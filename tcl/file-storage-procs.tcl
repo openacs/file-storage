@@ -679,7 +679,6 @@ ad_proc -public fs::add_file {
     db_transaction {
 	if {[empty_string_p $item_id] || ![db_string item_exists ""]} {
 	    set item_id [db_exec_plsql create_item ""]
-	    
 	    if {![empty_string_p $creation_user]} {
 		permission::grant -party_id $creation_user -object_id $item_id -privilege admin
 	    }
@@ -701,7 +700,7 @@ ad_proc -public fs::add_file {
 			]
 	
 	if {[string is true $do_notify_here_p]} {
-	    fs::do_notifications -folder_id $parent_id -filename $title -item_id $revision_id -action "new_file"
+	    fs::do_notifications -folder_id $parent_id -filename $title -item_id $revision_id -action "new_file" -package_id $package_id
 	}
     }
     return $revision_id
@@ -732,7 +731,6 @@ ad_proc fs::add_version {
     set mime_type [cr_filename_to_mime_type -create $name]
     set tmp_size [file size $tmp_filename]
     set parent_id [get_parent -item_id $item_id]
-
     set revision_id [cr_import_content \
 			 -item_id $item_id \
 			 -storage_type $storage_type \
@@ -752,7 +750,7 @@ ad_proc fs::add_version {
 	db_exec_plsql update_last_modified ""
 
     if {[string is false $suppress_notify_p]} {
-	fs::do_notifications -folder_id $parent_id -filename $title -item_id $revision_id -action "new_version"
+	fs::do_notifications -folder_id $parent_id -filename $title -item_id $revision_id -action "new_version" -package_id $package_id
     }
 
     return $revision_id
@@ -837,6 +835,7 @@ ad_proc -public fs::do_notifications {
     {-folder_id:required}
     {-filename:required}
     {-item_id:required}
+    {-package_id ""}
     -action
 } {
     Send notifications for file-storage operations.
@@ -845,7 +844,10 @@ ad_proc -public fs::do_notifications {
 
     @param action The kind of operation. One of: new_file, new_version, new_url, delete_file, delete_url
 } {
-    set root_folder [fs_get_root_folder]
+    if {[string equal "" $package_id]} {
+        set package_id [ad_conn package_id]
+    }
+    set root_folder [fs_get_root_folder -package_id $package_id]
 
     if {[string equal $action "new_file"]} {
         set action_type {New File Uploaded}
@@ -864,7 +866,6 @@ ad_proc -public fs::do_notifications {
     set url "[ad_url]"
     set new_content ""
     if {[string equal $action "new_file"] || [string equal $action "new_url"] || [string equal $action "new_version"]} {
-	ns_log notice "getting owner for $item_id"
         db_1row get_owner_name { }
 
         if {[string equal $action "new_version"]} {
