@@ -50,11 +50,14 @@ if {[string equal $confirmed_p "t"]} {
 	 # Redirect to the folder, instead of the latest revision (which does not exist anymore)
 	 ad_returnredirect "index?folder_id=$parent_id"
 
+         ad_script_abort
+
     } else {
 
 	 # Ok, we don't have to do anything fancy, just redirect to th last revision
 	 ad_returnredirect "file?file_id=$item_id"
-
+         
+         ad_script_abort
     }
 
 } else {
@@ -67,5 +70,4 @@ if {[string equal $confirmed_p "t"]} {
     and revision_id = :version_id"
 
     set context [fs_context_bar_list -final "Delete Version" $item_id]
-    ad_return_template
 }

@@ -62,6 +62,7 @@
                          fs_objects.url,
                          fs_objects.key,
                          fs_objects.sort_key,
+			 fs_objects.file_upload_name,
                          case when fs_objects.last_modified >= (sysdate - :n_past_days) then 1 else 0 end as new_p,
                          acs_permission.permission_p(fs_objects.object_id, :user_id, 'admin') as admin_p,
                          acs_permission.permission_p(fs_objects.object_id, :user_id, 'delete') as delete_p,
@@ -131,7 +132,7 @@
             where item_id not in (select i2.item_id
                                   from cr_items i2
                                   connect by prior i2.parent_id = i2.item_id
-                                  start with i2.item_id = :root_folder_id)
+                                  start with i2.item_id = file_storage.get_parent_id(:root_folder_id))
             connect by prior i.parent_id = i.item_id
             start with item_id = :start_id
             order by level desc

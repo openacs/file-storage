@@ -36,7 +36,7 @@
 	and    acs_permission.permission_p(r.revision_id, :user_id, 'read') = 't'
 	and    r.item_id = i.item_id
 	and    r.item_id = :file_id
-	$show_versions
+	$show_versions order by last_modified desc
 
       </querytext>
 </fullquery> 

@@ -47,6 +47,7 @@ if {[string equal $confirmed_p "t"] && [string equal $blocked_p "f"] } {
 
     ad_returnredirect "?folder_id=$parent_id"
 
+    ad_script_abort
 } else {
     # they need to confirm that they really want to delete the file
 
@@ -57,5 +58,4 @@ if {[string equal $confirmed_p "t"] && [string equal $blocked_p "f"] } {
 
     set context [fs_context_bar_list -final "Delete" $file_id]
 
-    ad_return_template
 }

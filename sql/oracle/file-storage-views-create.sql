@@ -25,13 +25,11 @@ as
     select cr_folders.folder_id,
            cr_folders.label as name,
            acs_objects.last_modified,
-           ((select count(*)
-             from cr_items ci
-             where ci.parent_id = cr_folders.folder_id)
-            +
             (select count(*)
-             from fs_simple_objects
-             where fs_simple_objects.folder_id = cr_folders.folder_id)) as content_size,
+             from cr_items ci
+	     where ci.content_type <> 'content_folder'
+	     connect by prior ci.item_id = ci.parent_id
+	     start with ci.item_id = cr_folders.folder_id) as content_size,
            cr_items.parent_id,
            cr_items.name as key
     from cr_folders,
@@ -45,6 +43,7 @@ as
     select cr_revisions.item_id as file_id,
            cr_revisions.revision_id as live_revision,
            cr_revisions.mime_type as type,
+	   cr_revisions.title as file_upload_name,
            cr_revisions.content_length as content_size,
            cr_items.name,
            acs_objects.last_modified,
@@ -65,33 +64,39 @@ as
            'folder' as type,
            fs_folders.content_size,
            fs_folders.name,
+	   '' as file_upload_name,
            fs_folders.last_modified,
            '' as url,
            fs_folders.parent_id,
            fs_folders.key,
            0 as sort_key
     from fs_folders
-    union
+    union all
     select fs_files.file_id as object_id,
            fs_files.live_revision,
            fs_files.type,
            fs_files.content_size,
            fs_files.name,
+	   fs_files.file_upload_name,
            fs_files.last_modified,
            '' as url,
            fs_files.parent_id,
            fs_files.key,
            1 as sort_key
     from fs_files
-    union
+    union all
     select fs_urls_full.url_id as object_id,
            0 as live_revision,
            'url' as type,
            0 as content_size,
            fs_urls_full.name,
+	   fs_urls_full.name as file_upload_name,
            fs_urls_full.last_modified,
            fs_urls_full.url,
            fs_urls_full.folder_id as parent_id,
            fs_urls_full.url as key,
            1 as sort_key
     from fs_urls_full;
+
+
+

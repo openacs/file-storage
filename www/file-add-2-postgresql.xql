@@ -5,7 +5,7 @@
 
 <fullquery name="new_lob_file">      
       <querytext>
-    	select file_storage__new_file (
+      select file_storage__new_file (
         	:title,           	-- title
         	:folder_id,          	-- parent_id
         	:user_id,            	-- creation_user
@@ -17,7 +17,7 @@
 
 <fullquery name="new_fs_file">      
       <querytext>
-    	select file_storage__new_file (
+        select file_storage__new_file (
         	:title,           	-- title
         	:folder_id,          	-- parent_id
         	:user_id,            	-- creation_user

@@ -56,6 +56,8 @@ if { [string equal $confirmed_p "t"] && [string equal $blocked_p "f"] } {
 
     ad_returnredirect "index?folder_id=$parent_id"
 
+    ad_script_abort
+
 } else {
     # they still need to confirm
 
@@ -63,7 +65,5 @@ if { [string equal $confirmed_p "t"] && [string equal $blocked_p "f"] } {
     select label from cr_folders where folder_id = :folder_id"]
 
     set context [fs_context_bar_list -final "Delete" $folder_id]
-
-    ad_return_template
 
 }
