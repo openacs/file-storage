@@ -1071,3 +1071,22 @@ ad_proc -public fs::get_folder_package_and_root folder_id {
 
     return [list $package_id $root_folder_id]
 }
+
+namespace eval fs::notification {}
+
+ad_proc -public fs::notification::get_url {
+    object_id
+} {
+    returns a full url to the object_id.
+    handles folders
+
+    @param object_id
+    
+    @author Stan Kaufman (skaufman@epimetrics.com)
+    @creation-date 2005-02-28
+} { 
+    set folder_id $object_id
+    return "[ad_url][db_string select_fs_package_url {}]index?folder_id=$folder_id"
+}
+
+
