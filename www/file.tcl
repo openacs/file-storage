@@ -57,7 +57,7 @@ if {[string equal $show_all_versions_p "t"]} {
     set show_versions [db_map show_live_version]
 }
 
-db_multirow -extend { last_modified_pretty content_size_pretty } version version_info {} {
+db_multirow -unclobber -extend { last_modified_pretty content_size_pretty } version version_info {} {
     set last_modified_ansi [lc_time_system_to_conn $last_modified_ansi]
     set last_modified_pretty [lc_time_fmt $last_modified_ansi "%x %X"]
     set content_size_pretty [lc_numeric $content_size]
