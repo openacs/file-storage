@@ -35,7 +35,7 @@ db_transaction {
 
 set folder_id [db_exec_plsql folder_create "
 begin
-    :1 := content_folder.new (
+    :1 := file_storage.new_folder (
         name => :name,
         label => :folder_name,
         parent_id => :parent_id,
@@ -44,38 +44,21 @@ begin
     );
 end;"]
 
-# register the standard content types
-
-db_exec_plsql register_content "
-begin
-    content_folder.register_content_type(:folder_id,'content_revision');
-    content_folder.register_content_type(:folder_id,'content_folder');
-end;"
-
-# give the creator admin privileges on the folder
-db_exec_plsql grant_admin_perms "
-begin
-    acs_permission.grant_permission (
-        object_id => :folder_id,
-        grantee_id => :user_id,
-        privilege => 'admin'
-    );
-end;"
-
 } on_error {
+
     # most likely a duplicate name or a double click
 
-    if [db_string duplicate_check "
-    select count(*)
-    from   cr_items
-    where  name = :name
-    and    parent_id = :parent_id"] {
-	ad_return_complaint 1 "Either there is already a folder with the name \"$folder_name\" or you clicked on the button more than once.  You can use the Back button to return and choose a new name, or <a href=\"?folder_id=$parent_id\">return to the directory listing</a> to see if your folder is there."
-    } else {
-	ad_return_complaint 1 "We got an error that we couldn't readily identify.  Please let the system owner know about this.
-
-	<pre>$errmsg</pre>"
-    }
+    #if [db_string duplicate_check "
+    #select count(*)
+    #from   cr_items
+    #where  name = :name
+    #and    parent_id = :parent_id"] {
+	ad_return_complaint 1 "Either there is already a folder with the name \"$folder_name\" or you clicked on the button more than once.  You can use the Back button to return and choose a new name, or <a href=\"index?folder_id=$parent_id\">return to the directory listing</a> to see if your folder is there."
+    #} else {
+#	ad_return_complaint 1 "We got an error that we couldn't readily identify.  Please let the system owner know about this.
+#
+#	<pre>$errmsg</pre>"
+#    }
     
     return
 }

@@ -6,14 +6,10 @@
 <fullquery name="folder_create">      
       <querytext>
 
-	select content_folder__new (
+	select file_storage__new_folder (
         	:name, 		-- name 
         	:folder_name, 	-- label
-		null,		-- description
         	:parent_id, 	-- parent_id 
-		null,		-- context_id (default)
-		null,		-- folder_id (default)
-		now(),		-- creation_date
         	:user_id,    	-- creation_user
         	:creation_ip 	-- creation_ip
     		);
@@ -21,43 +17,5 @@
       </querytext>
 </fullquery>
 
- 
-<fullquery name="register_content">      
-      <querytext>
-
-	begin
-
-    		PERFORM content_folder__register_content_type(
-			:folder_id, 		-- folder_id
-			'content_revision',	-- content_type
-			'f'			-- include_subtypes (default)
-			);
-
-    		PERFORM content_folder__register_content_type(
-			:folder_id,		-- folder_id
-			'content_folder',	-- content_type
-			'f'			-- include_subtypes (default)
-			);
-
-		return 0;
-
-	end;
-      </querytext>
-</fullquery>
-
- 
-<fullquery name="grant_admin_perms">      
-      <querytext>
-
-    	select acs_permission__grant_permission (
-        	:folder_id, 	-- object_id
-        	:user_id,	-- grantee_id
-        	'admin'		-- privilege
-    		);
-
-      </querytext>
-</fullquery>
-
- 
 </queryset>
 

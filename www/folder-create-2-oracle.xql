@@ -7,9 +7,9 @@
       <querytext>
       
 begin
-    :1 := content_folder.new (
+    :1 := file_storage.new_folder (
         name => :name,
-        label => :folder_name,
+        folder_name => :folder_name,
         parent_id => :parent_id,
         creation_user => :user_id,
         creation_ip => :creation_ip
@@ -18,30 +18,4 @@ end;
       </querytext>
 </fullquery>
 
- 
-<fullquery name="register_content">      
-      <querytext>
-      
-begin
-    content_folder.register_content_type(:folder_id,'content_revision');
-    content_folder.register_content_type(:folder_id,'content_folder');
-end;
-      </querytext>
-</fullquery>
-
- 
-<fullquery name="grant_admin_perms">      
-      <querytext>
-      
-begin
-    acs_permission.grant_permission (
-        object_id => :folder_id,
-        grantee_id => :user_id,
-        privilege => 'admin'
-    );
-end;
-      </querytext>
-</fullquery>
-
- 
 </queryset>
