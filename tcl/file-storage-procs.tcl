@@ -651,7 +651,7 @@ ad_proc -public fs::add_file {
     @return revision_id
 } {
 
-    if {[ad_parameter "StoreFilesInDatabaseP" -package_id $package_id]} {
+    if {[parameter::get -parameter "StoreFilesInDatabaseP" -package_id $package_id]} {
 	set indbp "t"
     } else {
 	set indbp "f"
@@ -708,7 +708,7 @@ ad_proc fs::add_version {
     @return revision_id
 } {
 
-    if {[ad_parameter "StoreFilesInDatabaseP" -package_id $package_id]} {
+    if {[parameter::get -parameter "StoreFilesInDatabaseP" -package_id $package_id]} {
 	set storage_type "lob"
     } else {
 	set storage_type "file"

@@ -43,6 +43,7 @@ ad_proc fs::impl::fs_object::put {} {
     set parent_id [oacs_dav::item_parent_folder_id $uri]
     array set sn [site_node::get -url $uri]
     set package_id $sn(package_id)
+    ns_log debug "\n ----- \n file_storage::dav::put package_id $package_id \n parent_id $parent_id \n uri $uri \n ----- \n "
     if {[empty_string_p $parent_id]} {
 	set response [list 409]
 	return $response
