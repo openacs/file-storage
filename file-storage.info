@@ -15,8 +15,8 @@
         <description format="text/plain">Provides a versioned document store with storage in the filesystem or database (depending on configuration).  Documents and folders can be permissioned and folders downloaded.</description>
 
         <provides url="file-storage" version="4.7d3"/>
-        <requires url="acs-content-repository" version="5.0.0a5"/>
-        <requires url="acs-kernel" version="5.0.0a5"/>
+        <requires url="acs-content-repository" version="5.0.0b4"/>
+        <requires url="acs-kernel" version="5.0.0b4"/>
 
         <callbacks>
         </callbacks>
