@@ -15,7 +15,6 @@
                          fs_objects.sort_key,
 			 fs_objects.file_upload_name,
                          case when fs_objects.last_modified >= (now() - interval '$n_past_days days') then 1 else 0 end as new_p
-                         case when fs_objects.last_modified >= (now() - $n_past_days) then 1 else 0 end as new_p
                   from fs_objects
                   where fs_objects.parent_id = :folder_id
 	          order by sort_key, name
