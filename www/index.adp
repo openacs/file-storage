@@ -44,7 +44,7 @@ Search file names for
    <td>&nbsp;</td>
   </if><else>
    <td><img src="graphics/file.gif"><a href="file?file_id=@file.file_id@">@file.name@</a></td>
-   <td><a href="download/@file.path@?version_id=@file.live_revision@">(download)</a></td>
+   <td><a href="download/index?version_id=@file.live_revision@">(download)</a></td>
    <td align=right>@file.content_size@</td>
    <td>@file.type@</td>
    <td>@file.last_modified@</td>
