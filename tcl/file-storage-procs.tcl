@@ -955,3 +955,91 @@ ad_proc -public fs::do_notifications {
         set folder_id $parent_id
     }
 }
+
+ad_proc -public fs::item_editable_info {
+    -item_id:required
+} {
+    Returns an array containing elements editable_p, mime_type, file_extension
+    if an fs item is editable through the browser, editable_p is set to 1
+    
+    @author Deds Castillo (deds@i-manila.com.ph)
+    @creation-date 2004-07-03
+    
+    @param item_id
+
+    @return 
+    
+    @error 
+} {
+    # ideally, this would get values from parameters
+    # hardcoding it for now
+    set editable_mime_types [list "text/html" "text/plain"]
+
+    item::get_mime_info [item::get_live_revision $item_id]
+
+    if {[lsearch -exact $editable_mime_types [string tolower $mime_info(mime_type)]] != -1} {
+        set mime_info(editable_p) 1
+    } else {
+        set mime_info(editable_p) 0
+    }
+    return [array get mime_info]
+}
+
+ad_proc -public fs::item_editable_p {
+    -item_id:required
+} {
+    returns 1 if item is editable via browser
+    
+    @author Deds Castillo (deds@i-manila.com.ph)
+    @creation-date 2004-07-03
+    
+    @param item_id
+
+    @return 
+    
+    @error 
+} {
+    array set item_editable_info [fs::item_editable_info -item_id $item_id]
+
+    return $item_editable_info(editable_p)
+}
+
+ad_proc -public fs::get_object_info {
+    -file_id:required
+    -revision_id
+} {
+    returns an array containing the fs object info
+    
+    @author Deds Castillo (deds@i-manila.com.ph)
+    @creation-date 2004-07-03
+    
+    @param item_id
+
+    @param revision_id
+
+    @return 
+    
+    @error 
+} {
+
+    set user_id [ad_conn user_id]
+    set root_folder_id [fs::get_root_folder]
+    if {![exists_and_not_null revision_id]} {
+        set revision_id [item::get_live_revision $file_id]
+    }
+
+    db_1row file_info {} -column_array file_object_info
+
+    set content [db_exec_plsql get_content {}]
+
+    if {[string equal $file_object_info(storage_type) file]} {
+        set filename [cr_fs_path $file_object_info(storage_area_key)]
+        append filename $content
+        set fd [open $filename]
+        set content [read $fd]
+        close $fd
+    }
+    
+    set file_object_info(content) $content
+    return [array get file_object_info]
+}
