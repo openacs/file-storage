@@ -112,8 +112,8 @@ if { $unpack_p && ![empty_string_p $unzip_binary] } {
     }
 
 } else {
-    set upload_files [list $upload_file]
-    set upload_tmpfiles [list ${upload_file.tmpfile}]
+    set upload_files [list [template::util::file::get_property filename $upload_file]]
+    set upload_tmpfiles [list [template::util::file::get_property tmp_filename $upload_file]]
 }
 
     foreach upload_file $upload_files tmpfile $upload_tmpfiles {
