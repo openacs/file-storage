@@ -1,5 +1,3 @@
-# 
-
 ad_library {
     
     Sets up WebDAV support service contracts
@@ -35,8 +33,11 @@ ad_proc -private fs::install::register_implementation {
     add file-storage repository service contract
     implementation
 } {
-  
-   set spec {
+    ns_log Notice "registering fs dav implementations."
+
+    ### dav contract
+
+    set spec {
         name "file_storage_object"
         aliases {
             get fs::impl::fs_object::get
@@ -57,19 +58,43 @@ ad_proc -private fs::install::register_implementation {
     
     acs_sc::impl::new_from_spec -spec $spec
 
-   set spec {
-       name "file-storage"
-       aliases {
-	   get_type fs::impl::dav_put_type::get_type
-       }
-       contract_name {dav_put_type}
-       owner "file-storage"
-   }
+    ### dav_put_type
 
-   acs_sc::impl::new_from_spec -spec $spec
-   
+    set spec {
+	name "file-storage"
+	aliases {
+	    get_type fs::impl::dav_put_type::get_type
+	}
+	contract_name {dav_put_type}
+	owner "file-storage"
+    }
+
+    acs_sc::impl::new_from_spec -spec $spec
+
+    ### dav_mkcol_type
+
+    set spec {
+	name "file-storage"
+	aliases {
+	    get_type fs::impl::dav_mkcol_type::get_type
+	}
+	contract_name {dav_mkcol_type}
+	owner "file-storage"
+    }
+    
+    acs_sc::impl::new_from_spec -spec $spec
+    
+    set spec {
+	name "file-storage"
+	aliases {
+	    get_type fs::impl::dav_mkcol_type::get_type
+	}
+	contract_name {dav_mkcol_type}
+	owner "file-storage"
+    }
+
+    acs_sc::impl::new_from_spec -spec $spec
 }
-
 
 ad_proc -private fs::install::unregister_implementation {
 } {
@@ -94,7 +119,17 @@ ad_proc -private fs::install::upgrade {
 		# by content::init so it can be recreated
 		file delete [file join [acs_root_dir] templates "file-storage-default.tcl"]
 	    }
-
+	    5.1.0a10 5.1.0a11 {
+		set spec {
+		    name "file-storage"
+		    aliases {
+			get_type fs::impl::dav_mkcol_type::get_type
+		    }
+		    contract_name {dav_mkcol_type}
+		    owner "file-storage"
+		}
+		acs_sc::impl::new_from_spec -spec $spec
+	    }
 	}
 
 }
