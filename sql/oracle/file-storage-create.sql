@@ -11,7 +11,6 @@
 -- each instance of file storage
 --
 
-
 create table fs_root_folders (
     -- ID for this package instance
     package_id  integer
@@ -20,44 +19,7 @@ create table fs_root_folders (
                 constraint fs_root_folder_package_id_pk
                 primary key,
     -- the ID of the root folder
-    -- JS: I removed the on delete cascade constraint on folder_id!!!!!!!!!!!!!!!!!!!!!
-    -- JS:
-    -- JS:  1) folder_id points to the root folder id in CR, which cannot (and should not) be deleted
-    -- JS:     unless the package instance is deleted (which is done from APM).  Thus there is
-    -- JS:     no conceivable scenario when the "on delete cascade" will be triggered to delete 
-    -- JS:     the entry in fs_root_folders through the deletion of the root 
-    -- JS:     folder id.  This constraint is superfluous.
-    -- JS: 
-    -- JS:  2) There is a nasty bug in the implementation of File Storage (FS), where if a package
-    -- JS:     instance is deleted, the "on delete cascade" on package_id will cause the deletion of 
-    -- JS:     the row containing package_id and folder_id when the instance is deleted.  Since the 
-    -- JS:     CR items inserted by this FS instance is accessible only through the root folder_id, 
-    -- JS:     the CR items are orphaned!  
-    -- JS: 
-    -- JS:     To clean up CR, we need to impose a trigger on deletion of the row containing the root
-    -- JS:     folder_id (i.e., when the package instance is deleted). With "on delete cascade" 
-    -- JS:     constaint imposed on folder_id, any trigger on the deletion of a package instance 
-    -- JS:     to clean up CR creates a circular reference.  To see this, note cleaning up CR
-    -- JS:     requires an inverted tree of the items belonging to the package be created, so 
-    -- JS:     that we can clean up from the leaves of the tree up to the root node.
-    -- JS:     We then call content_item.delete() or content_folder.delete() to remove the file or 
-    -- JS:     folder, as the case may be. However, content_item.delete() (cotent_folder.delete 
-    -- JS:     calls content_item.delete) calls on acs_object.delete, relying on the "on delete 
-    -- JS:     cascade" constraint imposed on item_id of cr_items to do the actual deletion. Now 
-    -- JS:     with "on delete cascade" also imposed on folder_id of fs_root_folders, the "on delete
-    -- JS:     cascade" on item_id of cr_items will trigger deletion of the entry in fs_root_folders 
-    -- JS:     AS IT IS BEING DELETED BY APM. Thus, we will get the famous "mutating tables" error
-    -- JS:     in oracle.
-    -- JS:
-    -- JS:     So we simplify our life and drop the "on delete cascade".  We still requie the foreign
-    -- JS:     key constraint.  The subtle problem this will cause is that when we clean up CR, we 
-    -- JS:     cannot prune the tree up to the root folder, since it will cause a foreign key 
-    -- JS:     constraint.  We could also drop the foreign key constraint, but we will expose our
-    -- JS:     database to integrity errors.  The solution is to make two triggers: a "before delete"
-    -- JS:     trigger on fs_root_folders  that cleans up the CR entries of the package except the
-    -- JS:     root folder, and an "after delete" trigger that cleans up the root folder entry
-    -- JS:     (since the folder id will have been deleted, so no foreign key reference will be 
-    -- JS:     violated by the deletion of the root folder)
+    -- JS: I removed the on delete cascade constraint on folder_id
     folder_id   integer
                 constraint fs_root_folder_folder_id_fk
                 references cr_folders 
