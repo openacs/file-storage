@@ -1,6 +1,6 @@
 <master>
-<property name="title">Edit @pretty_name@</property>
-<property name="context">@context@</property>
+<property name="title">Edit @pretty_name;noquote@</property>
+<property name="context">@context;noquote@</property>
 
 <form method=POST action="simple-edit-2">
 <input type=hidden name="object_id" value="@object_id@">

@@ -1,6 +1,6 @@
 <master>
-<property name="title">Delete @version_name@</property>
-<property name="context">@context@</property>
+<property name="title">Delete @version_name;noquote@</property>
+<property name="context">@context;noquote@</property>
 
 <form method=POST action=version-delete>
 <input type=hidden name=version_id value=@version_id@>

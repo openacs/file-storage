@@ -1,6 +1,6 @@
 <master>
 <property name="title">#file-storage.Search_Results#</property>
-<property name="context">@context@</property>
+<property name="context">@context;noquote@</property>
 
 <if @results:rowcount@ eq 0>
 <p>Your search on "@query@" did not return any results.

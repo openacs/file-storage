@@ -4,7 +4,7 @@
 <select name="parent_id" size=@folder:rowcount@>
 </else>
 <multiple name="folder">
-<option value="@folder.new_parent@">@folder.spaces@ @folder.label@</option>
+<option value="@folder.new_parent@">@folder.spaces;noquote@ @folder.label@</option>
 </multiple>
 </select>
 

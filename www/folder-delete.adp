@@ -1,6 +1,6 @@
 <master>
-<property name="title">Delete @folder_name@</property>
-<property name="context">@context@</property>
+<property name="title">Delete @folder_name;noquote@</property>
+<property name="context">@context;noquote@</property>
 
 <if @blocked_p@ eq "t">
 

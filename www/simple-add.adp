@@ -1,6 +1,6 @@
 <master>
-<property name="title">Create @pretty_name@</property>
-<property name="context">@context@</property>
+<property name="title">Create @pretty_name;noquote@</property>
+<property name="context">@context;noquote@</property>
 
 <form method=POST action="simple-add-2">
 <input type=hidden name="folder_id" value="@folder_id@">

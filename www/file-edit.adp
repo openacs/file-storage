@@ -1,7 +1,7 @@
 <master>
-<property name="title">Rename @title@</property>
-<property name="header">Rename @title@</property>
-<property name="context">@context@</property>
+<property name="title">Rename @title;noquote@</property>
+<property name="header">Rename @title;noquote@</property>
+<property name="context">@context;noquote@</property>
 
 <form method=POST action=file-edit-2.tcl>
 <input type=hidden name="file_id" value="@file_id@">
