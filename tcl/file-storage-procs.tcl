@@ -481,7 +481,8 @@ ad_proc -public fs::publish_object_to_file_system {
     }
 
     db_1row select_object_info {}
-
+    
+    ns_log Notice "TYPE: $type"
     if {[string equal folder $type]} {
 	set result [publish_folder_to_file_system -folder_id $object_id -path $path -folder_name $name -user_id $user_id]
     } elseif {[string equal url $type]} {
@@ -509,8 +510,9 @@ ad_proc -public fs::publish_folder_to_file_system {
 	set folder_name [get_object_name -object_id $folder_id]
     }
     set folder_name [remove_special_file_system_characters -string $folder_name]
-
-    set dir [file join ${path} ${folder_name}]
+    
+    set dir "[file join ${path} "${folder_name}"]"
+    # set dir "[file join ${path} "download"]"
     file mkdir $dir
 
     foreach object [get_folder_contents -folder_id $folder_id -user_id $user_id] {
@@ -567,6 +569,8 @@ ad_proc -public fs::publish_versioned_object_to_file_system {
 
     db_1row select_object_metadata {}
 
+    # After upgrade change title and filename...
+    set file_name $title
     if {[empty_string_p $file_name]} {
         if {![info exists upload_file_name]} {
 		set file_name "unnamedfile"
@@ -575,6 +579,7 @@ ad_proc -public fs::publish_versioned_object_to_file_system {
 	}
     }
     set file_name [remove_special_file_system_characters -string $file_name]
+    ns_log Notice "FILENAME:::: $file_name"
 
     switch $storage_type {
 	lob {
