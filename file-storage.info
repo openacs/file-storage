@@ -9,10 +9,10 @@
     
     <version name="4.7d3" url="http://openacs.org/repository/download/apm/file-storage-4.7d3.apm">
         <owner url="http://openacs.org">OpenACS</owner>
-        <summary>This application allows users to collaboratively maintain documents on the web server	</summary>
+        <summary>Collaborative document storage</summary>
         <release-date>2003-11-10</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
-        <description format="text/plain">Now allows storage of files on the filesystem or database.</description>
+        <description format="text/plain">Provides a versioned document store with storage in the filesystem or database (depending on configuration).  Documents and folders can be permissioned and folders downloaded.</description>
 
         <provides url="file-storage" version="4.7d3"/>
         <requires url="acs-content-repository" version="5.0.0a5"/>
