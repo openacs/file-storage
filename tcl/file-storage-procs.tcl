@@ -492,7 +492,15 @@ namespace eval fs {
 
         switch $storage_type {
             lob {
+
                 # FIXME: db_blob_get_file is failing when i use bind variables
+
+                # DRB: you're out of luck - the driver doesn't support them and while it should
+                # be fixed it will be a long time before we'll want to require an updated
+                # driver.  I'm substituting the Tcl variable value directly in the query due to
+                # this.  It's safe because we've pulled the value ourselves from the database,
+                # don't need to worry about SQL smuggling etc.
+
                 db_blob_get_file select_object_content {} -file [file join ${path} ${file_name}]
             }
             text {

@@ -145,7 +145,7 @@
         <querytext>
             select content
             from cr_revisions
-            where revision_id = :live_revision
+            where revision_id = $live_revision
         </querytext>
     </fullquery>
 
