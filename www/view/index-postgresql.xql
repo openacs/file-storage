@@ -20,7 +20,8 @@ select i.item_id
 	    and r.title = :item_url_title 
 	    and i.parent_id = (select item_id 
 			       from cr_items 
-			       where name = :item_url_folder) 
+			       where name = :item_url_folder
+	 		       limit 1) 
 	    order by revision_id desc
 	    limit 1
 
