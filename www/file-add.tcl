@@ -10,7 +10,8 @@ ad_page_contract {
     upload_file:trim,optional
     upload_file.tmpfile:tmpfile,optional
     {title ""}
-    {lock_title_p 0}
+    {lock_title_p 1}
+
 } -properties {
     folder_id:onevalue
     context:onevalue
@@ -18,10 +19,8 @@ ad_page_contract {
     lock_title_p:onevalue
 } -validate {
     file_id_or_folder_id {
-	if {[exists_and_not_null file_id]} {
+	if {[exists_and_not_null file_id] && ![exists_and_not_null folder_id]} {
 	    set folder_id [db_string get_folder_id "" -default ""]
-	} else {
-	    set folder_id ""
 	}
 	if {![fs_folder_p $folder_id]} {
 	    ad_complain "The specified parent folder is not valid."
@@ -37,11 +36,21 @@ ad_page_contract {
 }
 
 set user_id [ad_conn user_id]
+set package_id [ad_conn package_id]
+# check for write permission on the folder or item
 
-# check for write permission on the folder
+permission::require_permission \
+    -object_id $folder_id \
+    -party_id $user_id \
+    -privilege "write"
 
-ad_require_permission $folder_id write
-
+if {![ad_form_new_p -key file_id]} {
+    permission::require_permission \
+	-object_id $file_id \
+	-party_id $user_id \
+	-privilege "write"
+    
+}
 # set templating datasources
 
 set context [fs_context_bar_list -final "Add File" $folder_id]
@@ -54,11 +63,27 @@ if {[empty_string_p $title]} {
 ad_form -html { enctype multipart/form-data } -export { folder_id } -form {
     file_id:key
     {upload_file:file {label "Upload File"} {html "size 30"}}
-    {title:text,optional {label "Title"} {html "size 30"}}
+}
+
+if {$lock_title_p} {
+    ad_form -extend -form {
+	{title_display:text(inform) {label "Title"} }
+	{title:text(hidden) {value $title}}
+    }
+} else {
+    ad_form -extend -form {
+	{title:text,optional {label "Title"} {html {size 30}} }
+    }
+}
+
+ad_form -extend -form {
     {description:text(textarea),optional {label "Description"} {html "rows 5 cols 35"}}
 } -select_query_name {get_file} -new_data {
+    # upload a new file
+    # if the user choose upload from the folder view
+    # and the file with the same name already exists
+    # we create a new revision
     set name [template::util::file::get_property filename $upload_file]
-    set package_id [ad_conn package_id]
     set existing_item_id [fs::get_item_id -name $name -folder_id $folder_id]
     if {![empty_string_p $existing_item_id]} {
 	# file with the same name already exists
@@ -81,6 +106,21 @@ ad_form -html { enctype multipart/form-data } -export { folder_id } -form {
 	-description $description \
         -package_id $package_id
     
+    ad_returnredirect "."
+    ad_script_abort
+} -edit_data {
+
+    fs::add_version \
+	-name [template::util::file::get_property filename $upload_file] \
+	-tmp_filename [template::util::file::get_property tmp_filename $upload_file] \
+        -item_id $file_id \
+	-parent_id $folder_id \
+	-creation_user $user_id \
+	-creation_ip [ad_conn peeraddr] \
+	-title $title \
+	-description $description \
+	-package_id $package_id
+
     ad_returnredirect "."
     ad_script_abort
 }

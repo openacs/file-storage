@@ -18,7 +18,7 @@
   <fullquery name="set_live_revision">
     <querytext>
       update cr_items set live_revision=:revision_id
-      where item_id=:item_id
+      where item_id=:file_id
     </querytext>
   </fullquery>
 </queryset>

@@ -18,7 +18,8 @@
       <if @contents.type@ eq "folder">
 	<td><a href="@fs_url@index?folder_id=@contents.object_id@&n_past_days=@n_past_days@"><img src="@fs_url@graphics/folder.gif" border=0 alt="folder"></a></td>
 	<td>
-	  <a href="@fs_url@index?folder_id=@contents.object_id@&n_past_days=@n_past_days@">@contents.name@</a>
+	  <a
+	  href="@fs_url@index?folder_id=@contents.object_id@&n_past_days=@n_past_days@">@contents.name@</a>
 	  <if @contents.new_p@ and @contents.content_size@ gt 0><img src="@fs_url@graphics/new.gif" alt="new"></if>
 	</td>
 	<td>&nbsp;</td>

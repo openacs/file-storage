@@ -157,7 +157,7 @@
     </querytext>
   </fullquery>
 
-  <fullquery name="fs::add_file.update_last_modified">
+  <fullquery name="fs::add_version.update_last_modified">
     <querytext>
       begin
       perform acs_object__update_last_modified
