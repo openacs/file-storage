@@ -31,7 +31,11 @@ set folder_name [fs::get_object_name -object_id  $folder_id]
 
 set content_size_total 0
 
-set root_folder_id [fs::get_root_folder]
+if {![exists_and_not_null root_folder_id]} {
+    set root_folder_id [fs::get_root_folder]
+}
+
+set folder_path [db_exec_plsql get_folder_path {}]
 
 set actions [list]
 set actions [list "Upload File" file-add?[export_vars folder_id] "Upload a file in this folder" "Add Link" simple-add?[export_vars folder_id] "Add a link to a web page" "\#file-storage.New_Folder\#" folder-create?[export_vars {{parent_id $folder_id}}] "\#file-storage.Create_a_new_folder\#" ]

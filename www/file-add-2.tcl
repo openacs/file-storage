@@ -22,7 +22,7 @@ ad_page_contract {
         set n_bytes [file size ${upload_file.tmpfile}]
         set max_bytes [ad_parameter "MaximumFileSize"]
         if { $n_bytes > $max_bytes } {
-            ad_complain [_ file-storage.lt_Your_file_is_larger_t_1] [list max_number_of_bytes [util_commify_number $max_bytes]]]
+            ad_complain [_ file-storage.lt_Your_file_is_larger_t_1 [list max_number_of_bytes [util_commify_number $max_bytes]]]
         }
     }
 } 
