@@ -36,12 +36,6 @@ ad_require_permission $folder_id read
 
 # set templating datasources
 set folder_name [fs_get_folder_name $folder_id]
-set ext [fs::get_archive_extension]
-set download_name $folder_name
-if {![empty_string_p $ext]} {
-    append download_name ".${ext}"
-}
-set download_name [ns_urlencode $download_name]
 
 set user_id [ad_conn user_id]
 set write_p [ad_permission_p $folder_id write]
