@@ -18,6 +18,7 @@
         <vendor url="http://www.arsdigita.com/">ArsDigita Corporation</vendor>
         <description format="text/plain">Now allows storage of files on the filesystem or database.</description>
 
+        <provides url="file-storage" version="4.1"/>
         <requires url="acs-content-repository" version="4.0.1"/>
         <requires url="acs-kernel" version="4.0"/>
 
