@@ -18,6 +18,10 @@ begin
         if content_folder.is_registered(folder.folder_id, 'content_extlink') = 'f' then
           content_folder.register_content_type(folder.folder_id, 'content_extlink');
         end if;
+
+        if content_folder.is_registered(folder.folder_id, 'content_symlink') = 'f' then
+          content_folder.register_content_type(folder.folder_id, 'content_symlink');
+        end if;
   
       end loop;
     end loop;

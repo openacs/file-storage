@@ -133,7 +133,12 @@ begin
                 );
         PERFORM content_folder__register_content_type(
                 v_folder_id,            -- folder_id
-                ''content_extlink'',     -- content_types
+                ''content_symlink'',    -- content_types
+                ''t''                   -- include_subtypes 
+                );
+        PERFORM content_folder__register_content_type(
+                v_folder_id,            -- folder_id
+                ''content_extlink'',    -- content_types
                 ''t''                   -- include_subtypes 
                 );
 
@@ -644,7 +649,13 @@ begin
 
         PERFORM content_folder__register_content_type(
                 v_folder_id,            -- folder_id
-                ''content_extlink'',     -- content_types
+                ''content_extlink'',    -- content_types
+                ''t''                   -- include_subtypes 
+                );
+
+        PERFORM content_folder__register_content_type(
+                v_folder_id,            -- folder_id
+                ''content_symlink'',    -- content_types
                 ''t''                   -- include_subtypes 
                 );
 
