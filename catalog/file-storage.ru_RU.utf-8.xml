@@ -8,7 +8,7 @@
   <msg key="Add_pretty_name">Добавить %pretty_name%</msg>
   <msg key="Author">Автор</msg>
   <msg key="Change_Name">Переименовать</msg>
-  <msg key="Copy">Копировать</msg>
+  <msg key="Copy">Скопировать</msg>
   <msg key="Create">Добавить</msg>
   <msg key="Create_a_new_folder">Создать новую папку</msg>
   <msg key="Create_a_URL">Записать URL </msg>
@@ -40,26 +40,18 @@
   <msg key="lt_Please_enter_the_new_">Новое имя:</msg>
   <msg key="lt_Show_files_modified_i">Показать файлы, измененные за последние</msg>
   <msg key="lt_show_only_live_versio">показать только &quot;живую&quot; версию</msg>
-  <msg key="lt_The_specified_file_is">Недопустимый файл.</msg>
   <msg key="lt_The_specified_folder_">Указанная папка не существует.</msg>
   <msg key="lt_The_specified_folder__1">Указанная папка недопустимая.</msg>
   <msg key="lt_The_specified_parent_">Указанная родительская папка недопустимая.</msg>
   <msg key="lt_Use_the_Browse_button">Выберите файл при помощи кнопки &quot;Browse...&quot; (&quot;Найти...&quot;) и нажмите &quot;Open&quot; (&quot;Открыть&quot;).</msg>
-  <msg key="lt_version_not_valid">Недопустимая версия.</msg>
-  <msg key="lt_You_may_not_delete_th">Удалить корневую папку не допускается.</msg>
-  <msg key="lt_Your_file_is_larger_t">Файл превышит ограничение по размеру  (%number_of_bytes% bytes)</msg>
-  <msg key="lt_Your_file_is_larger_t_1">Файл превышит ограничение по размеру  (%max_number_of_bytes% bytes)</msg>
   <msg key="Modified">Изменено</msg>
   <msg key="Move">Переместить</msg>
   <msg key="Name">Имя</msg>
   <msg key="new">новый</msg>
-  <msg key="No_such_type">тип не существует</msg>
-  <msg key="no_such_URL">URL не найден</msg>
   <msg key="Rename">Переименовать</msg>
   <msg key="Rename_this_folder">Переименовать папку</msg>
   <msg key="Save">Запись</msg>
-  <msg key="Search">Поиск</msg>
-  <msg key="Search_again">Новые условия поиска:</msg>
+  <msg key="Search">Искать</msg>
   <msg key="Search_Results">Результаты Поиска</msg>
   <msg key="show_all_versions">показать все версии</msg>
   <msg key="Size">Размер</msg>
@@ -67,7 +59,6 @@
   <msg key="Title">Титул:</msg>
   <msg key="Title_">Титул:</msg>
   <msg key="Type">Тип</msg>
-  <msg key="Update">Обновить</msg>
   <msg key="Upload">Загрузить</msg>
   <msg key="Upload_a_file">Загрузить файл</msg>
   <msg key="Upload_a_new_version">Загрузить новую версию</msg>
@@ -77,8 +68,6 @@
   <msg key="Version_filename">Имя файла версии</msg>
   <msg key="Version_filename_">Имя файла версии:</msg>
   <msg key="Version_filename_1">Имя файла версии:</msg>
-  <msg key="Version_Notes">Заметки версии</msg>
-  <msg key="Version_Notes_1">Заметки версии:</msg>
   <msg key="view_details">детали</msg>
   <msg key="Yes_Delete_It">Да, удалить</msg>
 </message_catalog>
