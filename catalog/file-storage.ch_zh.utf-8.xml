@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="file-storage" package_version="5.0.0b4" locale="ch_zh" charset="utf-8">
+<message_catalog package_key="file-storage" package_version="5.0.1" locale="ch_zh" charset="utf-8">
 
   <msg key="Action">动作</msg>
   <msg key="Actions">动作：</msg>
@@ -56,6 +56,7 @@
   <msg key="lt_Either_there_is_alrea">已有一个名为&quot;%folder_name%&quot;的文件夹存在或多次点击按钮。用返回钮返回，选一个新名字，或&lt;a href=&quot;%directory_url%&quot;&gt;返回到目录列表&lt;/a&gt;，看文件夹是否在列表中。 </msg>
   <msg key="lt_Folder_folder_name_is">文件夹%folder_name%为空。</msg>
   <msg key="lt_It_appears_that_there">该文件夹中似乎已有一个同名文件存在。</msg>
+  <msg key="lt_Leave_blank_for_linked_documents">当上传多链接文件时让标题空白。</msg>
   <msg key="lt_Live_version_of_title">&quot;%title%&quot;的活动版本</msg>
   <msg key="lt_Modify_permissions_on">修改文件许可</msg>
   <msg key="lt_Modify_permissions_on_1">修改该文件夹许可</msg>
@@ -72,6 +73,7 @@
   <msg key="lt_There_are_no_versions">此文件没有版本信息</msg>
   <msg key="lt_This_file_has_version">此文件有不允许你删除的版本，所以不能删除。</msg>
   <msg key="lt_This_folder_contains_">此文件夹中含有不允许你删除的项，所以不能删除。</msg>
+  <msg key="lt_This_is_a_ZIP">这是一个包含多个文件的ZIP文件。</msg>
   <msg key="lt_Use_the_Browse_button">使用“浏览……”钮找到文件，单击“打开”。</msg>
   <msg key="lt_version_not_valid">指定的版本非法。</msg>
   <msg key="lt_We_got_an_error_that_">请通知系统owner，发现了一个不明错误。</msg>
@@ -85,6 +87,7 @@
   <msg key="lt_Your_search_on_query__1">&quot;%query%&quot;搜索到下述的文件：</msg>
   <msg key="Modified">已更改的</msg>
   <msg key="Move">移动</msg>
+  <msg key="Multiple_files">多文件：</msg>
   <msg key="Name">名称</msg>
   <msg key="new">新！</msg>
   <msg key="New_Folder">新文件夹</msg>
