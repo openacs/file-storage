@@ -23,7 +23,7 @@
       </td>
       <td>&nbsp;</td>
       <td>
-        @contents.content_size_pretty@ <if @contents.content_size@ ne 1>#file-storage.items#</if><else>#file-storage.item#</else>
+        @contents.content_size@ <if @contents.content_size@ ne 1>#file-storage.items#</if><else>#file-storage.item#</else>
       </td>
       <td>#file-storage.folder#</td>
       <td>@contents.last_modified@</td>
@@ -37,18 +37,18 @@
       </td>
       <td>
         <small>
-<if @contents.write_p@ or @contents.admin_p@>
+<if @contents.write_p@>
           [<a href="@fs_url@simple-edit?object_id=@contents.object_id@">
             #file-storage.edit#
           </a>
 </if>
-<if @contents.delete_p@ or @contents.admin_p@>
+<if @contents.delete_p@>
           |
           <a href="@fs_url@simple-delete?folder_id=@folder_id@&object_id=@contents.object_id@">
             #file-storage.delete#
           </a>
 </if>
-<if @contents.write_p@ or @contents.delete_p@ or @contents.admin_p@>
+<if @contents.write_p@ or @contents.delete_p@>
            ]
 </if>
         </small>
@@ -74,7 +74,7 @@
           </a>
         ]</small>
       </td>
-      <td>@contents.content_size_pretty@ byte<if @contents.content_size@ ne 1>s</if></td>
+      <td>@contents.content_size@ byte<if @contents.content_size@ ne 1>s</if></td>
       <td>@contents.type@</td>
       <td>@contents.last_modified@</td>
 </else>

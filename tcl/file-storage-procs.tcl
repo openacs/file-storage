@@ -351,6 +351,24 @@ namespace eval fs {
         return [db_string select_folder {} -default ""]
     }
 
+    ad_proc -public get_folder_objects {
+        -folder_id:required
+        -user_id:required
+    } {
+        Return a list the object_ids contained by a file storage folder.
+
+        This would be trivial if it weren't for the fact that we need to UNION ALL
+        with the gawddamned fs_simple_objects Open Force forced upon us and which
+        will be removed as soon as I (DRB) find the time to write upgrade scripts.
+
+        @param folder_id The folder for which to retrieve contents
+        @param user_id The viewer of the contents (to make sure they have
+                       permission)
+
+    } {
+        return [db_list select_folder_contents {}]
+    }
+
     ad_proc -public get_folder_contents {
         {-folder_id ""}
         {-user_id ""}
