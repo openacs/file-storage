@@ -6,7 +6,10 @@
 <body bgcolor=white>
 
 <h2>File Storage Design Document</h2>
-by <a href="mailto:kevin@arsdigita.com">Kevin Scaldeferri</a>
+
+by <a href="mailto:kevin@arsdigita.com">Kevin Scaldeferri</a>, modified
+by <a href="mailto:jowellsabino@netscape.net">Jowell S. Sabino</a> for
+OpenACS.
 
 <hr>
 
@@ -50,6 +53,7 @@ Content Repository.
 <h3>III.  Historical Considerations</h3> 
 
 <p>
+
 File Storage was created to provide a mechanism for non-technical
 users to collaborate on a wide range of documents, with minimum
 sysadmin overhead.  Specifically, it allowed clients to exchange
@@ -110,23 +114,19 @@ version or a file, we really delete it.
 useful functionality for File Storage with no additional development
 costs.  However, it may also constrain the system somewhat.
 
-<p>Currently, the only example is that <code>cr_revisions</code> does not
-have a column for the size of the content.  This requires that we call
-<code>dbms_lob.getlength</code> on the content of each revision each
-time we display information on a file.  No timing information on this
-is currently availible, but subjectively the response is somewhat
-sluggish.  This could be avoided by subtyping content_revision and
-adding a size column.  Alternatively, this might be considered
-generally valuable enough to warrant a change to the Content Repository
-data model.
+<p>
+The Content Repository's datamodel has been extended to include an
+attibute to store the filesize.  Unfortunately, the Content Repository
+does not automatically do this, since files may be stored on the
+filesystem (the Content Repository thus serving as a catalog to keep
+track of file location and some metadata, but not the filesize). The
+filesize is therefore calculated whenever a file is inserted in the
+Content Repository by the external program (the webserver's database
+driver) doing the insertion into the database..
 
-<p>As mentioned in the previous paragraph, we do not subtype
-content_revision or content_folder.  It is possible that this will
-cause problems in the future.  In particular, URL surgery might enable
-people to do some funny stuff with other items in the Content
-Repository.  However, appropriate use of the permissions system should
-prevent people from doing anything which they couldn't achieve through
-other means.
+<p>The content_revision is subtyped as a "file-storage-item" to allow
+site-wide search to distinguish file storage objects in its search
+results. This feature is not implemented yet, however.
 
 <h4>Permissions Design</h4>
 
@@ -177,13 +177,61 @@ does not have any meaning for versions.
 
 <h3>VI.  API</h3> 
 
-<p>For the most part, File Storage will simply use the Content Repository APIs.
+<p>For the most part, File Storage will provide wrappers to the
+Content Repository APIs. 
 
 <h4>PL/SQL API</h4>
 
-<p>File Storage is not intended to provide any public PL/SQL APIs.
-There are two internal PL/SQL functions, <code>get_root_folder</code>
-and <code>new_root_folder</code>, defined in the <a
+<p>File Storage provides public PL/SQL APIs either as wrappers to the
+Content Repository API, or more involved functions that calls multiple
+Content Repository PL/SQP functions. One reason for doing this is to
+abstract from the Content Repository datamodel and naming conventions,
+due to the different way File Storage labels its objects. 
+
+<p>
+
+The main objects of File Storage are "folders" and "files". A "folder"
+is analogous to a subdirectory in the Unix/Windows-world filesystem.
+Folder objects are stored as Content Repostory folders, thus folders
+are stored "as is" in the Content Repository.
+
+<p>
+
+"Files", however, can cause some confusion when stored in the Content
+Repository.  A "file" in File Storage consists of meta-data, and
+possibly multiple versions of the file's contents.  The main meta-data
+of a "file" is its "title", which is stored in the Content
+Repository's "name" attribute of the cr_items table. The "title" of a
+file should be unique within a subdirectory, although a directory may
+contain a file and a folder with the same "title".
+
+<p>
+
+Each version of a file is stored as a revision in cr_revisions table
+of Content Repository. The Content Repository also allows some
+meta-data about a version to be stored in this table, and indeed File
+Storage uses attributes of the cr_revisions table are used. However,
+this is where the confusion is created. The name of the filename
+uploaded from the client's computer, as a version of the file, is
+stored in the "title" attribute of cr_revisions.  Note that "title" is
+also used as the (unique within a folder) identifier of the file
+stored in cr_items.  Thus, wrappers to the Content Repository API
+makes sure that the naming convention is corect: cr_items.name
+attribute stores the title of a file and all its versions, while the
+cr_revisions.title attribute stores the filename of the version
+uploaded into the Content Repository.
+
+<p>
+
+Meta-data about a version of a file stored in Content Repository are
+the size of the version (stored in cr_revisions.content_length) and
+version notes (stored in cr_revisions.description).
+
+<p>
+
+There are two internal PL/SQL functions that do not call the Content
+Repository API, however: <code>get_root_folder</code> and
+<code>new_root_folder</code>, defined in the <a
 href="/api-doc/plsql-subprogram-one?type=PACKAGE&name=FILE%5fSTORAGE">file_storage
 PL/SQL package</a>
 
@@ -346,8 +394,6 @@ Returns 1 if the version_id corresponds to a version in the file-storage
 
 
 
-
-
 <h3>VII.  Data Model Discussion</h3>
 
 <p>
@@ -356,6 +402,55 @@ one additional table, <code>fs_root_folders</code>, which maps between
 package instances and the corresponding root folders in the Content
 Repository.
 
+<p>
+
+Inserting a row into the table fs_root_folders occurs the first time
+the package instance is visited. The reason is that there is no
+facility in APM to insert a row in the database everytime a package
+instance is created (technically, there is no "on insert" trigger
+imposed by APM on Content Repository, since they are separate packages
+even though they are both part of the core). The solution to this
+deficiency is a bit hack-ish, but seems to be the only solution
+available (unless APM allows trigger functions to be registered, to be
+caled at package instance creation).  Whenever the package instance is
+first visited, it calls a PL/SQL function that calculated the "root
+folder" of the File Storage. If this function detects that there is no
+"root folder" yet for this instance (as would be the case when the
+instance is first visited), it inserts the package id and a unique
+folder_id into the fs_root_folder table to serve as the root folder
+identifier.  It also inserts meta-data information about this folder
+in cr_items table.  Finally, it returns the newly created folder
+identifier as the root folder for this package instance. Subsequent
+visits to the package instance will detect the root folder, and will
+then return the root folder identifier.
+
+<p>
+
+There is an "on delete cascade" constraint imposed on the package_id
+attribute of fs_root_folders. The reason for this is that whenever the
+package instance is deleted by the site administrator, it
+automatically deletes the mapping between APM and the Content
+Repository (i.e, the package identifier and the root folder
+identified), and presumably the particular instance of File Storage.
+Unfortunately this has an undesirable effect. There is no
+corresponding "on delete cascade" on the Content Repository objects so
+that deleting the root folder will cause deletion of everything under
+the root folder.  Left on its own, the "on delete cascade" on the
+package identifier attribute of fs_root_folders will cause all objects
+belonging to the instance of File Storage deleted to be orphaned in
+the database, since the root folder is the crucial link from which all
+content is referenced!
+
+<p>
+
+The solution is (hopefully) more elegant: an "before on delete"
+trigger that first cleans up all contents under the root folder
+identifier before the root folder identifier is deleted by APM. This
+trigger walks through all the contents of the instance of File
+Storage, and starts deleting from the "leaves" or end nodes of the
+file tree up to the root folder.  Later improvements in Content
+Repository will allow archiving of the contents instaed of actually
+deleting them from the database.
 
 <h3>VIII.  User Interface</h3>
 
@@ -372,10 +467,39 @@ presented alongside the normal user action when appropriate.
 <h3>IX.  Configuration/Parameters</h3>
 
 <p>
-There is only one configuration parameter in this version of
-File Storage, the maximum size of uploaded files.  All of the other
-parameters in previous versions have been made obsolete by ACS 4
-features like site-nodes and templating.
+
+There are two configuration parameters in this version of File
+Storage. The first parameter <em>MaximumFileSize</em> is the maximum
+size of uploaded files, which should be self-explanatory. The other
+parameter is a flag that indicates to the package whether files are
+stored in the database or in the webserver's filesystem. This second
+parameter <em>StoreFilesInDatabaseP</em> uses the new capability in
+Content Repository to use the Content Repository as a mere catalog to
+store file information while the actual file contents are stored in
+the webserver's filesystem. Note that when files are stored in the
+filesystem, backups of the database will only store the catalog, but
+not the contents. Thus, it is important for the site administrator to
+store the entire directory containing the Content Repository files (in
+particular, <em>pageroot</em>/content-repository-content-files) when
+storing files in the fiesystem.
+
+<p>
+
+When a file is stored in the Content Repository, it first queries the
+parameter <em>StoreFilesInDatabaseP</em> to determine how the new file
+will be stored.  Thus, it is important that this parameter should be
+changed only at package instance creation, or before any operation
+that uploads a file into Content Repository. Otherwise, the package
+instance will have files of different storage types, depending on the
+value of the parameter at the time the file is uploaded.  Although all
+functionality provided by File Storage will continue to work (copy,
+move, delete, etc.), backing up the contents will be more complicated
+if the parameter is changed.
+
+<p>
+
+All of the other parameters in previous versions have been made
+obsolete by ACS 4 features like site-nodes and templating.
 
 
 <h3>X.  Future Improvements/Areas of Likely Change</h3>
