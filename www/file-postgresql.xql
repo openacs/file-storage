@@ -13,16 +13,15 @@
       <querytext>
       
 	select person__name(o.creation_user) as owner,
-       		i.name as title,
-       		r.title as name,
+       		f.name as title,
+       		coalesce(f.url,f.file_upload_name) as name,
        		acs_permission__permission_p(:file_id,:user_id,'write') as write_p,
        		acs_permission__permission_p(:file_id,:user_id,'delete') as delete_p,
        		acs_permission__permission_p(:file_id,:user_id,'admin') as admin_p,
-                content_item__get_path(o.object_id, :root_folder_id) as file_url,		i.live_revision
-	from   acs_objects o, cr_revisions r, cr_items i
+                content_item__get_path(o.object_id, :root_folder_id) as file_url, f.live_revision
+	from   acs_objects o, fs_objects f
 	where  o.object_id = :file_id
-	and    i.item_id   = o.object_id
-	and    r.revision_id = i.live_revision
+	and    f.object_id = o.object_id
       </querytext>
 </fullquery>
 
