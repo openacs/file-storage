@@ -726,6 +726,7 @@ ad_proc fs::add_version {
 			 -creation_user $creation_user \
 			 -creation_ip $creation_ip \
 			 -other_type "file_storage_object" \
+			 -image_type "file_storage_object" \
 			 -title $title \
 			 -description $description \
 			 $parent_id \

@@ -162,14 +162,16 @@
 
   <fullquery name="fs::add_file.create_item">
     <querytext>
-      select file_storage.new_file (
-          :name,
-          :parent_id,
-	  :creation_user,
-          :creation_ip,
-          :indbp,
-          :item_id
-      )
+      	begin 
+          :1 := file_storage.new_file (
+                  folder_id => :parent_id,
+                  title => :name,
+		  creation_user => :creation_user,
+		  creation_ip => :creation_ip,
+		  item_id => :item_id,
+		  indb_p => 't'
+               );
+	end;
     </querytext>
   </fullquery>
 
