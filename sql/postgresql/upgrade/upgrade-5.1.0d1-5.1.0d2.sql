@@ -609,30 +609,4 @@ begin
   return v_title;
 
 end;' language 'plpgsql';
-
-create function inline_0 () returns integer as '
-declare 
-	v_item_row record;
-begin
-	for v_item_row in select
-            r.item_id, r.revision_id, r.title, i.name, i.live_revision
-            from cr_items i, cr_revisions r
-	    where i.item_id=r.item_id
-	    and i.live_revision=r.revision_id
-	    and i.content_type=''file_storage_object''
-	loop
-
-	   update cr_items set name=v_item_row.name
-	        where item_id=v_item_row.item_id;
-
-	   update cr_revisions set title=v_item_row.title
-		where revision_id=v_item_row.revision_id;
-	
-	end loop;
-
-return null;
-end;' language 'plpgsql';
-
-select inline_0();
-
-drop function inline_0();
+-- name title switch script moved to a6-a7 upgrade
