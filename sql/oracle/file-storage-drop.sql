@@ -35,9 +35,21 @@ drop trigger fs_root_folder_delete_trig;
 drop table fs_root_folders;
 drop package file_storage;
 
+declare
+  template_id integer;
 begin
+template_id := content_type.get_template(
+  content_type => 'file_storage_object',
+  use_context  => 'public'
+);
+
+content_type.unregister_template(
+  template_id  => template_id
+);
+
 content_type.drop_type ( 
-  content_type => 'file_storage_object');
+  content_type => 'file_storage_object'
+);
 end;
 /
 show errors

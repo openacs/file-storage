@@ -8,7 +8,7 @@ ad_page_contract {
     folder_id:integer,notnull
     upload_file:notnull,trim
     upload_file.tmpfile:tmpfile
-    title:notnull,trim
+    title:trim
     description
 } -validate {
     valid_folder -requires {folder_id:integer} {
@@ -33,6 +33,11 @@ ad_require_permission $folder_id write
 if ![regexp {[^//\\]+$} $upload_file filename] {
     # no match
     set filename $upload_file
+}
+
+# Get the title
+if { [empty_string_p $title] } {
+    set title $filename
 }
 
 # Get the user

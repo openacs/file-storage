@@ -48,6 +48,13 @@ drop trigger fs_root_folder_delete_trig on fs_root_folders;
 drop table fs_root_folders;
 select drop_package('file_storage');
 
+-- Unregister the content template
+select content_type__unregister_template (
+       'file-storage-object',
+       content_type__get_template('file-storage-object','public'),
+       'public'
+);
+
 -- Remove subtype of content_revision so that site-wide-search
 -- can distinguish file-storage items in the search results
 select content_type__drop_type (

@@ -47,6 +47,11 @@ create table fs_root_folders (
 
 -- To enable site-wide search to distinguish CR items as File Storage items
 -- we create an item subtype of content_item in the ACS Object Model
+
+set escape on
+
+declare
+    template_id integer;
 begin
     content_type.create_type(
         content_type => 'file_storage_object',
@@ -57,9 +62,30 @@ begin
         id_column => 'folder_id',
         name_method => 'file_storage.get_title'
     );
+
+    -- Create the (default) file_storage_object content type template
+
+    template_id := content_template.new( 
+      name      => 'file-storage-default',
+      text      => '<master>
+<property name="title">@title;noquote@</property>
+<property name="context">@context;noquote@</property>
+\@text;noquote@'
+    );
+
+    -- Register the template for the file_storage_object content type
+
+    content_type.register_template(
+      content_type => 'file_storage_object',
+      template_id  => template_id,
+      use_context  => 'public',
+      is_default   => 't'
+    );
+
 end;
 /
 show errors;
+
 
 @ file-storage-package-create.sql
 

@@ -56,7 +56,7 @@
 	<else>
 	  <td><a href="@fs_url@download/@contents.file_upload_name@?version_id=@contents.live_revision@"><img src="@fs_url@graphics/file.gif" alt="#file-storage.file#" border="0"></a></td>
 	  <td>
-	    <a href="@fs_url@download/@contents.file_upload_name@?version_id=@contents.live_revision@">
+	    <a href="@fs_url@view/@contents.file_url@">
 	      @contents.name@
 	    </a>
 	    <if @contents.new_p@>
