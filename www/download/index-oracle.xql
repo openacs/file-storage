@@ -21,7 +21,7 @@
 
 	select content
         from   cr_revisions
-        where  revision_id = :version_id
+        where  revision_id = $version_id
  
       </querytext>
 </fullquery>
