@@ -40,7 +40,7 @@ if {[string equal $confirmed_p "t"] && [string equal $blocked_p "f"] } {
 
     db_1row parent_id "select parent_id from cr_items where item_id = :file_id"
 
-    db_exec_plsql file-delete "
+    db_exec_plsql file_delete "
     begin
         content_item.delete(:file_id);
     end;"
