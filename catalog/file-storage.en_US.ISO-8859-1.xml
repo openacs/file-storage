@@ -86,7 +86,7 @@ This action cannot be reversed.</msg>
 so you cannot delete the file.</msg>
   <msg key="lt_This_folder_contains_">This folder contains items that you do not have permission to
 delete, therefore you cannot delete it.</msg>
-  <msg key="lt_This_is_a_ZIP">This is a ZIP file containing multiple files</msg>
+  <msg key="lt_This_is_a_ZIP">This is a ZIP file containing multiple files. Expect a long upload time for large files.  You may minimize your browser while waiting.</msg>
   <msg key="lt_Use_the_Browse_button">Use the &quot;Browse...&quot; button to locate your file, 
     then click &quot;Open&quot;.</msg>
   <msg key="lt_version_not_valid">The specified version is not valid.</msg>
