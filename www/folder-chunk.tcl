@@ -115,7 +115,7 @@ db_multirow -extend { label icon last_modified_pretty content_size_pretty proper
     if {[string equal $type url]} {
         set label [_ file-storage.link]
 	set properties_link [_ file-storage.properties]
-	set properties_url "simple-edit?[export_vars {{object_id $object_id}}]"
+	set properties_url "simple?[export_vars {{object_id $object_id}}]"
 	set icon "/resources/file-storage/link.gif"
         set file_url $url
     } elseif {![string equal $type folder]} {
