@@ -429,14 +429,11 @@ end;' language 'plpgsql';
 
 create or replace function file_storage__get_title (
        --
-       -- Unfortunately, title in the file-storage context refers
-       -- to the name attribute in cr_items, not the title attribute in 
-       -- cr_revisions
        integer          -- cr_items.item_id%TYPE
 ) returns varchar as ' 
 declare
   get_title__item_id                 alias for $1;  
-  v_title                            cr_items.name%TYPE;
+  v_title                            cr_revisions.title%TYPE;
   v_content_type                     cr_items.content_type%TYPE;
 begin
   
@@ -455,8 +452,9 @@ begin
          where symlink_id = get_title__item_id;
        else
          select title into v_title
-         from cr_revisions
-         where revision_id=(select live_revision from cr_items where item_id = get_title__item_id);
+         from cr_revisions, cr_items
+         where revision_id=live_revision
+	 and item_id=get_title__item_id;
        end if;
   end if;
 
@@ -559,7 +557,7 @@ begin
         where cr_items.item_id = new_version__item_id;
 
         perform acs_object__update_last_modified(v_folder_id,new_version__creation_user,new_version__creation_ip);
-
+	perform acs_object__update_last_modified(new_version__item_id,new_version__creation_user,new_version__creation_ip);
 	return v_revision_id;
 
 end;' language 'plpgsql';

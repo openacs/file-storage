@@ -1,5 +1,9 @@
--- Need to recreate package, to add user and IP to update_last_modified
--- $Id
+-- 
+-- @author Dave Bauer (dave@thedesignexperience.org)
+-- @creation-date 2003-11-15
+-- @cvs-id $Id$
+--
+
 
 create or replace package file_storage
 as
@@ -22,7 +26,8 @@ as
         --
         package_id in apm_packages.package_id%TYPE,
         folder_name in cr_folders.label%TYPE default null,
-        description in cr_folders.description%TYPE default null
+        description in cr_folders.description%TYPE default null,
+	name in cr_items.name%TYPE default null
     ) return fs_root_folders.folder_id%TYPE;
 
     function new_file(
@@ -31,7 +36,7 @@ as
         -- Wrapper for content_item.new
         --
         item_id in cr_items.item_id%TYPE default null,
-        title in cr_items.name%TYPE,
+        name in cr_items.name%TYPE,
         folder_id in cr_items.parent_id%TYPE,
         creation_user in acs_objects.creation_user%TYPE,
         creation_ip in acs_objects.creation_ip%TYPE,
@@ -52,7 +57,7 @@ as
         -- Wrapper to content_item__rename
         --
         file_id in cr_items.item_id%TYPE,
-        title in cr_items.name%TYPE
+        name in cr_items.name%TYPE
     );
 
     function copy_file(
@@ -200,7 +205,8 @@ as
         --
         package_id in apm_packages.package_id%TYPE,
         folder_name in cr_folders.label%TYPE default null,
-        description in cr_folders.description%TYPE default null
+        description in cr_folders.description%TYPE default null,
+	name in cr_items.name%TYPE default null
     ) return fs_root_folders.folder_id%TYPE
     is
         v_folder_id             fs_root_folders.folder_id%TYPE;
@@ -229,7 +235,7 @@ as
         end if;
 
         v_folder_id := content_folder.new(
-            name => v_package_key || '_' || package_id,
+            name => nvl(new_root_folder.name,v_package_key || '_' || package_id),
             label => v_folder_name,
             description => v_description
         );
@@ -268,7 +274,7 @@ as
         -- Wrapper for content_item.new
         --
         item_id in cr_items.item_id%TYPE default null,
-        title in cr_items.name%TYPE,
+        name in cr_items.name%TYPE,
         folder_id in cr_items.parent_id%TYPE,
         creation_user in acs_objects.creation_user%TYPE,
         creation_ip in acs_objects.creation_ip%TYPE,
@@ -281,7 +287,7 @@ as
         then
             v_item_id := content_item.new(
                 item_id => new_file.item_id,
-                name => new_file.title,
+                name => new_file.name,
                 parent_id => new_file.folder_id,
                 creation_user => new_file.creation_user,
                 context_id => new_file.folder_id,
@@ -291,7 +297,7 @@ as
             );
         else
             v_item_id := content_item.new(
-                name => new_file.title,
+                name => new_file.name,
                 parent_id => new_file.folder_id,
                 creation_user => new_file.creation_user,
                 context_id => new_file.folder_id,
@@ -325,13 +331,13 @@ as
         -- Wrapper to content_item__rename
         --
         file_id in cr_items.item_id%TYPE,
-        title in cr_items.name%TYPE
+        name in cr_items.name%TYPE
     )
     is
     begin
         content_item.rename(
             item_id => file_storage.rename_file.file_id,
-            name => file_storage.rename_file.title
+            name => file_storage.rename_file.name
         );
     end rename_file;
 
@@ -345,7 +351,7 @@ as
         creation_ip in acs_objects.creation_ip%TYPE
     ) return cr_revisions.revision_id%TYPE
     is
-        v_title                 cr_items.name%TYPE;
+        v_name                 cr_items.name%TYPE;
         v_live_revision         cr_items.live_revision%TYPE;
         v_filename              cr_revisions.title%TYPE;
         v_description           cr_revisions.description%TYPE;
@@ -362,7 +368,7 @@ as
         select i.name, i.live_revision, r.title, r.description,
                r.mime_type, r.content, r.filename, r.content_length,
                decode(i.storage_type,'lob','t','f')
-        into v_title, v_live_revision, v_filename, v_description,
+        into v_name, v_live_revision, v_filename, v_description,
              v_mime_type, v_lob, v_file_path, v_content_length,
              v_indb_p
         from cr_items i, cr_revisions r
@@ -373,7 +379,7 @@ as
         -- We should probably use the copy functions of CR
         -- when we optimize this function
         v_new_file_id := file_storage.new_file(
-            title => v_title,
+            name => v_name,
             folder_id => file_storage.copy_file.target_folder_id,
             creation_user => file_storage.copy_file.creation_user,
             creation_ip => file_storage.copy_file.creation_ip,
@@ -457,6 +463,7 @@ as
         where cr_items.item_id = file_storage.new_version.item_id;
 
         acs_object.update_last_modified(v_folder_id,new_version.creation_user,new_version.creation_ip);
+	acs_object.update_last_modified(new_version.item_id,new_version.creation_user,new_version.creation_ip);
 
         return v_revision_id;
 
@@ -466,13 +473,10 @@ as
 
     function get_title(
         --
-        -- Unfortunately, title in the file-storage context refers
-        -- to the name attribute in cr_items, not the title attribute in
-        -- cr_revisions
         item_id in cr_items.item_id%TYPE
     ) return varchar
     is
-        v_title                 cr_items.name%TYPE;
+        v_title                 cr_revisions.title%TYPE;
         v_content_type          cr_items.content_type%TYPE;
     begin
         select content_type
@@ -492,9 +496,10 @@ as
                 from cr_symlinks
                 where symlink_id = get_title.item_id;
             else
-                select name into v_title
-                from cr_items
-                where item_id = get_title.item_id;
+                select title into v_title
+                from cr_revisions, cr_items
+                where item_id = get_title.item_id
+	        and   live_revision = revision_id;
             end if;
         end if;
 
@@ -697,12 +702,28 @@ end;
 /
 show errors;
 
--- JS: AFTER DELETE TRIGGER to clean up last entry in CR
-create or replace trigger fs_root_folder_delete_trig
-after delete on fs_root_folders
-for each row
 begin
-    content_folder.delete(:old.folder_id);
+	for v_item_row in (
+	    select r.item_id, r.revision_id, r.title, i.name
+            from cr_items i, cr_revisions r
+	    where i.item_id=r.item_id
+	    and i.live_revision=r.revision_id
+	    and i.content_type='file_storage_object'
+	) loop
+
+	   update cr_items set name=v_item_row.name
+	        where item_id=v_item_row.item_id;
+
+	   update cr_revisions set title=v_item_row.title
+		where revision_id=v_item_row.revision_id;
+	
+	end loop;
+
 end;
 /
 show errors;
+
+
+select inline_0();
+
+drop function inline_0();
