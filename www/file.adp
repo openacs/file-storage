@@ -2,6 +2,7 @@
 <property name="title">@title;noquote@</property>
 <property name="header">@title;noquote@</property>
 <property name="context">@context;noquote@</property>
+<property name="displayed_object_id">@file_id;noquote@</property>
 
 <p>#file-storage.back_to_folder_view#</p>
 <p><if @show_all_versions_p@ true>
