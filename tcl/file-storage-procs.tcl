@@ -640,6 +640,10 @@ ad_proc -public fs::add_file {
     db_transaction {
 	if {[empty_string_p $item_id] || ![db_string item_exists ""]} {
 	    set item_id [db_exec_plsql create_item ""]
+
+	    if {![empty_string_p $creation_user]} {
+	    permission::grant -party_id $creation_user -object_id $item_id -privilege admin
+	    }
 	}
 
 	set revision_id [cr_import_content \
@@ -659,9 +663,6 @@ ad_proc -public fs::add_file {
 	db_dml set_live_revision ""
 	db_exec_plsql update_last_modified ""
 
-	if {![empty_string_p $creation_user]} {
-	    permission::grant -party_id $creation_user -object_id $item_id -privilege admin
-	}
     } on_error {
 	error $errmsg
     }
