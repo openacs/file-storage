@@ -33,4 +33,12 @@ set context [fs_context_bar_list -final "[_ file-storage.Rename]" $file_id]
 # Variable title used by message lookup
 set page_title [_ file-storage.file_edit_page_title]
 
+set title_help [_ file-storage.lt_Please_enter_the_new_]
+set submit_label [_ file-storage.Change_Name]
+
+ad_form -action file-edit-2 -export file_id -form {
+    {title:text(text) {help_text $title_help} {label \#file-storage.Name\#}}
+    {submit:text(submit) {label $submit_label}}
+} -has_submit 1
+
 ad_return_template

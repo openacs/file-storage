@@ -44,3 +44,27 @@ if {[empty_string_p $title]} {
 
 # Message lookup uses variable pretty_name
 set page_title [_ file-storage.simple_add_page_title]
+
+
+ad_form -action simple-add-2 -export {folder_id type} -form {
+    {dummy:text(hidden)}
+} -has_submit 1
+
+if {$lock_title_p} {
+    ad_form -extend -form {
+        {title_display:text(inform) {label \#file-storage.Title\#} }
+        {title:text(hidden) {value $title}}
+    }
+} else {
+    ad_form -extend -form {
+        {title:text {label \#file-storage.Title\#} {html {size 30}} }
+    }
+}
+
+set submit_label [_ file-storage.Create]
+
+ad_form -extend -form {
+    {url:text(text) {label \#file-storage.URL\#} {value "http://"}}
+    {description:text(textarea),optional {html {rows 5 cols 50}} {label \#file-storage.Description\#}}
+    {submit:text(submit) {label $submit_label}}
+}
