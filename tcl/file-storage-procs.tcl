@@ -3,9 +3,8 @@ ad_library {
 
     @author Kevin Scaldeferri (kevin@arsdigita.com)
     @creation-date 6 November 2000
-    @cvs-id $Id$
+    @version $Id$
 }
-
  
 ad_proc fs_get_root_folder {
     {-package_id ""}
@@ -16,13 +15,7 @@ ad_proc fs_get_root_folder {
 	set package_id [ad_conn package_id]
     }
 
-    set folder_id [db_exec_plsql fs_root_folder "
-    begin
-        :1 := file_storage.get_root_folder(:package_id);
-    end;"]
-
-    return $folder_id
-
+    return [fs::get_root_folder -package_id $package_id]
 }
 
 ad_proc fs_get_folder_name {
@@ -229,4 +222,59 @@ ad_proc fs_maybe_create_new_mime_type {
     return $mime_type
 }
 
+namespace eval fs {
 
+    ad_proc -public new_root_folder {
+        -package_id
+    } {
+        Create a root folder for a package instance
+
+        @param package_id Package instance associated with this root folder
+
+        @return folder_id of the new root folder
+    } {
+        return [db_exec_plsql new_root_folder {}]
+    }
+
+    ad_proc -public get_root_folder {
+        -package_id
+    } {
+        Get the root folder of a package instance
+
+        @param package_id Package instance of the root folder to retrieve
+
+        @return folder_id of the root folder retrieved
+    } {
+        return [db_exec_plsql get_root_folder {}]
+    }
+
+    ad_proc -public new_folder {
+        -name
+        -pretty_name
+        -parent_id
+        {-creation_user ""}
+        {-creation_ip ""}
+    } {
+        Create a new folder
+
+        @param name Internal name of the folder, must be unique under a given
+                    parent_id
+        @param pretty_name What we show to users of the system
+        @param parent_id Where we create this folder
+        @param creation_user Who created this folder
+        @param creation_ip What is the ip address of the creation_user
+
+        @return folder_id of the newly created folder
+    } {
+        if {[empty_string_p $creation_user]} {
+            set creation_user [ad_conn user_id]
+        }
+
+        if {[empty_string_p $creation_ip]} {
+            set creation_ip [ns_conn peeraddr]
+        }
+
+        return [db_exec_plsql new_folder {}]
+    }
+
+}

@@ -3,15 +3,30 @@
 <queryset>
    <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
-<fullquery name="fs_get_root_folder.fs_root_folder">      
-      <querytext>
+    <fullquery name="fs::new_root_folder.new_root_folder">
+        <querytext>
+            select file_storage__new_root_folder(:package_id);
+        </querytext>
+    </fullquery>
 
-	select file_storage__get_root_folder(:package_id);
+    <fullquery name="fs::get_root_folder.get_root_folder">
+        <querytext>
+            select file_storage__get_root_folder(:package_id);
+        </querytext>
+    </fullquery>
 
-      </querytext>
-</fullquery>
+    <fullquery name="fs::new_folder.new_folder">
+        <querytext>
+            select file_storage__new_folder(
+                :name,
+                :pretty_name,
+                :parent_id,
+                :creation_user,
+                :creation_ip
+            );
+        </querytext>
+    </fullquery>
 
- 
 <fullquery name="fs_get_folder_name.folder_name">      
       <querytext>
 
