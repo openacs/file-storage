@@ -49,7 +49,14 @@ if {[info exists folder_id]} {
     # but the existing file-move page checks for WRITE
       
     template::multirow foreach move_objects {
+      db_transaction {
  	db_exec_plsql move_item {}
+      } on_error {
+         set folder_name "[_ file-storage.folder]"
+         set folder_link "<a href=\"index?folder_id=$folder_id\">$folder_name</a>"
+         ad_return_complaint 1 "[_ file-storage.lt_The_folder_link_you_s]"
+         ad_script_abort
+         }
      }
 
      ad_returnredirect $return_url
