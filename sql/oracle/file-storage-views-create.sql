@@ -32,7 +32,8 @@ as
             (select count(*)
              from fs_simple_objects
              where fs_simple_objects.folder_id = cr_folders.folder_id)) as content_size,
-           cr_items.parent_id
+           cr_items.parent_id,
+           cr_items.name as key
     from cr_folders,
          cr_items,
          acs_objects
@@ -47,7 +48,8 @@ as
            cr_revisions.content_length as content_size,
            cr_items.name,
            acs_objects.last_modified,
-           cr_items.parent_id
+           cr_items.parent_id,
+           cr_items.name as key
     from cr_revisions,
          cr_items,
          acs_objects
@@ -66,6 +68,7 @@ as
            fs_folders.last_modified,
            '' as url,
            fs_folders.parent_id,
+           fs_folders.key,
            0 as sort_key
     from fs_folders
     union
@@ -77,6 +80,7 @@ as
            fs_files.last_modified,
            '' as url,
            fs_files.parent_id,
+           fs_files.key,
            1 as sort_key
     from fs_files
     union
@@ -88,5 +92,6 @@ as
            fs_urls_full.last_modified,
            fs_urls_full.url,
            fs_urls_full.folder_id as parent_id,
+           fs_urls_full.url as key,
            1 as sort_key
     from fs_urls_full;
