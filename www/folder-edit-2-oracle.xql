@@ -6,7 +6,7 @@
 <fullquery name="folder_rename">
       <querytext>
       begin
-          content_folder.rename (
+          content_folder.edit_name (
                   folder_id => :folder_id,
                   label => :folder_name
           );
