@@ -16,7 +16,7 @@
 	<tr class="even">
       </else>
       <if @contents.type@ eq "folder">
-	<td><a href="@fs_url@index?folder_id=@contents.object_id@&n_past_days=@n_past_days@"><img src="@fs_url@graphics/folder.gif" border=0 alt="#file-storage.folder#"></a></td>
+	<td><a href="@fs_url@index?folder_id=@contents.object_id@&n_past_days=@n_past_days@"><img src="/resources/file-storage/folder.gif" border=0 alt="#file-storage.folder#"></a></td>
 	<td>
 	  <a href="@fs_url@index?folder_id=@contents.object_id@&n_past_days=@n_past_days@">@contents.name@</a>
           <if @contents.new_p@ and @contents.content_size@ gt 0><font color="red">#file-storage.new#</font></if>
@@ -30,7 +30,7 @@
       </if>
       <else>
 	<if @contents.type@ eq "url">
-	  <td><a href="@fs_url@url-goto?url_id=@contents.object_id@"><img src="@fs_url@graphics/file.gif" alt="#file-storage.file#" border=0></a></td>
+	  <td><a href="@fs_url@url-goto?url_id=@contents.object_id@"><img src="/resources/file-storage/file.gif" alt="#file-storage.file#" border=0></a></td>
 	  <td>
 	    <a href="@fs_url@url-goto?url_id=@contents.object_id@">@contents.name@</a>
             <if @contents.new_p@><font color="red">#file-storage.new#</font></if>
@@ -54,7 +54,7 @@
 	  <td>@contents.last_modified_pretty@</td>
 	</if>
 	<else>
-	  <td><a href="@fs_url@download/@contents.file_upload_name@?version_id=@contents.live_revision@"><img src="@fs_url@graphics/file.gif" alt="#file-storage.file#" border="0"></a></td>
+	  <td><a href="@fs_url@download/@contents.file_upload_name@?version_id=@contents.live_revision@"><img src="/resources/file-storage/file.gif" alt="#file-storage.file#" border="0"></a></td>
 	  <td>
 	    <a href="@fs_url@view/@contents.file_url@">
 	      @contents.name@
