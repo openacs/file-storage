@@ -37,7 +37,7 @@
        		r.description,
        		acs_permission__permission_p(r.revision_id,:user_id,'admin') as admin_p,
        		acs_permission__permission_p(r.revision_id,:user_id,'delete') as delete_p,
-       		r.content_length as content_size
+       		coalesce(r.content_length,0) as content_size
 	from   acs_objects o, cr_items i,cr_revisions r
        		left join cr_mime_types m on r.mime_type=m.mime_type
 	where o.object_id = r.revision_id
