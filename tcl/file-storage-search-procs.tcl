@@ -1,4 +1,12 @@
-# Site-wide search procs
+ad_library { 
+    Site-wide search procs for file storage
+    Implements OpenFTS Search service contracts
+
+    @author Jowell S. Sabino (jowellsabino@netscape.net)
+    @creation-date 2001-12-18
+    @cvs-id $Id$
+}
+
 ad_proc fs__datasource {
     revision_id
 } {
