@@ -15,7 +15,7 @@
   permissions on this folder</a>
 </if>
 <p>
-<if @delete_p@ eq 1>
+<if @delete_p@ eq 1 and @file:rowcount@ eq 0>
   <li><a href="folder-delete?folder_id=@folder_id@">Delete this folder</a>
 </if>
 </ul>
