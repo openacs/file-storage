@@ -764,9 +764,11 @@ ad_proc fs::webdav_url {
     }
 
     if {[string equal "t" [oacs_dav::folder_enabled -folder_id $root_folder_id]]} {
-    
-	set url_stub [item::get_url -root_folder_id $root_folder_id $item_id]
-
+	if {[string equal $root_folder_id $item_id]} {
+	    set url_stub ""
+	} else {
+	    set url_stub [item::get_url -root_folder_id $root_folder_id $item_id]
+	}
 	set package_url [apm_package_url_from_id $package_id]
 
 	set webdav_prefix [oacs_dav::uri_prefix]
