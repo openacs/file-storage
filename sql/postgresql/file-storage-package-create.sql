@@ -559,14 +559,9 @@ begin
         where cr_items.item_id = new_version__item_id;
 
         perform acs_object__update_last_modified(v_folder_id,new_version__creation_user,new_version__creation_ip);
-<<<<<<< file-storage-package-create.sql
-	perform acs_object__update_last_modified(new_version__item_id,new_version__creation_user,new_version__creation_ip);
-	return v_revision_id;
-=======
-	perform acs_object__update_last_modified(new_version__item_id,new_version__creation_user,new_version__creation_ip);
+    	perform acs_object__update_last_modified(new_version__item_id,new_version__creation_user,new_version__creation_ip);
 
         return v_revision_id;
->>>>>>> 1.13
 
 end;' language 'plpgsql';
 
