@@ -48,7 +48,10 @@
             #file-storage.delete#
           </a>
 </if>
-          ]</small>
+<if @contents.write_p@ or @contents.delete_p@ or @contents.admin_p@>
+           ]
+</if>
+        </small>
       </td>
       <td>&nbsp;</td>
       <td>@contents.type@ </td>
@@ -77,7 +80,7 @@
 </else>
 </else>
     </tr>
-</multiple>
+    </multiple>
   </table>
 </if>
 <else>
