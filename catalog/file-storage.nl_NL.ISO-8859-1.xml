@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="file-storage" package_version="4.7d3" locale="nl_NL" charset="ISO-8859-1">
+<message_catalog package_key="file-storage" package_version="5.0.0b4" locale="nl_NL" charset="ISO-8859-1">
 
-  <msg key="Action">Handeling</msg>
+  <msg key="Action">Actie</msg>
   <msg key="Actions">Menu:</msg>
   <msg key="Actions_1">Acties</msg>
   <msg key="Add_File">Toevoegen Bestand</msg>
   <msg key="Add_pretty_name">Toevoegen %pretty_name%</msg>
   <msg key="Author">Auteur</msg>
   <msg key="back_to_folder_view">&lt;a href=&quot;%folder_view_url%&quot;&gt;Terug&lt;/a&gt; naar mappenoverzicht </msg>
+  <msg key="bytes">bytes</msg>
   <msg key="Change_Name">Wijzig Naam</msg>
   <msg key="Copy">Kopieren</msg>
   <msg key="Create">Aanmaken</msg>
@@ -37,9 +38,11 @@
   <msg key="Folder_Name">Mapnaam:</msg>
   <msg key="folder_type_pretty_name">map</msg>
   <msg key="index_page_navigate_up_folder">Naar hoger niveau %up_name%</msg>
-  <msg key="item">item</msg>
-  <msg key="items">items</msg>
+  <msg key="item">bestand</msg>
+  <msg key="items">bestanden</msg>
   <msg key="Last_Modified">Laatste Wijziging</msg>
+  <msg key="last_month">Afgelopen maand</msg>
+  <msg key="last_week">Afgelopen week</msg>
   <msg key="lt_administer_permission">permissies instellen</msg>
   <msg key="lt_All_Versions_of_title">Alle Versies van &quot;%title%&quot; </msg>
   <msg key="lt_Are_you_sure_that_you">Weet u zeker dat u deze versie &quot;%version_name%&quot; van &quot;%title%&quot; wilt verwijderen? Deze handeling kan niet worden hersteld.</msg>
@@ -47,12 +50,13 @@
   <msg key="lt_Comments_on_this_file">Opmerkingen bij dit bestand:</msg>
   <msg key="lt_contentscontent_size_">%contents.content_size_pretty% bytes </msg>
   <msg key="lt_delete_file">Weet u zeker dat u het bestand &quot;%title%&quot; met alle versies wilt verwijderen? Deze handeling kan niet worden hersteld.</msg>
-  <msg key="lt_delete_folder">Weet u zeker dat u de map &quot;%folder_name%&quot; met alle items wilt verwijderen? Deze handeling kan niet worden hersteld.</msg>
+  <msg key="lt_delete_folder">Weet u zeker dat u de map &quot;%folder_name%&quot; met alle bestanden wilt verwijderen? Deze handeling kan niet worden hersteld.</msg>
   <msg key="lt_Delete_this_file_incl">Verwijder dit bestand (met alle versies)</msg>
   <msg key="lt_Download_an_archive_o">Importeer een archief van de mapinhoud</msg>
   <msg key="lt_Either_there_is_alrea">Mogelijk is er al een map met die &quot;%folder_name%&quot; heet, anders heeft u meer dan eenmaal op de verzendknop geklikt. Gebruikt de Beck/Terug knop om een nieuwe naam te kiezen of bekijk de &lt;a href=&quot;%directory_url%&quot;&gt;lijst met bestanden&lt;/a&gt; om te zien of de map bestaat.</msg>
-  <msg key="lt_Folder_folder_name_is">Map %folder_name% is leeg.</msg>
+  <msg key="lt_Folder_folder_name_is">Map %folder_name% is leeg</msg>
   <msg key="lt_It_appears_that_there">Het lijkt alsof er in deze map al een bestand is met deze naam (of er is meer dan eenmaal op de knop geklikt).</msg>
+  <msg key="lt_Leave_blank_for_linked_documents">Laat de titel leeg als er meerdere documenten worden aangeboden, die onderling samenhangen.</msg>
   <msg key="lt_Live_version_of_title">Live versie van &quot;%title%&quot; </msg>
   <msg key="lt_Modify_permissions_on">Wijzig permissies voor dit bestand</msg>
   <msg key="lt_Modify_permissions_on_1">Wijzig permissies voor deze map</msg>
@@ -68,7 +72,8 @@
   <msg key="lt_The_specified_parent_">De betreffende bovenliggende map is niet geldig.</msg>
   <msg key="lt_There_are_no_versions">Er is geen versie van dit bestand beschikbaar</msg>
   <msg key="lt_This_file_has_version">Het bestand heeft versies die niet mogen worden verwijderd. Verwijderen van het bestand is dus niet mogelijk.</msg>
-  <msg key="lt_This_folder_contains_">Deze map heeft items die niet mogen worden verwijderd. Verwijderen van de map is dus niet mogelijk.</msg>
+  <msg key="lt_This_folder_contains_">Deze map heeft bestanden die niet mogen worden verwijderd. Verwijderen van de map is dus niet mogelijk.</msg>
+  <msg key="lt_This_is_a_ZIP">Dit is een ZIP bestand welke meerdere bestanden bevat.</msg>
   <msg key="lt_Use_the_Browse_button">Gebruik de &quot;Browse/Snuffel...&quot; knop om het bestand te vinden en klik dan op &quot;Open&quot;.</msg>
   <msg key="lt_version_not_valid">De betreffende versie is niet geldig.</msg>
   <msg key="lt_We_got_an_error_that_">Er is een fout opgetreden waarvan de oorzaak niet direct duidelijk is. De systeembeheerder zou hiervan graag op de hoogte worden gesteld.</msg>
@@ -83,24 +88,30 @@
   <msg key="lt_Your_search_on_query__1">Uw zoekactie naar &quot;%query%&quot; leverde de volgende resultaten op:</msg>
   <msg key="Modified">Gewijzigd</msg>
   <msg key="Move">Verplaatsen</msg>
+  <msg key="Multiple_files">Meerdere bestanden:</msg>
   <msg key="Name">Naam</msg>
   <msg key="new">Nieuw</msg>
+  <msg key="New_Folder">Nieuwe map</msg>
   <msg key="No_such_type">een dergelijk type bestaat niet</msg>
   <msg key="no_such_URL">een dergelijk URL bestaat niet</msg>
+  <msg key="Permissions">Rechten</msg>
+  <msg key="properties">eigenschappen</msg>
   <msg key="Rename">Hernoemen</msg>
   <msg key="Rename_this_folder">Hernoem Map</msg>
   <msg key="Save">Bewaren</msg>
   <msg key="Search">Zoeken</msg>
   <msg key="Search_again">Zoek opnieuw:</msg>
   <msg key="Search_Results">Zoekresultaten</msg>
+  <msg key="Set_Permissions">Rechten instellen</msg>
   <msg key="show_all_versions">toon alle versies</msg>
   <msg key="simple_add_page_title">Aanmaken %pretty_name%</msg>
-  <msg key="Size">Grootte</msg>
+  <msg key="Size">Inhoud</msg>
   <msg key="Size_bytes">Grootte (bytes)</msg>
   <msg key="this_may_take_a_while">&lt;strong&gt;Bericht:&lt;/strong&gt; Dit kan enige tijd in beslag nemen. Wij vragen uw geduld.</msg>
   <msg key="Title">Titel:</msg>
   <msg key="Title_">Titel:</msg>
   <msg key="Type">Type</msg>
+  <msg key="untitled">geen naam opgegeven</msg>
   <msg key="Update">Bijwerken</msg>
   <msg key="Upload">Aanbieden</msg>
   <msg key="Upload_a_file">Bestand aanbieden</msg>

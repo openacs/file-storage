@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="file-storage" package_version="4.7d3" locale="ch_zh" charset="utf-8">
+<message_catalog package_key="file-storage" package_version="5.0.0b4" locale="ch_zh" charset="utf-8">
 
   <msg key="Action">动作</msg>
   <msg key="Actions">动作：</msg>
@@ -8,6 +8,7 @@
   <msg key="Add_pretty_name">增加%pretty_name%</msg>
   <msg key="Author">作者</msg>
   <msg key="back_to_folder_view">&lt;a href=&quot;%folder_view_url%&quot;&gt;返回&lt;/a&gt;浏览文件夹</msg>
+  <msg key="bytes">字节</msg>
   <msg key="Change_Name">改变名称</msg>
   <msg key="Copy">拷贝</msg>
   <msg key="Create">创建</msg>
@@ -40,6 +41,8 @@
   <msg key="item">项</msg>
   <msg key="items">项</msg>
   <msg key="Last_Modified">最新更改</msg>
+  <msg key="last_month">上个月</msg>
+  <msg key="last_week">上个星期</msg>
   <msg key="lt_administer_permission">管理许可</msg>
   <msg key="lt_All_Versions_of_title">&quot;%title%&quot;的所有版本</msg>
   <msg key="lt_Are_you_sure_that_you">确实要删除&quot;%title%&quot;的版本&quot;%version_name%&quot;吗？此动作是不可逆转的。</msg>
@@ -84,14 +87,18 @@
   <msg key="Move">移动</msg>
   <msg key="Name">名称</msg>
   <msg key="new">新！</msg>
+  <msg key="New_Folder">新文件夹</msg>
   <msg key="No_such_type">无此类型</msg>
   <msg key="no_such_URL">无此URL</msg>
+  <msg key="Permissions">许可</msg>
+  <msg key="properties">属性</msg>
   <msg key="Rename">重新命名</msg>
   <msg key="Rename_this_folder">文件夹重新命名</msg>
   <msg key="Save">保存</msg>
   <msg key="Search">搜索</msg>
   <msg key="Search_again">再次搜索：</msg>
   <msg key="Search_Results">搜索结果</msg>
+  <msg key="Set_Permissions">设定许可</msg>
   <msg key="show_all_versions">显示所有版本</msg>
   <msg key="simple_add_page_title">创建%pretty_name%</msg>
   <msg key="Size">数目</msg>
@@ -100,6 +107,7 @@
   <msg key="Title">标题：</msg>
   <msg key="Title_">标题：</msg>
   <msg key="Type">类型</msg>
+  <msg key="untitled">无名</msg>
   <msg key="Update">更新</msg>
   <msg key="Upload">上传</msg>
   <msg key="Upload_a_file">上传文件</msg>

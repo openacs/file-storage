@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="file-storage" package_version="4.7d3" locale="ko_KR" charset="utf-8">
+<message_catalog package_key="file-storage" package_version="5.0.0b4" locale="ko_KR" charset="utf-8">
 
   <msg key="Action">활동</msg>
   <msg key="Actions">활동:</msg>
@@ -7,6 +7,8 @@
   <msg key="Add_File">파일 추가</msg>
   <msg key="Add_pretty_name">%pretty_name% 추가</msg>
   <msg key="Author">저자</msg>
+  <msg key="back_to_folder_view">폴더 보기로 &lt;a href=&quot;%folder_view_url%&quot;&gt;돌아 감&lt;/a&gt;</msg>
+  <msg key="bytes">바이트</msg>
   <msg key="Change_Name">이름 변경</msg>
   <msg key="Copy">복사</msg>
   <msg key="Create">생성</msg>
@@ -25,17 +27,28 @@
   <msg key="Edit_Folder">폴더 수정</msg>
   <msg key="Edit_URL">URL 수정</msg>
   <msg key="file">파일</msg>
+  <msg key="file_delete_page_title">%title% 삭제</msg>
+  <msg key="file_edit_page_title">%title% 이름 변경</msg>
+  <msg key="file_edit_page_title_1">%pretty_name% 편집</msg>
   <msg key="file_page_file_title_label">제목: %title%</msg>
+  <msg key="file_page_owner_label">소유자: %owner% </msg>
   <msg key="folder">폴더</msg>
+  <msg key="folder_delete_page_title">%folder_name% 삭제</msg>
   <msg key="Folder_ID">폴더 아이디</msg>
   <msg key="Folder_Name">폴더 이름:</msg>
   <msg key="folder_type_pretty_name">폴더</msg>
+  <msg key="index_page_navigate_up_folder">%up_name%까지</msg>
   <msg key="item">항목</msg>
   <msg key="items">항목</msg>
   <msg key="Last_Modified">마지막 수정</msg>
+  <msg key="last_month">지난 달</msg>
+  <msg key="last_week">지난 주</msg>
   <msg key="lt_administer_permission">관리자 사용권한</msg>
+  <msg key="lt_All_Versions_of_title">&quot;%title%&quot;의 모든 버전</msg>
   <msg key="lt_Are_you_sure_that_you">&quot;%title%&quot;의 &quot;%version_name%&quot;(을)를 삭제하시겠습니까?  삭제작업은 복구가 불가능합니다.</msg>
   <msg key="lt_bad_folder_id_folder_">폴더 아이디가 없음</msg>
+  <msg key="lt_Comments_on_this_file">이 파일에 논평</msg>
+  <msg key="lt_contentscontent_size_">%contents.content_size_pretty% 바이트</msg>
   <msg key="lt_delete_file">파일 &quot;%title%&quot;(을)를 삭제하시겠습니까? 삭제작업은 복구가 불가능합니다.</msg>
   <msg key="lt_delete_folder">폴더 &quot;%folder_name%&quot;(와)과 폴더안의 모든 내용을 삭제하시겠습니까? 삭제작업은 복구가 불가능합니다.</msg>
   <msg key="lt_Delete_this_file_incl">파일 삭제</msg>
@@ -43,9 +56,13 @@
   <msg key="lt_Either_there_is_alrea">&quot;%folder_name%&quot;을 가진 폴더가 이미 존재하거나 버튼을 한번이상 클릭했습니다. 뒤로 가기 버튼을 사용하여 돌아가서 새로운 이름을 선택하거나 폴더가 제대로 있는지를 보기 위해서 &lt;a href=&quot;%directory_url%&quot;&gt;디렉토리 리스트로 돌아가기&lt;/a&gt;를 누르시오. </msg>
   <msg key="lt_Folder_folder_name_is">폴더 %folder_name% (이)가 비었습니다.</msg>
   <msg key="lt_It_appears_that_there">(비록 실행버튼을 한번이상 클릭했을지라도) 이 폴더안에 파일이름이 이미 존재합니다. </msg>
+  <msg key="lt_Leave_blank_for_linked_documents">상호 연결된 복수개의 문서를 업로드할 때 제목은 빈칸으로 나두세요</msg>
+  <msg key="lt_Live_version_of_title">&quot;%title%&quot;의 사용하는 버전</msg>
   <msg key="lt_Modify_permissions_on">이 파일에 대한 사용권한 수정</msg>
   <msg key="lt_Modify_permissions_on_1">이 폴더에 대한 사용권한 수정</msg>
   <msg key="lt_Please_enter_the_new_">이 파일에 대한 새로운 이름을 입력하시오:</msg>
+  <msg key="lt_Select_the_folder_tha">&quot;%file_name%&quot;을 복사하여 넣으려는 폴더 선택</msg>
+  <msg key="lt_Select_the_folder_tha_1">&quot;%file_name%&quot;을 이동하려는 폴더 선택</msg>
   <msg key="lt_Show_files_modified_i">과거에 수정한 파일 보여주기</msg>
   <msg key="lt_show_only_live_versio">사용중인 버전만 보여주기</msg>
   <msg key="lt_The_folder_link_you_s">%folder_link% 선택한 폴더에 이미 동일한 이름의 파일이 있습니다.</msg>
@@ -56,6 +73,7 @@
   <msg key="lt_There_are_no_versions">유효한 파일 버전이 없습니다.</msg>
   <msg key="lt_This_file_has_version">이 파일에 대해 삭제 권한을 가지고 있지 않으므로, 파일을 삭제할 수 없습니다. </msg>
   <msg key="lt_This_folder_contains_">이 폴더에는 여러분이 삭제 권한을 가지고 있지 않은 항목을 포함하고 있기때문에 폴더를 삭제할 수 없습니다. </msg>
+  <msg key="lt_This_is_a_ZIP">이것은 여러 파일을 포함하는 zip 파일입니다.</msg>
   <msg key="lt_Use_the_Browse_button">&quot;찾아보기..&quot; 버튼으로 파일을 찾고, &quot;열기&quot;버튼을 클릭하시오.</msg>
   <msg key="lt_version_not_valid">지정한 버전이 유효하지 않습니다.</msg>
   <msg key="lt_We_got_an_error_that_">여러분의 신분을 확인할 수 없습니다. 시스템의 소유자에게 알리시기 바랍니다.</msg>
@@ -63,26 +81,36 @@
   <msg key="lt_Were_sorry_but_at_the">미안합니다. 폴더가 비어있지 않으면 삭제할 수 없습니다. </msg>
   <msg key="lt_You_may_not_delete_th">루트 폴더를 삭제할 수 없습니다.</msg>
   <msg key="lt_You_probably_clicked_">아마도 추가 버튼을 한번이상 클릭한 것 같습니다. %folder_link%에 파일이 로드되었는지 체크하던지, 돌아가기는 버튼을 사용하여 파일을 새로 입력할 수 있습니다.</msg>
+  <msg key="lt_Your_file_is_larger_t">파일이 시스템에서 허용하는 최대 파일 크기(%max_number_of_bytes% 바이트)를 초과했습니다.</msg>
   <msg key="lt_Your_file_is_larger_t_1">파일이 시스템에서 허용하는 최대 파일 크기(%max_number_of_bytes% 바이트)를 초과했습니다.</msg>
   <msg key="lt_Your_search_on_query_">&quot;%query%&quot;에대한 검색결과가 없습니다.</msg>
+  <msg key="lt_Your_search_on_query__1">&quot;%query%&quot;에 대한 검색 결과 검색된 파일은 다음과 같습니다: </msg>
   <msg key="Modified">수정된</msg>
   <msg key="Move">이동</msg>
+  <msg key="Multiple_files">여러 파일:</msg>
   <msg key="Name">이름</msg>
   <msg key="new">새로운</msg>
-  <msg key="No_such_type">이 유형이 없습니다</msg>
+  <msg key="New_Folder">새 폴더</msg>
+  <msg key="No_such_type">이 유형이 없음</msg>
   <msg key="no_such_URL">URL이 없습니다.</msg>
+  <msg key="Permissions">허용</msg>
+  <msg key="properties">속성들</msg>
   <msg key="Rename">재명명</msg>
   <msg key="Rename_this_folder">이 폴더를 재명명</msg>
   <msg key="Save">저장</msg>
   <msg key="Search">검색</msg>
   <msg key="Search_again">재검색:</msg>
   <msg key="Search_Results">검색 결과</msg>
+  <msg key="Set_Permissions">허용 설정</msg>
   <msg key="show_all_versions">모든 버전 보여주기</msg>
+  <msg key="simple_add_page_title">%pretty_name% 생성</msg>
   <msg key="Size">크기</msg>
   <msg key="Size_bytes">크기 (바이트)</msg>
+  <msg key="this_may_take_a_while">&lt;strong&gt;알림:&lt;/strong&gt;시간이 많이 걸릴 수 있으므로 기다려 주십시오.</msg>
   <msg key="Title">제목:</msg>
   <msg key="Title_">제목 :</msg>
   <msg key="Type">유형</msg>
+  <msg key="untitled">무제</msg>
   <msg key="Update">업데이트</msg>
   <msg key="Upload">업로드</msg>
   <msg key="Upload_a_file">파일 업로드</msg>
@@ -90,6 +118,8 @@
   <msg key="Upload_New_File">새 파일 업로드</msg>
   <msg key="Upload_New_Version">새 버전 업로드</msg>
   <msg key="URL">URL: </msg>
+  <msg key="version_add_page_title">%title%의 새버전 업로드</msg>
+  <msg key="version_delete_page_title">%version_name% 삭제</msg>
   <msg key="Version_filename">파일이름</msg>
   <msg key="Version_filename_">파일이름:</msg>
   <msg key="Version_filename_1">파일이름:</msg>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="file-storage" package_version="4.7d3" locale="da_DK" charset="ISO-8859-1">
+<message_catalog package_key="file-storage" package_version="5.0.0b4" locale="da_DK" charset="ISO-8859-1">
 
   <msg key="Action">Handling</msg>
   <msg key="Actions">Handlinger:</msg>
@@ -8,6 +8,7 @@
   <msg key="Add_pretty_name">Tilføj %pretty_name%</msg>
   <msg key="Author">Forfatter</msg>
   <msg key="back_to_folder_view">&lt;a href=&quot;%folder_view_url%&quot;&gt;Tilbage&lt;/a&gt; til mappevisning</msg>
+  <msg key="bytes">bytes</msg>
   <msg key="Change_Name">Ændr Navn</msg>
   <msg key="Copy">Kopier</msg>
   <msg key="Create">Lav</msg>
@@ -40,8 +41,10 @@
   <msg key="item">objekt</msg>
   <msg key="items">objekter</msg>
   <msg key="Last_Modified">Senest Ændret</msg>
+  <msg key="last_month">Sidste Måned</msg>
+  <msg key="last_week">Sidste Uge</msg>
   <msg key="lt_administer_permission">administrer rettigheder</msg>
-  <msg key="lt_All_Versions_of_title">All versioner af &quot;%title%&quot;</msg>
+  <msg key="lt_All_Versions_of_title">Alle udgaver af &quot;%title%&quot;</msg>
   <msg key="lt_Are_you_sure_that_you">Er du sikker på, at du ønsker at slette denne version &quot;%version_name%&quot; af &quot;%title%&quot;? Denne handling kan ikke fortrydes.</msg>
   <msg key="lt_bad_folder_id_folder_">manglende mappe id</msg>
   <msg key="lt_Comments_on_this_file">Kommentarer til denne fil:</msg>
@@ -84,14 +87,18 @@
   <msg key="Move">Flyt</msg>
   <msg key="Name">Navn</msg>
   <msg key="new">ny</msg>
+  <msg key="New_Folder">Ny Mappe</msg>
   <msg key="No_such_type">Ingen sådan type</msg>
   <msg key="no_such_URL">URL'en var ikke gyldig</msg>
+  <msg key="Permissions">Rettigheder</msg>
+  <msg key="properties">egenskaber</msg>
   <msg key="Rename">Omdøb</msg>
   <msg key="Rename_this_folder">Omdøb denne mappe</msg>
   <msg key="Save">Gem</msg>
   <msg key="Search">Søg</msg>
   <msg key="Search_again">Søg igen:</msg>
   <msg key="Search_Results">Søgeresultater</msg>
+  <msg key="Set_Permissions">Sæt Rettigheder</msg>
   <msg key="show_all_versions">vis alle versioner</msg>
   <msg key="simple_add_page_title">Opret %pretty_name%</msg>
   <msg key="Size">Størrelse</msg>
@@ -100,6 +107,7 @@
   <msg key="Title">Titel:</msg>
   <msg key="Title_">Titel:</msg>
   <msg key="Type">Type</msg>
+  <msg key="untitled">unavngivet</msg>
   <msg key="Update">Opdatér</msg>
   <msg key="Upload">Upload</msg>
   <msg key="Upload_a_file">Upload en fil</msg>
@@ -107,7 +115,7 @@
   <msg key="Upload_New_File">Upload Ny Fil</msg>
   <msg key="Upload_New_Version">Upload Ny Version</msg>
   <msg key="URL">URL:</msg>
-  <msg key="version_add_page_title">Upload en ny version af %title%</msg>
+  <msg key="version_add_page_title">Upload en ny udgave af %title%</msg>
   <msg key="version_delete_page_title">Slet %version_name%</msg>
   <msg key="Version_filename">Version filnavn</msg>
   <msg key="Version_filename_">Version filnavn:</msg>
