@@ -226,6 +226,8 @@ namespace eval fs {
 
     ad_proc -public new_root_folder {
         {-package_id:required}
+        {-pretty_name ""}
+        {-description ""}
     } {
         Create a root folder for a package instance
 
@@ -275,6 +277,22 @@ namespace eval fs {
         }
 
         return [db_exec_plsql new_folder {}]
+    }
+
+    ad_proc -public get_folder {
+        {-name:required}
+        {-parent_id:required}
+    } {
+        Retrieve the folder_id of a folder given it's name and parent folder
+
+        @param name Internal name of the folder, must be unique under a given
+                    parent_id
+        @param parent_id The parent folder to look under
+
+        @return folder_id of the folder, or null if no folder was found by that
+                name
+    } {
+        return [db_string get_folder {} -default ""]
     }
 
 }

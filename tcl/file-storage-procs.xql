@@ -40,4 +40,13 @@
       </querytext>
 </fullquery>
 
+    <fullquery name="fs::get_folder.get_folder">
+        <querytext>
+            select item_id
+            from cr_items
+            where parent_id = :parent_id
+            and name = :name
+        </querytext>
+    </fullquery>
+
 </queryset>

@@ -47,32 +47,6 @@ set delete_p [ad_permission_p $folder_id delete]
 
 set package_id [ad_conn package_id]
 
-db_multirow file file_select "
-select i.item_id as file_id,
-       r.title as name,
-       i.live_revision,
-       r.mime_type as type,
-       to_char(o.last_modified,'YYYY-MM-DD HH24:MI') as last_modified,
-       r.content_length as content_size,
-       1 as ordering_key
-from   cr_items i, cr_revisions r, acs_objects o
-where  i.item_id       = o.object_id
-and    i.live_revision = r.revision_id (+)
-and    i.parent_id     = :folder_id
-and    acs_permission.permission_p(i.item_id, :user_id, 'read') = 't'
-and    i.content_type = 'content_revision'
-UNION
-select i.item_id as file_id,
-       f.label as name,
-       0,
-       'Folder',
-       NULL,
-       0,
-       0
-from   cr_items i, cr_folders f
-where  i.item_id   = f.folder_id
-and    i.parent_id = :folder_id
-and    acs_permission.permission_p(folder_id, :user_id, 'read') = 't'
-order by ordering_key,name"
+db_multirow file file_select {}
 
 ad_return_template

@@ -97,14 +97,20 @@ create function file_storage__new_root_folder (
        -- A hackish function to get around the fact that we can not run
        -- code automatically when a new package instance is created.
        --
-       integer		-- apm_packages.package_id%TYPE
+       integer,         -- apm_packages.package_id%TYPE
+       varchar,         -- cr_folders.label%TYPE
+       varchar          -- cr_folders.description%TYPE
 )
 returns integer as '	--  fs_root_folders.folder_id%TYPE
 declare
-	new_root_folder__package_id  alias for $1;
-        v_folder_id		    fs_root_folders.folder_id%TYPE;
-        v_package_name		    apm_packages.instance_name%TYPE;
-        v_package_key		    apm_packages.package_key%TYPE;
+	new_root_folder__package_id         alias for $1;
+        new_root_folder__folder_name        alias for $2;
+        new_root_folder__description        alias for $3;
+        v_folder_id		            fs_root_folders.folder_id%TYPE;
+        v_package_name		            apm_packages.instance_name%TYPE;
+        v_package_key		            apm_packages.package_key%TYPE;
+        v_folder_name                       cr_folders.label%TYPE;
+        v_description                       cr_folders.description%TYPE;
 begin
 
         select instance_name, package_key 
@@ -112,10 +118,24 @@ begin
         from apm_packages
         where package_id = new_root_folder__package_id;
 
+        if new_root_folder__folder_name is null
+        then
+            v_folder_name := v_package_name || '' Root Folder '';
+        else
+            v_folder_name := new_root_folder__folder_name;
+        end if;
+
+        if new_root_folder__description is null
+        then
+            v_description := ''Root folder for the file-storage system.  All other folders in file storage are subfolders of this one.'';
+        else
+            v_description := new_root_folder__description;
+        end if;
+
         v_folder_id := content_folder__new (
             v_package_key || ''_'' || new_root_folder__package_id, -- name
-            v_package_name || '' Root Folder'',    -- label
-            ''Root folder for the file-storage system.  All other folders in file storage are subfolders of this one.'', -- description
+            v_folder_name, -- label
+            v_description, -- description
 	    null				  -- parent_id (default)
         );
 
