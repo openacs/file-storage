@@ -59,7 +59,7 @@
 <multiple name=version>
   <tr>
     <td><img src="graphics/file.gif">
-      <a href="download/index?version_id=@version.version_id@">@version.title@</a>
+      <a href="download/@version.title@?version_id=@version.version_id@">@version.title@</a>
     </td>
     <td>@version.author@</td>
     <td align=right>@version.content_size@</td>
