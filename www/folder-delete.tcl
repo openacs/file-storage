@@ -51,10 +51,10 @@ if { [string equal $confirmed_p "t"] && [string equal $blocked_p "f"] } {
 
     db_exec_plsql folder_delete "
     begin
-        content_folder.delete(:folder_id);
+        file_storage.delete_folder(:folder_id);
     end;"
 
-    ad_returnredirect "?folder_id=$parent_id"
+    ad_returnredirect "index?folder_id=$parent_id"
 
 } else {
     # they still need to confirm

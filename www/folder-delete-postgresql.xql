@@ -6,7 +6,7 @@
 <fullquery name="folder_delete">      
       <querytext>
 
-        select content_folder__delete(:folder_id);
+        select file_storage__delete_folder(:folder_id);
 
       </querytext>
 </fullquery>

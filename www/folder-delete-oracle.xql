@@ -7,7 +7,7 @@
       <querytext>
       
     begin
-        content_folder.delete(:folder_id);
+        file_storage.delete_folder(:folder_id);
     end;
 
       </querytext>
