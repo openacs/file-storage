@@ -13,9 +13,9 @@
 	where  acs_permission__permission_p(i.item_id,:user_id,'write') = 't'
 	and    exists (select 1 from cr_folders f where f.folder_id = i.item_id)
 	$children_clause
-	and i.tree_sortkey like (select j.tree_sortkey || '%'
-				 from cr_items j
-				 where j.item_id = file_storage__get_root_folder(:package_id))
+	and i.tree_sortkey like (select l.tree_sortkey || '%'
+				 from cr_items l
+				 where l.item_id = file_storage__get_root_folder(:package_id))
 	order by i.tree_sortkey
 
 
@@ -25,14 +25,12 @@
 <partialquery name="children_clause">      
       <querytext>
 
-    	and item_id not in (select item_id
-    			    from cr_items
-    			    where item_id != :file_id
-			    -- connect by prior item_id = parent_id
-    			    -- start with item_id = :file_id
-    			    and tree_sortkey like (select k.tree_sortkey || '%'
-						   from cr_items k
-						   where k.item_id = :file_id)) 
+    	and i.item_id not in (select j.item_id
+    			      from cr_items j
+    			      where j.item_id != :file_id
+    			      and j.tree_sortkey like (select k.tree_sortkey || '%'
+						       from cr_items k
+						       where k.item_id = :file_id)) 
 
       </querytext>
 </partialquery> 	
