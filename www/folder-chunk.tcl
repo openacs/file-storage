@@ -44,6 +44,8 @@ db_multirow -extend { last_modified_pretty content_size_pretty } contents select
     if { ![empty_string_p $content_size] } {
         incr content_size_total $content_size
     }
+
+    set name [lang::util::localize $name]
 }
 
 ad_return_template
