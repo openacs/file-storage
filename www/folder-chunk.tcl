@@ -130,11 +130,12 @@ db_multirow -extend { icon last_modified_pretty content_size_pretty properties_l
     set last_modified_ansi [lc_time_system_to_conn $last_modified_ansi]
 
     set last_modified_pretty [lc_time_fmt $last_modified_ansi "%x %X"]
-    set content_size_pretty [lc_numeric $content_size]
     if {[string equal $type "folder"]} {
+        set content_size_pretty [lc_numeric $content_size]
 	append content_size_pretty " [_ file-storage.items]"
     } else {
-	append content_size_pretty " [_ file-storage.bytes]"
+        set content_size_pretty [lc_numeric [expr $content_size / 1024 ]]
+	append content_size_pretty " [_ file-storage.kb]"
     }
 
     set file_upload_name [fs::remove_special_file_system_characters -string $file_upload_name]

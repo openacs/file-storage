@@ -42,6 +42,7 @@
   <msg key="index_page_navigate_up_folder">Up to %up_name%</msg>
   <msg key="item">item</msg>
   <msg key="items">items</msg>
+  <msg key="kb">kb</msg>
   <msg key="Last_Modified">Last Modified</msg>
   <msg key="last_month">Last Month</msg>
   <msg key="last_week">Last Week</msg>
