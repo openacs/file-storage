@@ -195,35 +195,22 @@ ad_proc fs_maybe_create_new_mime_type {
 
     set file_extension [string trimleft [file extension $file_name] "."]
 
-    if {[empty_string_p $file_extension]} {
-	return "*/*"
-    }
+    # This case is now handled by the code below (Ben)
+    # if {[empty_string_p $file_extension]} {
+    #	return "*/*"
+    #}
 
     if {![db_0or1row select_mime_type "select mime_type
         from cr_mime_types
         where file_extension = :file_extension"]} {
 
-	# A mime type for this file extension does not exist
-	# in the database.  Check to see AOLServer can 
-	# generate a mime type.
+	# Ben: we've fixed this so that all AOLserver mime types
+	# are now part of the cr_mime_types. So we just return now
+	# or leave it at that.
 
-	set mime_type [ns_guesstype $file_name]
-	
-	# Note: If AOLServer can't determine a mime type, 
-	# ns_guesstype will return */*. We still record
-	# a mime type for this file extension.  At a later
-	# date, the mime type for the file extension may be
-	# updated and, as a result, the files with that
-	# file extension will be associated with the
-	# proper mime types.
-
-        db_dml new_mime_type {
-            insert into cr_mime_types
-            (mime_type, file_extension)
-            values
-	    (:mime_type, :file_extension)
-        }
+	set mime_type "*/*"
     }
+
     return $mime_type
 }
 
