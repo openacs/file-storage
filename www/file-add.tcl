@@ -131,9 +131,6 @@ ad_form -extend -form {} -select_query_name {get_file} -new_data {
 	    set this_title $upload_file
 	}
 	
-	if {$lock_title_p} {
-            set upload_file $this_title
-        }
 	set existing_item_id [fs::get_item_id -name $upload_file -folder_id $folder_id]
 	
 	if {![empty_string_p $existing_item_id]} {
