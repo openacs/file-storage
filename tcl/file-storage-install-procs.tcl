@@ -128,11 +128,10 @@ ad_proc -private fs::install::upgrade {
 ad_proc -private ::install::xml::action::file-storage-folder { node } {
     Create a file storage folder from install.xml
 } {
-    set url [apm_required_attribute_value $node url]
     set name [apm_required_attribute_value $node name]
     set pretty_name [apm_required_attribute_value $node pretty-name]
 
-    set package_id [site_node::get_element -url $url -element package_id]
+    set package_id [install::xml::object_id::package $node]
 
     set root [fs::get_root_folder -package_id $package_id]
 
