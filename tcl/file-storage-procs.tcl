@@ -307,6 +307,25 @@ namespace eval fs {
         return [db_string select_object_name {} -default $object_id]
     }
 
+    ad_proc -public get_file_system_safe_object_name {
+        {-object_id:required}
+    } {
+        get the name of a file storage object and make it safe for writing to
+        the file system
+    } {
+        return [remove_special_file_system_characters -string [get_object_name -object_id $object_id]]
+    }
+
+    ad_proc -public remove_special_file_system_characters {
+        {-string:required}
+    } {
+        remove unsafe file system characters. useful if you want to use $string
+        as the name of an object to write to disk.
+    } {
+        regsub -all {[<>:\"|/\\]} $string {_} string
+        return $string
+    }
+
     ad_proc -public folder_p {
         {-object_id:required}
     } {
@@ -396,9 +415,9 @@ namespace eval fs {
 
         db_1row select_object_info {}
 
-        if {[string match folder $type]} {
+        if {[string equal folder $type]} {
             set result [publish_folder_to_file_system -folder_id $object_id -path $path -folder_name $name -user_id $user_id]
-        } elseif {[string match url $type]} {
+        } elseif {[string equal url $type]} {
             set result [publish_simple_object_to_file_system -object_id $object_id -path $path -file_name $file_name]
         } else {
             set result [publish_versioned_object_to_file_system -object_id $object_id -path $path]
@@ -422,15 +441,16 @@ namespace eval fs {
         if {[empty_string_p $folder_name]} {
             set folder_name [get_object_name -object_id $folder_id]
         }
+        set folder_name [remove_special_file_system_characters -string $folder_name]
 
-        set dir "${path}/${folder_name}"
+        set dir [file join ${path} ${folder_name}]
         file mkdir $dir
 
         foreach object [get_folder_contents -folder_id $folder_id -user_id $user_id] {
             publish_object_to_file_system \
                 -object_id [ns_set get $object object_id] \
                 -path $dir \
-                -file_name [ns_set get $object name] \
+                -file_name [remove_special_file_system_characters -string [ns_set get $object name]] \
                 -user_id $user_id
         }
 
@@ -474,12 +494,13 @@ namespace eval fs {
         if {[empty_string_p $file_name]} {
             set file_name [ns_set get $object name]
         }
+        set file_name [remove_special_file_system_characters -string $file_name]
 
-        set fp [open "${path}/${file_name}" w]
+        set fp [open [file join ${path} ${file_name}] w]
         puts $fp [ns_set get $object url]
         close $fp
 
-        return "${path}/${file_name}"
+        return [file join ${path} ${file_name}]
     }
 
     ad_proc -public publish_versioned_object_to_file_system {
@@ -499,16 +520,17 @@ namespace eval fs {
         if {[empty_string_p $file_name]} {
             set file_name $title
         }
+        set file_name [remove_special_file_system_characters -string $file_name]
 
         switch $storage_type {
             lob {
                 # FIXME: db_blob_get_file is failing when i use bind variables
-                db_blob_get_file select_object_content {} -file "${path}/${file_name}"
+                db_blob_get_file select_object_content {} -file [file join ${path} ${file_name}]
             }
             text {
                 set content [db_string select_object_content {}]
 
-                set fp [open "${path}/${file_name}" w]
+                set fp [open [file join ${path} ${file_name}] w]
                 puts $fp $content
                 close $fp
             }
@@ -517,7 +539,7 @@ namespace eval fs {
                 set cr_file_name [db_string select_file_name {}]
 
                 set ifp [open "${cr_path}${cr_file_name}" r]
-                set ofp [open "${path}/${file_name}" w]
+                set ofp [open [file join ${path} ${file_name}] w]
 
                 ns_cpfp $ifp $ofp
 
@@ -526,7 +548,7 @@ namespace eval fs {
             }
         }
 
-        return "${path}/${file_name}"
+        return [file join ${path} ${file_name}]
     }
 
     ad_proc -public get_archive_command {
