@@ -78,19 +78,20 @@ as
       case
         when cr_items.content_type = 'content_folder' then cr_folders.label
         when cr_items.content_type = 'content_extlink' then cr_extlinks.label
-        else nvl(cr_revisions.title,cr_items.name)
+        else cr_items.name
       end as name,
       cr_items.name as file_upload_name,
+      cr_revisions.title,
       acs_objects.last_modified,
       cr_extlinks.url,
       cr_items.parent_id,
       cr_items.name as key,
-      cr_mime_types.label as pretty_type
+      cr_mime_types.label as pretty_type,
       case
         when cr_items.content_type = 'content_folder' then 0
         else 1
       end as sort_key
-    from cr_items, cr_extlinks, cr_folders, cr_revisions, acs_objects
+    from cr_items, cr_extlinks, cr_folders, cr_revisions, acs_objects, cr_mime_types
     where cr_items.item_id = cr_extlinks.extlink_id(+)
       and cr_items.item_id = cr_folders.folder_id(+)
       and cr_items.item_id = acs_objects.object_id

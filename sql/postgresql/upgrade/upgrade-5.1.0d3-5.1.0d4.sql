@@ -26,7 +26,7 @@ as
       case
         when cr_items.content_type = 'content_folder' then cr_folders.label
         when cr_items.content_type = 'content_extlink' then cr_extlinks.label
-        else coalesce(cr_revisions.title,cr_items.name)
+        else cr_items.name
       end as name,
       cr_items.name as file_upload_name,
       cr_revisions.mime_type,
@@ -38,7 +38,7 @@ as
         when cr_items.content_type = 'content_folder' then 0
         else 1
       end as sort_key,
-	cr_mime_types.label as pretty_type
+      cr_mime_types.label as pretty_type
 
     from cr_items left join cr_extlinks on (cr_items.item_id = cr_extlinks.extlink_id)
       

@@ -16,8 +16,6 @@ begin
         from fs_root_folders
         where package_id = get_root_folder__package_id;
 
-	v_folder_id := file_storage__new_root_folder(get_root_folder__package_id, null, null);
-
         return v_folder_id;
 
 end;' language 'plpgsql' with (iscachable);
