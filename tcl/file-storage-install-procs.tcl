@@ -135,5 +135,5 @@ ad_proc -private ::install::xml::action::file-storage-folder { node } {
 
     set root [fs::get_root_folder -package_id $package_id]
 
-    fs::new_folder -name $name -pretty_name $pretty_name -parent_id $root -creation_user 0 -creation_ip 127.0.0.1
+    fs::new_folder -name $name -pretty_name $pretty_name -parent_id $root -creation_user [ad_conn user_id] -creation_ip 127.0.0.1
 }
