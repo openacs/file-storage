@@ -20,6 +20,7 @@ if {![exists_and_not_null folder_id]} {
 set viewing_user_id [ad_conn user_id]
 
 permission::require_permission -party_id $viewing_user_id -object_id $folder_id -privilege "read"
+set admin_p [permission::permission_p -party_id $viewing_user_id -object_id $folder_id -privilege "admin"]
 
 if {![exists_and_not_null n_past_days]} {
     set n_past_days 99999
@@ -45,6 +46,11 @@ set actions [list "Upload File" file-add?[export_vars folder_id] "Upload a file 
 #if {$delete_p} {
 #    lappend actions "Delete Folder" folder-delete "Delete folder and all contents"
 #}
+if {$admin_p} {
+    set return_url [ad_conn url]
+    lappend actions "Rename Folder" "folder-edit?folder_id=$folder_id" "Change the name of this folder"
+    lappend actions "Folder Permissions" "/permissions/one?[export_vars -override {{object_id $folder_id}} {return_url}]" "Change the permissions of this folder"
+}
 
 #set n_past_filter_values [list [list "Yesterday" 1] [list [_ file-storage.last_week] 7] [list [_ file-storage.last_month] 30]]
 set elements [list icon \
