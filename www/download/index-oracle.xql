@@ -16,13 +16,36 @@
       </querytext>
 </fullquery>
 
-<fullquery name="version_write">      
+<fullquery name="version_write_blob">      
       <querytext>
 
 	select content
         from   cr_revisions
         where  revision_id = $version_id
  
+      </querytext>
+</fullquery>
+
+<fullquery name="version_write_file">      
+      <querytext>
+
+	    select '[cr_fs_path]' || filename as content
+            from cr_revisions
+            where revision_id = $version_id
+
+      </querytext>
+</fullquery>
+
+<fullquery name="file_type">      
+      <querytext>
+
+	select mime_type,(case when filename is null 
+                               then 1
+		               else 0
+		          end) as indb_p 
+	from   cr_revisions r
+	where  revision_id = :version_id
+
       </querytext>
 </fullquery>
 
