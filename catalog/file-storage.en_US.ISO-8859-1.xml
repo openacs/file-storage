@@ -59,7 +59,7 @@ This action cannot be reversed.</msg>
   <msg key="lt_The_specified_folder_">The specified folder does not exist.</msg>
   <msg key="lt_The_specified_folder__1">The specified folder is not valid.</msg>
   <msg key="lt_The_specified_parent_">The specified parent folder is not valid.</msg>
-  <msg key="lt_There_are_no_versions">There are no versions of this file availible to you</msg>
+  <msg key="lt_There_are_no_versions">There are no versions of this file available to you</msg>
   <msg key="lt_This_file_has_version">This file has versions that you do not have permission to delete,
 so you cannot delete the file.</msg>
   <msg key="lt_This_folder_contains_">This folder contains items that you do not have permission to
