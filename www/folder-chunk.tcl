@@ -67,6 +67,7 @@ set actions [list]
 
 lappend actions "\#file-storage.Add_File\#" ${fs_url}file-add?[export_vars folder_id] "Upload a file in this folder" "\#file-storage.Create_a_URL\#" ${fs_url}simple-add?[export_vars folder_id] "Add a link to a web page" "\#file-storage.New_Folder\#" ${fs_url}folder-create?[export_vars {{parent_id $folder_id}}] "\#file-storage.Create_a_new_folder\#"
 
+set expose_rss_p [parameter::get -parameter ExposeRssP -default 0]
 
 if {$delete_p} {
     lappend actions "\#file-storage.Delete_this_folder\#" ${fs_url}folder-delete?[export_vars folder_id] "\#file-storage.Delete_this_folder\#"
@@ -75,6 +76,9 @@ if {$admin_p} {
     set return_url [ad_conn url]
     lappend actions "\#file-storage.Edit_Folder\#" "${fs_url}folder-edit?folder_id=$folder_id" "\#file-storage.Rename_this_folder\#"
     lappend actions "\#file-storage.lt_Modify_permissions_on_1\#" "/permissions/one?[export_vars -override {{object_id $folder_id}} {return_url}]" "\#file-storage.lt_Modify_permissions_on_1\#"
+    if { $expose_rss_p } {
+	lappend actions "Configure RSS" "${fs_url}admin/rss-subscrs?folder_id=$folder_id"
+    }
 }
 
 #set n_past_filter_values [list [list "Yesterday" 1] [list [_ file-storage.last_week] 7] [list [_ file-storage.last_month] 30]]
@@ -181,6 +185,10 @@ db_multirow -extend { icon last_modified_pretty content_size_pretty properties_l
     # We need to encode the hashes in any i18n message keys (.LRN plays this trick on some of its folders).
     # If we don't, the hashes will cause the path to be chopped off (by ns_conn url) at the leftmost hash.
     regsub -all {#} $file_url {%23} file_url
+}
+
+if { $expose_rss_p } {
+    db_multirow feeds select_subscrs {}
 }
 
 ad_return_template

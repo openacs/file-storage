@@ -760,6 +760,13 @@ ad_proc fs::add_version {
 	fs::do_notifications -folder_id $parent_id -filename $title -item_id $revision_id -action "new_version" -package_id $package_id
     }
 
+    #It's safe to rebuild RSS repeatedly, assuming it's not too expensive.
+    set folder_info [fs::get_folder_package_and_root $parent_id]
+    set db_package_id [lindex $folder_info 0]
+    if { [parameter::get -package_id $db_package_id -parameter ExposeRssP -default 0] } {
+        fs::rss::build_feeds $parent_id
+    }
+
     return $revision_id
 }
 
@@ -1048,4 +1055,19 @@ ad_proc -public fs::get_object_info {
     
     set file_object_info(content) $content
     return [array get file_object_info]
+}
+
+ad_proc -public fs::get_folder_package_and_root folder_id {
+
+    Returns a two-element tcl list containing the package_id
+    and root_folder_id for the passed-in folder_id.
+
+    @author Andrew Grumet (aegrumet@alum.mit.edu)
+    @creation-date 15 March 2004
+
+} {
+
+    db_1row select_package_and_root {}
+
+    return [list $package_id $root_folder_id]
 }

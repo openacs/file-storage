@@ -96,3 +96,5 @@ drop function inline_0();
 \i file-storage-views-create.sql
 
 \i file-storage-notifications-create.sql
+
+\i file-storage-rss-create.sql

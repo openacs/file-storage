@@ -16,6 +16,7 @@ ad_proc -private fs::install::package_install {} {
 } {
     db_transaction {
 	register_implementation
+	fs::rss::create_rss_gen_subscr_impl
     }
 }
 
@@ -116,6 +117,9 @@ ad_proc -private fs::install::upgrade {
 		    owner "file-storage"
 		}
 		acs_sc::impl::new_from_spec -spec $spec
+	    }
+            5.1.0a11 5.1.0a12 {
+		fs::rss::create_rss_gen_subscr_impl
 	    }
 	}
 

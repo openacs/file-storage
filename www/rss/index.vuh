@@ -1,0 +1,23 @@
+# subscr_id/rss.xml
+set path_info [split [ad_conn path_info] "/"]
+
+if { [llength $path_info] != 2 } {
+	ns_returnnotfound
+	ad_script_abort 
+}
+
+set subscr_id [lindex $path_info 0]
+
+if { ![regexp {^[1-9][0-9]*$} $subscr_id] } {
+	ns_returnnotfound
+	ad_script_abort 
+}
+
+set stub [lindex $path_info 1]
+
+if { ![string equal $stub rss.xml] } {
+	ns_returnnotfound
+	ad_script_abort 
+}
+
+ns_returnfile 200 text/xml [rss_gen_report_file -summary_context_id $subscr_id -impl_name fs_rss]
