@@ -45,23 +45,22 @@ declare
     v_package_id                fs_root_folders.package_id%TYPE;
     v_tree_sortkey              cr_items.tree_sortkey%TYPE;
 begin
-    select tree_ancestor_key(tree_sortkey, 2)
-    into v_tree_sortkey
-    from cr_items
-    where item_id = get_package_id__item_id;
 
     select fs_root_folders.package_id
     into v_package_id
     from fs_root_folders,
-         cr_items
-    where fs_root_folders.folder_id = cr_items.item_id
-    and cr_items.tree_sortkey = v_tree_sortkey;
+        (select cr_items.item_id 
+           from (select tree_ancestor_keys(cr_items_get_tree_sortkey(get_package_id__item_id)) as tree_sortkey) parents,
+             cr_items
+          where cr_items.tree_sortkey = parents.tree_sortkey) this
+    where fs_root_folders.folder_id = this.item_id;
 
     if NOT FOUND then
         return null;
     else
         return v_package_id;
     end if;
+
 end;' language 'plpgsql' with (iscachable);
 
 create function file_storage__new_root_folder (
