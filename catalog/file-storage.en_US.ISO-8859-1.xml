@@ -129,4 +129,7 @@ delete, therefore you cannot delete it.</msg>
   <msg key="Version_Notes_1">Version Notes:</msg>
   <msg key="view_details">view details</msg>
   <msg key="Yes_Delete_It">Yes, Delete It</msg>
+  <msg key="lt_Leave_blank_for_linked_documents">Leave title blank when uploading multiple interlinked documents.</msg>
+  <msg key="lt_This_is_a_ZIP">This is a ZIP file containing multiple files</msg>
+  <msg key="Multiple_files">Multiple files:</msg>
 </message_catalog>
