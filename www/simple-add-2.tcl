@@ -6,9 +6,9 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     folder_id:integer,notnull
-    name:notnull,trim
+    title:notnull,trim
     description
-    url
+    url:notnull,trim
 } -validate {
     valid_folder -requires {folder_id:integer} {
 	if ![fs_folder_p $folder_id] {
@@ -22,6 +22,6 @@ ad_page_contract {
 ad_require_permission $folder_id write
 
 # Create the URL (for now)
-set url_id [fs::url_new -url $url -name $name -description $description -folder_id $folder_id]
+set url_id [fs::url_new -url $url -name $title -description $description -folder_id $folder_id]
 
 ad_returnredirect "?folder_id=$folder_id"

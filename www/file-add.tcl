@@ -6,6 +6,8 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     folder_id:integer,notnull
+    {title ""}
+    {lock_title_p 0}
 } -validate {
     valid_folder -requires {folder_id:integer} {
 	if ![fs_folder_p $folder_id] {
@@ -15,6 +17,8 @@ ad_page_contract {
 } -properties {
     folder_id:onevalue
     context_bar:onevalue
+    title:onevalue
+    lock_title_p:onevalue
 }
 
 # check for write permission on the folder
@@ -28,4 +32,8 @@ set context_bar [fs_context_bar_list -final "Add File" $folder_id]
 # Should probably generate the item_id and version_id now for
 # double-click protection
 
-ad_return_template
+# if title isn't passed in ignore lock_title_p
+if {[empty_string_p $title]} {
+    set lock_title_p 0
+}
+
