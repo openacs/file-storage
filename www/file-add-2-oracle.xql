@@ -8,7 +8,7 @@
       
 	begin
     		:1 := file_storage.new_file (
-        		title => :title,
+        		title => :filename,
         		folder_id => :folder_id,
         		creation_user => :user_id,
         		creation_ip => :creation_ip,
@@ -25,7 +25,7 @@
       
 	begin
     		:1 := file_storage.new_file (
-        		title => :title,
+        		title => :filename,
         		folder_id => :folder_id,
         		creation_user => :user_id,
         		creation_ip => :creation_ip,
@@ -43,7 +43,7 @@
       
 	begin
     		:1 := file_storage.new_version (
-        		filename => :filename,
+        		filename => :title,
         		description => :description,
         		mime_type => :mime_type,
         		item_id => :file_id,

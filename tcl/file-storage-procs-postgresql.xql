@@ -6,9 +6,10 @@
     <fullquery name="fs::new_root_folder.new_root_folder">
         <querytext>
             select file_storage__new_root_folder(
-                :package_id,
+		:package_id,
                 :pretty_name,
-                :description
+		:description,
+		:name
             );
         </querytext>
     </fullquery>
@@ -134,6 +135,12 @@
             from cr_revisions
             where revision_id = $live_revision
         </querytext>
+    </fullquery>
+
+    <fullquery name="fs::get_item_id.get_item_id">
+      <querytext>
+        select content_item__get_id ( :name, :folder_id, 'f' )
+      </querytext>
     </fullquery>
 
 </queryset>

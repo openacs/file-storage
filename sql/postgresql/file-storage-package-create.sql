@@ -63,7 +63,7 @@ begin
 
 end;' language 'plpgsql' with (iscachable);
 
-create function file_storage__new_root_folder (
+create or replace function file_storage__new_root_folder (
        --
        -- Creates a new root folder
        --
@@ -73,13 +73,15 @@ create function file_storage__new_root_folder (
        --
        integer,         -- apm_packages.package_id%TYPE
        varchar,         -- cr_folders.label%TYPE
-       varchar          -- cr_folders.description%TYPE
+       varchar,         -- cr_folders.description%TYPE
+       varchar          -- cr_items.name%TYPE
 )
 returns integer as '    --  fs_root_folders.folder_id%TYPE
 declare
         new_root_folder__package_id         alias for $1;
         new_root_folder__folder_name        alias for $2;
         new_root_folder__description        alias for $3;
+	new_root_folder__url		    alias for $4;
         v_folder_id                         fs_root_folders.folder_id%TYPE;
         v_package_name                      apm_packages.instance_name%TYPE;
         v_package_key                       apm_packages.package_key%TYPE;
@@ -107,7 +109,7 @@ begin
         end if;
 
         v_folder_id := content_folder__new (
-            v_package_key || ''_'' || new_root_folder__package_id, -- name
+            coalesce (new_root_folder__url, v_package_key || ''_'' || new_root_folder__package_id), -- name
             v_folder_name, -- label
             v_description, -- description
             null                                  -- parent_id (default)
@@ -452,9 +454,9 @@ begin
          select label into v_title from cr_symlinks 
          where symlink_id = get_title__item_id;
        else
-         select name into v_title
-         from cr_items
-         where item_id = get_title__item_id;
+         select title into v_title
+         from cr_revisions
+         where revision_id=(select live_revision from cr_items where item_id = get_title__item_id);
        end if;
   end if;
 
@@ -558,7 +560,7 @@ begin
 
         perform acs_object__update_last_modified(v_folder_id,new_version__creation_user,new_version__creation_ip);
 
-        return v_revision_id;
+	return v_revision_id;
 
 end;' language 'plpgsql';
 
