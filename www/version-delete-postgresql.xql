@@ -22,6 +22,13 @@
       </querytext>
 </fullquery>
 
+<fullquery name="delete_item">      
+      <querytext>
+
+	select content_item__delete(:item_id);
+
+      </querytext>
+</fullquery>
  
 </queryset>
 
