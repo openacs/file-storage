@@ -193,8 +193,8 @@ ad_proc -public fs::after_mount {
     This sets the cr_items.name to the url of the site
     node.
 } {
-#    array set sn [site_node::get -node_id $node_id]
-#    regsub -all {/} $sn(name)  {} name
+    array set sn [site_node::get -node_id $node_id]
+    regsub -all {/} $sn(name)  {} name
     # using site_node name for root folder name
     # doesn't work in the case that multiple instances of
     # a node called "file-storage" for example, are mounted
