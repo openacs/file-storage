@@ -163,7 +163,7 @@ db_multirow -extend { icon last_modified_pretty content_size_pretty properties_l
 	url {
 	    set properties_link "properties"
 	    set properties_url "${fs_url}simple?[export_vars object_id]"
-	    set icon "/resources/url-button.gif"
+	    set icon "/resources/acs-subsite/url-button.gif"
 	    set file_url ${url}
             set download_url $file_url
 	}
