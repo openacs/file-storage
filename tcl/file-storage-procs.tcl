@@ -286,8 +286,8 @@ namespace eval fs {
         remove unsafe file system characters. useful if you want to use $string
         as the name of an object to write to disk.
     } {
-        regsub -all {[<>:\"|/@#%&+\\]} $string {_} string
-        return $string
+        regsub -all {[<>:\"|/@\#%&+\\]} $string {_} string
+        return [string trim $string]
     }
 
     ad_proc -public folder_p {
@@ -421,7 +421,7 @@ namespace eval fs {
         if {[string equal folder $type]} {
             set result [publish_folder_to_file_system -folder_id $object_id -path $path -folder_name $name -user_id $user_id]
         } elseif {[string equal url $type]} {
-            set result [publish_url -object_id $object_id -path $path -file_name $file_name]
+            set result [publish_url_to_file_system -object_id $object_id -path $path -file_name $file_name]
         } else {
             set result [publish_versioned_object_to_file_system -object_id $object_id -path $path]
         }
@@ -465,7 +465,8 @@ namespace eval fs {
         {-path ""}
         {-file_name ""}
     } {
-        publish a url object to the file system
+        publish a url object to the file system as a Windows shortcut
+        (which at least KDE also knows how to handle)
     } {
         if {[empty_string_p $path]} {
             set path [ns_tmpnam]
@@ -477,10 +478,12 @@ namespace eval fs {
         if {[empty_string_p $file_name]} {
             set file_name $label
         }
+	set file_name "${file_name}.url"
         set file_name [remove_special_file_system_characters -string $file_name]
 
         set fp [open [file join ${path} ${file_name}] w]
-        puts $fp url
+        puts $fp {[InternetShortcut]}
+        puts $fp URL=$url
         close $fp
 
         return [file join ${path} ${file_name}]
