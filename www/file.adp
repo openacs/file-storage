@@ -61,7 +61,7 @@
       </if>
       <if @version.admin_p@ eq "t">
       <a
-      href="/permissions/one?object_id=@version.version_id@">administrate
+      href="/permissions/one?object_id=@version.version_id@">administer
       permissions</a>
       </if>
   </td>
