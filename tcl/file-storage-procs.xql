@@ -43,11 +43,11 @@
         </querytext>
     </fullquery>
 
-    <fullquery name="fs::get_folder_name.select_folder_name">
+    <fullquery name="fs::get_object_name.select_object_name">
         <querytext>
             select name
-            from fs_folders
-            where folder_id = :folder_id
+            from fs_objects
+            where object_id = :object_id
         </querytext>
     </fullquery>
 
@@ -69,7 +69,7 @@
         </querytext>
     </fullquery>
 
-    <fullquery name="fs::publish_simple_object_to_file_system.select_object_content">
+    <fullquery name="fs::publish_object_to_file_system.select_object_info">
         <querytext>
             select fs_objects.*
             from fs_objects
@@ -77,7 +77,15 @@
         </querytext>
     </fullquery>
 
-    <fullquery name="fs::publish_object_to_file_system.select_object_metadata">
+    <fullquery name="fs::publish_simple_object_to_file_system.select_object_info">
+        <querytext>
+            select fs_objects.*
+            from fs_objects
+            where fs_objects.object_id = :object_id
+        </querytext>
+    </fullquery>
+
+    <fullquery name="fs::publish_versioned_object_to_file_system.select_object_metadata">
         <querytext>
             select fs_objects.*,
                    cr_items.storage_type,
@@ -92,7 +100,7 @@
         </querytext>
     </fullquery>
 
-    <fullquery name="fs::publish_object_to_file_system.select_object_content">
+    <fullquery name="fs::publish_versioned_object_to_file_system.select_object_content">
         <querytext>
             select content
             from cr_revisions
@@ -100,7 +108,7 @@
         </querytext>
     </fullquery>
 
-    <fullquery name="fs::publish_object_to_file_system.select_file_name">
+    <fullquery name="fs::publish_versioned_object_to_file_system.select_file_name">
         <querytext>
             select filename
             from cr_revisions

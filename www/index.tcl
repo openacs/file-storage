@@ -36,7 +36,12 @@ ad_require_permission $folder_id read
 
 # set templating datasources
 set folder_name [fs_get_folder_name $folder_id]
-set context_bar [fs_context_bar_list $folder_id]
+set ext [fs::get_archive_extension]
+set download_name $folder_name
+if {![empty_string_p $ext]} {
+    append download_name ".${ext}"
+}
+set download_name [ns_urlencode $download_name]
 
 set user_id [ad_conn user_id]
 set write_p [ad_permission_p $folder_id write]
@@ -77,5 +82,7 @@ element create n_past_days_form folder_id \
 if {[form is_valid n_past_days_form]} {
     form get_values n_past_days_form n_past_days folder_id
 }
+
+set context_bar [fs_context_bar_list $folder_id]
 
 ad_return_template

@@ -290,12 +290,12 @@ namespace eval fs {
         return [db_exec_plsql new_folder {}]
     }
 
-    ad_proc -public get_folder_name {
-        {-folder_id:required}
+    ad_proc -public get_object_name {
+        {-object_id:required}
     } {
-        Select the name of this folder.
+        Select the name of this object.
     } {
-        return [db_string select_folder_name {} -default $folder_id]
+        return [db_string select_object_name {} -default $object_id]
     }
 
     ad_proc -public folder_p {
@@ -373,6 +373,31 @@ namespace eval fs {
         return [db_string select_folder_contents_count {}]
     }
 
+    ad_proc -public publish_object_to_file_system {
+        {-object_id:required}
+        {-path ""}
+        {-file_name ""}
+        {-user_id ""}
+    } {
+        publish a file storage object to the file system
+    } {
+        if {[empty_string_p $path]} {
+            set path [ns_tmpnam]
+        }
+
+        db_1row select_object_info {}
+
+        if {[string match folder $type]} {
+            set result [publish_folder_to_file_system -folder_id $object_id -path $path -folder_name $name -user_id $user_id]
+        } elseif {[string match url $type]} {
+            set result [publish_simple_object_to_file_system -object_id $object_id -path $path -file_name $file_name]
+        } else {
+            set result [publish_versioned_object_to_file_system -object_id $object_id -path $path]
+        }
+
+        return $result
+    }
+
     ad_proc -public publish_folder_to_file_system {
         {-folder_id:required}
         {-path ""}
@@ -386,30 +411,18 @@ namespace eval fs {
         }
 
         if {[empty_string_p $folder_name]} {
-            set folder_name [get_folder_name -folder_id $folder_id]
+            set folder_name [get_object_name -object_id $folder_id]
         }
 
         set dir "${path}/${folder_name}"
         file mkdir $dir
 
-        # lets truncate the file that stores URLs
-        set url_file "${folder_name} URLs.txt"
-        file delete -force "${dir}/${url_file}"
-
         foreach object [get_folder_contents -folder_id $folder_id -user_id $user_id] {
-            set object_id [ns_set get $object object_id]
-            set name [ns_set get $object name]
-            set type [ns_set get $object type]
-
-            if {[string match folder $type]} {
-                file mkdir "${dir}/${name}"
-                publish_folder_to_file_system -folder_id $object_id -path $dir -folder_name $name -user_id $user_id
-            } elseif {[string match url $type]} {
-                publish_simple_object_to_file_system -object_id $object_id -path $dir -file_name $url_file
-            } else {
-                publish_object_to_file_system -object_id $object_id -path $dir
-            }
-
+            publish_object_to_file_system \
+                -object_id [ns_set get $object object_id] \
+                -path $dir \
+                -file_name [ns_set get $object name] \
+                -user_id $user_id
         }
 
         return $dir
@@ -417,7 +430,7 @@ namespace eval fs {
 
     ad_proc -public publish_simple_object_to_file_system {
         {-object_id:required}
-        {-path:required}
+        {-path ""}
         {-file_name:required}
     } {
         publish a simple object to the file system; you must implement a proc
@@ -425,36 +438,53 @@ namespace eval fs {
         fs_simple_object type that you create, for each new simple file storage
         object you create.
     } {
-        set object [db_list_of_ns_sets select_object_content {}]
+        if {[empty_string_p $path]} {
+            set path [ns_tmpnam]
+            file mkdir $path
+        }
 
-        publish_simple_[ns_set get $object type]_to_file_system -object $object -path $path -file_name $file_name
+        set object [db_list_of_ns_sets select_object_info {}]
+
+        return [publish_simple_[ns_set get $object type]_to_file_system -object $object -path $path -file_name $file_name]
     }
 
     ad_proc -public publish_simple_url_to_file_system {
         {-object:required}
-        {-path:required}
+        {-path ""}
         {-file_name ""}
     } {
         publish a url object to the file system
     } {
+        if {[empty_string_p $path]} {
+            set path [ns_tmpnam]
+            file mkdir $path
+        }
+
         set object [lindex $object 0]
 
         if {[empty_string_p $file_name]} {
-            set $file_name [ns_set get $object name]
+            set file_name [ns_set get $object name]
         }
 
-        set fp [open "${path}/${file_name}" a+]
-        puts $fp "[ns_set get $object name] ([ns_set get $object url])"
+        set fp [open "${path}/${file_name}" w]
+        puts $fp [ns_set get $object url]
         close $fp
+
+        return "${path}/${file_name}"
     }
 
-    ad_proc -public publish_object_to_file_system {
+    ad_proc -public publish_versioned_object_to_file_system {
         {-object_id:required}
-        {-path:required}
+        {-path ""}
         {-file_name ""}
     } {
         publish an object to the file system
     } {
+        if {[empty_string_p $path]} {
+            set path [ns_tmpnam]
+            file mkdir $path
+        }
+
         db_1row select_object_metadata {}
 
         if {[empty_string_p $file_name]} {
@@ -486,26 +516,38 @@ namespace eval fs {
                 close $ofp
             }
         }
+
+        return "${path}/${file_name}"
     }
 
-    ad_proc -public get_archive_cmd {
+    ad_proc -public get_archive_command {
         {-in_file ""}
         {-out_file ""}
     } {
         return the archive command after replacing {in_file} and {out_file} with
         their respective values.
     } {
-        set archive_cmd [parameter::get -parameter ArchiveCmd -default "cat `find {in_file} -type f` > {out_file}"]
+        set cmd [parameter::get -parameter ArchiveCommand -default "cat `find {in_file} -type f` > {out_file}"]
 
         regsub -all {(\W)} $in_file {\\\1} in_file
         regsub -all {\\/} $in_file {/} in_file
+        regsub -all {\\\.} $in_file {.} in_file
+
         regsub -all {(\W)} $out_file {\\\1} out_file
         regsub -all {\\/} $out_file {/} out_file
+        regsub -all {\\\.} $out_file {.} out_file
 
-        regsub -all {{in_file}} $archive_cmd $in_file archive_cmd
-        regsub -all {{out_file}} $archive_cmd $out_file archive_cmd
+        regsub -all {{in_file}} $cmd $in_file cmd
+        regsub -all {{out_file}} $cmd $out_file cmd
 
-        return $archive_cmd
+        return $cmd
+    }
+
+    ad_proc -public get_archive_extension {} {
+        return the archive extension that should be added to the output file of
+        an archive command
+    } {
+        return [parameter::get -parameter ArchiveExtension -default "txt"]
     }
 
 }
