@@ -6,7 +6,9 @@ ad_library {
     @cvs-id $Id$
 }
 
-aa_register_case fs_new_root_folder {
+aa_register_case \
+    -cats {api db smoke} \
+    fs_new_root_folder {
     Test the fs::new_root_folder proc.
 } {    
 
