@@ -76,9 +76,10 @@ as
       case
         when cr_items.content_type = 'content_folder' then cr_folders.label
         when cr_items.content_type = 'content_extlink' then cr_extlinks.label
-        else coalesce(cr_revisions.title,cr_items.name)
+        else cr_items.name
       end as name,
       cr_items.name as file_upload_name,
+      cr_revisions.title,
       cr_revisions.mime_type,
       acs_objects.last_modified,
       cr_extlinks.url,
