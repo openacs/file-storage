@@ -1,8 +1,8 @@
 ad_page_contract {
     page to add a new nonversioned object to the system
 
-    @author Ben Adida (ben@openforce)    
-    @author arjun (arjun@openforce)
+    @author Ben Adida (ben@openforce.net)    
+    @author arjun (arjun@openforce.net)
     @creation-date 01 April 2002
     @cvs-id $Id$
 } {

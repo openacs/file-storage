@@ -1,7 +1,7 @@
 ad_page_contract {
     page to confirm and delete a simple fs object
 
-    @author Ben Adida (ben@openforce)
+    @author Ben Adida (ben@openforce.net)
     @creation-date 10 Nov 2000
     @cvs-id $Id$
 } {

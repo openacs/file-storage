@@ -4,7 +4,7 @@ ad_page_contract {
 
     @author Kevin Scaldeferri (kevin@arsdigita.com)
     @creation-date 6 Nov 2000
-    @version $Id$
+    @cvs-id $Id$
 } {
     {folder_id:integer [fs_get_root_folder]}
     {n_past_days:integer "99999"}

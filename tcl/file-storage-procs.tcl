@@ -3,7 +3,7 @@ ad_library {
 
     @author Kevin Scaldeferri (kevin@arsdigita.com)
     @creation-date 6 November 2000
-    @version $Id$
+    @cvs-id $Id$
 }
  
 ad_proc fs_get_root_folder {

@@ -3,7 +3,7 @@
 ad_page_contract {
     @author yon (yon@openforce.net)
     @creation-date Apr 25, 2002
-    @version $Id$
+    @cvs-id $Id$
 } -query {
     {folder_id:integer {[fs::get_root_folder]}}
     {recurse_p:boolean 0}

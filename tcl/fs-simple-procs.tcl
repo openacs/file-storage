@@ -2,9 +2,9 @@ ad_library {
     TCL library for the file-storage system (v.4)
     extensions for non-versioned (simple) items
 
-    @author Ben Adida (ben@openforce)
+    @author Ben Adida (ben@openforce.net)
     @creation-date 01 April 2002
-    @version $Id$
+    @cvs-id $Id$
 }
  
 namespace eval fs {

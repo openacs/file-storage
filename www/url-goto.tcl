@@ -1,7 +1,7 @@
 ad_page_contract {
     go to a URL
 
-    @author Ben Adida (ben@openforce)
+    @author Ben Adida (ben@openforce.net)
     @creation-date 01 April 2002
     @cvs-id $Id$
 } {
