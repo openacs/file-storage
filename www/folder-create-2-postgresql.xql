@@ -25,16 +25,23 @@
 <fullquery name="register_content">      
       <querytext>
 
-    	select content_folder__register_content_type(
-		:folder_id, 		-- folder_id
-		'content_revision',	-- content_type
-		'f'			-- include_subtypes (default)
-		);
-    	select content_folder__register_content_type(
-		:folder_id,		-- folder_id
-		'content_folder',	-- content_type
-		'f'			-- include_subtypes (default)
-		);
+	begin
+
+    		PERFORM content_folder__register_content_type(
+			:folder_id, 		-- folder_id
+			'content_revision',	-- content_type
+			'f'			-- include_subtypes (default)
+			);
+
+    		PERFORM content_folder__register_content_type(
+			:folder_id,		-- folder_id
+			'content_folder',	-- content_type
+			'f'			-- include_subtypes (default)
+			);
+
+		return 0;
+
+	end;
       </querytext>
 </fullquery>
 
