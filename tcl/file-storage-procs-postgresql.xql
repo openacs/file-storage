@@ -38,8 +38,10 @@
                    fs_objects.live_revision,
                    fs_objects.type,
                    to_char(fs_objects.last_modified, 'YYYY-MM-DD HH24:MI') as last_modified,
-                   case when fs_objects.last_modified >= (sysdate - :n_past_days) then 1 else 0 end as new_p,
+                   fs_objects.url,
+                   fs_objects.key,
                    fs_objects.content_size,
+                   case when fs_objects.last_modified >= (sysdate - :n_past_days) then 1 else 0 end as new_p,
                    case when acs_permission__permission_p(fs_objects.object_id, :user_id, 'write') = 'f' then 0 else 1 end as write_p,
                    case when acs_permission__permission_p(fs_objects.object_id, :user_id, 'delete') = 'f' then 0 else 1 end as delete_p,
                    case when acs_permission__permission_p(fs_objects.object_id, :user_id, 'admin') = 'f' then 0 else 1 end as admin_p

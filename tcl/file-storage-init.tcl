@@ -20,12 +20,12 @@ ad_library {
 # "post_instantiation".  The parameter passed is always
 # package_id. The name of the proc is thus:
 
-ad_proc file_storage_post_instantiation {
-    package_id
-} {
-    Post package instantiation procedure to insert a package_id, 
-    folder_id pair in fs_root_folders
-} {
-    # We should probably just define this function here, and remove from the fs namespace
-    return [fs::new_root_folder -package_id $package_id]
-}
+# ad_proc file_storage_post_instantiation {
+#     package_id
+# } {
+#     Post package instantiation procedure to insert a package_id, 
+#     folder_id pair in fs_root_folders
+# } {
+#     # We should probably just define this function here, and remove from the fs namespace
+#     return [fs::new_root_folder -package_id $package_id]
+# }

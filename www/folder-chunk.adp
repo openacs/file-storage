@@ -10,7 +10,7 @@
     </tr>
 <multiple name="contents">
     <tr>
-<if @contents.type@ eq "Folder">
+<if @contents.type@ eq "folder">
       <td><img src="graphics/folder.gif"></td>
       <td>
         <a href="index?folder_id=@contents.object_id@&n_past_days=@n_past_days@">@contents.name@</a>
@@ -24,7 +24,7 @@
       <td>@contents.last_modified@</td>
 </if>
 <else>
-<if @contents.type@ eq "URL">
+<if @contents.type@ eq "url">
       <td><img src="graphics/file.gif"></td>
       <td>
       <a href="url-goto?url_id=@contents.object_id@">@contents.name@</a>
