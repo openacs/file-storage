@@ -6,7 +6,7 @@
       <td>Action</td>
       <td>Size (bytes)</td>
       <td>Type</td>
-      <td>Modified</td>
+      <td>Last Modified</td>
     </tr>
 <multiple name="contents">
     <tr>
