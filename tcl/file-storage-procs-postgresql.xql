@@ -81,7 +81,7 @@
           cr_items i
         where i.tree_sortkey = parents.tree_sortkey
           and i.tree_sortkey > root.tree_sortkey
-    	order by j.tree_sortkey asc
+    	order by i.tree_sortkey asc
 
       </querytext>
 </fullquery>
