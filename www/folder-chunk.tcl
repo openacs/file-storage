@@ -31,11 +31,4 @@ db_multirow contents select_folder_contents {} {
     set file_upload_name [fs::remove_special_file_system_characters -string $file_upload_name]
 }
 
-#set rows [fs::get_folder_contents \
-#    -folder_id $folder_id \
-#    -user_id $viewing_user_id \
-#    -n_past_days $n_past_days \
-#]
-#template::util::list_of_ns_sets_to_multirow -rows $rows -var_name "contents"
-
 ad_return_template
