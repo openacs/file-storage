@@ -81,7 +81,7 @@
         <querytext>
             select count(*)
             from cr_items c1, cr_items c2
-            where c2.item_id = file_storage__get_parent_id(:item_id)
+            where c2.item_id = :item_id
             and c1.tree_sortkey between c2.tree_sortkey and tree_right(c2.tree_sortkey)
             and not acs_permission__permission_p(c1.item_id, :user_id, :privilege)
         </querytext>
