@@ -33,31 +33,17 @@
 
     <fullquery name="fs::get_folder_contents.get_folder_contents">
         <querytext>
-            select 	i.item_id as file_id,
-                    i.name as name,
-                    i.live_revision,
-                    r.mime_type as type,
-                    to_char(o.last_modified,'YYYY-MM-DD HH24:MI') as last_modified,
-                    r.content_length as content_size,
-                    1 as ordering_key
-            from   cr_items i left join cr_revisions r on (i.live_revision = r.revision_id), acs_objects o
-            where  i.item_id       = o.object_id
-            and    i.parent_id     = :folder_id
-            and    acs_permission__permission_p(i.item_id, :user_id, 'read') = 't'
-            and    i.content_type = 'file_storage_object'
-            UNION
-            select 	i.item_id as file_id,
-                    f.label as name,
-                    0,
-                    'Folder',
-                    NULL,
-                    0,
-                    0
-            from   cr_items i, cr_folders f
-            where  i.item_id   = f.folder_id
-            and    i.parent_id = :folder_id
-            and    acs_permission__permission_p(f.folder_id, :user_id, 'read') = 't'
-            order by ordering_key,name
+            select fs_folders_and_files.file_id,
+                   fs_folders_and_files.name,
+                   fs_folders_and_files.live_revision,
+                   fs_folders_and_files.type,
+                   to_char(fs_folders_and_files.last_modified, 'YYYY-MM-DD HH24:MI') as last_modified,
+                   fs_folders_and_files.content_size
+            from fs_folders_and_files
+            where fs_folders_and_files.parent_id = :folder_id
+            and 't' = acs_permission__permission_p(fs_folders_and_files.file_id, :user_id, 'read')
+            order by fs_folders_and_files.sort_key,
+                     fs_folders_and_files.name
         </querytext>
     </fullquery>
 

@@ -43,7 +43,6 @@ create table fs_root_folders (
                                 unique
 );
 
---
 -- To enable site-wide search to distinguish CR items as File Storage items
 -- we create an item subtype of content_item in the ACS Object Model
 begin
@@ -697,3 +696,62 @@ begin
 end;
 /
 show errors;
+
+create or replace view fs_folders
+as
+    select cr_folders.folder_id,
+           cr_folders.label as name,
+           (select count(*)
+            from cr_items ci
+            where ci.parent_id = cr_folders.folder_id) as content_size,
+           (select site_node.url(site_nodes.node_id)
+            from site_nodes
+            where site_nodes.object_id = file_storage.get_package_id(cr_items.item_id)) as url,
+           cr_items.parent_id
+    from cr_folders,
+         cr_items
+    where cr_folders.folder_id = cr_items.item_id;
+
+create or replace view fs_files
+as
+    select cr_revisions.item_id as file_id,
+           cr_revisions.revision_id as live_revision,
+           cr_revisions.mime_type as type,
+           cr_revisions.content_length as content_size,
+           cr_items.name,
+           acs_objects.last_modified,
+           (select site_node.url(site_nodes.node_id)
+            from site_nodes
+            where site_nodes.object_id = file_storage.get_package_id(cr_items.item_id)) as url,
+           cr_items.parent_id
+    from cr_revisions,
+         cr_items,
+         acs_objects
+    where cr_revisions.revision_id = cr_items.live_revision
+    and cr_revisions.item_id = cr_items.item_id
+    and cr_items.content_type = 'file_storage_object'
+    and cr_revisions.revision_id = acs_objects.object_id;
+
+create or replace view fs_folders_and_files
+as
+    select fs_folders.folder_id as file_id,
+           0 as live_revision,
+           'Folder' as type,
+           fs_folders.content_size,
+           fs_folders.name,
+           to_date(null, 'YYYY-MM-DD HH24:MI') as last_modified,
+           fs_folders.url,
+           fs_folders.parent_id,
+           0 as sort_key
+    from fs_folders
+    union
+    select fs_files.file_id,
+           fs_files.live_revision,
+           fs_files.type,
+           fs_files.content_size,
+           fs_files.name,
+           fs_files.last_modified,
+           fs_files.url,
+           fs_files.parent_id,
+           1 as sort_key
+    from fs_files;
