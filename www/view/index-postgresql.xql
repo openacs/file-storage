@@ -21,7 +21,9 @@ select i.item_id
 	    and i.parent_id = (select item_id 
 			       from cr_items 
 			       where name = :item_url_folder
-	 		       limit 1) 
+			       and parent_id = (select item_id
+						from cr_items
+						where name = :item_url_parent_folder))
 	    order by revision_id desc
 	    limit 1
 

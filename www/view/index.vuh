@@ -36,19 +36,33 @@ if {[parameter::get -parameter BehaveLikeFilesystemP -default 0]} {
     if { [string equal "" $file_id] } {
 	set splitted_url [split $the_url "/"]
 	set item_url_title [lindex $splitted_url end]
+
+	# THIS CODE ONLY TAKES TWO FOLDERS INTO ACCOUNT. THIS NEEDS TO BE FIXED LATER
 	set item_url_folder [lindex $splitted_url end-1]
-	set file_id [db_string upgraded_item_id {}]
+	set item_url_parent_folder [lindex $splitted_url end-2]
+	set file_id [db_string upgraded_item_id {} -default 0]
     }
 
-    if {![exists_and_not_null version_id]} {
-	set version_id [item::get_live_revision $file_id]
+    if {$file_id == 0} {
+	# ns_returnnotfound
+	set page "[ad_header {Content Item Not Found}]"
+	append page "<h3>Content Item Not Found</h3>"
+	append page "The requested item is not available for viewing.  "
+	append page "The item is either not available on this server or it is not in a publishable state  "
+	append page "Unpublished items can be viewed via the CMS interface if the CMS package is installed.<br>"
+	append page "[ad_footer]"
+	doc_return 200 text/html $page
+    } else {
+	if {![exists_and_not_null version_id]} {
+	    set version_id [item::get_live_revision $file_id]
+	}
+	
+	set user_id [ad_conn user_id]
+	
+	ad_require_permission $version_id "read"
+	
+	cr_write_content -revision_id $version_id
     }
-
-    set user_id [ad_conn user_id]
-    
-    ad_require_permission $version_id "read"
-    
-    cr_write_content -revision_id $version_id
 
 } else {
     
