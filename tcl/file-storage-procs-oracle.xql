@@ -3,17 +3,40 @@
 <queryset>
    <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
-<fullquery name="fs_get_root_folder.fs_root_folder">      
-      <querytext>
-      
-	 begin
-        	:1 := file_storage.get_root_folder(:package_id);
-    	 end;
+    <fullquery name="fs::new_root_folder.new_root_folder">
+        <querytext>
+            begin
+                :1 := file_storage.new_root_folder(
+                    package_id => :package_id
+                );
+            end;
+        </querytext>
+    </fullquery>
 
-      </querytext>
-</fullquery>
+    <fullquery name="fs::get_root_folder.get_root_folder">
+        <querytext>
+            begin
+                :1 := file_storage.get_root_folder(
+                    package_id => :package_id
+                );
+            end;
+        </querytext>
+    </fullquery>
 
- 
+    <fullquery name="fs::new_folder.new_folder">
+        <querytext>
+            begin
+                :1 := file_storage.new_folder(
+                    name => :name,
+                    folder_name => :pretty_name,
+                    parent_id => :parent_id,
+                    creation_user => :creation_user,
+                    creation_ip => :creation_ip
+                );
+            end;
+        </querytext>
+    </fullquery>
+
 <fullquery name="fs_get_folder_name.folder_name">      
       <querytext>
       
