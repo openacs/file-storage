@@ -27,7 +27,7 @@ ad_page_contract {
 ad_require_permission $file_id read
 ad_require_permission $parent_id write
 
-set user_id [ad_conn user_ud]
+set user_id [ad_conn user_id]
 set ip_address [ad_conn peeraddr]
 
 # Question - do we copy revisions or not?
