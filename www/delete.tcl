@@ -30,13 +30,6 @@ set not_allowed_count 0
 if {[llength $object_id] == 1} {
     set object_id [split [lindex $object_id 0]]
 }
-ns_log notice "
-DB --------------------------------------------------------------------------------
-DB DAVE debugging /var/lib/aolserver/openacs-5-1/packages/file-storage/www/delete.tcl
-DB --------------------------------------------------------------------------------
-DB object_id = '${object_id}'
-DB llength object_id = '[llength $object_id]'
-DB --------------------------------------------------------------------------------"
 
 set root_folders_count [db_string count_root_folders "" -default 0]
 if {$root_folders_count > 0} {
