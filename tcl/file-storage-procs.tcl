@@ -148,7 +148,11 @@ ad_proc children_have_permission_p {
 #
 
 ad_proc fs_context_bar_list {
+    {-root_folder_id ""}
     {-final ""}
+    {-folder_url "index"}
+    {-file_url "file"}
+    {-extra_vars ""}
     item_id
 } {
     Constructs the list to be fed to ad_context_bar appropriate for
@@ -156,6 +160,10 @@ ad_proc fs_context_bar_list {
     item in the context bar.  Otherwise, the name corresponding to 
     item_id will be used.
 } {
+    if {[empty_string_p $root_folder_id]} {
+        set root_folder_id [fs_get_root_folder]
+    }
+
     if [empty_string_p $final] {
 	set start_id [db_string parent_id "
 	select parent_id from cr_items where item_id = :item_id"]
@@ -166,23 +174,7 @@ ad_proc fs_context_bar_list {
 	set start_id $item_id
     }
 
-    set context_bar [db_list_of_lists context_bar "
-    select decode(
-             file_storage.get_content_type(i.item_id),
-             'content_folder',
-             'index?folder_id=',
-             'file?file_id='
-           ) || i.item_id,
-           file_storage.get_title(i.item_id)
-    from   cr_items i
-    where  item_id not in (
-        select i2.item_id
-        from   cr_items i2
-        connect by prior i2.parent_id = i2.item_id
-        start with i2.item_id = file_storage.get_root_folder([ad_conn package_id]))
-    connect by prior i.parent_id = i.item_id
-    start with item_id = :start_id
-    order by level desc"]
+    set context_bar [db_list_of_lists context_bar {}]
 
     lappend context_bar $final
 
