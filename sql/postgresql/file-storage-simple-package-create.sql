@@ -64,7 +64,7 @@ select define_function_args('fs_simple_object__name', 'object_id');
 create function fs_simple_object__name(integer)
 returns integer as '
 declare
-    p_object_id                     alias from $1;
+    p_object_id                     alias for $1;
 begin
     return name
     from fs_simple_objects
