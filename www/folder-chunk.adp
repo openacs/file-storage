@@ -9,7 +9,6 @@
       <small><i>#file-storage.this_may_take_a_while#</i></small>
     </p>
   </if>
-</if>
 
 <if @feeds:rowcount@ not nil and @feeds:rowcount@ gt 0>
 <multiple name="feeds">
