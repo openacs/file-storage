@@ -55,7 +55,7 @@ if {$admin_p} {
 #set n_past_filter_values [list [list "Yesterday" 1] [list [_ file-storage.last_week] 7] [list [_ file-storage.last_month] 30]]
 set elements [list icon \
 		  [list label "" \
-		       display_template {<a href="@contents.file_url@"><img src="@contents.icon@"  border=0 alt="#file-storage.folder#" /></a>}] \
+		       display_template {<a href="@contents.file_url@"><img src="@contents.icon@" border=0 alt="@contents.label@" /></a>}] \
 		  name \
 		  [list label [_ file-storage.Name] \
 		       link_url_col file_url \
@@ -93,7 +93,7 @@ if {[string equal $orderby ""]} {
     set orderby " order by fs_objects.sort_key, fs_objects.name asc"
 }
 
-db_multirow -extend { icon last_modified_pretty content_size_pretty properties_link properties_url} contents select_folder_contents {} {
+db_multirow -extend { label icon last_modified_pretty content_size_pretty properties_link properties_url} contents select_folder_contents {} {
     set last_modified_ansi [lc_time_system_to_conn $last_modified_ansi]
 
     set last_modified_pretty [lc_time_fmt $last_modified_ansi "%x %X"]
@@ -110,13 +110,22 @@ db_multirow -extend { icon last_modified_pretty content_size_pretty properties_l
         incr content_size_total $content_size
     }
 
+
     set name [lang::util::localize $name]
-    if {![string equal $type folder]} {
+    if {[string equal $type url]} {
+        set label [_ file-storage.link]
+	set properties_link [_ file-storage.properties]
+	set properties_url "file?[export_vars {{file_id $object_id}}]"
+	set icon "/resources/file-storage/link.gif"
+        set file_url $url
+    } elseif {![string equal $type folder]} {
+        set label [_ file-storage.file]
 	set properties_link [_ file-storage.properties]
 	set properties_url "file?[export_vars {{file_id $object_id}}]"
 	set icon "/resources/file-storage/file.gif"
         set file_url "view/${file_url}"
     } else {
+        set label [_ file-storage.folder]
 	set properties_link ""
 	set properties_url ""
 	set icon "/resources/file-storage/folder.gif"

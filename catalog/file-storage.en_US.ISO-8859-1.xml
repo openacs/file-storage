@@ -27,6 +27,7 @@
   <msg key="Edit_Folder">Edit Folder</msg>
   <msg key="Edit_URL">Edit URL</msg>
   <msg key="file">file</msg>
+  <msg key="link">link</msg>
   <msg key="file_delete_page_title">Delete %title%</msg>
   <msg key="file_edit_page_title">Rename %title%</msg>
   <msg key="file_edit_page_title_1">Edit %pretty_name%</msg>
