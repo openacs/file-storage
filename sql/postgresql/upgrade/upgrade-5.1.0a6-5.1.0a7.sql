@@ -1,12 +1,13 @@
 --set serveroutput on size 200000
 
 create or replace function tmp_fs_name_duplicate (
-        varchar
+        varchar,
+        integer
 ) returns integer
 as '
 declare
   v_name  alias for $1; --cr_items.name%TYPE
-  v_count integer;
+  v_count alias for $2; 
   v_insert_pos integer;
 begin
   v_insert_pos := instr(v_name,''.'',-1)-1;
@@ -55,7 +56,7 @@ begin
              --Name collision: change file.ext to file.n.ext
 
              v_count := v_count + 1;
-             v_new_name := select tmp_fs_name_duplicate(v_item_row.title,v_count);
+             select into v_new_name tmp_fs_name_duplicate(v_item_row.title,v_count);
              update cr_items set name = v_new_name
 	        where item_id=v_item_row.item_id;
 
@@ -79,4 +80,4 @@ end;' language 'plpgsql';
 select inline_0();
 drop function inline_0();
 
-drop function tmp_fs_name_duplicate(varchar);
+drop function tmp_fs_name_duplicate(varchar,integer);
