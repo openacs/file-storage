@@ -721,6 +721,7 @@ create view fs_folders
 as
     select cr_folders.folder_id,
            cr_folders.label as name,
+           acs_objects.last_modified,
            (select count(*)
             from cr_items ci
             where ci.parent_id = cr_folders.folder_id) as content_size,
@@ -729,8 +730,10 @@ as
             where site_nodes.object_id = file_storage__get_package_id(cr_items.item_id)) as url,
            cr_items.parent_id
     from cr_folders,
-         cr_items
-    where cr_folders.folder_id = cr_items.item_id;
+         cr_items,
+         acs_objects
+    where cr_folders.folder_id = cr_items.item_id
+    and cr_folders.folder_id = acs_objects.object_id;
 
 create view fs_files
 as
@@ -759,7 +762,7 @@ as
            'Folder' as type,
            fs_folders.content_size,
            fs_folders.name,
-           to_date(null, 'YYYY-MM-DD HH24:MI') as last_modified,
+           fs_folders.last_modified,
            fs_folders.url,
            fs_folders.parent_id,
            0 as sort_key
