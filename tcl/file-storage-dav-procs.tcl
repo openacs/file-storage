@@ -102,8 +102,7 @@ ad_proc fs::impl::fs_object::mkcol {} {
 ad_proc fs::impl::fs_object::proppatch {} {
     PROPPATCH method
 } {
-    # this is handled in tDAV for now
-    return [list 201]
+    return [oacs_dav::impl::content_revision::proppatch]
 }
 
 ad_proc fs::impl::fs_object::copy {} {
