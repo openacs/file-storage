@@ -97,7 +97,7 @@ db_transaction {
  
        ad_return_complaint 1 "You probably clicked on the Add button more than once. Check if the file is properly loaded on the <a href=\"index?folder_id?$folder_id\">folder</a> you wan, or you can use the Back button to return and re-enter the version file."      
 
-    return
+       ad_script_abort
 }
 
 
