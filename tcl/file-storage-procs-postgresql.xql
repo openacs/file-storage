@@ -56,6 +56,7 @@
                    fs_objects.key,
                    fs_objects.sort_key,
                    fs_objects.file_upload_name,
+                   fs_objects.title,
                    case when fs_objects.last_modified >= (now() - interval '$n_past_days days') then 1 else 0 end as new_p,
                    acs_permission__permission_p(fs_objects.object_id, :user_id, 'admin') as admin_p,
                    acs_permission__permission_p(fs_objects.object_id, :user_id, 'delete') as delete_p,
