@@ -2,11 +2,11 @@
   <table class="table-display" cellpadding="5" cellspacing="0">
     <tr class="table-header">
       <td>&nbsp;</td>
-      <td>#file-storage.Name#</td>
-      <td>#file-storage.Action#</td>
-      <td>#file-storage.Size#</td>
-      <td>#file-storage.Type#</td>
-      <td>#file-storage.Last_Modified#</td>
+      <th>#file-storage.Name#</th>
+      <th>#file-storage.Action#</th>
+      <th>#file-storage.Size#</th>
+      <th>#file-storage.Type#</th>
+      <th>#file-storage.Last_Modified#</th>
     </tr>
     <multiple name="contents">
       <if @contents.rownum@ odd>
