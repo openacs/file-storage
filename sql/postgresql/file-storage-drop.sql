@@ -8,6 +8,9 @@
 -- drop script for file-storage
 --
 
+-- Site-wide search interface
+\i file-storage-sc-drop.sql
+
 --
 -- content repository is set up to cascade, so we should just have to 
 -- delete the root folders
@@ -43,7 +46,12 @@ drop trigger fs_root_folder_delete_trig on fs_root_folders;
 drop table fs_root_folders;
 select drop_package('file_storage');
 
-select acs_object_type__drop_type ( 
-  'file_storage_item','f');
+-- Remove subtype of content_revision so that site-wide-search
+-- can distinguish file-storage items in the search results
+select content_type__drop_type (
+       'file_storage_object',	 -- content_type
+       'f',			 -- drop_children_p
+       'f'			 -- drop_table_p
+       );
 
 
