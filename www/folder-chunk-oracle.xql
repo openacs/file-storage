@@ -9,7 +9,7 @@
                    fs_objects.name,
                    fs_objects.live_revision,
                    fs_objects.type,
-                   to_char(fs_objects.last_modified, 'YYYY-MM-DD HH24:MI:SS') as last_modified,
+                   to_char(fs_objects.last_modified, 'YYYY-MM-DD HH24:MI:SS') as last_modified_ansi,
                    fs_objects.content_size,
                    fs_objects.url,
                    content_item.get_path(fs_objects.object_id, :root_folder_id) as file_url,
@@ -38,7 +38,3 @@
         </querytext>
     </fullquery>
 </queryset>
-
-
-
-
