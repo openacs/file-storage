@@ -38,7 +38,8 @@
  </if>
 </ul>
 
-
+<a href="index?folder_id=@folder_id@">Back</a> to folder view
+<p>
 <table border=1 cellspacing=2 cellpadding=2>
   <tr>
     <td colspan=7>
