@@ -57,7 +57,6 @@ begin
         id_column => 'folder_id',
         name_method => 'file_storage.get_title'
     );
-
 end;
 /
 show errors;
