@@ -185,7 +185,7 @@
 		  creation_user => :creation_user,
 		  creation_ip => :creation_ip,
 		  item_id => :item_id,
-		  indb_p => 't'
+		  indb_p => :indbp
                );
 	end;
     </querytext>

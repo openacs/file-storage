@@ -81,10 +81,10 @@ if {$admin_p} {
 
 set elements [list icon \
 		  [list label "" \
-		       display_template {<a href="@contents.file_url@"><img src="@contents.icon@"  border=0 alt="#file-storage.@contents.pretty_type@#" /></a>}] \
+		       display_template {<a href="@contents.download_url@"><img src="@contents.icon@"  border=0 alt="#file-storage.@contents.pretty_type@#" /></a>}] \
 		  name \
 		  [list label [_ file-storage.Name] \
-		       display_template {<a href="@contents.file_url@">@contents.name@</a><br/><if @contents.name@ ne @contents.file_upload_name@><span style="color: \#999;">@contents.file_upload_name@</span></if>} \
+		       display_template {<a href="@contents.file_url@">@contents.name@</a><br/><if @contents.name@ ne @contents.title@><span style="color: \#999;">@contents.title@</span></if>} \
 		       orderby_desc {fs_objects.name desc} \
 		       orderby_asc {fs_objects.name asc}] \
 		  content_size_pretty \
@@ -127,7 +127,7 @@ if {[string equal $orderby ""]} {
     set orderby " order by fs_objects.sort_key, fs_objects.name asc"
 }
 
-db_multirow -extend { label icon last_modified_pretty content_size_pretty properties_link properties_url} contents select_folder_contents {} {
+db_multirow -extend {label icon last_modified_pretty content_size_pretty properties_link properties_url download_url} contents select_folder_contents {} {
     set last_modified_ansi [lc_time_system_to_conn $last_modified_ansi]
     
     set last_modified_pretty [lc_time_fmt $last_modified_ansi "%x %X"]
@@ -136,7 +136,6 @@ db_multirow -extend { label icon last_modified_pretty content_size_pretty proper
 	append content_size_pretty " [_ file-storage.items]"
 	set pretty_type "Folder"
     } else {
-	set type [string trimleft [file extension $file_upload_name] . ]
 	if {$content_size < 1024} {
 	    set content_size_pretty "[lc_numeric $content_size] [_ file-storage.bytes]"
 	} else {
@@ -173,8 +172,9 @@ db_multirow -extend { label icon last_modified_pretty content_size_pretty proper
 	    set icon "/resources/file-storage/file.gif"
 	    set file_url "${fs_url}view/${file_url}"
 	}
+
     }
-    
+    set download_url "download/?[export_vars {{file_id $object_id}}]"    
 
     # We need to encode the hashes in any i18n message keys (.LRN plays this trick on some of its folders).
     # If we don't, the hashes will cause the path to be chopped off (by ns_conn url) at the leftmost hash.

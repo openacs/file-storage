@@ -23,10 +23,7 @@ ad_page_contract {
 
 ad_require_permission $file_id write
 
-db_1row file_info "
-select name as title
-from   cr_items
-where  item_id = :file_id"
+db_1row file_info ""
 
 set context [fs_context_bar_list -final "[_ file-storage.Rename]" $file_id]
 

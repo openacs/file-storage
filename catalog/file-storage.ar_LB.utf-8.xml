@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="file-storage" package_version="5.1.0a2" locale="AR_LB" charset="utf-8">
+<message_catalog package_key="file-storage" package_version="5.1.0a2" locale="ar_LB" charset="utf-8">
 
   <msg key="Action">الفعل</msg>
   <msg key="Actions">الأفعال:</msg>
@@ -7,16 +7,20 @@
   <msg key="Add_File">أضفْ ملفاً</msg>
   <msg key="Add_pretty_name">أضفْ %pretty_name%</msg>
   <msg key="Author">المؤلف</msg>
+  <msg key="back_to_folder_view">الرجوع الى منظر الحافظة</msg>
+  <msg key="bytes">بايت</msg>
   <msg key="Change_Name">غييرْ الإسم</msg>
   <msg key="Copy">إنسخ</msg>
   <msg key="Create">إخلق</msg>
   <msg key="Create_a_new_folder">إخلقْ حافظةً جديدةً</msg>
-  <msg key="Create_a_URL">إخلقْ موقعاً</msg>
+  <msg key="Create_a_URL">انشئ موقعاً</msg>
   <msg key="Create_New_Folder">إخلقْ حافظةً جديدةً</msg>
   <msg key="day">يوم</msg>
   <msg key="days_as_new">الأيام الماضية كجديدة.</msg>
   <msg key="Delete">إحذفْ</msg>
   <msg key="delete">إحذفْ</msg>
+  <msg key="delete_folder_and_children">هذا سوف يحذف %folder_name% و %child_count% ملفات و الحافظات هل تريد الاستمرار
+</msg>
   <msg key="Delete_this_folder">إحذفْ هذه الحافظة</msg>
   <msg key="Delete_Version">أحذفْ إصدار</msg>
   <msg key="Description">الوصف:</msg>
@@ -25,28 +29,46 @@
   <msg key="Edit_Folder">حررْ حافظة</msg>
   <msg key="Edit_URL">حررْ موقع</msg>
   <msg key="file">ملف</msg>
+  <msg key="file_delete_page_title">حذف %title%</msg>
+  <msg key="file_edit_page_title">إعادة تسمية %title%</msg>
+  <msg key="file_edit_page_title_1">تحرير %pretty_name%</msg>
+  <msg key="file_page_file_title_label">العنوان %title%</msg>
+  <msg key="file_page_owner_label">المالك %owner%</msg>
   <msg key="folder">حافظة</msg>
+  <msg key="Folder_available_via_WebDAV_at">هذه الحافظة متوفرة بواسطة WebDAV على %webdav_url%</msg>
+  <msg key="folder_delete_page_title">حذف  %folder_name%</msg>
   <msg key="Folder_ID">هوية الحافظة</msg>
   <msg key="Folder_Name">إسم الحافظة:</msg>
   <msg key="folder_type_pretty_name">حافظة</msg>
+  <msg key="index_page_navigate_up_folder">حتى %up_name%</msg>
   <msg key="item">بند</msg>
   <msg key="items">بنود</msg>
   <msg key="Last_Modified">آخر تعديل</msg>
+  <msg key="last_month">الشهر الماضي</msg>
+  <msg key="last_week">الاسبوع الماضي</msg>
+  <msg key="link">صلة</msg>
   <msg key="lt_administer_permission">أدرْ الأذون</msg>
+  <msg key="lt_All_Versions_of_title">كل النسخ المعدلة من &quot;%title%&quot;</msg>
   <msg key="lt_Are_you_sure_that_you">هل متأكّدة بأنك تريد أن تحذف هذه النسخة &quot;%version_name%&quot; لي &quot;%title%&quot;؟ هذا الإجراء لا يمكن الرجوع عنه.</msg>
   <msg key="lt_bad_folder_id_folder_">هوية الحافظة مفقودة</msg>
+  <msg key="lt_Comments_on_this_file">التعليقات على هذا الملف</msg>
+  <msg key="lt_contentscontent_size_">%contents.content_size_pretty% بايت</msg>
   <msg key="lt_delete_file">هل أنت متأكّد تريد حذف الملف &quot;%title%&quot;وكلّ نسخه؟ هذا العمل لا يمكن أن يعكس.</msg>
   <msg key="lt_delete_folder">هل أنت متأكّدة أنك تريد حذف الحافظة &quot;%folder_name%&quot; وكلّ المواد التي تحتويها؟ هذا الإجراء لا يمكن الرجوع عنه.</msg>
-  <msg key="lt_Delete_this_file_incl">إحذفْ هذا الملف ( متضمّناً كلّ الإصدارات)</msg>
+  <msg key="lt_Delete_this_file_incl">إحذفْ هذا الملف - متضمّناً كلّ الإصدارات</msg>
   <msg key="lt_Download_an_archive_o">حملْ أرشيف محتويات هذه الحافظة</msg>
   <msg key="lt_Either_there_is_alrea">أو أنت نقرت على الزرّ أكثر من مرة. أنت تستطيع إستعمال زرّ الرجوع لعودة وإختيار   &quot;%folder_name%&quot; أمّا هناك حافظة بالاسم
 للرؤية إذا حافظتك هناك.  &lt;a href=&quot;%directory_url%&quot;&gt; عد إلى عنصر القوائم &lt;/a&gt; اسما جديدا، أو
 </msg>
   <msg key="lt_Folder_folder_name_is">حافظةُ %folder_name% فارغة.</msg>
-  <msg key="lt_It_appears_that_there">يبدو أن بالفعل هناك ملفّ بذلك الاسم في هذا الملفّ (بالرّغم من أنّ من الممكن إنك نقرت أكثر من مرّة على زّرّ الإرسال.)</msg>
+  <msg key="lt_It_appears_that_there">يبدو أن بالفعل هناك ملفّ بذلك الاسم في هذا الملفّ - بالرّغم من أنّ من الممكن إنك نقرت أكثر من مرّة على زّرّ الإرسال.</msg>
+  <msg key="lt_Leave_blank_for_linked_documents">أترك العنوان فارغا عندما تقوم بالتحميل عدة بيانات مترابطة</msg>
+  <msg key="lt_Live_version_of_title">النسخة الحية &quot;%title%&quot;</msg>
   <msg key="lt_Modify_permissions_on">عدّلْ الأذون على هذا الملف</msg>
   <msg key="lt_Modify_permissions_on_1">عدّلْ الأذون على هذه الحافظة</msg>
   <msg key="lt_Please_enter_the_new_">من فضلك أدخل الاسم الجديد لهذا الملف:</msg>
+  <msg key="lt_Select_the_folder_tha">إختار الحافظة التي ترغب بنسخ اليها &quot;%file_name%&quot; </msg>
+  <msg key="lt_Select_the_folder_tha_1">إختار الحافظة التي ترغب بنقل اليها&quot;%file_name%&quot; </msg>
   <msg key="lt_Show_files_modified_i">إعرضْ الملفات المعدلة منذ</msg>
   <msg key="lt_show_only_live_versio">أعرضْ الإصدار الحيّ فقط</msg>
   <msg key="lt_The_folder_link_you_s"> الـ %folder_link% التي إخترت تحتوي ملفا بنفس الاسم.</msg>
@@ -57,9 +79,10 @@
   <msg key="lt_There_are_no_versions">ليس هناك إصدارات لهذا الملف المتوفرِ إليك</msg>
   <msg key="lt_This_file_has_version">هذا الملف له النسخ التي أنت ما عندك رخصة للحذف، لذا أنت لا تستطيع حذف الملف.</msg>
   <msg key="lt_This_folder_contains_">تحتوي هذه الحافظة البنود التي أنت ما عندك الإذن للحذف، لذا أنت لا تستطيع حذفه.</msg>
+  <msg key="lt_This_is_a_ZIP">هذا الملف المضغوط يحوي عدة ملفات</msg>
   <msg key="lt_Use_the_Browse_button">إستعمل زر &quot;تصفّح. . .&quot; لتحديد مكان ملفك، ثم انقر &quot;إفتح&quot;.</msg>
   <msg key="lt_version_not_valid">الإصدار المحدّد لَيسْ صحيحاً.</msg>
-  <msg key="lt_We_got_an_error_that_">فهمنا خطأً أننا لم يكن من الممكن أن نتعرّف بسهولة . من فضلك دع مالك النّظام أن يعرف عن هذا.</msg>
+  <msg key="lt_We_got_an_error_that_"> لدينا خطأً أننا لم يكن من الممكن أن نتعرّف بسهولة . من فضلك دع مالك النّظام أن يعرف عن هذا.</msg>
   <msg key="lt_We_received_an_error_">إستلمنا خطأ من قاعدة البيانات. من المحتمل الحافظة التي إخترت تحتوي ملفا بنفس الاسم.</msg>
   <msg key="lt_Were_sorry_but_at_the">نحن آسفون, لكنّ الآن لا يمكن أن تحذف الملفّات إلّا إذا كانوا فارغين بالفعل.</msg>
   <msg key="lt_You_may_not_delete_th">أنت لا يمكنك تَحْذفُ حافظة الأساس.</msg>
@@ -67,24 +90,35 @@
 وإعادة إدخال إصدار  ملف.
 </msg>
   <msg key="lt_Your_file_is_larger_t">ملفك أكبر من حجم الملف الأقصى المسموح له على هذا النظام (%number_of_bytes% بايتس)</msg>
+  <msg key="lt_Your_file_is_larger_t_1">حجم ملفك أكبر مما هو مسموح به على هذا النظام (%max_number_of_bytes% بايت)</msg>
+  <msg key="lt_Your_search_on_query_">بحثك على &quot;%query%&quot; لم يؤدي الى اية نتائج</msg>
+  <msg key="lt_Your_search_on_query__1">بحثك على &quot;%query%&quot; اعاد هؤلاء الملفات:</msg>
   <msg key="Modified">معدل</msg>
   <msg key="Move">تحرّكْ</msg>
+  <msg key="Multiple_files">ملفات متعددة</msg>
   <msg key="Name">إسم</msg>
   <msg key="new">جديد</msg>
+  <msg key="New_Folder">حاظنة جديدة</msg>
   <msg key="No_such_type">لا مثل هذا النوع</msg>
   <msg key="no_such_URL">لا مثل هذا الموقع</msg>
+  <msg key="Permissions">صلاحيات</msg>
+  <msg key="properties">خصائص</msg>
   <msg key="Rename">أعدْ تسمية</msg>
   <msg key="Rename_this_folder">أعدْ تسمية هذه الحافظة</msg>
   <msg key="Save">إحفظْ</msg>
   <msg key="Search">إبحثْ</msg>
   <msg key="Search_again">إبحثْ ثانيةً:</msg>
   <msg key="Search_Results">نَتائِج البحث</msg>
+  <msg key="Set_Permissions">إعداد صلاحيات</msg>
   <msg key="show_all_versions">إعرضْ كلّ الإصدارات</msg>
+  <msg key="simple_add_page_title">إنشاء %pretty_name%</msg>
   <msg key="Size">حجم</msg>
   <msg key="Size_bytes">حجم(بايتس)</msg>
+  <msg key="this_may_take_a_while">&lt;strong&gt;ملاحظة:&lt;/strong&gt; هذا سوف يأخذ وقت الرجاء الانتظار</msg>
   <msg key="Title">العنوان:</msg>
   <msg key="Title_">العنوان :</msg>
   <msg key="Type">نوع</msg>
+  <msg key="untitled">غير معنون</msg>
   <msg key="Update">حدثْ</msg>
   <msg key="Upload">إرسالْ</msg>
   <msg key="Upload_a_file">أرسلْ ملفاً</msg>
@@ -92,11 +126,14 @@
   <msg key="Upload_New_File">أرسلْ ملف جديد</msg>
   <msg key="Upload_New_Version">أرسلْ إصدار جديد</msg>
   <msg key="URL">الموقع:</msg>
+  <msg key="version_add_page_title">تحميل نسخة جديدة من %title%</msg>
+  <msg key="version_delete_page_title">حذف %version_name%</msg>
   <msg key="Version_filename">إصدار إسم الملف</msg>
   <msg key="Version_filename_">إصدار إسم الملف :</msg>
   <msg key="Version_filename_1">إصدار إسم الملف:</msg>
   <msg key="Version_Notes">إصدار الملاحظات</msg>
   <msg key="Version_Notes_1">إصدار الملاحظات:</msg>
   <msg key="view_details">شاهد التفاصيل</msg>
+  <msg key="Yes_Delete">نعم إحذف</msg>
   <msg key="Yes_Delete_It">نعم, إحذفْه</msg>
 </message_catalog>

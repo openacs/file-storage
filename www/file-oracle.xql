@@ -36,6 +36,7 @@
                 o.creation_user as author_id,
        		r.mime_type as type,
        		m.label as pretty_type,
+		i.name,
                 to_char(o.last_modified,'YYYY-MM-DD HH24:MI:SS') as last_modified_ansi,
        		r.description,
        		acs_permission.permission_p(r.revision_id,:user_id,'admin') as admin_p,

@@ -19,6 +19,7 @@
   <msg key="days_as_new">dage som ny.</msg>
   <msg key="Delete">Slet</msg>
   <msg key="delete">slet</msg>
+  <msg key="delete_folder_and_children">%folder_name% og %child_count% filer og mapper bliver slettet. Ønsker du at fortsætte?</msg>
   <msg key="Delete_this_folder">Slet denne mappe</msg>
   <msg key="Delete_Version">Slet Version</msg>
   <msg key="Description">Beskrivelse:</msg>
@@ -33,6 +34,7 @@
   <msg key="file_page_file_title_label">Titel: %title%</msg>
   <msg key="file_page_owner_label">Ejer: %owner%</msg>
   <msg key="folder">mappe</msg>
+  <msg key="Folder_available_via_WebDAV_at">Denne mappe er tilgængelig gennem WebDAV på %webdav_url%</msg>
   <msg key="folder_delete_page_title">Slet %folder_name%</msg>
   <msg key="Folder_ID">Mappe ID</msg>
   <msg key="Folder_Name">Mappe Navn:</msg>
@@ -43,6 +45,7 @@
   <msg key="Last_Modified">Senest Ændret</msg>
   <msg key="last_month">Sidste Måned</msg>
   <msg key="last_week">Sidste Uge</msg>
+  <msg key="link">link</msg>
   <msg key="lt_administer_permission">administrer rettigheder</msg>
   <msg key="lt_All_Versions_of_title">Alle udgaver af &quot;%title%&quot;</msg>
   <msg key="lt_Are_you_sure_that_you">Er du sikker på, at du ønsker at slette denne version &quot;%version_name%&quot; af &quot;%title%&quot;? Denne handling kan ikke fortrydes.</msg>
@@ -123,5 +126,6 @@
   <msg key="Version_Notes">Versionsnoter</msg>
   <msg key="Version_Notes_1">Versionsnoter:</msg>
   <msg key="view_details">vis detajler</msg>
+  <msg key="Yes_Delete">Ja, Slet</msg>
   <msg key="Yes_Delete_It">Ja, Slet Den</msg>
 </message_catalog>

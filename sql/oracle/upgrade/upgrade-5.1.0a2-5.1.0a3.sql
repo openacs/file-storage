@@ -1,11 +1,3 @@
---
--- packages/file-storage/sql/file-storage-package-create.sql
---
--- @author yon (yon@openforce.net)
--- @creation-date 2002-04-03
--- @version $Id$
---
-
 create or replace package file_storage
 as
 
@@ -102,7 +94,7 @@ as
 
     function get_folder_name(
        --
-       -- Wrapper for content_folder.get_label
+       -- Wrapper for content_folder__get_label
        --
        folder_id in cr_folders.folder_id%TYPE
     ) return cr_folders.label%TYPE;
@@ -276,7 +268,7 @@ as
     procedure delete_file(
         --
         -- Delete a file and all its version
-        -- Wrapper to content_item.delete
+        -- Wrapper to content_item__delete
         --
         file_id in cr_items.item_id%TYPE
     )

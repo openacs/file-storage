@@ -16,10 +16,11 @@
                    fs_objects.url,
                    fs_objects.sort_key,
                    fs_objects.file_upload_name,
+                   fs_objects.title,
                    case
                      when :folder_path is null
-                     then fs_objects.name
-                     else :folder_path || '/' || fs_objects.name
+                     then fs_objects.file_upload_name
+                     else :folder_path || '/' || fs_objects.file_upload_name
                    end as file_url,
                    case
                      when fs_objects.last_modified >= (now() - cast('$n_past_days days' as interval))

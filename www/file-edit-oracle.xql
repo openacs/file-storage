@@ -6,9 +6,10 @@
 <fullquery name="file_info">      
       <querytext>
       
-	select name as title
-	from   cr_items
-	where  item_id = :file_id
+	select title
+	from   cr_revisions, cr_items
+	where  cr_items.item_id = :file_id
+	and revision_id=live_revision
 
       </querytext>
 </fullquery>
