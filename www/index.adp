@@ -38,6 +38,7 @@
     </td>
   </tr>
 </if>
+<if @n_contents@ gt 0>
   <tr><td colspan="2"><br></td></tr>
   <tr>
     <td><li></td>
@@ -49,6 +50,7 @@
       <i><strong>Note:</strong> This may take a while, so please be patient.</i>
     </td>
   </tr>
+</if>
   <tr><td colspan="2"><br></td></tr>
   <tr>
     <td><li></td>
