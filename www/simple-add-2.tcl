@@ -34,5 +34,7 @@ if { [string is false [permission::permission_p -party_id $user_id -object_id $f
     permission::grant -party_id $user_id -object_id $item_id -privilege admin
 }
 
+fs::do_notifications -folder_id $folder_id -filename $url -url_id $item_id -action "new_url"
+
 ad_returnredirect "?folder_id=$folder_id"
 

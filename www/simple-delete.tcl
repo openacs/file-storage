@@ -13,7 +13,15 @@ ad_page_contract {
 ad_require_permission $object_id delete
 
 # Delete
-content_extlink::delete -extlink_id $object_id
+
+db_transaction {
+
+    fs::do_notifications -folder_id $folder_id -filename [content_extlink::extlink_name -item_id $object_id] -url_id $object_id -action "delete_url"
+
+    content_extlink::delete -extlink_id $object_id
+
+}
+
 
 ad_returnredirect "./?folder_id=$folder_id"
 

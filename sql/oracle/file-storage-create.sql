@@ -91,3 +91,5 @@ show errors;
 @ file-storage-package-create.sql
 
 @ file-storage-views-create.sql
+
+@ file-storage-notifications-create.sql

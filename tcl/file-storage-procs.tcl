@@ -778,3 +778,94 @@ ad_proc fs::webdav_url {
 	
     }
 }
+
+ad_proc -public fs::do_notifications {
+    {-folder_id:required}
+    {-filename:required}
+    {-file_id ""}
+    {-url_id ""}
+    -action
+    {-version_id ""}
+} {
+    Send notifications for file-storage operations.
+
+    Note that not all possible operations are implemented, e.g. move, copy etc. See documentation.
+
+    @param action The kind of operation. One of: new_file, new_version, new_url, delete_file, delete_url
+} {
+    set root_folder [fs_get_root_folder]
+
+    if {[string equal $action "new_file"]} {
+        set action_type {New File Uploaded}
+    } elseif {[string equal $action "new_url"]} {
+        set action_type {New URL Uploaded}
+        set file_id $url_id
+    } elseif {[string equal $action "new_version"]} {
+        set action_type {New version of file uploaded}
+    } elseif {[string equal $action "delete_file"]} {
+        set action_type {File deleted}
+    } elseif {[string equal $action "delete_url"]} {
+        set action_type {URL deleted}
+    } else {
+        error "Unknown file-storage notification action: $action"
+    }
+
+    set url "[ad_url]"
+    set new_content ""
+    if {[string equal $action "new_file"] || [string equal $action "new_url"] || [string equal $action "new_version"]} {
+        db_1row get_owner_name { }
+
+        if {[string equal $action "new_version"]} {
+            set sql "select description as description from cr_revisions 
+                           where cr_revisions.revision_id = :version_id"
+        } else {
+            set sql "select description as description from cr_revisions 
+                           where cr_revisions.item_id = :file_id"
+        }
+
+        db_0or1row description $sql
+
+    }
+    db_1row path1 { }
+    
+    # Set email message body - "text only" for now
+    set text_version ""
+    append text_version "Notification for: File-Storage: $action_type\n"
+    append text_version "File-Storage folder: [fs_get_folder_name $folder_id]\n"
+
+    if {[string equal $action "new_version"]} {
+        append text_version "New Version Uploaded for file: $filename\n"
+    } else {
+        append text_version "Name of the $action_type: $filename\n"
+    }
+    if {[info exists owner]} {
+        append text_version "Uploaded by: $owner\n"
+    }
+    if {[info exists description]} {
+        append text_version "Version Notes: $description\n" 
+    }
+
+    append text_version "View folder contents: $url$path1?folder_id=$folder_id \n\n"
+    set new_content $text_version
+    # Do the notification for the file-storage
+    
+    notification::new \
+        -type_id [notification::type::get_type_id \
+                      -short_name fs_fs_notif] \
+        -object_id $folder_id \
+        -notif_subject {File Storage Notification} \
+        -notif_text $new_content
+
+    # walk through all folders up to the root folder
+    while {$folder_id != $root_folder} {
+        set parent_id [db_string parent_id "
+	            select parent_id from cr_items where item_id = :folder_id"]
+        notification::new \
+            -type_id [notification::type::get_type_id \
+                          -short_name fs_fs_notif] \
+            -object_id $parent_id \
+            -notif_subject {File Storage Notification} \
+            -notif_text $new_content
+        set folder_id $parent_id
+    }
+}

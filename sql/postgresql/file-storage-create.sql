@@ -94,3 +94,5 @@ drop function inline_0();
 \i file-storage-package-create.sql
 
 \i file-storage-views-create.sql
+
+\i file-storage-notifications-create.sql
