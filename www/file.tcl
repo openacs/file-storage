@@ -78,6 +78,8 @@ template::list::create \
     }
 
 db_multirow -unclobber -extend { last_modified_pretty content_size_pretty version_url version_delete version_delete_url} version version_info {} {
+    # FIXME urlencode each part of the path
+    # set file_url [ad_urlencode $file_url]
     set last_modified_ansi [lc_time_system_to_conn $last_modified_ansi]
     set last_modified_pretty [lc_time_fmt $last_modified_ansi "%x %X"]
     if {$content_size < 1024} {
@@ -95,7 +97,7 @@ db_multirow -unclobber -extend { last_modified_pretty content_size_pretty versio
     }
     set version_delete [_ file-storage.Delete_Version]
     set version_delete_url "version-delete?[export_vars version_id]"
-    set file_url [ad_urlencode $file_url]
+
 }
 
 set return_url "[ad_conn url]?file_id=$file_id"

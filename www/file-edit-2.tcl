@@ -20,7 +20,7 @@ ad_page_contract {
 ad_require_permission $file_id write
 
 if [catch {
-    db_exec_plsql rename_file {}
+    db_dml edit_title ""
 } errmsg] {
 
     if { [db_string duplicate_check {}] } {
