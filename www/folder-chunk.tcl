@@ -50,6 +50,10 @@ set folder_name [lang::util::localize [fs::get_object_name -object_id  $folder_i
 
 set content_size_total 0
 
+if {![exists_and_not_null format]} {
+    set format table
+}
+
 if {![exists_and_not_null root_folder_id]} {
     set root_folder_id [fs::get_root_folder]
 }
@@ -91,6 +95,12 @@ set elements [list icon \
                        display_template {<a href="@contents.file_url@"><if @contents.title@ nil>@contents.name@</a></if><else>@contents.title@</a><br/><if @contents.name@ ne @contents.title@><span style="color: \#999;">@contents.name@</span></if></else>} \
 		       orderby_desc {fs_objects.name desc} \
 		       orderby_asc {fs_objects.name asc}] \
+ 		  short_name \
+ 		  [list label [_ file-storage.Name] \
+                        hide_p 1 \
+ 		       display_template {<a href="@contents.download_url@">@contents.title@</a>} \
+ 		       orderby_desc {fs_objects.name desc} \
+ 		       orderby_asc {fs_objects.name asc}] \
 		  content_size_pretty \
 		  [list label [_ file-storage.Size] \
 		       orderby_desc {content_size desc} \
@@ -114,12 +124,30 @@ if {$allow_bulk_actions} {
     set bulk_actions ""
 }
 
+if {$format eq "list"} { 
+    set actions {}
+} 
+
 template::list::create \
     -name contents \
     -multirow contents \
     -key object_id \
     -actions $actions \
     -bulk_actions $bulk_actions \
+    -selected_format $format \
+    -formats {
+        table {
+            label Table
+            layout table
+        }
+        list {
+            label List
+            layout list
+            template {
+              <listelement name="short_name"> - <listelement name="last_modified_pretty">  
+            }
+        }
+    } \
     -filters {
 	folder_id {hide_p 1}
     } \
@@ -134,7 +162,7 @@ if {[string equal $orderby ""]} {
 db_multirow -extend {label icon last_modified_pretty content_size_pretty properties_link properties_url download_url} contents select_folder_contents {} {
     set last_modified_ansi [lc_time_system_to_conn $last_modified_ansi]
     
-    set last_modified_pretty [lc_time_fmt $last_modified_ansi "%x %X"]
+    set last_modified_pretty [lc_time_fmt $last_modified_ansi "%x "]
     if {[string equal $type "folder"]} {
         set content_size_pretty [lc_numeric $content_size]
 	append content_size_pretty " [_ file-storage.items]"
@@ -185,11 +213,15 @@ db_multirow -extend {label icon last_modified_pretty content_size_pretty propert
 
     # We need to encode the hashes in any i18n message keys (.LRN plays this trick on some of its folders).
     # If we don't, the hashes will cause the path to be chopped off (by ns_conn url) at the leftmost hash.
-    regsub -all {#} $file_url {%23} file_url
+    regsub -all \# $file_url {%23} file_url
 }
 
 if { $expose_rss_p } {
     db_multirow feeds select_subscrs {}
+}
+
+if {$format eq "list"} {
+    set content_size_total 0
 }
 
 ad_return_template
