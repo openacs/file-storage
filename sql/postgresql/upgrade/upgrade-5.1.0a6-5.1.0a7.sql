@@ -50,8 +50,7 @@ begin
 	   update cr_revisions set title=v_item_row.name
 		where revision_id=v_item_row.revision_id;
 
-           if v_item_row.parent_id = v_prev_parent_id
-             and v_item_row.title = v_prev_title then
+           if (select 1 from cr_items where name = v_item_row.title) then
 
              --Name collision: change file.ext to file.n.ext
 
