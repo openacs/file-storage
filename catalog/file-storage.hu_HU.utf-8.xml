@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="file-storage" package_version="5.1.0a2" locale="hu_HU" charset="utf-8">
+<message_catalog package_key="file-storage" package_version="5.1.0a10" locale="hu_HU" charset="utf-8">
 
   <msg key="Create_a_new_folder">Új mappa készítése</msg>
   <msg key="Create_a_URL">Új URL készítése</msg>

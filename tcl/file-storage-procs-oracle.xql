@@ -55,6 +55,7 @@
         <querytext>
             select fs_objects.object_id,
                    fs_objects.name,
+                   fs_objects.title,
                    fs_objects.live_revision,
                    fs_objects.type,
                    to_char(fs_objects.last_modified, 'YYYY-MM-DD HH24:MI:SS') as last_modified_ansi,
@@ -145,7 +146,7 @@
    <fullquery name="fs::do_notifications.get_owner_name">
         <querytext>
 	  select person.name(o.creation_user) as owner
-		 from acs_objects o where o.object_id = :file_id
+		 from acs_objects o where o.object_id = :item_id
         </querytext>
     </fullquery>
 
@@ -166,6 +167,13 @@
         </querytext>
     </fullquery>
 
+    <fullquery name="fs::publish_versioned_object_to_file_system.select_file_name">
+        <querytext>
+            select filename
+            from cr_revisions
+            where revision_id = :live_revision
+        </querytext>
+    </fullquery>
   
     <fullquery name="fs::get_item_id.get_item_id">
       <querytext>
@@ -191,12 +199,60 @@
     </querytext>
   </fullquery>
 
+<fullquery name="fs::delete_version::delete_version">      
+      <querytext>
+
+	begin
+	   :1 := file_storage.delete_version(
+			:item_id,
+			:version_id
+			);
+	end;
+
+      </querytext>
+</fullquery>
+
+  <fullquery name="fs::delete_file.delete_file">      
+      <querytext>
+	
+	
+	begin
+	    file_storage.delete_file(
+			:item_id
+			);
+	end;
+
+      </querytext>
+  </fullquery>
+
+  <fullquery name="fs::delete_folder.delete_folder">      
+      <querytext>
+
+	begin
+	        file_storage.delete_folder(:folder_id, :cascade_p );
+	end;
+      </querytext>
+  </fullquery>
+  
   <fullquery name="fs::add_version.update_last_modified">
     <querytext>
       begin
       acs_object.update_last_modified(:parent_id,:creation_user,:creation_ip);
       acs_object.update_last_modified(:item_id,:creation_user,:creation_ip);
       end;
+    </querytext>
+  </fullquery>
+
+  <fullquery name="fs::get_folder_package_and_root.select_package_and_root">
+    <querytext>
+	select r.package_id,
+               r.folder_id as root_folder_id
+	from fs_root_folders r,
+	     (select item_id as folder_id
+              from cr_items
+              connect by prior parent_id = item_id 
+              start with item_id = :folder_id) t
+        where r.folder_id = t.folder_id
     </querytext>
   </fullquery>
 

@@ -25,21 +25,25 @@
 
   <fullquery name="move_item">
     <querytext>
-      select content_item.move(
+	begin
+      	content_item.move(
            :object_id,
            :folder_id
-      )
+      );
+	end;
     </querytext>
   </fullquery>
 
   <fullquery name="get_folder_tree">
     <querytext>
       select
-      cf.folder_id, cf.label, ci1.level
-      from cr_folders cf, (select item_id, level from
+      cf.folder_id, cf.label, ci1.level_num
+      from cr_folders cf, (select item_id, parent_id, level as level_num from
                            cr_items
-                           connect by prior item_id=parent_id
-                           start with :root_folder_id
+		           where cr_items.item_id not in ($object_id_list)
+			   connect by (prior item_id=parent_id and parent_id not in ($object_id_list))
+                           start with cr_items.item_id = :root_folder_id
+			   
                           ) ci1
       where
       ci1.item_id=cf.folder_id
@@ -48,7 +52,7 @@
                    where m.object_id = cf.folder_id
                      and m.party_id = :user_id
                      and m.privilege = 'write')
-      order by order by ci1.level, cf.label
+      order by level_num, cf.label
     </querytext>
   </fullquery>
 

@@ -12,11 +12,17 @@
     <type>postgresql</type>
     <version>7.2</version>
   </rdbms>
-  
-  <fullquery name="delete_item">
-    <querytext>
-      select content_item__delete(:object_id)
+
+ <fullquery name="get_to_be_deleted">    
+   <querytext>
+	select fs.object_id as fs_object_id, fs.type, fs.name, fs.parent_id,
+      	acs_permission__permission_p(fs.object_id, :user_id, 'write') as delete_p
+      	from fs_objects fs
+      	where fs.object_id in ('$object_id_list')
+
     </querytext>
   </fullquery>
+  
+
   
 </queryset>

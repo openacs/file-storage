@@ -29,6 +29,7 @@ as
         else cr_items.name
       end as name,
       cr_items.name as file_upload_name,
+      cr_revisions.title,
       cr_revisions.mime_type,
       acs_objects.last_modified,
       cr_extlinks.url,
@@ -46,6 +47,8 @@ as
       left join cr_revisions on (cr_items.live_revision = cr_revisions.revision_id)
       left join cr_mime_types on (cr_revisions.mime_type = cr_mime_types.mime_type)
       join acs_objects on (cr_items.item_id = acs_objects.object_id);
+
+
 
 -- dropped old version in d1-d2 upgrade script. 
 

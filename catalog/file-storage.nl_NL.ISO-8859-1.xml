@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="file-storage" package_version="5.1.0a2" locale="nl_NL" charset="ISO-8859-1">
+<message_catalog package_key="file-storage" package_version="5.1.0a10" locale="nl_NL" charset="ISO-8859-1">
 
   <msg key="Action">Actie</msg>
   <msg key="Actions">Acties:</msg>
@@ -42,6 +42,7 @@
   <msg key="index_page_navigate_up_folder">Naar hoger niveau %up_name%</msg>
   <msg key="item">bestand</msg>
   <msg key="items">bestanden</msg>
+  <msg key="kb">kb</msg>
   <msg key="Last_Modified">Laatste wijziging</msg>
   <msg key="last_month">Afgelopen maand</msg>
   <msg key="last_week">Afgelopen week</msg>
@@ -55,6 +56,7 @@
   <msg key="lt_delete_file">Het bestand &quot;%title%&quot; met alle versies echt verwijderen? Deze handeling kan niet worden hersteld!</msg>
   <msg key="lt_delete_folder">De map &quot;%folder_name%&quot; met alle bestanden echt verwijderen? Deze handeling kan niet worden hersteld!</msg>
   <msg key="lt_Delete_this_file_incl">Dit bestand (met alle versies) verwijderen</msg>
+  <msg key="lt_Do_you_want_to_delete">Deze bestanden verwijderen?</msg>
   <msg key="lt_Download_an_archive_o">Een archief van de mapinhoud importeren</msg>
   <msg key="lt_Either_there_is_alrea">Mogelijk is er al een map die &quot;%folder_name%&quot; heet. Zo niet, dan heeft u meer dan eenmaal op de verzendknop geklikt. 
 Gebruikt de knop &quot;Terug&quot; om een nieuwe naam te kiezen of bekijk de &lt;a href=&quot;%directory_url%&quot;&gt;mapoverzicht&lt;/a&gt; om te zien of de map bestaat.</msg>
@@ -64,6 +66,9 @@ Gebruikt de knop &quot;Terug&quot; om een nieuwe naam te kiezen of bekijk de &lt
   <msg key="lt_Live_version_of_title">Actuele versie van &quot;%title%&quot; </msg>
   <msg key="lt_Modify_permissions_on">Rechten voor dit bestand wijzigen</msg>
   <msg key="lt_Modify_permissions_on_1">Rechten voor deze map wijzigen</msg>
+  <msg key="lt_Moving_allowed_count_">%allowed_count% bestanden verplaatsen.</msg>
+  <msg key="lt_No_valid_items_to_be_">Geen geldige bestanden om te verplaatsen. </msg>
+  <msg key="lt_not_allowed_count_ite">%not_allowed_count% bestanden kunnen niet worden verplaatst.</msg>
   <msg key="lt_Please_enter_the_new_">De nieuwe naam voor dit bestand invoeren:</msg>
   <msg key="lt_Select_the_folder_tha">De map waar &quot;%file_name%&quot; naar gekopieerd moet worden selecteren</msg>
   <msg key="lt_Select_the_folder_tha_1">De map waar &quot;%file_name%&quot; naar verplaatst moet worden selecteren</msg>

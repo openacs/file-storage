@@ -46,13 +46,8 @@ ad_form -export file_id -cancel_url "file?[export_vars file_id]" -form {
 
 if {[string equal $blocked_p "f"] } {
     # they confirmed that they want to delete the file
-    db_1row parent_id "select parent_id from cr_items where item_id = :file_id"
-    db_exec_plsql delete_file "
-    begin
-        file_storage.delete_file(:file_id);
-    end;"
-
-    fs::do_notifications -folder_id $parent_id -filename $title -file_id $file_id -action "delete_file"
+    set parent_id [fs::get_parent -item_id $file_id]
+    fs::delete_file -item_id $file_id -parent_id $parent_id
 
     ad_returnredirect "?folder_id=$parent_id"
 

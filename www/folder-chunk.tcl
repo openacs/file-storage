@@ -67,6 +67,7 @@ set actions [list]
 
 lappend actions "\#file-storage.Add_File\#" ${fs_url}file-add?[export_vars folder_id] "Upload a file in this folder" "\#file-storage.Create_a_URL\#" ${fs_url}simple-add?[export_vars folder_id] "Add a link to a web page" "\#file-storage.New_Folder\#" ${fs_url}folder-create?[export_vars {{parent_id $folder_id}}] "\#file-storage.Create_a_new_folder\#"
 
+set expose_rss_p [parameter::get -parameter ExposeRssP -default 0]
 
 if {$delete_p} {
     lappend actions "\#file-storage.Delete_this_folder\#" ${fs_url}folder-delete?[export_vars folder_id] "\#file-storage.Delete_this_folder\#"
@@ -75,6 +76,9 @@ if {$admin_p} {
     set return_url [ad_conn url]
     lappend actions "\#file-storage.Edit_Folder\#" "${fs_url}folder-edit?folder_id=$folder_id" "\#file-storage.Rename_this_folder\#"
     lappend actions "\#file-storage.lt_Modify_permissions_on_1\#" "/permissions/one?[export_vars -override {{object_id $folder_id}} {return_url}]" "\#file-storage.lt_Modify_permissions_on_1\#"
+    if { $expose_rss_p } {
+	lappend actions "Configure RSS" "${fs_url}admin/rss-subscrs?folder_id=$folder_id" "Configure RSS"
+    }
 }
 
 #set n_past_filter_values [list [list "Yesterday" 1] [list [_ file-storage.last_week] 7] [list [_ file-storage.last_month] 30]]
@@ -84,7 +88,7 @@ set elements [list icon \
 		       display_template {<a href="@contents.download_url@"><img src="@contents.icon@"  border=0 alt="#file-storage.@contents.pretty_type@#" /></a>}] \
 		  name \
 		  [list label [_ file-storage.Name] \
-		       display_template {<a href="@contents.file_url@">@contents.name@</a><br/><if @contents.name@ ne @contents.title@><span style="color: \#999;">@contents.title@</span></if>} \
+                       display_template {<a href="@contents.file_url@"><if @contents.title@ nil>@contents.name@</a></if><else>@contents.title@</a><br/><if @contents.name@ ne @contents.title@><span style="color: \#999;">@contents.name@</span></if></else>} \
 		       orderby_desc {fs_objects.name desc} \
 		       orderby_asc {fs_objects.name asc}] \
 		  content_size_pretty \
@@ -159,26 +163,33 @@ db_multirow -extend {label icon last_modified_pretty content_size_pretty propert
 	    set properties_url ""
 	    set icon "/resources/file-storage/folder.gif"
 	    set file_url "${fs_url}index?[export_vars {{folder_id $object_id}}]"
+            set download_url $file_url
 	}
 	url {
 	    set properties_link [_ file-storage.properties]
 	    set properties_url "${fs_url}simple?[export_vars object_id]"
-	    set icon "/resources/url-button.gif"
-	    set file_url ${fs_url}${url}
+	    set icon "/resources/acs-subsite/url-button.gif"
+	    set file_url ${url}
+            set download_url $file_url
 	}
 	default {
 	    set properties_link [_ file-storage.properties]
 	    set properties_url "${fs_url}file?[export_vars {{file_id $object_id}}]"
 	    set icon "/resources/file-storage/file.gif"
 	    set file_url "${fs_url}view/${file_url}"
+            set download_url "${fs_url}download/?[export_vars {{file_id $object_id}}]"                
 	}
 
     }
-    set download_url "download/?[export_vars {{file_id $object_id}}]"    
+
 
     # We need to encode the hashes in any i18n message keys (.LRN plays this trick on some of its folders).
     # If we don't, the hashes will cause the path to be chopped off (by ns_conn url) at the leftmost hash.
     regsub -all {#} $file_url {%23} file_url
+}
+
+if { $expose_rss_p } {
+    db_multirow feeds select_subscrs {}
 }
 
 ad_return_template
