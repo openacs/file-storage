@@ -68,21 +68,15 @@ returns integer as '  -- fs_root_folders.folder_id%TYPE
 declare
 	get_root_folder__package_id  alias for $1;
         v_folder_id		     fs_root_folders.folder_id%TYPE;
-        v_count			     integer;
 begin
 
-        select count(*) into v_count 
-        from fs_root_folders
-        where package_id = get_root_folder__package_id;
+	-- JS: We do not have to check (and create if none) for a root folder anymore
+	-- since APM will do the root folder creation for us, using the 
+	-- "post_instantiation" feature. 
 
-        if v_count > 0 then
-            select folder_id into v_folder_id 
-            from fs_root_folders
-            where package_id = get_root_folder__package_id;
-        else
-            -- must be a new instance.  Gotta create a new root folder
-            v_folder_id := file_storage__new_root_folder(get_root_folder__package_id, null, null);
-        end if;
+	select folder_id into v_folder_id 
+          from fs_root_folders
+         where package_id = get_root_folder__package_id;
 
         return v_folder_id;
 
