@@ -8,3 +8,7 @@
 
 <include src="folder-chunk" folder_id=@folder_id;noquote@ n_past_days=@n_past_days@>
 
+<if @webdav_url@ not nil>
+      <p>#file-storage.Folder_available_via_WebDAV_at# @webdav_url@</p>
+</if>
+      
