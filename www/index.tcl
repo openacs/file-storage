@@ -43,7 +43,10 @@ set admin_p [ad_permission_p $folder_id admin]
 # thus, not be able to actually delete it.  We check this later, but
 # sometime present a link that they won't be able to use.
 
-set delete_p [ad_permission_p $folder_id delete]
+set delete_p $admin_p
+if {!$delete_p} {
+    set delete_p [ad_permission_p $folder_id delete]
+}
 
 set package_id [ad_conn package_id]
 
