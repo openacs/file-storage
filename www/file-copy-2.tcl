@@ -51,7 +51,7 @@ db_transaction {
 
 #    <pre>$errmsg</pre>
 
-    return
+    ad_script_abort
 }
 
 ad_returnredirect "?folder_id=$parent_id"

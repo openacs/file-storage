@@ -39,7 +39,7 @@ end;"} errmsg] {
 	<pre>$errmsg</pre>"
     }
 
-    return
+    ad_script_abort
 }
 
 ad_returnredirect "file?file_id=$file_id"
