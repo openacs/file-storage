@@ -51,11 +51,6 @@
         </querytext>
     </fullquery>
 
-    <fullquery name="fs::get_folder_contents_recursive.select_folder_contents_recursive">
-        <querytext>
-        </querytext>
-    </fullquery>
-
     <fullquery name="fs_get_folder_name.folder_name">
         <querytext>
             select file_storage__get_folder_name(:folder_id);

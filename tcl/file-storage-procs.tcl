@@ -326,7 +326,7 @@ namespace eval fs {
 
     ad_proc -public get_folder_contents {
         {-folder_id ""}
-        !{-user_id ""}
+        {-user_id ""}
         {-n_past_days "-1"}
     } {
         Retrieve the contents of the specified folder in the form of a list
@@ -371,33 +371,6 @@ namespace eval fs {
         }
 
         return [db_string select_folder_contents_count {}]
-    }
-
-    ad_proc -public get_folder_items_recursive {
-        {-folder_id ""}
-        {-user_id ""}
-        {-n_past_days "-1"}
-    } {
-        Retrieve the contents of a folder and any of its child folders.
-        Returns a list of ns_sets, one for each row, with the following keys:
-
-            file_id, name, live_revision, type,
-            last_modified, content_size, sort_key
-
-        @param folder_id The folder for which to retrieve contents
-        @param user_id The viewer of the contents (to make sure they have
-                       permission)
-        @param n_past_days Mark files that are newer than the past N days as new
-    } {
-        if {[empty_string_p $folder_id]} {
-            set folder_id [fs::get_root_folder -package_id [ad_conn package_id]]
-        }
-
-        if {[empty_string_p $user_id]} {
-            set user_id [acs_magic_object "the_public"]
-        }
-
-        return [db_list_of_ns_sets select_folder_items_recursive {}]
     }
 
 }
