@@ -62,7 +62,9 @@ template::list::create \
 	    label \#file-storage.Title\#
 	    link_url_col version_url
 	}
-	author { label \#file-storage.Author\#}
+	author { label \#file-storage.Author\#
+            display_template {@version.author_link;noquote@}
+        }
 	content_size {
 	    label \#file-storage.Size\#
 	    display_col content_size_pretty
@@ -76,10 +78,11 @@ template::list::create \
 	version_delete {label "" link_url_col version_delete_url}
     }
 
-db_multirow -unclobber -extend { last_modified_pretty content_size_pretty version_url version_delete version_delete_url} version version_info {} {
+db_multirow -unclobber -extend { author_link last_modified_pretty content_size_pretty version_url version_delete version_delete_url} version version_info {} {
     set last_modified_ansi [lc_time_system_to_conn $last_modified_ansi]
     set last_modified_pretty [lc_time_fmt $last_modified_ansi "%x %X"]
     set content_size_pretty "[lc_numeric $content_size] [_ file-storage.bytes]"
+    set author_link [acs_community_member_link -user_id $author_id -label $author]
     if {[string equal $title ""]} {
 	set title "[_ file-storage.untitled]"
     }

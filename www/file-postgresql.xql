@@ -31,6 +31,7 @@
 	select  r.title,
        		r.revision_id as version_id,
        		person__name(o.creation_user) as author,
+                o.creation_user as author_id,
        		r.mime_type as type,
                 to_char(o.last_modified,'YYYY-MM-DD HH24:MI:SS') as last_modified_ansi,
        		r.description,
