@@ -35,6 +35,7 @@
   <msg key="lt_administer_permission">administrer rettigheder</msg>
   <msg key="lt_Are_you_sure_that_you">Er du sikker på, at du ønsker at slette denne version &quot;%version_name%&quot; af &quot;%title%&quot;? Denne handling kan ikke fortrydes.</msg>
   <msg key="lt_bad_folder_id_folder_">manglende mappe id</msg>
+  <msg key="lt_contentscontent_size_">%contents.content_size_pretty% bytes</msg>
   <msg key="lt_delete_file">Er du sikker på at du vil slette filen &quot;%title%&quot; og alle dens revisioner? Denne handling kan ikke fortrydes.</msg>
   <msg key="lt_delete_folder">Er du sikker på at du vil slette mappen &quot;%folder_name%&quot; og alle de ting den indeholder? Denne handling kan ikke gøres om.</msg>
   <msg key="lt_Delete_this_file_incl">Slet denne fil (inklusiv alle versioner)</msg>
@@ -67,7 +68,7 @@
   <msg key="Modified">Ændret</msg>
   <msg key="Move">Flyt</msg>
   <msg key="Name">Navn</msg>
-  <msg key="new">ny</msg>
+  <msg key="new">[&lt;b&gt;Ny&lt;/b&gt;]</msg>
   <msg key="No_such_type">Ingen sådan type</msg>
   <msg key="no_such_URL">URL'en var ikke gyldig</msg>
   <msg key="Rename">Omdøb</msg>
@@ -95,6 +96,6 @@
   <msg key="Version_filename_1">Version filnavn:</msg>
   <msg key="Version_Notes">Versionsnoter</msg>
   <msg key="Version_Notes_1">Versionsnoter:</msg>
-  <msg key="view_details">vis detajler</msg>
+  <msg key="view_details">Vis detajler</msg>
   <msg key="Yes_Delete_It">Ja, Slet Den</msg>
 </message_catalog>
