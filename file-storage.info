@@ -24,6 +24,9 @@
 
         <callbacks>
             <callback type="after-mount"  proc="fs::after_mount"/>
+            <callback type="before-unmount"  proc="fs::before_unmount"/>
+            <callback type="after-instantiate"  proc="fs::install::after_instantiate"/>
+            <callback type="before-uninstantiate"  proc="fs::install::before_uninstantiate"/>
             <callback type="after-install"  proc="fs::install::package_install"/>
             <callback type="after-upgrade"  proc="fs::install::upgrade"/>
         </callbacks>

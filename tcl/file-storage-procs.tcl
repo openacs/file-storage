@@ -186,33 +186,28 @@ ad_proc fs_context_bar_list {
 
 namespace eval fs {}
 
-ad_proc -public fs::after_mount {
+ad_proc -private fs::after_mount {
     -package_id
     -node_id
 } {
     Create root folder for package instance
     via tcl callback.
 } {
-    array set sn [site_node::get -node_id $node_id]
-    regsub -all {/} $sn(name)  {} name
-    # using site_node name for root folder name
-    # doesn't work in the case that multiple instances of
-    # a node called "file-storage" for example, are mounted
-    # all file storage root folders have parent_id=0 and
-    # parent_id, name must be unique.
+    set folder_id [fs::get_root_folder -package_id $package_id]
 
-    # this isn't a problem in resolving URLs because we know which
-    # root folder is associated with a site_node/package_id
-    
-    set label $sn(instance_name)
+    oacs_dav::register_folder -enabled_p "t" $folder_id $node_id
+}
 
-    set folder_id [fs::new_root_folder \
-		       -package_id $package_id \
-		       -pretty_name $label
-		       ]
+ad_proc -private fs::before_unmount {
+    -package_id
+    -node_id
+} {
+    Create root folder for package instance
+    via tcl callback.
+} {
+    set folder_id [fs::get_root_folder -package_id $package_id]
 
-    oacs_dav::register_folder -enabled_p "t" $folder_id $sn(node_id)
-    
+    oacs_dav::unregister_folder $folder_id $node_id
 }
 
 ad_proc -public fs::new_root_folder {

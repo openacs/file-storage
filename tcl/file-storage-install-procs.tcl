@@ -28,6 +28,31 @@ ad_proc -private fs::install::package_uninstall {} {
     }
 }
 
+ad_proc -private fs::install::after_instantiate {
+    {-package_id:required}
+} {
+} {
+    # using site_node name for root folder name
+    # doesn't work in the case that multiple instances of
+    # a node called "file-storage" for example, are mounted
+    # all file storage root folders have parent_id=0 and
+    # parent_id, name must be unique.
+
+    # this isn't a problem in resolving URLs because we know which
+    # root folder is associated with a site_node/package_id
+    set instance_name [apm_instance_name_from_id $package_id]
+    set folder_id [fs::new_root_folder \
+		       -package_id $package_id \
+		       -pretty_name $instance_name \
+		       ]
+}
+
+ad_proc -private fs::install::before_uninstantiate {
+    {-package_id:required}
+} {
+} {
+    # TODO: make this clean up the root folder
+}
 
 ad_proc -private fs::install::register_implementation {
 } {
