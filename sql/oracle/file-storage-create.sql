@@ -23,21 +23,6 @@
 -- JS:
 
 
--- 
--- To enable site-wide search to distinguish CR items as File Storage items
--- we create an item subtype of content_item in the ACS Object Model
-begin
- acs_object_type.create_type (
-   object_type   => 'file_storage_item',
-   pretty_name   => 'File Storage Item',
-   pretty_plural => 'File Storage Items',
-   supertype     => 'content_item',
-   table_name    => 'fs_root_folders',  -- JS: Will not do anything, but we have to insert something
-   id_column     => 'folder_id'         -- JS: Same.
- );
-end;
-/
-show errors;
 
 --
 -- We need to create a root folder in the content repository for 
@@ -60,6 +45,22 @@ create table fs_root_folders (
                 unique
 );
 
+-- 
+-- To enable site-wide search to distinguish CR items as File Storage items
+-- we create an item subtype of content_item in the ACS Object Model
+begin
+ content_type.create_type (
+   content_type  => 'file_storage_object',
+   pretty_name   => 'File Storage Object',
+   pretty_plural => 'File Storage Objects',
+   supertype     => 'content_revision',
+   table_name    => 'fs_root_folders',  
+   id_column     => 'folder_id',
+   name_method => 'file_storage.get_title' 
+ );
+end;
+/
+show errors;
 
 
 create or replace package file_storage
@@ -67,7 +68,7 @@ as
 
     function get_root_folder (
        --
-       -- Returns the root folder corresponding to a particulat
+       -- Returns the root folder corresponding to a particular
        -- package instance.
        --
        package_id in apm_packages.package_id%TYPE
@@ -95,7 +96,7 @@ as
     procedure delete_file (
        --
        -- Delete a file and all its version
-       -- Wrapper to content_item__delete
+       -- Wrapper to content_item.delete
        --
        file_id	in cr_items.item_id%TYPE
     );
@@ -126,17 +127,6 @@ as
        file_id		in cr_items.item_id%TYPE,
        target_folder_id	in cr_items.parent_id%TYPE
     );
-
-    function get_path (
-       --
-       -- Get the virtual path, but replace title with name at the end
-       -- Wrapper for content_item.get_path
-       --
-       item_id		in cr_items.item_id%TYPE,
-       root_folder_id	in cr_items.parent_id%TYPE,
-       revision_id	in cr_revisions.revision_id%TYPE
-    ) return varchar;
-
 
     function get_title (
        --
@@ -265,8 +255,8 @@ as
         (package_id, v_folder_id);
 
         -- allow child items to be added
-        content_folder.register_content_type(v_folder_id,'content_revision');
-        content_folder.register_content_type(v_folder_id,'content_folder');
+        content_folder.register_content_type(v_folder_id,'content_revision','t');
+        content_folder.register_content_type(v_folder_id,'content_folder','t');
 
         -- set up default permissions
         acs_permission.grant_permission (
@@ -308,7 +298,8 @@ as
 			      creation_user => new_file.creation_user,
 			      context_id => new_file.folder_id, 
 			      creation_ip => new_file.creation_ip,
-			      item_subtype => 'file_storage_item'
+			      content_type => 'file_storage_object', 
+			      item_subtype => 'content_item'
 			      );
 	   else
 		v_item_id := content_item.new (
@@ -317,7 +308,8 @@ as
 			      creation_user => new_file.creation_user,
 			      context_id => new_file.folder_id,
 			      creation_ip => new_file.creation_ip,
-			      item_subtype => 'file_storage_item',
+			      content_type => 'file_storage_object', 
+			      item_subtype => 'content_item',
 			      storage_type => 'file'
 			      );
 
@@ -481,58 +473,6 @@ as
     end new_version;
 
 
-    function get_path (
-       --
-       -- Get the virtual path, but replace title with name at the end
-       -- Wrapper for content_item__get_path
-       --
-       item_id		in cr_items.item_id%TYPE,
-       root_folder_id	in cr_items.parent_id%TYPE,
-       revision_id	in cr_revisions.revision_id%TYPE default null
-    ) return varchar
-    is
-	v_filename	cr_revisions.title%TYPE;
-	v_content_type	cr_items.content_type%TYPE;
-	v_live_revision	cr_items.live_revision%TYPE;
-	v_revision_id	cr_revisions.revision_id%TYPE;
-    begin
-
-	select content_type,live_revision 
-	       into v_content_type,v_live_revision
-	from cr_items
-	where item_id = file_storage.get_path.item_id;
-
-	if v_content_type = 'content_revision'
-	then
-	
-	     if file_storage.get_path.revision_id is null
-	     then
-		   v_revision_id := v_live_revision;
-	     else
-		   v_revision_id := file_storage.get_path.revision_id;
-	     end if;
-
-	     select title into v_filename
-	     from cr_revisions
-	     where revision_id = v_revision_id;
-
-	     return content_item.get_path(
-			item_id => file_storage.get_path.item_id,
-			root_folder_id => file_storage.get_path.root_folder_id
-			) || '/../' || v_filename;
-
-        else
-
-	     return content_item.get_path(
-			item_id => file_storage.get_path.item_id,
-			root_folder_id => file_storage.get_path.root_folder_id
-			);
-
-	end if;
-
-    end get_path;
-
-
     function get_title (
        --
        -- Unfortunately, title in the file-storage context refers
@@ -665,12 +605,14 @@ as
 	-- register the standard content types
 	content_folder.register_content_type(
 			v_folder_id,		-- folder_id
-			'content_revision'	-- content_type
+			'content_revision',	-- content_type
+			't'			-- include_subtypes
 			);			
 
 	content_folder.register_content_type(
 			v_folder_id,		-- folder_id
-			'content_folder'	-- content_type
+			'content_folder',	-- content_type
+			't'			-- include_subtypes
 			);			
 
 	-- Give the creator admin privileges on the folder
@@ -724,7 +666,7 @@ begin
 
 		-- We delete the item. On delete cascade should take care
 		-- of deletion of revisions.
-		if v_rec.content_type = 'content_revision'
+		if v_rec.content_type = 'file_storage_object'
 		then
 		    content_item.delete(v_rec.item_id);
 		end if;
