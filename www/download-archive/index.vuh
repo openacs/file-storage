@@ -49,6 +49,7 @@ set out_file [file join ${out_path} ${download_name}]
 
 # get the archive command
 set cmd [fs::get_archive_command -in_file $file_name -out_file $out_file]
+error $cmd
 
 # create the archive
 with_catch errmsg {

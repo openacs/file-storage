@@ -54,6 +54,7 @@ This action cannot be reversed.</msg>
   <msg key="lt_Either_there_is_alrea">Either there is already a folder with the name &quot;%folder_name%&quot; or you clicked on the button more than once.  You can use the Back button to return and choose a new name, or &lt;a href=&quot;%directory_url%&quot;&gt;return to the directory listing&lt;/a&gt; to see if your folder is there.</msg>
   <msg key="lt_Folder_folder_name_is">Folder %folder_name% is empty.</msg>
   <msg key="lt_It_appears_that_there">It appears that there is already a file with that name in this folder (although possibly you clicked more than once on the submit button.)</msg>
+  <msg key="lt_Leave_blank_for_linked_documents">Leave title blank when uploading multiple interlinked documents.</msg>
   <msg key="lt_Live_version_of_title">Live version of &quot;%title%&quot;</msg>
   <msg key="lt_Modify_permissions_on">Modify permissions on this file</msg>
   <msg key="lt_Modify_permissions_on_1">Modify permissions on this folder</msg>
