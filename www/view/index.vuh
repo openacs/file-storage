@@ -51,7 +51,7 @@ if {[parameter::get -parameter BehaveLikeFilesystemP -default 0]} {
 	append page "The item is either not available on this server or it is not in a publishable state  "
 	append page "Unpublished items can be viewed via the CMS interface if the CMS package is installed.<br>"
 	append page "[ad_footer]"
-	doc_return 200 text/html $page
+	doc_return 404 text/html $page
     } else {
 	if {![exists_and_not_null version_id]} {
 	    set version_id [item::get_live_revision $file_id]
@@ -77,6 +77,6 @@ if {[parameter::get -parameter BehaveLikeFilesystemP -default 0]} {
 	append page "The item is either not available on this server or it is not in a publishable state  "
 	append page "Unpublished items can be viewed via the CMS interface if the CMS package is installed.<br>"
 	append page "[ad_footer]"
-	doc_return 200 text/html $page
+	doc_return 404 text/html $page
     }
 }
