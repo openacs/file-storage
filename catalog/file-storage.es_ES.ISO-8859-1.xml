@@ -38,6 +38,7 @@
   <msg key="lt_delete_file">¿Desea realmente borrar el archivo &quot;%title%&quot; y todas sus versiones? No se podrá recuperar.</msg>
   <msg key="lt_delete_folder">¿Desea realmente borrar la carpeta &quot;%folder_name%&quot; y todo su contenido? No se podrá recuperar.</msg>
   <msg key="lt_Delete_this_file_incl">Borrar este archivo (y todas sus versiones)</msg>
+  <msg key="lt_Download_an_archive_o">Descargar un archivo con los contenidos de esta carpeta</msg>
   <msg key="lt_Either_there_is_alrea">O ya existe una carpeta con el nombre &quot;%folder_name%&quot;, o ha pulsado el botón más de una vez. Utilice el botón Atrás de su navegador y elija otro nombre, o &lt;a href=&quot;%directory_url%&quot;&gt;vuelva al listado&lt;/a&gt; para comprobar la carpeta.</msg>
   <msg key="lt_Folder_folder_name_is">La carpeta %folder_name% está vacía.</msg>
   <msg key="lt_It_appears_that_there">Parece que ya existe un archivo con este nombre en esta carpeta (también es posible que haya pulsado varias veces el botón).</msg>

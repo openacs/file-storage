@@ -38,6 +38,7 @@
   <msg key="lt_delete_file">Haluatko todellakin poistaa kaikki tiedoston &quot;%title%&quot; versiot? Toimintoa ei voi peruuttaa.</msg>
   <msg key="lt_delete_folder">Haluatko varmasti poistaa kansion &quot;%folder_name%&quot; ja kaikki sen sisältämät kohteet? Toimintoa ei voi perua.</msg>
   <msg key="lt_Delete_this_file_incl">Poista tiedosto (mukaanlukien kaikki sen versiot)</msg>
+  <msg key="lt_Download_an_archive_o">Imuroi tämän kansion sisältö pakattuna tiedostona</msg>
   <msg key="lt_Either_there_is_alrea">Joko kansio nimeltä &quot;%folder_name%&quot; on jo olemassa, tai painoit lähetä-nappulaa useammin kuin kerran. Voit palata takaisin selaimesi back-napilla ja antaa kansiolle uuden nimen, tai &lt;a href=&quot;%directory_url%&quot;&gt;palata hakemiston sisältösivulle&lt;/a&gt; katsomaan, löytyykö  kansiosi sieltä.</msg>
   <msg key="lt_Folder_folder_name_is">Kansio %folder_name% on tyhjä.</msg>
   <msg key="lt_It_appears_that_there">Vaikuttaa siltä, että kansiossa on jo samanniminen tiedosto (tosin on myös mahdollista, että painoit lähetä-nappulaa useammin kuin kerran).</msg>

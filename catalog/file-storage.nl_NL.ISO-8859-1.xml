@@ -38,6 +38,7 @@
   <msg key="lt_delete_file">Weet u zeker dat u het bestand &quot;%title%&quot; met alle versies wilt verwijderen? Deze handeling kan niet worden hersteld.</msg>
   <msg key="lt_delete_folder">Weet u zeker dat u de map &quot;%folder_name%&quot; met alle items wilt verwijderen? Deze handeling kan niet worden hersteld.</msg>
   <msg key="lt_Delete_this_file_incl">Verwijder dit bestand (met alle versies)</msg>
+  <msg key="lt_Download_an_archive_o">Importeer een archief van de mapinhoud</msg>
   <msg key="lt_Either_there_is_alrea">Mogelijk is er al een map met die &quot;%folder_name%&quot; heet, anders heeft u meer dan eenmaal op de verzendknop geklikt. Gebruikt de Beck/Terug knop om een nieuwe naam te kiezen of bekijk de &lt;a href=&quot;%directory_url%&quot;&gt;lijst met bestanden&lt;/a&gt; om te zien of de map bestaat.</msg>
   <msg key="lt_Folder_folder_name_is">Map %folder_name% is leeg.</msg>
   <msg key="lt_It_appears_that_there">Het lijkt alsof er in deze map al een bestand is met deze naam (of er is meer dan eenmaal op de knop geklikt).</msg>

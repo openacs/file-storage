@@ -38,6 +38,7 @@
   <msg key="lt_delete_file">Är du säker på att du vill ta bort filen &quot;%title%&quot; och alla av dess versioner? Denna åtgärd kan inte ångras.</msg>
   <msg key="lt_delete_folder">Är du säker på att du vill ta bort mappen &quot;%folder_name%&quot; och alla filer/mappar den innehåller? Denna åtgärd kan inte ångras.</msg>
   <msg key="lt_Delete_this_file_incl">Ta bort denna fil (inklusive alla dess versioner)</msg>
+  <msg key="lt_Download_an_archive_o">Ladda ned ett arkiv över innehållet i denna mapp</msg>
   <msg key="lt_Either_there_is_alrea">Antingen finns det redan en mapp med namnet &quot;%folder_name%&quot; eller så har du klickat på knappen mer än en gång. Du kan använda &quot;tillbaks&quot;-knappen för att återgå och välja ett nytt namn, eller &lt;a href=&quot;%directory_url%&quot;&gt; återgå till listan&lt;/a&gt; för att se om din mapp finns där.</msg>
   <msg key="lt_Folder_folder_name_is">Mappen %folder_name% är tom.</msg>
   <msg key="lt_It_appears_that_there">Det verkar som om det redan finns en fil med det namnet i denna mapp (det är också möjligt att du klickade mer än en gång på 'skicka'-knappen.)</msg>

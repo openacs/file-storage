@@ -38,6 +38,7 @@
   <msg key="lt_delete_file">Você tem certeza que quer remover o arquivo &quot;%title%&quot; e todas suas versões? Esta ação é irreversível.</msg>
   <msg key="lt_delete_folder">Você tem certeza que quer remover a pasta &quot;%folder_name%&quot; e todos os itens que ela contém? Esta ação é irreversível.</msg>
   <msg key="lt_Delete_this_file_incl">Remover este arquivo (incluindo todas as versões)</msg>
+  <msg key="lt_Download_an_archive_o">Baixar um arquivo com o conteúdo desta pasta</msg>
   <msg key="lt_Either_there_is_alrea">Já existe uma pasta com o nome &quot;%folder_name%&quot; ou você clicou no botão mais do que uma vez. Você pode usar o botão Voltar para retornar e escolher um novo nome, ou &lt;a href=&quot;%directory_url%&quot;&gt;retorne a lista de diretórios&lt;/a&gt; para ver se sua pasta está lá.</msg>
   <msg key="lt_Folder_folder_name_is">Pasta %folder_name% está vazia.</msg>
   <msg key="lt_It_appears_that_there">Parece que já existe um arquivo com aquele nome nesta pasta (embora possivelmente você clicou mais que uma vez no botão submeter.)</msg>

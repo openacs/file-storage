@@ -38,6 +38,7 @@
   <msg key="lt_delete_file">파일 &quot;%title%&quot;(을)를 삭제하시겠습니까? 삭제작업은 복구가 불가능합니다.</msg>
   <msg key="lt_delete_folder">폴더 &quot;%folder_name%&quot;(와)과 폴더안의 모든 내용을 삭제하시겠습니까? 삭제작업은 복구가 불가능합니다.</msg>
   <msg key="lt_Delete_this_file_incl">파일 삭제</msg>
+  <msg key="lt_Download_an_archive_o">이 폴더의 내용들을 다운로드</msg>
   <msg key="lt_Either_there_is_alrea">&quot;%folder_name%&quot;을 가진 폴더가 이미 존재하거나 버튼을 한번이상 클릭했습니다. 뒤로 가기 버튼을 사용하여 돌아가서 새로운 이름을 선택하거나 폴더가 제대로 있는지를 보기 위해서 &lt;a href=&quot;%directory_url%&quot;&gt;디렉토리 리스트로 돌아가기&lt;/a&gt;를 누르시오. </msg>
   <msg key="lt_Folder_folder_name_is">폴더 %folder_name% (이)가 비었습니다.</msg>
   <msg key="lt_It_appears_that_there">(비록 실행버튼을 한번이상 클릭했을지라도) 이 폴더안에 파일이름이 이미 존재합니다. </msg>

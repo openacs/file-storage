@@ -38,6 +38,7 @@
   <msg key="lt_delete_file">Czy na pewno usunąć plik &quot;%title%&quot; i wszystkie jego wersje? Usunięcie jest nieodwracalne.</msg>
   <msg key="lt_delete_folder">Czy na pewno usunąć folder &quot;%folder_name%&quot; i wszystko co zawiera? Usunięcie będzie nieodwracalne.</msg>
   <msg key="lt_Delete_this_file_incl">Usuń ten plik (włączając wszystkie jego wersje)</msg>
+  <msg key="lt_Download_an_archive_o">Ściągnij archiwum zawartości tego foldera</msg>
   <msg key="lt_Either_there_is_alrea">Albo folder &quot;%folder_name%&quot; już istnieje albo kliknięto przycisk dwukrotnie. Możesz cofnąć się i wybrać nową nazwę, lub &lt;a href=&quot;%directory_url%&quot;&gt;powrócić do spisu zawartości&lt;/a&gt; by zobaczyć czy Twój folder tam jest.</msg>
   <msg key="lt_Folder_folder_name_is">Folder %folder_name% jest pusty.</msg>
   <msg key="lt_It_appears_that_there">Plik o takiej nazwie już istnieje w tym katalogu (albo kliknięto przycisk &quot;Utwórz&quot; dwukrotnie).</msg>

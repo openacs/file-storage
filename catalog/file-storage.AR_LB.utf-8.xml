@@ -38,6 +38,7 @@
   <msg key="lt_delete_file">هل أنت متأكّد تريد حذف الملف &quot;%title%&quot;وكلّ نسخه؟ هذا العمل لا يمكن أن يعكس.</msg>
   <msg key="lt_delete_folder">هل أنت متأكّدة أنك تريد حذف الحافظة &quot;%folder_name%&quot; وكلّ المواد التي تحتويها؟ هذا الإجراء لا يمكن الرجوع عنه.</msg>
   <msg key="lt_Delete_this_file_incl">إحذفْ هذا الملف ( متضمّناً كلّ الإصدارات)</msg>
+  <msg key="lt_Download_an_archive_o">حملْ أرشيف محتويات هذه الحافظة</msg>
   <msg key="lt_Either_there_is_alrea">أو أنت نقرت على الزرّ أكثر من مرة. أنت تستطيع إستعمال زرّ الرجوع لعودة وإختيار   &quot;%folder_name%&quot; أمّا هناك حافظة بالاسم
 للرؤية إذا حافظتك هناك.  &lt;a href=&quot;%directory_url%&quot;&gt; عد إلى عنصر القوائم &lt;/a&gt; اسما جديدا، أو
 </msg>
