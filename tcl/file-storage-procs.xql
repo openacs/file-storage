@@ -43,6 +43,16 @@
         </querytext>
     </fullquery>
 
+    <fullquery name="fs::object_p.select_object_p">
+        <querytext>
+            select count(*)
+            from dual
+            where exists (select 1
+                          from fs_objects
+                          where object_id = :object_id)
+        </querytext>
+    </fullquery>
+
     <fullquery name="fs::get_object_name.select_object_name">
         <querytext>
             select name
