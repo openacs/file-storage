@@ -56,26 +56,26 @@ db_transaction {
 
 	set file_id [db_exec_plsql new_lob_file "
 	begin
-	   :1 := file_storage__create_file (
-                  name => :filename,
-                  parent_id => :folder_id,
-                  context_id => :folder_id,
-                  creation_user => :user_id,
-                  creation_ip => :creation_ip,
-                  item_subtype => 'file_storage_item' -- needed by site-wide search
-                  );
+    		:1 := file_storage.new_file (
+        		title => :title,
+        		folder_id => :folder_id,
+        		creation_user => :user_id,
+        		creation_ip => :creation_ip,
+		        indb_p => 't'
+   			);
+
         end;"]
 
 	set version_id [db_exec_plsql new_version "
 	begin
-	   :1 := file_storage__create_file (
-                  name => :filename,
-                  parent_id => :folder_id,
-                  context_id => :folder_id,
-                  creation_user => :user_id,
-                  creation_ip => :creation_ip,
-                  item_subtype => 'file_storage_item' -- needed by site-wide search
-                  );
+    		:1 := file_storage.new_version (
+        		filename => :filename,
+        		description => :description,
+        		mime_type => :mime_type,
+        		item_id => :file_id,
+        		creation_user => :user_id,
+        		creation_ip => :creation_ip
+    			);
         end;"]
 
 	db_dml lob_content "
@@ -88,35 +88,35 @@ db_transaction {
 	# Unfortunately, we can only calculate the file size after the lob is uploaded 
 	db_dml lob_size "
 	update cr_revisions
-	set    content_length = lob_length(lob)
-	where  revision_id = :version_id"
+ 	set content_length = dbms_lob.getlength(content) 
+	where revision_id = :version_id"
 
     } else {
 
 	set file_id [db_exec_plsql new_fs_file "
 	begin
-	   :1 := content_item.new (
-	          name => :filename,
-        	  parent_id => :folder_id,
-        	  context_id => :folder_id,
-        	  creation_user => :user_id,
-        	  creation_ip => :creation_ip,
-		  item_subtype => 'file_storage_item',
-	          storage_type => 'file'
-	          );
+    		:1 := file_storage.new_file (
+        		title => :title,
+        		folder_id => :folder_id,
+        		creation_user => :user_id,
+        		creation_ip => :creation_ip,
+		        indb_p => 'f'
+   			);
 	end;"]
 
 
 	set version_id [db_exec_plsql new_version "
 	begin
-	   :1 := file_storage__create_file (
-                  name => :filename,
-                  parent_id => :folder_id,
-                  context_id => :folder_id,
-                  creation_user => :user_id,
-                  creation_ip => :creation_ip,
-                  item_subtype => 'file_storage_item' -- needed by site-wide search
-                  );
+
+    		:1 := file_storage.new_version (
+        		filename => :filename,
+        		description => :description,
+        		mime_type => :mime_type,
+        		item_id => :file_id,
+        		creation_user => :user_id,
+        		creation_ip => :creation_ip
+    			);
+
         end;"]
 
 	set tmp_filename [cr_create_content_file $file_id $version_id ${upload_file.tmpfile}]
@@ -135,18 +135,20 @@ db_transaction {
 
     # most likely a duplicate name or a double click
 
-    if [db_string duplicate_check "
-    select count(*)
-    from   cr_items
-    where  name = :filename
-    and    parent_id = :folder_id"] {
-	ad_return_complaint 1 "Either there is already a file with the name \"$tmp_filename\" or you clicked on the button more than once.  You can use the Back button to return and choose a new name, or <a href=\"?folder_id=$folder_id\">return to the directory listing</a> to see if your file is there."
-    } else {
-	ad_return_complaint 1 "We got an error that we couldn't readily identify.  Please let the system owner know about this.
+#    if [db_string duplicate_check "
+#    select count(*)
+#    from   cr_items
+#    where  name = :filename
+#    and    parent_id = :folder_id"] {
+#	ad_return_complaint 1 "Either there is already a file with the name \"$tmp_filename\" or you clicked on the button more than once.  You can use the Back button to return and choose a new name, or <a href=\"?folder_id=$folder_id\">return to the directory listing</a> to see if your file is there."
+#    } else {
+#	ad_return_complaint 1 "We got an error that we couldn't readily identify.  Please let the system owner know about this.
+#
+#	<pre>$errmsg</pre>"
+#    }
+ 
+       ad_return_complaint 1 "You probably clicked on the Add button more than once. Check if the file is properly loaded on the <a href=\"index?folder_id?$folder_id\">folder</a> you wan, or you can use the Back button to return and re-enter the version file."      
 
-	<pre>$errmsg</pre>"
-    }
-    
     return
 }
 
