@@ -11,9 +11,30 @@ ad_page_contract {
     folder_id:integer,optional
     {return_url ""}
     {redirect_to_folder:boolean 0}
+    {show_items:boolean 0}
 }
 
 set user_id [ad_conn user_id]
+
+set allowed_count 0
+set not_allowed_count 0
+
+db_multirow -extend {move_message} move_objects get_move_objects "" {
+    if {$move_p} {
+	set move_message ""
+	incr allowed_count
+    } else {
+	set move_message "Not Allowed"
+	incr not_allowed_count
+    }
+  
+}
+
+set total_count [template::multirow size move_objects]
+
+if {$not_allowed_count > 0} {
+    set show_items 1
+}
 
 if {[info exists folder_id]} {
      permission::require_permission \
@@ -21,8 +42,12 @@ if {[info exists folder_id]} {
  	-object_id $folder_id \
  	-privilege "write"
 
-    # FIXME check READ permission on every item
-     foreach one_item $object_id {
+
+    # check for WRTIE permission on each object to be moved
+    # DaveB: I think it should be DELETE instead of WRITE
+    # but the existing file-move page checks for WRITE
+      
+    template::multirow::foreach move_objects {
  	db_exec_plsql move_item {}
      }
 
@@ -32,13 +57,22 @@ if {[info exists folder_id]} {
  } else {
 
     template::list::create \
+	-name move_objects \
+	-multirow move_objects \
+	-elements {
+	    name {label "Files to be moved"}
+	    move_message {}
+	}
+    
+    template::list::create \
         -name folder_tree \
         -pass_properties { item_id redirect_to_folder return_url } \
         -multirow folder_tree \
         -key folder_id \
+	-no_data "No valid destination folders exist" \
         -elements {
             label {
-                label "Folder"
+                label "Choose Destination Folder"
                 link_url_col move_url
 		link_html {title "Move to @folder_tree.label@"}
 		display_template {<div style="text-indent: @folder_tree.level@em;">@folder_tree.label@</div>} 
@@ -54,6 +88,6 @@ if {[info exists folder_id]} {
 
 }
 
-set context "Move Items"
+set context [list "Move Items"]
 set title "Move Items"
 set file_name "FIX ME"
