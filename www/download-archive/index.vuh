@@ -52,7 +52,7 @@ set cmd [fs::get_archive_command -in_file $file_name -out_file $out_file]
 
 # create the archive
 with_catch errmsg {
-    exec /bin/sh -c "cd $in_path; $cmd; cd -"
+    exec bash -c "cd $in_path; $cmd; cd -"
 } {
     # some day we'll do something useful here
     error $errmsg
