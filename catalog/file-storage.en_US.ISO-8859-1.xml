@@ -37,6 +37,7 @@
   <msg key="edit">edit</msg>
   <msg key="Edit_Folder">Edit Folder</msg>
   <msg key="Edit_URL">Edit URL</msg>
+  <msg key="File_deleted">File deleted</msg>
   <msg key="file">file</msg>
   <msg key="file_delete_page_title">Delete %title%</msg>
   <msg key="file_edit_page_title">Rename %title%</msg>
@@ -45,6 +46,7 @@
   <msg key="file_page_owner_label">Owner: %owner%</msg>
   <msg key="Folder">Folder</msg>
   <msg key="folder">folder</msg>
+  <msg key="Folder_deleted">Folder deleted</msg>
   <msg key="Folder_available_via_WebDAV_at">This folder is available via WebDAV at %webdav_url%</msg>
   <msg key="folder_delete_page_title">Delete %folder_name%</msg>
   <msg key="Folder_ID">Folder ID</msg>
@@ -71,6 +73,8 @@ This action cannot be reversed.</msg>
   <msg key="lt_Do_you_want_to_delete">Do you want to delete the listed items?</msg>
   <msg key="lt_Download_an_archive_o">Download an archive of the contents of this folder</msg>
   <msg key="lt_Either_there_is_alrea">Either there is already a folder with the name &quot;%folder_name%&quot; or you clicked on the button more than once.  You can use the Back button to return and choose a new name, or &lt;a href=&quot;%directory_url%&quot;&gt;return to the directory listing&lt;/a&gt; to see if your folder is there.</msg>
+  <msg key="lt_File-Storage_folder_f">File-Storage folder: %folder_name%\n</msg>
+  <msg key="lt_File_Storage_Notifica">File Storage Notification</msg>
   <msg key="lt_Folder_folder_name_is">Folder %folder_name% is empty.</msg>
   <msg key="lt_It_appears_that_there">It appears that there is already a file with that name in this folder (although possibly you clicked more than once on the submit button.)</msg>
   <msg key="lt_Leave_blank_for_linked_documents">Leave title blank when uploading multiple interlinked documents.</msg>
@@ -78,8 +82,12 @@ This action cannot be reversed.</msg>
   <msg key="lt_Modify_permissions_on">Modify permissions on this file</msg>
   <msg key="lt_Modify_permissions_on_1">Modify permissions on this folder</msg>
   <msg key="lt_Moving_allowed_count_">Moving %allowed_count% items.</msg>
+  <msg key="lt_Name_of_the_action_ty">Name of the %action_type%: %filename%\n</msg>
+  <msg key="lt_New_version_of_file_u">New version of file uploaded</msg>
+  <msg key="lt_New_Version_Uploaded_">New Version Uploaded for file: %filename%\n</msg>
   <msg key="lt_No_valid_items_to_be_">No valid items to be moved.</msg>
   <msg key="lt_not_allowed_count_ite">%not_allowed_count% items can not be moved</msg>
+  <msg key="lt_Notification_for_File">Notification for: File-Storage: %action_type%\n</msg>
   <msg key="lt_Please_enter_the_new_">Please enter the new name for this file:</msg>
   <msg key="lt_Select_the_folder_tha">Select the folder that you would like to copy &quot;%file_name%&quot; to</msg>
   <msg key="lt_Select_the_folder_tha_1">Select the folder that you would like to move &quot;%file_name%&quot; under</msg>
@@ -98,7 +106,9 @@ delete, therefore you cannot delete it.</msg>
   <msg key="lt_This_is_a_ZIP">This is a ZIP file containing multiple files. Expect a long upload time for large files.  You may minimize your browser while waiting.</msg>
   <msg key="lt_Use_the_Browse_button">Use the &quot;Browse...&quot; button to locate your file, 
     then click &quot;Open&quot;.</msg>
+  <msg key="lt_Version_Notes_descrip">Version Notes: %description%\n</msg>
   <msg key="lt_version_not_valid">The specified version is not valid.</msg>
+  <msg key="lt_View_folder_contents_">View folder contents: %url_version% \n\n</msg>
   <msg key="lt_We_got_an_error_that_">We got an error that we couldn't readily identify.  Please let the system owner know about this.</msg>
   <msg key="lt_We_received_an_error_">We received an error from the database.  Probably
     the folder you selected already contains a file with the same name.</msg>
@@ -115,7 +125,9 @@ delete, therefore you cannot delete it.</msg>
   <msg key="Multiple_files">Multiple files:</msg>
   <msg key="Name">Name</msg>
   <msg key="new">new</msg>
+  <msg key="New_File_Uploaded">New File Uploaded</msg>
   <msg key="New_Folder">New Folder</msg>
+  <msg key="New_URL_Uploaded">New URL Uploaded</msg>
   <msg key="No_such_type">No such type</msg>
   <msg key="no_such_URL">no such URL</msg>
   <msg key="PDF">PDF</msg>
@@ -148,7 +160,9 @@ delete, therefore you cannot delete it.</msg>
   <msg key="Upload_New_File">Upload New File</msg>
   <msg key="Upload_New_Version">Upload New Version</msg>
   <msg key="Upload_Revision">Upload Revision</msg>
+  <msg key="Uploaded_by_ownern">Uploaded by: %owner%\n</msg>
   <msg key="URL">URL:</msg>
+  <msg key="URL_deleted">URL deleted</msg> 
   <msg key="version_add_page_title">Upload New Version of %title%</msg>
   <msg key="version_delete_page_title">Delete %version_name%</msg>
   <msg key="Version_filename">Version filename</msg>

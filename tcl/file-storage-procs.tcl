@@ -876,17 +876,17 @@ ad_proc -public fs::do_notifications {
     set root_folder [fs_get_root_folder -package_id $package_id]
 
     if {[string equal $action "new_file"]} {
-        set action_type {New File Uploaded}
+        set action_type "[_ file-storage.New_File_Uploaded]"
     } elseif {[string equal $action "new_url"]} {
-        set action_type {New URL Uploaded}
+        set action_type "[_ file-storage.New_URL_Uploaded]"
     } elseif {[string equal $action "new_version"]} {
-        set action_type {New version of file uploaded}
+        set action_type "[_ file-storage.lt_New_version_of_file_u]"
     } elseif {[string equal $action "delete_file"]} {
-        set action_type {File deleted}
+        set action_type "[_ file-storage.File_deleted]"
     } elseif {[string equal $action "delete_url"]} {
-        set action_type {URL deleted}
+        set action_type "[_ file-storage.URL_deleted]"
     } elseif {[string equal $action "delete_folder"]} {
-        set action_type {Folder deleted}
+        set action_type "[_ file-storage.Folder_deleted]"
     } else {
         error "Unknown file-storage notification action: $action"
     }
@@ -913,22 +913,24 @@ ad_proc -public fs::do_notifications {
     
     # Set email message body - "text only" for now
     set text_version ""
-    append text_version "Notification for: File-Storage: $action_type\n"
-    append text_version "File-Storage folder: [fs_get_folder_name $folder_id]\n"
+    append text_version "[_ file-storage.lt_Notification_for_File]"
+    set folder_name [fs_get_folder_name $folder_id]
+    append text_version "[_ file-storage.lt_File-Storage_folder_f]"
 
     if {[string equal $action "new_version"]} {
-        append text_version "New Version Uploaded for file: $filename\n"
+        append text_version "[_ file-storage.lt_New_Version_Uploaded_]"
     } else {
-        append text_version "Name of the $action_type: $filename\n"
+        append text_version "[_ file-storage.lt_Name_of_the_action_ty]"
     }
     if {[info exists owner]} {
-        append text_version "Uploaded by: $owner\n"
+        append text_version "[_ file-storage.Uploaded_by_ownern]"
     }
     if {[info exists description]} {
-        append text_version "Version Notes: $description\n" 
+        append text_version "[_ file-storage.lt_Version_Notes_descrip]" 
     }
 
-    append text_version "View folder contents: $url$path1?folder_id=$folder_id \n\n"
+    set url_version "$url$path1?folder_id=$folder_id"
+    append text_version "[_ file-storage.lt_View_folder_contents_]"
 
     set html_version [ad_html_text_convert -from text/plain -to text/html -- $text_version]
     append html_version "<br /><br />"
@@ -938,7 +940,7 @@ ad_proc -public fs::do_notifications {
         -type_id [notification::type::get_type_id \
                       -short_name fs_fs_notif] \
         -object_id $folder_id \
-        -notif_subject {File Storage Notification} \
+        -notif_subject "[_ file-storage.lt_File_Storage_Notifica]" \
         -notif_text $text_version \
         -notif_html $html_version
 
@@ -950,7 +952,7 @@ ad_proc -public fs::do_notifications {
             -type_id [notification::type::get_type_id \
                           -short_name fs_fs_notif] \
             -object_id $parent_id \
-            -notif_subject {File Storage Notification} \
+            -notif_subject "[_ file-storage.lt_File_Storage_Notifica]" \
             -notif_text $new_content
         set folder_id $parent_id
     }
