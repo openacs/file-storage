@@ -80,7 +80,7 @@ template::list::create \
 db_multirow -unclobber -extend { last_modified_pretty content_size_pretty version_url version_delete version_delete_url} version version_info {} {
     set last_modified_ansi [lc_time_system_to_conn $last_modified_ansi]
     set last_modified_pretty [lc_time_fmt $last_modified_ansi "%x %X"]
-    if {$content_size > 0 && $content_size < 1024} {
+    if {$content_size < 1024} {
 	set content_size_pretty "[lc_numeric $content_size] [_ file-storage.bytes]"
     } else {
     set content_size_pretty "[lc_numeric [expr $content_size / 1024 ]] [_ file-storage.kb]"
