@@ -25,6 +25,7 @@
   <msg key="Edit_Folder">폴더 수정</msg>
   <msg key="Edit_URL">URL 수정</msg>
   <msg key="file">파일</msg>
+  <msg key="file_page_file_title_label">제목: %title%</msg>
   <msg key="folder">폴더</msg>
   <msg key="Folder_ID">폴더 아이디</msg>
   <msg key="Folder_Name">폴더 이름:</msg>
@@ -63,6 +64,7 @@
   <msg key="lt_You_may_not_delete_th">루트 폴더를 삭제할 수 없습니다.</msg>
   <msg key="lt_You_probably_clicked_">아마도 추가 버튼을 한번이상 클릭한 것 같습니다. %folder_link%에 파일이 로드되었는지 체크하던지, 돌아가기는 버튼을 사용하여 파일을 새로 입력할 수 있습니다.</msg>
   <msg key="lt_Your_file_is_larger_t_1">파일이 시스템에서 허용하는 최대 파일 크기(%max_number_of_bytes% 바이트)를 초과했습니다.</msg>
+  <msg key="lt_Your_search_on_query_">&quot;%query%&quot;에대한 검색결과가 없습니다.</msg>
   <msg key="Modified">수정된</msg>
   <msg key="Move">이동</msg>
   <msg key="Name">이름</msg>
