@@ -17,23 +17,6 @@
         </querytext>
     </fullquery>
 
-    <fullquery name="fs_maybe_create_new_mime_type.select_mime_type">      
-        <querytext>
-	        select mime_type
-            from cr_mime_types
-        	where file_extension = :file_extension
-        </querytext>
-    </fullquery>
-
-    <fullquery name="fs_maybe_create_new_mime_type.insert_mime_type">      
-        <querytext>
-            insert into cr_mime_types
-            (mime_type, file_extension)
-            values
-            (:mime_type, :extension)
-        </querytext>
-    </fullquery>
-
     <fullquery name="fs::get_folder.select_folder">
         <querytext>
             select item_id
