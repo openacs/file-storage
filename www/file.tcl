@@ -36,7 +36,6 @@ db_1row file_info "
 select person.name(o.creation_user) as owner,
        i.name,
        r.title,
-       content_item.get_path(i.item_id,file_storage.get_root_folder([ad_conn package_id])) as file_path,
        acs_permission.permission_p(:file_id,:user_id,'write') as write_p,
        acs_permission.permission_p(:file_id,:user_id,'delete') as delete_p,
        acs_permission.permission_p(:file_id,:user_id,'admin') as admin_p
