@@ -239,4 +239,21 @@
     </querytext>
   </fullquery>
 
+  <fullquery name="fs::notification::get_url.select_fs_package_url">
+    <querytext>
+      select site_node__url(node_id) 
+      from site_nodes
+      where object_id = (select package_id
+         from fs_root_folders r,
+             (select parent.item_id as folder_id
+               from cr_items parent,
+                   cr_items children
+              where children.item_id = :folder_id
+               and children.tree_sortkey
+                between parent.tree_sortkey
+                and tree_right(parent.tree_sortkey)) t
+      where r.folder_id = t.folder_id)
+    </querytext>
+  </fullquery>
+
 </queryset>
