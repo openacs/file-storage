@@ -1,11 +1,6 @@
-<if @folder:rowcount@ gt 8>
-<select name="parent_id" size=8>
-</if><else>
-<select name="parent_id" size=@folder:rowcount@>
-</else>
+<p>
 <multiple name="folder">
-<option value="@folder.new_parent@">@folder.spaces;noquote@ @folder.label@</option>
+    @folder.spaces;noquote@ <a href="@folder.link_url@">@folder.label@</a><br/>
 </multiple>
-</select>
-
+</p>
 

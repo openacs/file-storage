@@ -4,13 +4,7 @@
 
 <P>#file-storage.lt_Select_the_folder_tha#
 
-<form method=GET action="file-copy-2">
-<input type=hidden name=file_id value="@file_id@">
-
-<include src="folder-list" file_id="">
-<p>
-<input type=submit value="#file-storage.Copy#">
-</form>
+<include src="folder-list" file_id="@file_id@" base_url="file-copy-2">
 
 
 

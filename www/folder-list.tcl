@@ -1,7 +1,7 @@
 set user_id [ad_conn user_id]
 set package_id [ad_conn package_id]
 
-if ![empty_string_p $file_id] {
+if [string equal $base_url file-move-2] {
     set children_clause [db_map children_clause]
 } else {
     set children_clause ""
@@ -21,4 +21,6 @@ set sql "
  connect by prior item_id = parent_id
  start with item_id = file_storage.get_root_folder(:package_id)
 "
-db_multirow folder folder $sql
+db_multirow -extend link_url folder folder $sql { set link_url [export_vars -base $base_url {file_id {parent_id $new_parent}}] }
+
+

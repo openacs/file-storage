@@ -29,8 +29,18 @@ select item_id
 from   cr_revisions
 where  revision_id = :version_id"
 
-if {[string equal $confirmed_p "t"]} {
-    # they have confirmed that they want to delete the version
+db_1row version_name "
+    select i.name as title,r.title as version_name 
+    from cr_items i,cr_revisions r
+    where i.item_id = r.item_id
+    and revision_id = :version_id"
+
+set context [fs_context_bar_list -final [_ file-storage.Delete_Version] $item_id]
+
+set delete_message [_ file-storage.lt_Are_you_sure_that_you]
+ad_form -export version_id -cancel_url "file?[export_vars {{file_id $item_id}}]" -form {
+    {delete_message:text(inform) {label $delete_message}}
+} -on_submit {
 
     set parent_id [db_exec_plsql delete_version "
          begin
@@ -60,16 +70,6 @@ if {[string equal $confirmed_p "t"]} {
          ad_script_abort
     }
 
-} else {
-    # they still need to confirm
-
-    db_1row version_name "
-    select i.name as title,r.title as version_name 
-    from cr_items i,cr_revisions r
-    where i.item_id = r.item_id
-    and revision_id = :version_id"
-
-    set context [fs_context_bar_list -final [_ file-storage.Delete_Version] $item_id]
 }
 
 # Message lookup uses variable version_name
