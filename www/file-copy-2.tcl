@@ -56,7 +56,8 @@ db_transaction {
             name => :name,
             content_type => :content_type,
             creation_user => :user_id,
-            creation_ip => :ip_address
+            creation_ip => :ip_address,
+            item_subtype => 'file_storage_item' -- needed by site-wide search
         );
     end;"]
 

@@ -7,21 +7,21 @@
       <querytext>
 
     	select content_item__new (
-        	:filename,          -- name
-        	:folder_id,         -- parent_id
-		null,	            -- item_id (default)
-		null,	            -- locale (default)
-	        now(),	            -- creation_date (default)
-        	:user_id,           -- creation_user
-        	:folder_id,         -- context_id
-        	:creation_ip,       -- creation_ip
-		'content_item',     -- item_subtype (default)
-		'content_revision', -- content_type (default)
-		null,		    -- title (default)
-		null,		    -- description
-		'text/plain',	    -- mime_type (default)
-		null,	            -- nls_language (default)
-		null		    -- data (default)
+        	:filename,           -- name
+        	:folder_id,          -- parent_id
+		null,	             -- item_id (default)
+		null,	             -- locale (default)
+	        now(),	             -- creation_date (default)
+        	:user_id,            -- creation_user
+        	:folder_id,          -- context_id
+        	:creation_ip,        -- creation_ip
+		'file_storage_item', -- item_subtype (needed by site-wide search)
+		'content_revision',  -- content_type (default)
+		null,		     -- title (default)
+		null,		     -- description
+		'text/plain',	     -- mime_type (default)
+		null,	             -- nls_language (default)
+		null		     -- data (default)
    		);
 
       </querytext>

@@ -52,7 +52,8 @@ begin
         parent_id => :folder_id,
         context_id => :folder_id,
         creation_user => :user_id,
-        creation_ip => :creation_ip
+        creation_ip => :creation_ip,
+        item_subtupe => 'file_storage_item' -- needed by site-wide search
    );
 end;"]
 
