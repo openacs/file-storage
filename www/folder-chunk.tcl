@@ -77,7 +77,7 @@ if {$admin_p} {
     lappend actions "\#file-storage.Edit_Folder\#" "${fs_url}folder-edit?folder_id=$folder_id" "\#file-storage.Rename_this_folder\#"
     lappend actions "\#file-storage.lt_Modify_permissions_on_1\#" "/permissions/one?[export_vars -override {{object_id $folder_id}} {return_url}]" "\#file-storage.lt_Modify_permissions_on_1\#"
     if { $expose_rss_p } {
-	lappend actions "Configure RSS" "${fs_url}admin/rss-subscrs?folder_id=$folder_id"
+	lappend actions "Configure RSS" "${fs_url}admin/rss-subscrs?folder_id=$folder_id" "Configure RSS"
     }
 }
 
