@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="file-storage" package_version="5.1.0a2" locale="it_IT" charset="ISO-8859-1">
+<message_catalog package_key="file-storage" package_version="5.1.0a10" locale="it_IT" charset="ISO-8859-1">
 
   <msg key="Action">Azione</msg>
   <msg key="Actions">Azioni:</msg>
@@ -18,8 +18,9 @@
   <msg key="days_as_new">giorni.</msg>
   <msg key="Delete">Cancella</msg>
   <msg key="delete">cancella</msg>
+  <msg key="delete_folder_and_children">Questo cancellerà %folder_name% e %child_count% files e cartelle. Vuoi continuare?</msg>
   <msg key="Delete_this_folder">Cancella questa cartella</msg>
-  <msg key="Delete_Version">Canella la versione</msg>
+  <msg key="Delete_Version">Cancella la versione</msg>
   <msg key="Description">Descrizione:</msg>
   <msg key="Edit">Modifica</msg>
   <msg key="edit">modifica</msg>
@@ -71,13 +72,13 @@
   <msg key="lt_This_folder_contains_">Questo file contiene elementi che non ti &amp;egrave; permesso di cancellare.</msg>
   <msg key="lt_Use_the_Browse_button">Usa il tasto &amp;quot;Sfoglia...&amp;quot; per trovare il tuo file, poi clicca &amp;quot;Apri&amp;quot;.</msg>
   <msg key="lt_version_not_valid">La versione specificata non &amp;egrave; valida.</msg>
-  <msg key="lt_We_got_an_error_that_">Si è verificato un errore che non &amp;egrave; possibile classificare in breve tempo. Per favore, avvista il gestore del sistema di questo fatto.</msg>
+  <msg key="lt_We_got_an_error_that_">Si è verificato un errore che non &amp;egrave; possibile classificare in breve tempo. Per favore, avvisa il gestore del sistema di questo fatto.</msg>
   <msg key="lt_We_received_an_error_">Si è verificato un errore nel database. Probabilmente le cartelle che hai selezionato contendolo un file con lo stesso nome.</msg>
   <msg key="lt_Were_sorry_but_at_the">Spiacente, ma al momento non puoi cancellare le cartelle fino a che non sono vuote.</msg>
   <msg key="lt_You_may_not_delete_th">Non puoi cancellare la cartella principale.</msg>
-  <msg key="lt_You_probably_clicked_">E' possobile che tu abbia cliccato pi&amp;ugrave; di una volta sul tasto &quot;Aggiungi&quot;. Controlla se il file &amp;egrave; stato caricato correttamente nella cartella %folder_link%, o torna indietro e immetti nuovamente la versione del file.</msg>
-  <msg key="lt_Your_file_is_larger_t">Il tuo file eccede la dimesione massima permessa su questo sistema (%number_of_bytes% bytes)</msg>
-  <msg key="lt_Your_file_is_larger_t_1">Il tuo file eccede la dimesione massima permessa su questo sistema (%max_number_of_bytes% bytes)</msg>
+  <msg key="lt_You_probably_clicked_">&amp;Egrave; possobile che tu abbia cliccato pi&amp;ugrave; di una volta sul tasto &quot;Aggiungi&quot;. Controlla se il file &amp;egrave; stato caricato correttamente nella cartella %folder_link%, o torna indietro e immetti nuovamente la versione del file.</msg>
+  <msg key="lt_Your_file_is_larger_t">Il tuo file eccede la dimensione massima permessa su questo sistema (%number_of_bytes% bytes)</msg>
+  <msg key="lt_Your_file_is_larger_t_1">Il tuo file eccede la dimensione massima permessa su questo sistema (%max_number_of_bytes% bytes)</msg>
   <msg key="lt_Your_search_on_query_">La tua ricerca di &quot;%query%&quot; non ha prodotto alcun risultato.</msg>
   <msg key="lt_Your_search_on_query__1">La tua ricerca di &quot;%query%&quot; ha individuato i file seguenti: </msg>
   <msg key="Modified">Modificato</msg>
@@ -115,5 +116,6 @@
   <msg key="Version_Notes">Note della versione</msg>
   <msg key="Version_Notes_1">Note della versione:</msg>
   <msg key="view_details">Vedi i dettagli</msg>
+  <msg key="Yes_Delete">S&amp;igrave;, cancella</msg>
   <msg key="Yes_Delete_It">S&amp;igrave;, cancella</msg>
 </message_catalog>
