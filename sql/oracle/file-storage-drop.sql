@@ -19,9 +19,9 @@ declare
     from   fs_root_folders;
 begin
     for v_root_folder in c_root_folders loop
-        -- JS: The RI constraints will cause acs_objects.delete to fail
-	-- JS: So I changed this to apm_package.delete
-        apm_package.delete(v_root_folder.package_id);
+        -- JS: The RI constraints will cause acs_objects.del to fail
+	-- JS: So I changed this to apm_package.del
+        apm_package.del(v_root_folder.package_id);
     end loop;
 end;
 /
