@@ -35,7 +35,7 @@
 <table border=1 cellspacing=2 cellpadding=2>
  <tr>
   <td colspan=7><if @show_all_versions_p@ eq "t">All Versions of "@title@"</if>
-   <else>Live version of "@title@"</else></td>
+   <else>Live version of "@title@"</else>.</td>
  </tr>
  <tr>
   <td>Version filename</td>
