@@ -675,7 +675,7 @@ ad_proc -public fs::add_file {
         set storage_type "file"
     }
 
-    set mime_type [cr_filename_to_mime_type -create $name]
+    set mime_type [cr_filename_to_mime_type -create -- $name]
     switch  [cr_registered_type_for_mime_type $mime_type] {
         image {
 	    set content_type "image"
@@ -735,7 +735,7 @@ ad_proc fs::add_version {
     if {[string equal "" $storage_type]} {
         set storage_type [db_string get_storage_type ""]
     }
-    set mime_type [cr_filename_to_mime_type -create $name]
+    set mime_type [cr_filename_to_mime_type -create -- $name]
     set tmp_size [file size $tmp_filename]
     set parent_id [get_parent -item_id $item_id]
     set revision_id [cr_import_content \
