@@ -482,7 +482,6 @@ ad_proc -public fs::publish_object_to_file_system {
 
     db_1row select_object_info {}
     
-    ns_log Notice "TYPE: $type"
     if {[string equal folder $type]} {
 	set result [publish_folder_to_file_system -folder_id $object_id -path $path -folder_name $name -user_id $user_id]
     } elseif {[string equal url $type]} {
@@ -579,7 +578,6 @@ ad_proc -public fs::publish_versioned_object_to_file_system {
 	}
     }
     set file_name [remove_special_file_system_characters -string $file_name]
-    ns_log Notice "FILENAME:::: $file_name"
 
     switch $storage_type {
 	lob {
@@ -929,32 +927,28 @@ ad_proc -public fs::do_notifications {
     
     # Set email message body - "text only" for now
     set text_version ""
-    append text_version "[_ file-storage.lt_Notification_for_File]"
+    append text_version "[_ file-storage.lt_Notification_for_File]\n"
     set folder_name [fs_get_folder_name $folder_id]
-    append text_version "[_ file-storage.lt_File-Storage_folder_f]"
+    append text_version "[_ file-storage.lt_File-Storage_folder_f]\n"
 
     if {[string equal $action "new_version"]} {
-        append text_version "[_ file-storage.lt_New_Version_Uploaded_]"
+        append text_version "[_ file-storage.lt_New_Version_Uploaded_]\n"
     } else {
-        append text_version "[_ file-storage.lt_Name_of_the_action_ty]"
+        append text_version "[_ file-storage.lt_Name_of_the_action_ty]\n"
     }
     if {[info exists owner]} {
-        append text_version "[_ file-storage.Uploaded_by_ownern]"
+        append text_version "[_ file-storage.Uploaded_by_ownern]\n"
     }
     if {[info exists description]} {
-        append text_version "[_ file-storage.lt_Version_Notes_descrip]" 
+        append text_version "[_ file-storage.lt_Version_Notes_descrip]\n" 
     }
 
     set url_version "$url$path1?folder_id=$folder_id"
-    append text_version "[_ file-storage.lt_View_folder_contents_]"
+    append text_version "[_ file-storage.lt_View_folder_contents_]\n"
 
     set html_version [ad_html_text_convert -from text/plain -to text/html -- $text_version]
-    
-    # For whatever the reason, ad_html_text_convert somehow returns the text with \\n instead of <br /> inserted.
-    # Too busy to find out now. Needs fixing l8er.
-    regsub -all {\\n} $html_version {<br />} html_version
 
-    # append html_version "<br /><br />"
+    append html_version "<br /><br />"
     # Do the notification for the file-storage
     
     notification::new \
