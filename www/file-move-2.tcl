@@ -44,20 +44,29 @@ where  object_id = :file_id"
 } on_error {
     # most likely a duplicate name or a double click
 
-    set filename [db_string filename "
-    select name from cr_items where item_id = :file_id"]
+    # JS: I commented out the more elaborate error reporting, since Postgres does not seem
+    # JS: to like quering a table that has just aborted a transaction on it. Instead, I copied
+    # JS: the error reporting of file-copy-2.tcl does
 
-    if [db_string duplicate_check "
-    select count(*)
-    from   cr_items
-    where  name = :filename
-    and    parent_id = :parent_id"] {
-	ad_return_complaint 1 "Either there is already a file in the specified folder with the name \"$filename\" or you clicked on the button more than once.  You can <a href=\"index?folder_id=$parent_id\">return to the directory listing</a> to see if your file is there."
-    } else {
-	ad_return_complaint 1 "We got an error that we couldn't readily identify.  Please let the system owner know about this.
+    ad_return_complaint 1 "We received an error from the database.  Probably
+    the folder you selected already contains a file with the same name.
 
-	<pre>$errmsg</pre>"
-    }
+    <pre>$errmsg</pre>"
+
+    #set filename [db_string filename "
+    #select name from cr_items where item_id = :file_id"]
+
+    #if [db_string duplicate_check "
+    #select count(*)
+    #from   cr_items
+    #where  name = :filename
+    #and    parent_id = :parent_id"] {
+    #	ad_return_complaint 1 "Either there is already a file in the specified folder with the name \"$filename\" or you clicked on the button more than once.  You can <a href=\"index?folder_id=$parent_id\">return to the directory listing</a> to see if your file is there."
+    #} else {
+    #ad_return_complaint 1 "We got an error that we couldn't readily identify.  Please let the system owner know about this.
+
+    #	<pre>$errmsg</pre>"
+    #}
     
     return
 }
