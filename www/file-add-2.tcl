@@ -56,19 +56,14 @@ db_transaction {
     # create the new item
     if {$indb_p} {
 
-        ns_log Notice LARS1
 	set file_id [db_exec_plsql new_lob_file {}]
         
-        ns_log Notice LARS2
 	set version_id [db_exec_plsql new_version {}]
 
-        ns_log Notice LARS3
 	db_dml lob_content {} -blob_files [list ${upload_file.tmpfile}]
 
-        ns_log Notice LARS4
 	# Unfortunately, we can only calculate the file size after the lob is uploaded 
 	db_dml lob_size {}
-        ns_log Notice LARS5
 
     } else {
 
