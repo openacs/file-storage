@@ -1,6 +1,6 @@
 <master>
-<property name="title">@folder_name;noquote@</property>
-<property name="header">@folder_name;noquote@</property>
+<property name="title">@folder_name@</property>
+<property name="header">@folder_name@</property>
 <property name="context">@context;noquote@</property>
 
 
@@ -49,5 +49,5 @@
 </table>
 
 
-<include src="folder-chunk" folder_id=@folder_id;noquote@ viewing_user_id=@user_id;noquote@ n_past_days=@n_past_days;noquote@>
+<include src="folder-chunk" folder_id=@folder_id@ viewing_user_id=@user_id@ n_past_days=@n_past_days@>
 
