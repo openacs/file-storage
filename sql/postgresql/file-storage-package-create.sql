@@ -64,7 +64,7 @@ create or replace function file_storage__new_root_folder (
        integer,         -- apm_packages.package_id%TYPE
        varchar,         -- cr_folders.label%TYPE
        varchar,          -- cr_items.name%TYPE
-       description
+       varchar
 )
 returns integer as '    --  fs_root_folders.folder_id%TYPE
 declare
