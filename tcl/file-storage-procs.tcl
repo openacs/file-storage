@@ -290,6 +290,14 @@ namespace eval fs {
         return [db_exec_plsql new_folder {}]
     }
 
+    ad_proc -public object_p {
+        {-object_id:required}
+    } {
+        is this a file storage object
+    } {
+        return [db_string select_object_p {}]
+    }
+
     ad_proc -public get_object_name {
         {-object_id:required}
     } {
