@@ -33,14 +33,12 @@
 
     <fullquery name="fs::rename_folder.rename_folder">
         <querytext>
-            begin
-                select content_folder__rename(
-                    :folder_id,
-                    null,
-                    :name,
-                    null
-                );
-            end;
+            select content_folder__rename(
+                :folder_id,
+                null,
+                :name,
+                null
+            );
         </querytext>
     </fullquery>
 
