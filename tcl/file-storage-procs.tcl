@@ -225,7 +225,7 @@ ad_proc fs_maybe_create_new_mime_type {
 namespace eval fs {
 
     ad_proc -public new_root_folder {
-        -package_id
+        {-package_id:required}
     } {
         Create a root folder for a package instance
 
@@ -237,7 +237,7 @@ namespace eval fs {
     }
 
     ad_proc -public get_root_folder {
-        -package_id
+        {-package_id:required}
     } {
         Get the root folder of a package instance
 
@@ -249,9 +249,9 @@ namespace eval fs {
     }
 
     ad_proc -public new_folder {
-        -name
-        -pretty_name
-        -parent_id
+        {-name:required}
+        {-pretty_name:required}
+        {-parent_id:required}
         {-creation_user ""}
         {-creation_ip ""}
     } {
