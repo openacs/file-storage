@@ -20,7 +20,20 @@ if {![exists_and_not_null folder_id]} {
 set viewing_user_id [ad_conn user_id]
 
 permission::require_permission -party_id $viewing_user_id -object_id $folder_id -privilege "read"
+
 set admin_p [permission::permission_p -party_id $viewing_user_id -object_id $folder_id -privilege "admin"]
+
+set write_p $admin_p
+
+if {!$write_p} {
+    set write_p [permission::permission_p -party_id $viewing_user_id -object_id $folder_id -privilege "write"]
+}
+
+set delete_p $admin_p
+
+if {!$delete_p} {
+    set delete_p [permission::permission_p -party_id $viewing_user_id -object_id $folder_id -privilege "delete"]
+}
 
 if {![exists_and_not_null n_past_days]} {
     set n_past_days 99999
@@ -41,11 +54,16 @@ if {![exists_and_not_null root_folder_id]} {
 set folder_path [db_exec_plsql get_folder_path {}]
 
 set actions [list]
-set actions [list "Upload File" file-add?[export_vars folder_id] "Upload a file in this folder" "Add Link" simple-add?[export_vars folder_id] "Add a link to a web page" "\#file-storage.New_Folder\#" folder-create?[export_vars {{parent_id $folder_id}}] "\#file-storage.Create_a_new_folder\#" ]
 
-#if {$delete_p} {
-#    lappend actions "Delete Folder" folder-delete "Delete folder and all contents"
-#}
+# for now, invite users to upload, and then they will be asked to
+# login if they are not.
+
+ lappend actions "Upload File" file-add?[export_vars folder_id] "Upload a file in this folder" "Add Link" simple-add?[export_vars folder_id] "Add a link to a web page" "\#file-storage.New_Folder\#" folder-create?[export_vars {{parent_id $folder_id}}] "\#file-storage.Create_a_new_folder\#"
+
+
+if {$delete_p} {
+    lappend actions "Delete Folder" folder-delete?[export_vars folder_id] "Delete folder"
+}
 if {$admin_p} {
     set return_url [ad_conn url]
     lappend actions "Rename Folder" "folder-edit?folder_id=$folder_id" "Change the name of this folder"
@@ -53,9 +71,10 @@ if {$admin_p} {
 }
 
 #set n_past_filter_values [list [list "Yesterday" 1] [list [_ file-storage.last_week] 7] [list [_ file-storage.last_month] 30]]
+
 set elements [list icon \
 		  [list label "" \
-		       display_template {<a href="@contents.file_url@"><img src="@contents.icon@" border=0 alt="@contents.label@" /></a>}] \
+		       display_template {<a href="@contents.file_url@"><img src="@contents.icon@"  border=0 alt="#file-storage.@contents.type@#" /></a>}] \
 		  name \
 		  [list label [_ file-storage.Name] \
 		       link_url_col file_url \
@@ -112,24 +131,26 @@ db_multirow -extend { label icon last_modified_pretty content_size_pretty proper
 
 
     set name [lang::util::localize $name]
-    if {[string equal $type url]} {
-        set label [_ file-storage.link]
-	set properties_link [_ file-storage.properties]
-	set properties_url "simple?[export_vars {{object_id $object_id}}]"
-	set icon "/resources/file-storage/link.gif"
-        set file_url $url
-    } elseif {![string equal $type folder]} {
-        set label [_ file-storage.file]
-	set properties_link [_ file-storage.properties]
-	set properties_url "file?[export_vars {{file_id $object_id}}]"
-	set icon "/resources/file-storage/file.gif"
-        set file_url "view/${file_url}"
-    } else {
-        set label [_ file-storage.folder]
-	set properties_link ""
-	set properties_url ""
-	set icon "/resources/file-storage/folder.gif"
-	set file_url "index?[export_vars {{folder_id $object_id}}]"
+
+    switch -- $type {
+	folder {
+	    set properties_link ""
+	    set properties_url ""
+	    set icon "/resources/file-storage/folder.gif"
+	    set file_url "index?[export_vars {{folder_id $object_id}}]"
+	}
+	url {
+	    set properties_link [_ file-storage.properties]
+	    set properties_url "simple?[export_vars object_id]"
+	    set icon "/resources/url-button.gif"
+	    set file_url ${url}
+	}
+	default {
+	    set properties_link [_ file-storage.properties]
+	    set properties_url "file?[export_vars {{file_id $object_id}}]"
+	    set icon "/resources/file-storage/file.gif"
+	    set file_url "view/${file_url}"
+	}
     }
     
 

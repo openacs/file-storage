@@ -153,7 +153,9 @@
   
     <fullquery name="fs::get_item_id.get_item_id">
       <querytext>
-        select content_item__get_id ( :name, :folder_id, 'f' )
+        begin
+          :1 := content_item.get_id ( :name, :folder_id, 'f' );
+	end;
       </querytext>
     </fullquery>
 

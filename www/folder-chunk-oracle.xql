@@ -23,17 +23,7 @@
                      when fs_objects.last_modified >= (sysdate - :n_past_days)
                      then 1
                      else 0
-                   end as new_p,
-                   case
-                     when type = 'url'
-                     then acs_permission.permission_p(fs_objects.object_id, :viewing_user_id, 'delete')
-                     else 't'
-                   end as delete_p,
-                   case
-                     when type = 'url'
-                     then acs_permission.permission_p(fs_objects.object_id, :viewing_user_id, 'write')
-                     else 't'
-                   end as write_p
+                   end as new_p
             from fs_objects
             where fs_objects.parent_id = :folder_id
               and exists (select 1
