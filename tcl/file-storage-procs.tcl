@@ -487,7 +487,7 @@ ad_proc -public fs::publish_object_to_file_system {
     } elseif {[string equal url $type]} {
 	set result [publish_url_to_file_system -object_id $object_id -path $path -file_name $file_name]
     } else {
-	set result [publish_versioned_object_to_file_system -object_id $object_id -path $path]
+	set result [publish_versioned_object_to_file_system -object_id $object_id -path $path -file_name $file_name]
     }
 
     return $result
@@ -568,7 +568,11 @@ ad_proc -public fs::publish_versioned_object_to_file_system {
     db_1row select_object_metadata {}
 
     if {[empty_string_p $file_name]} {
+        if {![info exists upload_file_name]} {
+		set file_name "unnamedfile"
+    	} else {
 	set file_name $file_upload_name
+	}
     }
     set file_name [remove_special_file_system_characters -string $file_name]
 
