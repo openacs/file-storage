@@ -19,6 +19,7 @@
   <msg key="days_as_new">dagen: &quot;Nieuw&quot;</msg>
   <msg key="Delete">Verwijderen</msg>
   <msg key="delete">Verwijderen</msg>
+  <msg key="delete_folder_and_children">%folder_name% en %child_count% bestanden en mappen zullen worden verwijderd. Doorgaan?</msg>
   <msg key="Delete_this_folder">Deze map verwijderen</msg>
   <msg key="Delete_Version">Versie verwijderen</msg>
   <msg key="Description">Beschrijving:</msg>
@@ -33,6 +34,7 @@
   <msg key="file_page_file_title_label">Titel: %title% </msg>
   <msg key="file_page_owner_label">Eigenaar: %owner% </msg>
   <msg key="folder">map</msg>
+  <msg key="Folder_available_via_WebDAV_at">Deze map is beschikbaar via WebDAV op %webdav_url%</msg>
   <msg key="folder_delete_page_title">%folder_name% verwijderen</msg>
   <msg key="Folder_ID">Map ID</msg>
   <msg key="Folder_Name">Mapnaam:</msg>
@@ -43,6 +45,7 @@
   <msg key="Last_Modified">Laatste wijziging</msg>
   <msg key="last_month">Afgelopen maand</msg>
   <msg key="last_week">Afgelopen week</msg>
+  <msg key="link">koppeling</msg>
   <msg key="lt_administer_permission">rechten beheren</msg>
   <msg key="lt_All_Versions_of_title">Alle versies van &quot;%title%&quot; </msg>
   <msg key="lt_Are_you_sure_that_you">De versie &quot;%version_name%&quot; van &quot;%title%&quot; echt verwijderen?  Deze handeling kan niet ongedaan worden gemaakt!</msg>
@@ -128,5 +131,6 @@ Gebruikt de knop &quot;Terug&quot; om een nieuwe naam te kiezen of bekijk de &lt
   <msg key="Version_Notes">Versie toelichting</msg>
   <msg key="Version_Notes_1">Versie toelichting:</msg>
   <msg key="view_details">bekijk details</msg>
+  <msg key="Yes_Delete">Ja, verwijderen</msg>
   <msg key="Yes_Delete_It">Ja, verwijderen</msg>
 </message_catalog>
