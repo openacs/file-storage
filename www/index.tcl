@@ -10,7 +10,7 @@ ad_page_contract {
     {n_past_days:integer "-1"}
 } -validate {
     valid_folder -requires {folder_id:integer} {
-	if ![fs_folder_p $folder_id] {
+	if {![fs_folder_p $folder_id]} {
 	    ad_complain "The specified folder is not valid."
 	}
     }
@@ -51,6 +51,7 @@ if {!$delete_p} {
 
 set package_id [ad_conn package_id]
 
+set show_administer_permissions_link_p [ad_parameter -package_id $package_id "ShowAdministerPermissionsLinkP"]
 set n_contents [fs::get_folder_contents_count -folder_id $folder_id -user_id $user_id]
 
 form create n_past_days_form
