@@ -23,10 +23,10 @@
 	</td>
 	<td>&nbsp;</td>
 	<td align="right">
-	  @contents.content_size@ <if @contents.content_size@ ne 1>#file-storage.items#</if><else>#file-storage.item#</else>
+	  @contents.content_size_pretty@ <if @contents.content_size@ ne 1>#file-storage.items#</if><else>#file-storage.item#</else>
 	</td>
 	<td>@contents.type@</td>
-	<td>@contents.last_modified@</td>
+	<td>@contents.last_modified_pretty@</td>
       </if>
       <else>
 	<if @contents.type@ eq "url">
@@ -51,7 +51,7 @@
 	  </td>
 	  <td>&nbsp;</td>
 	  <td>@contents.type@</td>
-	  <td>@contents.last_modified@</td>
+	  <td>@contents.last_modified_pretty@</td>
 	</if>
 	<else>
 	  <td><a href="@fs_url@download/@contents.file_upload_name@?version_id=@contents.live_revision@"><img src="@fs_url@graphics/file.gif" alt="#file-storage.file#" border="0"></a></td>
@@ -66,9 +66,9 @@
 	  <td>
 	    <small><a href="@fs_url@file?file_id=@contents.object_id@">#file-storage.view_details#</a></small>
 	  </td>
-          <td align="right">@contents.content_size@ byte<if @contents.content_size@ ne 1>s</if></td>
+          <td align="right">@contents.content_size_pretty@ byte<if @contents.content_size@ ne 1>s</if></td>
 	  <td>@contents.type@</td>
-	  <td>@contents.last_modified@</td>
+	  <td>@contents.last_modified_pretty@</td>
 	</else>
       </else>
     </tr>

@@ -64,7 +64,7 @@
     <td>@version.author@</td>
     <td align=right>@version.content_size_pretty@</td>
     <td>@version.type@</td>
-    <td>@version.last_modified@</td>
+    <td>@version.last_modified_pretty@</td>
     <td>@version.description@&nbsp;</td>
     <td>
       &nbsp;<if @version.delete_p@ true>
