@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="file-storage" package_version="5.1.0a10" locale="en_US" charset="ISO-8859-1">
+<message_catalog package_key="file-storage" package_version="5.1.0a15" locale="en_US" charset="ISO-8859-1">
 
   <msg key="_Copy">File</msg>
   <msg key="_Delete">File</msg>
@@ -122,6 +122,7 @@ delete, therefore you cannot delete it.</msg>
   <msg key="Modified">Modified</msg>
   <msg key="Move">Move</msg>
   <msg key="Move_File">Move File</msg>
+  <msg key="Move_to_folder_title">Move to %folder_tree.label%</msg>
   <msg key="Multiple_files">Multiple files:</msg>
   <msg key="Name">Name</msg>
   <msg key="new">new</msg>

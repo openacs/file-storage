@@ -47,7 +47,7 @@ set return_url [ad_conn url]?[export_vars file_id]
 set actions [list "[_ file-storage.Upload_Revision]" file-add?[export_vars [list file_id return_url]] "Upload a new version of this file" \
 		 "[_ file-storage.Rename_File]" file-edit?[export_vars file_id] "Rename file" \
 		 "[_ file-storage.Copy_File]" file-copy?[export_vars file_id] "Copy file" \
-		 "[_ file-storage.Move_File]" file-move?[export_vars file_id] "Move file" \
+		 "[_ file-storage.Move_File]" move?object_id=$file_id "Move file" \
 		 "[_ file-storage.Delete_File]" file-delete?[export_vars file_id] "Delete file"]
 
 if {[string equal $delete_p "t"]} {
