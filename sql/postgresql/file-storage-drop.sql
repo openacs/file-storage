@@ -50,6 +50,10 @@ select content_type__drop_type (
        'f'			 -- drop_table_p
 );
 
+-- this data model added by file-storage patch number 146 from 
+-- openacs.org bugtracker
+\i file-storage-notifications-drop.sql
+
 -- this content type is created incorrectly tying the file_storage_root_folders
 -- table to file_storage_object
 -- so we drop these directly

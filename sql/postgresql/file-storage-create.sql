@@ -70,6 +70,7 @@ begin
       ''<master>
 <property name="title">@title;noquote@</property>
 <property name="context">@context;noquote@</property>
+<property name="displayed_object_id">@item_id;noquote@</property>
 @text;noquote@'',               -- text
       true                      -- is_live
     );
@@ -93,3 +94,5 @@ drop function inline_0();
 \i file-storage-package-create.sql
 
 \i file-storage-views-create.sql
+
+\i file-storage-notifications-create.sql

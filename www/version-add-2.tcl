@@ -64,6 +64,9 @@ db_transaction {
                   );
         end;"]
 
+    db_1row parent_folder { }
+
+    fs::do_notifications -folder_id $parent_folder -filename $filename -file_id $file_id -version_id $version_id -action "new_version"
 
     if {$indb_p} {
 

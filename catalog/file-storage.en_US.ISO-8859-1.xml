@@ -28,6 +28,7 @@
   <msg key="Edit_Folder">Edit Folder</msg>
   <msg key="Edit_URL">Edit URL</msg>
   <msg key="file">file</msg>
+  <msg key="link">link</msg>
   <msg key="file_delete_page_title">Delete %title%</msg>
   <msg key="file_edit_page_title">Rename %title%</msg>
   <msg key="file_edit_page_title_1">Edit %pretty_name%</msg>
@@ -37,6 +38,7 @@
   <msg key="Folder_available_via_WebDAV_at">This folder is available via WebDAV at %webdav_url%</msg>
   <msg key="folder_delete_page_title">Delete %folder_name%</msg>
   <msg key="Folder_ID">Folder ID</msg>
+  <msg key="Folder_available_via_WebDAV_at">This folder is available via WebDAV at %webdav_url%</msg> 
   <msg key="Folder_Name">Folder Name:</msg>
   <msg key="folder_type_pretty_name">folder</msg>
   <msg key="index_page_navigate_up_folder">Up to %up_name%</msg>

@@ -53,3 +53,5 @@ content_type.drop_type (
 end;
 /
 show errors
+
+@ file-storage-notifications-drop.sql
