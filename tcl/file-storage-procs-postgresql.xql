@@ -61,26 +61,6 @@
         </querytext>
     </fullquery>
 
-    <fullquery name="fs::get_folder_contents_count.get_folder_contents_count">
-        <querytext>
-            select count(*)
-            from (
-                  select 1
-                  from cr_items i left join cr_revisions r on (i.live_revision = r.revision_id), acs_objects o
-                  where i.item_id = o.object_id
-                  and i.parent_id = :folder_id
-                  and acs_permission__permission_p(i.item_id, :user_id, 'read') = 't'
-                  and i.content_type = 'file_storage_object'
-                  union
-                  select 1
-                  from cr_items i, cr_folders f
-                  where i.item_id = f.folder_id
-                  and i.parent_id = :folder_id
-                  and acs_permission__permission_p(f.folder_id, :user_id, 'read') = 't'
-                 ) foo
-        </querytext>
-    </fullquery>
-
 <fullquery name="fs_get_folder_name.folder_name">      
       <querytext>
 
