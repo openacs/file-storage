@@ -26,13 +26,18 @@ ad_page_contract {
 ad_require_permission $file_id write
 ad_require_permission $parent_id write
 
+set user_id [ad_conn user_id]
+set address [ad_conn peeraddr]
+
 db_transaction {
 
 db_exec_plsql file_move "
 begin
     file_storage.move_file (
     	file_id => :file_id,
-    	target_folder_id => :parent_id
+    	target_folder_id => :parent_id,
+        creation_user => :user_id,
+        creation_ip => :address:
     );
 end;"
 
