@@ -30,4 +30,7 @@ where  item_id = :file_id"
 
 set context [fs_context_bar_list -final "[_ file-storage.Rename]" $file_id]
 
+# Variable title used by message lookup
+set page_title [_ file-storage.file_edit_page_title]
+
 ad_return_template

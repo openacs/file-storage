@@ -1,5 +1,5 @@
 <master>
-<property name="title">Upload New Version of @title;noquote@</property>
+<property name="title">@page_title;noquote@</property>
 <property name="context">@context;noquote@</property>
 
 <form enctype=multipart/form-data method=POST action=version-add-2>

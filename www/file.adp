@@ -4,8 +4,8 @@
 <property name="context">@context;noquote@</property>
 
 <ul>
-  <li>Title: @title@ <if @write_p@ true>(<a href="file-edit?file_id=@file_id@">#file-storage.edit#</a>)</if>
-  <li>Owner: @owner@
+  <li>#file-storage.file_page_file_title_label# <if @write_p@ true>(<a href="file-edit?file_id=@file_id@">#file-storage.edit#</a>)</if>
+  <li>#file-storage.file_page_owner_label#
 <p>
   <li>#file-storage.Actions# 
   <if @show_all_versions_p@ true>
@@ -28,7 +28,7 @@
     | <a href="file-delete?file_id=@file_id@">#file-storage.lt_Delete_this_file_incl#</a>
   </if>
  <if @gc_comments@ not nil>
- <li>Comments on this file:
+ <li>#file-storage.lt_Comments_on_this_file#
  <ul>
  @gc_comments;noquote@
  </ul>
@@ -38,13 +38,13 @@
  </if>
 </ul>
 
-<a href="index?folder_id=@folder_id@">Back</a> to folder view
+#file-storage.back_to_folder_view#
 <p>
 <table border=1 cellspacing=2 cellpadding=2>
   <tr>
     <td colspan=7>
-      <if @show_all_versions_p@ true>All Versions of "@title@"</if>
-      <else>Live version of "@title@"</else>.
+      <if @show_all_versions_p@ true>#file-storage.lt_All_Versions_of_title#</if>
+      <else>#file-storage.lt_Live_version_of_title#</else>.
     </td>
   </tr>
   <tr>
@@ -85,5 +85,6 @@
   </tr>
 </if>
 </table>
+
 
 

@@ -66,7 +66,7 @@
 	  <td>
 	    <small><a href="@fs_url@file?file_id=@contents.object_id@">#file-storage.view_details#</a></small>
 	  </td>
-          <td align="right">@contents.content_size_pretty@ byte<if @contents.content_size@ ne 1>s</if></td>
+          <td align="right">#file-storage.lt_contentscontent_size_#</td>
 	  <td>@contents.type@</td>
 	  <td>@contents.last_modified_pretty@</td>
 	</else>
@@ -78,13 +78,14 @@
   <if @content_size_total@ gt 0>
     <p>
       <a href="@fs_url@download-archive/index?object_id=@folder_id@">
-        Download an archive of the contents of this folder
+        #file-storage.lt_Download_an_archive_o#
       </a>
       <br>
-      <small><i><strong>Note:</strong> This may take a while, please be patient.</i></small>
+      <small><i>#file-storage.this_may_take_a_while#</i></small>
     </p>
   </if>
 </if>
 <else>
   <p><blockquote><i>#file-storage.lt_Folder_folder_name_is#</i></blockquote></p>
 </else>
+

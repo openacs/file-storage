@@ -41,3 +41,6 @@ set context [fs_context_bar_list -final [_ file-storage.Add_pretty_name [list pr
 if {[empty_string_p $title]} {
     set lock_title_p 0
 }
+
+# Message lookup uses variable pretty_name
+set page_title [_ file-storage.simple_add_page_title]

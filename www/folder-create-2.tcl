@@ -46,7 +46,7 @@ end;"]
 
 } on_error {
 
-    ad_return_complaint 1 [_ file-storage.lt_Either_there_is_alrea] [list folder_name $folder_name directory_url "index?folder_id=$parent_id"]]
+    ad_return_complaint 1 [_ file-storage.lt_Either_there_is_alrea [list folder_name $folder_name directory_url "index?folder_id=$parent_id"]]
     
      ad_script_abort
 }

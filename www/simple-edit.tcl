@@ -17,5 +17,7 @@ db_1row select_item_info "select name, url, description, folder_id from fs_urls_
 set pretty_name "$name"
 set context [fs_context_bar_list -final "[_ file-storage.Edit_URL]" $folder_id]
 
-ad_return_template
+# Message lookup uses variable pretty_name
+set page_title [_ file-storage.file_edit_page_title_1]
 
+ad_return_template

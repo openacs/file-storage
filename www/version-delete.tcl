@@ -71,3 +71,6 @@ if {[string equal $confirmed_p "t"]} {
 
     set context [fs_context_bar_list -final [_ file-storage.Delete_Version] $item_id]
 }
+
+# Message lookup uses variable version_name
+set page_title [_ file-storage.version_delete_page_title]
