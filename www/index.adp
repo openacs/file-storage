@@ -47,11 +47,5 @@
 
 <include src="folder-chunk" folder_id=@folder_id@ viewing_user_id=@user_id@ n_past_days=@n_past_days@>
 
-<p>
-      <a href="download-archive/index?object_id=@folder_id@">
-        Download an archive of the contents of this folder
-      </a>
-      <br>
-      <small><i><strong>Note:</strong> This may take a while, please be patient.</i></small>
 
 
