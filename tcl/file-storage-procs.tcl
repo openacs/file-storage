@@ -366,8 +366,12 @@ namespace eval fs {
         }
 
         set list_of_ns_sets [db_list_of_ns_sets select_folder_contents {}]
-        
+
         foreach set $list_of_ns_sets {
+            # in plain Tcl:
+            # set last_modified_ansi [lc_time_system_to_conn $last_modified_ansi]
+            ns_set put $set last_modified_ansi [lc_time_system_to_conn [ns_set get $set last_modifed_ansi]] 
+
             # in plain Tcl:
             # set last_modified [lc_time_fmt $last_modified_ansi "%x %X"]
             ns_set put $set last_modified [lc_time_fmt [ns_set get $set last_modified_ansi] "%x %X"]
