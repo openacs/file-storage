@@ -19,7 +19,7 @@ ad_page_contract {
     owner:onevalue
     version:multirow
     show_all_versions_p:onevalue
-    context_bar:onevalue
+    context:onevalue
     file_path:onevalue
 }
 
@@ -30,7 +30,7 @@ ad_require_permission $file_id read
 #set templating datasources
 
 set user_id [ad_conn user_id]
-set context_bar [fs_context_bar_list $file_id]
+set context [fs_context_bar_list $file_id]
 
 set show_administer_permissions_link_p [ad_parameter "ShowAdministerPermissionsLinkP"]
 

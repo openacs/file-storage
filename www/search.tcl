@@ -9,11 +9,11 @@ ad_page_contract {
 } -properties {
     results:multirow
     query:onevalue
-    context_bar:onevalue
+    context:onevalue
 }
 
 set user_id [ad_conn user_id]
-set context_bar "Search"
+set context "Search"
 
 # Bash the query to lowercase
 

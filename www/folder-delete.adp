@@ -1,6 +1,6 @@
-<master src="fs_master">
+<master src="master">
 <property name="title">Delete @folder_name@</property>
-<property name="context_bar">@context_bar@</property>
+<property name="context">@context@</property>
 
 <if @blocked_p@ eq "t">
 

@@ -1,6 +1,6 @@
-<master src="fs_master">
+<master src="master">
 <property name="title">Edit @pretty_name@</property>
-<property name="context_bar">@context_bar@</property>
+<property name="context">@context@</property>
 
 <form method=POST action="simple-edit-2">
 <input type=hidden name="object_id" value="@object_id@">

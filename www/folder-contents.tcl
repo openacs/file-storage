@@ -20,7 +20,7 @@ ad_page_contract {
 } -properties {
     folder_id:onevalue
     folder_name:onevalue
-    context_bar:onevalue
+    context:onevalue
     recurse_p:onevalue
     n_past_days:onevalue
     orderby:onevalue
@@ -111,6 +111,6 @@ set table [ad_table \
 ]
 
 set folder_name [fs::get_object_name -object_id $folder_id]
-set context_bar [fs_context_bar_list -final Contents $folder_id]
+set context [fs_context_bar_list -final Contents $folder_id]
 
 ad_return_template

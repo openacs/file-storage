@@ -15,7 +15,7 @@ ad_page_contract {
 } -properties {
     file_id:onevalue
     file_name:onevalue
-    context_bar:onevalue
+    context:onevalue
 }
 
 # check for read permission on the file
@@ -29,6 +29,6 @@ select name as title
 from   cr_items
 where  item_id = :file_id"]
 
-set context_bar [fs_context_bar_list -final "Copy" $file_id]
+set context [fs_context_bar_list -final "Copy" $file_id]
 
 ad_return_template

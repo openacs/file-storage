@@ -15,7 +15,7 @@ ad_require_permission $object_id write
 db_1row select_item_info "select name, url, description, folder_id from fs_urls_full where url_id= :object_id"
 
 set pretty_name "$name"
-set context_bar [fs_context_bar_list -final "Edit URL" $folder_id]
+set context [fs_context_bar_list -final "Edit URL" $folder_id]
 
 # Should probably generate the item_id and version_id now for
 # double-click protection

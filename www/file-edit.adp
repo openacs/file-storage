@@ -1,7 +1,7 @@
-<master src="fs_master">
+<master src="master">
 <property name="title">Rename @title@</property>
 <property name="header">Rename @title@</property>
-<property name="context_bar">@context_bar@</property>
+<property name="context">@context@</property>
 
 <form method=POST action=file-edit-2.tcl>
 <input type=hidden name="file_id" value="@file_id@">

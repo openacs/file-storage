@@ -1,7 +1,7 @@
-<master src="fs_master">
+<master src="master">
 <property name="title">@folder_name@</property>
 <property name="header">@folder_name@</property>
-<property name="context_bar">@context_bar@</property>
+<property name="context">@context@</property>
 
 <table>
 <if @write_p@ true>

@@ -14,7 +14,7 @@ ad_page_contract {
     }
 } -properties {
     file_id:onevalue
-    context_bar:onevalue
+    context:onevalue
     title:onevalue
 }
 
@@ -28,6 +28,6 @@ select name as title
 from   cr_items
 where  item_id = :file_id"
 
-set context_bar [fs_context_bar_list -final "Rename" $file_id]
+set context [fs_context_bar_list -final "Rename" $file_id]
 
 ad_return_template

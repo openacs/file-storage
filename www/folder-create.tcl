@@ -14,7 +14,7 @@ ad_page_contract {
     }
 } -properties {
     parent_id:onevalue
-    context_bar:onevalue
+    context:onevalue
 }
 
 # check that they have write permission on the parent folder
@@ -23,6 +23,6 @@ ad_require_permission $parent_id write
 
 # set templating datasources
 
-set context_bar [fs_context_bar_list -final "Create New Folder" $parent_id]
+set context [fs_context_bar_list -final "Create New Folder" $parent_id]
 
 ad_return_template

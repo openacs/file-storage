@@ -16,7 +16,7 @@ ad_page_contract {
 } -properties {
     file_id:onevalue
     file_name:onevalue
-    context_bar:onevalue
+    context:onevalue
 }
 
 # check they have write permission on the file (is this really the
@@ -31,7 +31,7 @@ begin
     :1 := file_storage.get_title(:file_id);
 end;"]
 
-set context_bar [fs_context_bar_list -final "Move" $file_id]
+set context [fs_context_bar_list -final "Move" $file_id]
 
 ad_return_template
 

@@ -1,6 +1,6 @@
-<master src="fs_master">
+<master src="master">
 <property name="title">Create @pretty_name@</property>
-<property name="context_bar">@context_bar@</property>
+<property name="context">@context@</property>
 
 <form method=POST action="simple-add-2">
 <input type=hidden name="folder_id" value="@folder_id@">

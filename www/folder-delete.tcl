@@ -31,7 +31,7 @@ ad_page_contract {
     folder_id:onevalue
     folder_name:onevalue
     blocked_p:onevalue
-    context_bar:onevalue
+    context:onevalue
 }
 
 # check for delete permission on the folder
@@ -62,7 +62,7 @@ if { [string equal $confirmed_p "t"] && [string equal $blocked_p "f"] } {
     set folder_name [db_string folder_name "
     select label from cr_folders where folder_id = :folder_id"]
 
-    set context_bar [fs_context_bar_list -final "Delete" $folder_id]
+    set context [fs_context_bar_list -final "Delete" $folder_id]
 
     ad_return_template
 

@@ -17,7 +17,7 @@ ad_page_contract {
     file_id:onevalue
     file_name:onevalue
     blocked_p:onevalue
-    context_bar:onevalue
+    context:onevalue
 }
 
 # check for delete permission on the file
@@ -55,7 +55,7 @@ if {[string equal $confirmed_p "t"] && [string equal $blocked_p "f"] } {
     	from   cr_items
     	where  item_id = :file_id"
 
-    set context_bar [fs_context_bar_list -final "Delete" $file_id]
+    set context [fs_context_bar_list -final "Delete" $file_id]
 
     ad_return_template
 }
