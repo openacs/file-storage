@@ -51,9 +51,14 @@
 
     <fullquery name="fs::get_folder_contents_count.get_folder_contents_count">
         <querytext>
-            select count(*)
-            from cr_items
-            where cr_items.parent_id = :folder_id
+            select (select count(*)
+                    from cr_items
+                    where cr_items.parent_id = :folder_id)
+                   +
+                   (select count(*)
+                    from fs_simple_objects
+                    where fs_simple_objects.folder_id = :folder_id)
+            from dual
         </querytext>
     </fullquery>
 

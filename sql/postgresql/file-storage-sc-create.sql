@@ -1,6 +1,6 @@
 -- Implement site-wide search using OpenFTS
 --
--- packages/file-storage/sql/postgresql/file-storage-sc-create.sql
+-- file-storage/sql/postgresql/file-storage-sc-create.sql
 --
 -- @author Jowell Sabino (jowellsabino@netscape.net)
 --

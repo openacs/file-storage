@@ -33,21 +33,21 @@
 
     <fullquery name="fs::get_folder_contents.get_folder_contents">
         <querytext>
-            select fs_folders_and_files.file_id,
-                   fs_folders_and_files.name,
-                   fs_folders_and_files.live_revision,
-                   fs_folders_and_files.type,
-                   to_char(fs_folders_and_files.last_modified, 'YYYY-MM-DD HH24:MI') as last_modified,
-                   case when fs_folders_and_files.last_modified >= (sysdate - :n_past_days) then 1 else 0 end as new_p,
-                   fs_folders_and_files.content_size,
-                   case when acs_permission__permission_p(fs_folders_and_files, :user_id, 'write') = 'f' then 0 else 1 end as write_p,
-                   case when acs_permission__permission_p(fs_folders_and_files, :user_id, 'delete') = 'f' then 0 else 1 end as delete_p,
-                   case when acs_permission__permission_p(fs_folders_and_files, :user_id, 'admin') = 'f' then 0 else 1 end as admin_p
-            from fs_folders_and_files
-            where fs_folders_and_files.parent_id = :folder_id
-            and 't' = acs_permission__permission_p(fs_folders_and_files.file_id, :user_id, 'read')
-            order by fs_folders_and_files.sort_key,
-                     fs_folders_and_files.name
+            select fs_objects.object_id,
+                   fs_objects.name,
+                   fs_objects.live_revision,
+                   fs_objects.type,
+                   to_char(fs_objects.last_modified, 'YYYY-MM-DD HH24:MI') as last_modified,
+                   case when fs_objects.last_modified >= (sysdate - :n_past_days) then 1 else 0 end as new_p,
+                   fs_objects.content_size,
+                   case when acs_permission__permission_p(fs_objects.object_id, :user_id, 'write') = 'f' then 0 else 1 end as write_p,
+                   case when acs_permission__permission_p(fs_objects.object_id, :user_id, 'delete') = 'f' then 0 else 1 end as delete_p,
+                   case when acs_permission__permission_p(fs_objects.object_id, :user_id, 'admin') = 'f' then 0 else 1 end as admin_p
+            from fs_objects
+            where fs_objects.parent_id = :folder_id
+            and 't' = acs_permission__permission_p(fs_objects.object_id, :user_id, 'read')
+            order by fs_objects.sort_key,
+                     fs_objects.name
         </querytext>
     </fullquery>
 

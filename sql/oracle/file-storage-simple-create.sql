@@ -16,29 +16,22 @@ create table fs_simple_objects (
        object_id                     integer
                                      constraint fs_simp_obj_id_fk
                                      references acs_objects(object_id)
-                                     constraint fs_simp_obj_id_pk
+                                     constraint fs_simple_objects_pk
                                      primary key,
        folder_id                     integer
                                      constraint fs_simp_folder_id_fk
-                                     references cr_folders(folder_id),
-       name                          varchar(250) not null,
-       description                   varchar(4000)
 );
 
+create index fs_so_folder_id_idx on fs_simple_objects (folder_id);
 
 create table fs_urls (
        url_id                        integer
                                      constraint fs_url_url_id_fk
                                      references fs_simple_objects(object_id)
-                                     constraint fs_url_url_id_pk
+                                     constraint fs_urls_pk
                                      primary key,
        url                           varchar(250) not null
 );
-
-
-create view fs_urls_full as
-select * from fs_urls, fs_simple_objects
-where url_id = object_id;
 
 begin
     -- stuff for non-versioned file-storage objects
@@ -63,4 +56,3 @@ begin
 end;
 /
 show errors;
-
