@@ -228,7 +228,7 @@ ad_proc fs_maybe_create_new_mime_type {
 namespace eval fs {
 
     ad_proc -public new_root_folder {
-        {-package_id:required}
+        {-package_id ""}
         {-pretty_name ""}
         {-description ""}
     } {
@@ -238,11 +238,15 @@ namespace eval fs {
 
         @return folder_id of the new root folder
     } {
+        if {[empty_string_p $package_id]} {
+            set package_id [ad_conn package_id]
+        }
+
         return [db_exec_plsql new_root_folder {}]
     }
 
     ad_proc -public get_root_folder {
-        {-package_id:required}
+        {-package_id ""}
     } {
         Get the root folder of a package instance.
 
@@ -250,6 +254,10 @@ namespace eval fs {
 
         @return folder_id of the root folder retrieved
     } {
+        if {[empty_string_p $package_id]} {
+            set package_id [ad_conn package_id]
+        }
+
         return [db_exec_plsql get_root_folder {}]
     }
 
@@ -282,6 +290,24 @@ namespace eval fs {
         return [db_exec_plsql new_folder {}]
     }
 
+    ad_proc -public get_folder_name {
+        {-folder_id:required}
+    } {
+        Select the name of this folder.
+    } {
+        return [db_string select_folder_name {} -default $folder_id]
+    }
+
+    ad_proc -public folder_p {
+        {-object_id:required}
+    } {
+        Is this object a folder?
+
+        @return true if object_id is a folder
+    } {
+        return [db_string select_folder_p {} -default 0]
+    }
+
     ad_proc -public get_folder {
         {-name:required}
         {-parent_id:required}
@@ -295,12 +321,12 @@ namespace eval fs {
         @return folder_id of the folder, or null if no folder was found by that
                 name
     } {
-        return [db_string get_folder {} -default ""]
+        return [db_string select_folder {} -default ""]
     }
 
     ad_proc -public get_folder_contents {
-        {-folder_id:required}
-        {-user_id ""}
+        {-folder_id ""}
+        !{-user_id ""}
         {-n_past_days "-1"}
     } {
         Retrieve the contents of the specified folder in the form of a list
@@ -315,15 +341,19 @@ namespace eval fs {
                        permission)
         @param n_past_days Mark files that are newer than the past N days as new
     } {
+        if {[empty_string_p $folder_id]} {
+            set folder_id [fs::get_root_folder -package_id [ad_conn package_id]]
+        }
+
         if {[empty_string_p $user_id]} {
             set user_id [acs_magic_object "the_public"]
         }
 
-        return [db_list_of_ns_sets get_folder_contents {}]
+        return [db_list_of_ns_sets select_folder_contents {}]
     }
 
     ad_proc -public get_folder_contents_count {
-        {-folder_id:required}
+        {-folder_id ""}
         {-user_id ""}
     } {
         Retrieve the count of contents of the specified folder.
@@ -332,11 +362,42 @@ namespace eval fs {
         @param user_id The viewer of the contents (to make sure they have
                        permission)
     } {
+        if {[empty_string_p $folder_id]} {
+            set folder_id [fs::get_root_folder -package_id [ad_conn package_id]]
+        }
+
         if {[empty_string_p $user_id]} {
             set user_id [acs_magic_object "the_public"]
         }
 
-        return [db_string get_folder_contents_count {}]
+        return [db_string select_folder_contents_count {}]
+    }
+
+    ad_proc -public get_folder_items_recursive {
+        {-folder_id ""}
+        {-user_id ""}
+        {-n_past_days "-1"}
+    } {
+        Retrieve the contents of a folder and any of its child folders.
+        Returns a list of ns_sets, one for each row, with the following keys:
+
+            file_id, name, live_revision, type,
+            last_modified, content_size, sort_key
+
+        @param folder_id The folder for which to retrieve contents
+        @param user_id The viewer of the contents (to make sure they have
+                       permission)
+        @param n_past_days Mark files that are newer than the past N days as new
+    } {
+        if {[empty_string_p $folder_id]} {
+            set folder_id [fs::get_root_folder -package_id [ad_conn package_id]]
+        }
+
+        if {[empty_string_p $user_id]} {
+            set user_id [acs_magic_object "the_public"]
+        }
+
+        return [db_list_of_ns_sets select_folder_items_recursive {}]
     }
 
 }
