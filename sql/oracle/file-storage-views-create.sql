@@ -90,7 +90,7 @@ as
         when cr_items.content_type = 'content_folder' then 0
         else 1
       end as sort_key
-    from cr_items, cr_extlinks, cr_folders, cr_revisions, acs_objects
+    from cr_items, cr_extlinks, cr_folders, cr_revisions, acs_objects, cr_mime_types
     where cr_items.item_id = cr_extlinks.extlink_id(+)
       and cr_items.item_id = cr_folders.folder_id(+)
       and cr_items.item_id = acs_objects.object_id
