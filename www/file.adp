@@ -3,9 +3,8 @@
 <property name="header">@title;noquote@</property>
 <property name="context">@context;noquote@</property>
 
-<p>
-  <a href="@folder_view_url@" class="button">#file-storage.back_to_folder_view#</a>
-<if @show_all_versions_p@ true>
+<p>#file-storage.back_to_folder_view#</p>
+<p><if @show_all_versions_p@ true>
     <a href="file?file_id=@file_id@&show_all_versions_p=f" class="button">#file-storage.lt_show_only_live_versio#</a>
   </if>
   <else>

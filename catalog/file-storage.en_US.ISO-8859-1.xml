@@ -7,7 +7,7 @@
   <msg key="Add_File">Add File</msg>
   <msg key="Add_pretty_name">Add %pretty_name%</msg>
   <msg key="Author">Author</msg>
-  <msg key="back_to_folder_view">&lt;a href=&quot;%folder_view_url%&quot;&gt;Back&lt;/a&gt; to folder view</msg>
+  <msg key="back_to_folder_view">&lt;a class=&quot;button&quot; href=&quot;%folder_view_url%&quot;&gt;Back&lt;/a&gt; to folder view</msg>
   <msg key="bytes">bytes</msg>
   <msg key="Change_Name">Change Name</msg>
   <msg key="Copy">Copy</msg>
