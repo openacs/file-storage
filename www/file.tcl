@@ -74,4 +74,13 @@ $show_versions"
 
 db_multirow version version_info $sql
 
-ad_return_template
+if { [apm_package_installed_p "general-comments"] && [ad_parameter "GeneralCommentsP" -default 0] } {
+    set return_url "[ad_conn url]?file_id=$file_id"
+    set gc_link [general_comments_create_link $file_id $return_url]
+    set gc_comments [general_comments_get_comments $file_id $return_url]
+} else {
+    set gc_link ""
+    set gc_comments ""
+}
+
+
