@@ -78,7 +78,7 @@ element create n_past_days_form folder_id \
 
 
 set notification_chunk [notification::display::request_widget \
-    -type fs_fs_notif\
+    -type fs_fs_notif \
     -object_id $folder_id \
     -pretty_name $folder_name \
     -url [ad_conn url]?folder_id=$folder_id \
