@@ -25,14 +25,10 @@
       <querytext>
 
     	select count(*)
-    	from   cr_items
-    	where  item_id in (select item_id
-                       	   from   cr_items
-			   where tree_sortkey like (select tree_sortkey || '%'
-						    from cr_items
-						    where item_id = :item_id)
-			    order by tree_sortkey)
-    	and    acs_permission__permission_p(item_id,:user_id,:privilege) = 'f'
+    	from   cr_items c1, cr_items c2
+    	where  c2.item_id = :item_id
+          and c1.tree_sortkey between c2.tree_sortkey and tree_right(c2.tree_sortkey)
+    	  and not acs_permission__permission_p(c1.item_id,:user_id,:privilege)
 
       </querytext>
 </fullquery>
@@ -41,12 +37,11 @@
 <fullquery name="children_have_permission_p.child_items">      
       <querytext>
 
-	select item_id as child_item_id
-	from   cr_items
-   	where tree_sortkey like (select tree_sortkey || '%'
-				from cr_items
-				where item_id = :item_id)
-	order by tree_sortkey
+	select c1.item_id as child_item_id
+	from   cr_items c1, cr_items c2
+   	where c2.item_id = :item_id
+          and c1.tree_sortkey between c2.tree_sortkey and tree_right(c2.tree_sortkey)
+	order by c1.tree_sortkey
 	
       </querytext>
 </fullquery>
@@ -81,16 +76,11 @@
 	             else 'file?file_id=' 
                 end) || j.item_id,
            	file_storage__get_title(j.item_id)
-        from   cr_items i,cr_items j
-        where  j.item_id not in (select o2.item_id
-        		         from   cr_items o1, cr_items o2
-			         where o1.item_id = file_storage__get_root_folder([ad_conn package_id])
-				 and o2.tree_sortkey <= o1.tree_sortkey
-				 and o1.tree_sortkey like (o2.tree_sortkey || '%')
-				)
-	and i.item_id = :start_id
-	and j.tree_sortkey <= i.tree_sortkey
-	and i.tree_sortkey like (j.tree_sortkey || '%')
+        from   cr_items i, cr_items j, cr_items k
+        where i.item_id = :start_id
+          and k.item_id = file_storage__get_root_folder([ad_conn package_id])
+          and j.tree_sortkey between tree_left(k.tree_sortkey) and i.tree_sortkey
+          and tree_ancestor_p(j.tree_sortkey, i.tree_sortkey)
     	order by j.tree_sortkey asc
 
       </querytext>

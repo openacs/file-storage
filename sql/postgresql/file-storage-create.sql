@@ -58,8 +58,6 @@ create table fs_root_folders (
                 unique
 );
 
-
-
 create function file_storage__get_root_folder (
        --
        -- Returns the root folder corresponding to a particular
@@ -89,7 +87,7 @@ begin
 
         return v_folder_id;
 
-end;' language 'plpgsql';
+end;' language 'plpgsql' with (iscachable);
 
 
 
@@ -687,13 +685,12 @@ begin
 	
 		-- We want to delete all cr_items entries, starting from the leaves all
 		--  the way up the root folder (old.folder_id).
-		select item_id,content_type
-		from cr_items
-		where  tree_sortkey like (select tree_sortkey || ''%''
-						            from cr_items
-						            where item_id = old.folder_id)
-		and item_id != old.folder_id
-                order by tree_sortkey desc
+		select c1.item_id, c1.content_type
+		from cr_items c1, cr_items c2
+                where c2.item_id = old.folder_id
+		  and c1.tree_sortkey between c2.tree_sortkey and tree_right(c2.tree_sortkey)
+		  and item_id != old.folder_id
+                order by c1.tree_sortkey desc
 	loop
 
 
