@@ -5,57 +5,15 @@ ad_page_contract {
     Virtual URL handler for file downloads
 
     @author Kevin Scaldeferri (kevin@arsdigita.com)
+    @author Don Baccus (simplified it by using cr utility)
     @creation-date 18 December 2000
     @cvs-id $Id$
 } {
-    {version_id:integer ""}
+    version_id:integer
 }
 
 set user_id [ad_conn user_id]
 
-# There is really no point in resolving the live_revision from the path, 
-# since we can always pass the live_revision id!
-#
-#regexp "[ad_conn package_url]download/(.*)" [ad_conn url] match path
-#
-#if [empty_string_p $version_id] {
-#    if ![db_0or1row get_file_id "
-#    select content_item.get_live_revision(content_item.get_id(:path,file_storage.get_root_folder([ad_conn package_id]))) as version_id from dual"] {
-#        ad_script_abort
-#    }
-#}
-
 ad_require_permission $version_id "read"
 
-#set indb_p [ad_parameter "StoreFilesInDatabaseP" -package_id [ad_conn package_id]]
-# We get the storage type from the way CR stored the file, instead of 
-# querying the package instance parameter.  With this, we still are able
-# to offer download of the file even if the site-admin mistakenly
-# changes the storage type parameter after files are already stored in CR
-db_1row file_type "
-select mime_type,(case when lob is null then 0
-		        else 1
-		  end) as indb_p 
-from   cr_revisions 
-where  revision_id = :version_id"
-
-ReturnHeaders $mime_type
-
-if {$indb_p} {
-
-	db_write_blob version_write_blob "select content
-        	                     from   cr_revisions
-                	             where  revision_id = $version_id"
-} else {
-
-	# JS: I promise to make this cleaner...
-	set storage_type "file"
-
-	db_write_blob version_write_file "
-	    select '[cr_fs_path]' || filename as content
-            from cr_revisions 
-            where revision_id = $version_id" 
-}	
-
-
-
+cr_write_content -revision_id $version_id
