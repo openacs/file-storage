@@ -25,11 +25,9 @@ ad_require_permission $file_id read
 # set templating datasources
 
 set file_name [db_string file_name "
-select title
-from   cr_revisions
-where  revision_id = (select live_revision
-                      from   cr_items
-                      where  item_id = :file_id)"]
+select name as title
+from   cr_items
+where  item_id = :file_id"]
 
 set context_bar [fs_context_bar_list -final "Copy" $file_id]
 
