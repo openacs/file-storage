@@ -209,7 +209,7 @@
 	
 	
 	begin
-	   :1 := file_storage.delete_file(
+	    file_storage.delete_file(
 			:item_id
 			);
 	end;
