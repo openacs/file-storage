@@ -97,6 +97,3 @@ as
            fs_urls_full.url as key,
            1 as sort_key
     from fs_urls_full;
-
-
-

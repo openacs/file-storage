@@ -18,7 +18,7 @@
 <if @contents.type@ eq "folder">
       <td><a href="@fs_url@index?folder_id=@contents.object_id@&n_past_days=@n_past_days@"><img src="graphics/folder.gif" border=0 alt="#file-storage.folder#"></a></td>
       <td>
-        <a href="@fs_url@index?folder_id=@contents.object_id@&n_past_days=@n_past_days@">@contents.name@</a>
+        <a href="@fs_url@index?folder_id=@contents.object_id@&n_past_days=@n_past_days@"><%= [lang::util::localize @contents.name@] %></a>
 <if @contents.new_p@ and @contents.content_size@ gt 0><font color="red">#file-storage.new#</font></if>
       </td>
       <td>&nbsp;</td>
