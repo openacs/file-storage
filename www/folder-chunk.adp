@@ -1,5 +1,5 @@
 <if @contents:rowcount@ gt 0>
-  <table width="85%" class="table-display" cellpadding="5" cellspacing="0">
+  <table class="table-display" cellpadding="5" cellspacing="0">
     <tr class="table-header">
       <td>&nbsp;</td>
       <td>Name</td>
@@ -22,7 +22,7 @@
 	  <if @contents.new_p@ and @contents.content_size@ gt 0><img src="@fs_url@graphics/new.gif" alt="new"></if>
 	</td>
 	<td>&nbsp;</td>
-	<td>
+	<td align="right">
 	  @contents.content_size@ item<if @contents.content_size@ ne 1>s</if>
 	</td>
 	<td>@contents.type@</td>
@@ -68,13 +68,9 @@
 	    </if>
 	  </td>
 	  <td>
-	    <small>[
-	      <a href="@fs_url@file?file_id=@contents.object_id@">
-		view details
-	      </a>
-	      ]</small>
+	    <small><a href="@fs_url@file?file_id=@contents.object_id@">view details</a></small>
 	  </td>
-	  <td>@contents.content_size@ byte<if @contents.content_size@ ne 1>s</if></td>
+          <td align="right">@contents.content_size@ byte<if @contents.content_size@ ne 1>s</if></td>
 	  <td>@contents.type@</td>
 	  <td>@contents.last_modified@</td>
 	</else>
@@ -84,7 +80,7 @@
   </table>
   <if @content_size_total@ gt 0>
     <p>
-      <a href="download-archive/index?object_id=@folder_id@">
+      <a href="@fs_url@download-archive/index?object_id=@folder_id@">
         Download an archive of the contents of this folder
       </a>
       <br>
