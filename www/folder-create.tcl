@@ -55,8 +55,11 @@ ad_form -name "folder-ae" -html { enctype multipart/form-data } -export { parent
 } -edit_request {
     #For now I'm using the bCSM proc. We need to move it to somewhere its more accessible.
     #But I hope we can avoid repeating the code in 2 places.
-    array set folder [bcms::folder::get_folder -folder_id $folder_id]
+#    array set folder [bcms::folder::get_folder -folder_id $folder_id]
+# use a plain old query until this gets fixed in CR
 
+    db_1row get_folder_info "" -array folder
+    
     #Sigh, there seems to be no consitancy as to how name, title, label and pretty_name are used.
 
     # cr_folders.label is the pretty name
