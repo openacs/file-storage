@@ -92,7 +92,4 @@ drop function inline_0();
 
 \i file-storage-package-create.sql
 
-\i file-storage-simple-create.sql
-\i file-storage-simple-package-create.sql
-
 \i file-storage-views-create.sql
