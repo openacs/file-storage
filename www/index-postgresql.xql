@@ -12,9 +12,7 @@
        		r.mime_type as type,
        		to_char(o.last_modified,'YYYY-MM-DD HH24:MI') as last_modified,
        		-- dbms_lob.getlength(r.content) as content_size,
-		-- instead of above, we rely on CR to calculate for us 
-		-- the size of r.content. 	
-		r.content_length as content_size,
+	        lob_length(r.lob) as content_size,
        		1 as ordering_key
 	from   cr_items i left join cr_revisions r on (i.live_revision = r.revision_id), acs_objects o
 	where  i.item_id       = o.object_id
