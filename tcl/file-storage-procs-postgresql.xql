@@ -79,20 +79,19 @@
     	select (case when content_item__get_content_type(i.item_id) = 'content_folder' 
 	             then '?folder_id=' 
 	             else 'file?file_id=' 
-                end) || i.item_id,
-           	content_item__get_title(i.item_id)
+                end) || j.item_id,
+           	content_item__get_title(j.item_id)
         from   cr_items i,cr_items j
-        where  i.item_id not in (select i2.item_id
-        		         from   cr_items i2, cr_items i3
-			         where i2.tree_sortkey = file_storage__get_root_folder([ad_conn package_id])
-				 and i3.tree_sortkey <= i2.tree_sortkey
-				 and i2.tree_sortkey like (i3.tree_sortkey || '%')
-				 order by i2.tree_sortkey
+        where  j.item_id not in (select o2.item_id
+        		         from   cr_items o1, cr_items o2
+			         where o1.item_id = file_storage__get_root_folder([ad_conn package_id])
+				 and o2.tree_sortkey <= o1.tree_sortkey
+				 and o1.tree_sortkey like (o2.tree_sortkey || '%')
 				)
-	and i.tree_sortkey = :start_id
+	and i.item_id = :start_id
 	and j.tree_sortkey <= i.tree_sortkey
 	and i.tree_sortkey like (j.tree_sortkey || '%')
-    	order by i.tree_sortkey desc
+    	order by j.tree_sortkey desc
 
       </querytext>
 </fullquery>
