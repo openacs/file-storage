@@ -37,7 +37,7 @@ if {$root_folders_count > 0} {
     ad_script_abort
 }
 
-set object_id_list [join $object_id " ',' "]
+set object_id_list [join $object_id "','"]
 
 db_multirow -extend {delete_message} delete_list get_to_be_deleted {} {
 	  if {$delete_p} {
