@@ -18,7 +18,7 @@
       <querytext>
       
     	begin
-        	:1 := content_folder.get_label(:folder_id);
+        	:1 := file_storage.get_folder_name(:folder_id);
     	end;
 
       </querytext>
@@ -68,7 +68,7 @@
       <querytext>
 
       	begin
-	    :1 := content_item.get_title(:item_id);
+	    :1 := file_storage.get_title(:item_id);
 	end;
 
       </querytext>
@@ -78,11 +78,11 @@
 <fullquery name="fs_context_bar_list.context_bar">      
       <querytext>
       
-    	select case when content_item.get_content_type(i.item_id) = 'content_folder' 
-	            then '?folder_id=' 
-	             else 'file?file_id=' 
+    	select case when file_storage.get_content_type(i.item_id) = 'content_folder' 
+	            then 'index?folder_id=' 
+	            else 'file?file_id=' 
 	       end || i.item_id,
-               content_item.get_title(i.item_id)
+               file_storage.get_title(i.item_id)
     	from   cr_items i
     	where  item_id not in (
         		       	select i2.item_id

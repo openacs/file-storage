@@ -15,7 +15,7 @@
 <fullquery name="fs_get_folder_name.folder_name">      
       <querytext>
 
-	select content_folder__get_label(:folder_id);
+	select file_storage__get_folder_name(:folder_id);
 
       </querytext>
 </fullquery>
@@ -67,7 +67,7 @@
 <fullquery name="fs_context_bar_list.title">      
       <querytext>
 
-	select content_item__get_title(:item_id);
+	select file_storage__get_title(:item_id)
 
       </querytext>
 </fullquery>
@@ -76,11 +76,11 @@
 <fullquery name="fs_context_bar_list.context_bar">      
       <querytext>
 
-    	select (case when content_item__get_content_type(j.item_id) = 'content_folder' 
-	             then '?folder_id=' 
+    	select (case when file_storage__get_content_type(j.item_id) = 'content_folder' 
+	             then 'index?folder_id=' 
 	             else 'file?file_id=' 
                 end) || j.item_id,
-           	content_item__get_title(j.item_id)
+           	file_storage__get_title(j.item_id)
         from   cr_items i,cr_items j
         where  j.item_id not in (select o2.item_id
         		         from   cr_items o1, cr_items o2
