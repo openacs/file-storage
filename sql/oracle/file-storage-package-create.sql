@@ -55,7 +55,7 @@ as
     procedure rename_file(
         --
         -- Rename a file and all
-        -- Wrapper to content_item__rename
+        -- Wrapper to content_item.edit_name
         --
         file_id in cr_items.item_id%TYPE,
         title in cr_items.name%TYPE
@@ -102,7 +102,7 @@ as
 
     function get_folder_name(
        --
-       -- Wrapper for content_folder__get_label
+       -- Wrapper for content_folder.get_label
        --
        folder_id in cr_folders.folder_id%TYPE
     ) return cr_folders.label%TYPE;
@@ -276,7 +276,7 @@ as
     procedure delete_file(
         --
         -- Delete a file and all its version
-        -- Wrapper to content_item__delete
+        -- Wrapper to content_item.delete
         --
         file_id in cr_items.item_id%TYPE
     )
@@ -288,14 +288,14 @@ as
     procedure rename_file(
         --
         -- Rename a file and all
-        -- Wrapper to content_item__rename
+        -- Wrapper to content_item.edit_name
         --
         file_id in cr_items.item_id%TYPE,
         title in cr_items.name%TYPE
     )
     is
     begin
-        content_item.rename(
+        content_item.edit_name(
             item_id => file_storage.rename_file.file_id,
             name => file_storage.rename_file.title
         );
