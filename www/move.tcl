@@ -47,7 +47,7 @@ if {[info exists folder_id]} {
     # DaveB: I think it should be DELETE instead of WRITE
     # but the existing file-move page checks for WRITE
       
-    template::multirow::foreach move_objects {
+    template::multirow foreach move_objects {
  	db_exec_plsql move_item {}
      }
 
