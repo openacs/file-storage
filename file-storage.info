@@ -18,9 +18,7 @@
         <requires url="acs-content-repository" version="4.6.5"/>
         <requires url="acs-kernel" version="4.6.2"/>
 
-        <files>
             <!-- No files -->
-        </files>
         <callbacks>
         </callbacks>
         <parameters>
