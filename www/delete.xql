@@ -11,8 +11,7 @@
     <querytext>
       select count(folder_id)
       from fs_root_folders
-      where folder_id in ([template::util::tcl_to_sql_list
-      $object_id])
+      where folder_id in ([template::util::tcl_to_sql_list $object_id])
     </querytext>
   </fullquery>
   

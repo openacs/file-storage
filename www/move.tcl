@@ -14,6 +14,7 @@ ad_page_contract {
     {show_items:boolean 0}
 }
 
+set objects_to_move $object_id
 set user_id [ad_conn user_id]
 
 set allowed_count 0
@@ -48,7 +49,14 @@ if {[info exists folder_id]} {
     # but the existing file-move page checks for WRITE
       
     template::multirow foreach move_objects {
+      db_transaction {
  	db_exec_plsql move_item {}
+      } on_error {
+         set folder_name "[_ file-storage.folder]"
+         set folder_link "<a href=\"index?folder_id=$folder_id\">$folder_name</a>"
+         ad_return_complaint 1 "[_ file-storage.lt_The_folder_link_you_s]"
+         ad_script_abort
+         }
      }
 
      ad_returnredirect $return_url
@@ -79,8 +87,10 @@ if {[info exists folder_id]} {
             }
         }
     set root_folder_id [fs::get_root_folder]
+    set object_id $objects_to_move
     db_multirow -extend {move_url} folder_tree get_folder_tree "" {
 	set move_url [export_vars -base "move" { object_id:multiple folder_id return_url }]
+
 	
     }
 
