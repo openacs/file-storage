@@ -1,7 +1,7 @@
 -- Add user_id and IP to update_last_modified
 -- $Id
 
-create function file_storage__new_file(
+create or replace function file_storage__new_file(
        -- 
        -- Create a file in CR in preparation for actual storage
        -- Wrapper for content_item__new
@@ -73,7 +73,7 @@ begin
 end;' language 'plpgsql';
     
 
-create function file_storage__copy_file(
+create or replace function file_storage__copy_file(
        --
        -- Copy a file, but only copy the live_revision
        --
@@ -175,7 +175,7 @@ begin
 end;' language 'plpgsql';
 
 
-create function file_storage__move_file (
+create or replace function file_storage__move_file (
        --
        -- Move a file (ans all its versions) to a different folder.
        -- Wrapper for content_item__move
@@ -200,7 +200,7 @@ begin
         return 0;
 end;' language 'plpgsql';
 
-create function file_storage__new_version (
+create or replace function file_storage__new_version (
        --
        -- Create a new version of a file
        -- Wrapper for content_revision__new
