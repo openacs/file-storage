@@ -359,7 +359,7 @@ begin
                 v_new_lob_id := empty_lob();
 
                 -- copy the blob
-                select lob_copy(v_lob_id,v_new_lob_id);
+                perform lob_copy(v_lob_id,v_new_lob_id);
 
                 -- Update the lob id on the new version
                 update cr_revisions
@@ -402,7 +402,7 @@ declare
         move_file__target_folder_id     alias for $2;
 begin
 
-        select content_item__move(
+        perform content_item__move(
                move_file__file_id,              -- item_id
                move_file__target_folder_id      -- target_folder_id
                );
