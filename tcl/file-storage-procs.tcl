@@ -301,6 +301,7 @@ namespace eval fs {
     ad_proc -public get_folder_contents {
         {-folder_id:required}
         {-user_id ""}
+        {-n_past_days "-1"}
     } {
         Retrieve the contents of the specified folder in the form of a list
         of ns_sets, one for each row returned. The keys for each row are as
@@ -312,6 +313,7 @@ namespace eval fs {
         @param folder_id The folder for which to retrieve contents
         @param user_id The viewer of the contents (to make sure they have
                        permission)
+        @param n_past_days Mark files that are newer than the past N days as new
     } {
         if {[empty_string_p $user_id]} {
             set user_id [acs_magic_object "the_public"]
