@@ -46,6 +46,7 @@
                    fs_folders_and_files.live_revision,
                    fs_folders_and_files.type,
                    to_char(fs_folders_and_files.last_modified, 'YYYY-MM-DD HH24:MI') as last_modified,
+                   case when fs_folders_and_files.last_modified >= (sysdate - :n_past_days) then 1 else 0 end as new_p,
                    fs_folders_and_files.content_size,
                    decode(acs_permission.permission_p(fs_folders_and_files.file_id, :user_id, 'write'), 'f', 0, 1) as write_p,
                    decode(acs_permission.permission_p(fs_folders_and_files.file_id, :user_id, 'delete'), 'f', 0, 1) as delete_p,
