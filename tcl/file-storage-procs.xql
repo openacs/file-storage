@@ -64,8 +64,8 @@
     <fullquery name="fs::get_folder_contents_count.select_folder_contents_count">
         <querytext>
             select count(*)
-            from fs_folders
-            where folder_id = :folder_id
+            from fs_objects
+            where parent_id = :folder_id
         </querytext>
     </fullquery>
 
