@@ -32,7 +32,7 @@ if {[empty_string_p $pretty_name]} {
     return -code error "[_ file-storage.No_such_type]"
 }
 
-set context [fs_context_bar_list -final [_ [ad_conn locale] file-storage.Add_pretty_name "" [list pretty_name $pretty_name]]" $folder_id]
+set context [fs_context_bar_list -final [_ file-storage.Add_pretty_name [list pretty_name $pretty_name]] $folder_id]
 
 # Should probably generate the item_id and version_id now for
 # double-click protection
@@ -42,4 +42,3 @@ set context [fs_context_bar_list -final [_ [ad_conn locale] file-storage.Add_pre
 if {[empty_string_p $title]} {
     set lock_title_p 0
 }
-

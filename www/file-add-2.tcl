@@ -21,7 +21,7 @@ ad_page_contract {
 	set n_bytes [file size ${upload_file.tmpfile}]
 	set max_bytes [ad_parameter "MaximumFileSize"]
 	if { $n_bytes > $max_bytes } {
-	    ad_complain [_ [ad_conn locale] file-storage.lt_Your_file_is_larger_t_1] "" [list max_number_of_bytes [util_commify_number $max_bytes]]]
+	    ad_complain [_ file-storage.lt_Your_file_is_larger_t_1] [list max_number_of_bytes [util_commify_number $max_bytes]]]
 	}
     }
 } 
@@ -97,7 +97,7 @@ db_transaction {
  
        set folder_name "[_ file-storage.folder]"
        set folder_link "<a href=\"index?folder_id?$folder_id\">$folder_name</a>"
-       ad_return_complaint 1 "[_ [ad_conn locale] file-storage.lt_You_probably_clicked_ "" [list folder_link $folder_link]]"
+       ad_return_complaint 1 "[_ file-storage.lt_You_probably_clicked_ [list folder_link $folder_link]]"
 
        ad_script_abort
 }
