@@ -31,4 +31,5 @@ select acs_sc_impl_alias__new(
 );
 
 
+select acs_sc_binding__new('FtsContentProvider','file_storage_object');
 
