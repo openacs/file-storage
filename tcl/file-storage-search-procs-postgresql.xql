@@ -29,9 +29,9 @@
        	  (select i2.parent_id
 	     from cr_items i1, cr_items i2, cr_revisions r
 	    where i1.item_id = r.item_id
-	      and r.revision_id = $revision_id
+	      and r.revision_id = :revision_id
               and i2.tree_sortkey <= i1.tree_sortkey
-	      and i1.tree_sortkey like (i2.tree_sortkey || '%')) as i
+	      and i1.tree_sortkey i2.tree_sortkey and tree_right(i2.tree_sortkey)) as i
   	  where f.folder_id = i.parent_id
        </querytext>
 </fullquery>
