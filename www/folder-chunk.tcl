@@ -62,15 +62,15 @@ set actions [list]
 # for now, invite users to upload, and then they will be asked to
 # login if they are not.
 
- lappend actions "Upload File" file-add?[export_vars folder_id] "Upload a file in this folder" "Add Link" simple-add?[export_vars folder_id] "Add a link to a web page" "\#file-storage.New_Folder\#" folder-create?[export_vars {{parent_id $folder_id}}] "\#file-storage.Create_a_new_folder\#"
+lappend actions "\#file-storage.Upload_File\#" ${fs_url}file-add?[export_vars folder_id] "Upload a file in this folder" "Add Link" ${fs_url}simple-add?[export_vars folder_id] "Add a link to a web page" "\#file-storage.New_Folder\#" ${fs_url}folder-create?[export_vars {{parent_id $folder_id}}] "\#file-storage.Create_a_new_folder\#"
 
 
 if {$delete_p} {
-    lappend actions "Delete Folder" folder-delete?[export_vars folder_id] "Delete folder"
+    lappend actions "Delete Folder" ${fs_url}folder-delete?[export_vars folder_id] "Delete folder"
 }
 if {$admin_p} {
     set return_url [ad_conn url]
-    lappend actions "Rename Folder" "folder-edit?folder_id=$folder_id" "Change the name of this folder"
+    lappend actions "Rename Folder" "${fs_url}folder-edit?folder_id=$folder_id" "Change the name of this folder"
     lappend actions "Folder Permissions" "/permissions/one?[export_vars -override {{object_id $folder_id}} {return_url}]" "Change the permissions of this folder"
 }
 
@@ -140,19 +140,19 @@ db_multirow -extend { icon last_modified_pretty content_size_pretty properties_l
 	    set properties_link ""
 	    set properties_url ""
 	    set icon "/resources/file-storage/folder.gif"
-	    set file_url "index?[export_vars {{folder_id $object_id}}]"
+	    set file_url "${fs_url}index?[export_vars {{folder_id $object_id}}]"
 	}
 	url {
 	    set properties_link "properties"
-	    set properties_url "simple?[export_vars object_id]"
+	    set properties_url "${fs_url}simple?[export_vars object_id]"
 	    set icon "/resources/url-button.gif"
-	    set file_url ${url}
+	    set file_url ${fs_url}${url}
 	}
 	default {
 	    set properties_link [_ file-storage.properties]
-	    set properties_url "file?[export_vars {{file_id $object_id}}]"
+	    set properties_url "${fs_url}file?[export_vars {{file_id $object_id}}]"
 	    set icon "/resources/file-storage/file.gif"
-	    set file_url "view/${file_url}"
+	    set file_url "${fs_url}view/${file_url}"
 	}
     }
     
