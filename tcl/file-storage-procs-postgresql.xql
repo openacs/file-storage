@@ -71,16 +71,16 @@
 <fullquery name="fs_context_bar_list.context_bar">      
       <querytext>
 
-    	select (case when file_storage__get_content_type(j.item_id) = 'content_folder' 
+    	select (case when file_storage__get_content_type(i.item_id) = 'content_folder' 
 	             then 'index?folder_id=' 
 	             else 'file?file_id=' 
-                end) || j.item_id,
-           	file_storage__get_title(j.item_id)
-        from   cr_items i, cr_items j, cr_items k
-        where i.item_id = :start_id
-          and k.item_id = file_storage__get_root_folder([ad_conn package_id])
-          and j.tree_sortkey between tree_left(k.tree_sortkey) and i.tree_sortkey
-          and tree_ancestor_p(j.tree_sortkey, i.tree_sortkey)
+                end) || i.item_id,
+           	file_storage__get_title(i.item_id)
+        from (select tree_ancestor_keys(cr_items_get_tree_sortkey(:start_id)) as tree_sortkey) parents,
+          (select tree_sortkey from cr_items where item_id = file_storage__get_root_folder([ad_conn package_id])) root,
+          cr_items i
+        where i.tree_sortkey = parents.tree_sortkey
+          and i.tree_sortkey > root.tree_sortkey
     	order by j.tree_sortkey asc
 
       </querytext>
