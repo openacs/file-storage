@@ -667,6 +667,8 @@ end;' language 'plpgsql';
 
 
 -- JS: BEFORE DELETE TRIGGER to clean up CR entries (except root folder)
+
+drop function fs_package_items_delete_trig();
 create or replace function fs_package_items_delete_trig () returns opaque as '
 declare
 
@@ -710,11 +712,12 @@ begin
 
 end;' language 'plpgsql';
 
-\i ../file-storage-simple-create.sql
-\i ../file-storage-simple-package-create.sql
+create trigger fs_package_items_delete_trig before delete
+on fs_root_folders for each row 
+execute procedure fs_package_items_delete_trig ();
 
-drop view fs_folders;
-drop view fs_files;
-drop view fs_folders_and_files;
+drop view fs_folders cascade;
+drop view fs_files cascade;
+drop view fs_folders_and_files cascade;
 
 \i ../file-storage-views-create.sql
