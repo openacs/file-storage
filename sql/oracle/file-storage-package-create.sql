@@ -86,6 +86,10 @@ as
         item_id in cr_items.item_id%TYPE
     ) return varchar;
 
+    function get_parent_id(
+	item_id in cr_items.item_id%TYPE
+    ) return cr_items.item_id%TYPE;
+
     function get_content_type(
         --
         -- Wrapper for content_item. get_content_type
@@ -495,6 +499,20 @@ as
 
         return v_title;
     end get_title;
+
+    function get_parent_id(
+        item_id in cr_items.item_id%TYPE
+    ) return cr_items.item_id%TYPE
+    is
+        v_parent_id             cr_items.item_id%TYPE;
+    begin
+        select parent_id
+        into v_parent_id
+        from cr_items
+        where item_id = get_parent_id.item_id;
+
+	return v_parent_id;
+    end get_parent_id;
 
     function get_content_type(
         --

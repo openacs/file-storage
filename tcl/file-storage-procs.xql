@@ -17,15 +17,15 @@
         </querytext>
     </fullquery>
 
-    <fullquery name="fs_maybe_create_new_mime_type.mime_type_exists">      
+    <fullquery name="fs_maybe_create_new_mime_type.select_mime_type">      
         <querytext>
-            select count(*)
+	        select mime_type
             from cr_mime_types
-            where mime_type = :mime_type
+        	where file_extension = :file_extension
         </querytext>
     </fullquery>
 
-    <fullquery name="fs_maybe_create_new_mime_type.new_mime_type">      
+    <fullquery name="fs_maybe_create_new_mime_type.insert_mime_type">      
         <querytext>
             insert into cr_mime_types
             (mime_type, file_extension)

@@ -1,6 +1,6 @@
 <if @contents:rowcount@ gt 0>
-  <table width="85%" cellpadding="5" cellspacing="5">
-    <tr>
+  <table width="85%" class="table-display" cellpadding="5" cellspacing="0">
+    <tr class="table-header">
       <td>&nbsp;</td>
       <td>Name</td>
       <td>Action</td>
@@ -9,12 +9,17 @@
       <td>Last Modified</td>
     </tr>
 <multiple name="contents">
-    <tr>
+<if @contents.rownum@ odd>
+    <tr class="oddrow">
+</if>
+<else>
+    <tr class="evenrow">
+</else>
 <if @contents.type@ eq "folder">
-      <td><img src="graphics/folder.gif"></td>
+      <td><a href="@fs_url@index?folder_id=@contents.object_id@&n_past_days=@n_past_days@"><img src="graphics/folder.gif" border=0 alt="folder"></a></td>
       <td>
-        <a href="index?folder_id=@contents.object_id@&n_past_days=@n_past_days@">@contents.name@</a>
-<if @contents.new_p@ and @contents.content_size@ gt 0>(&nbsp;new&nbsp;)</if>
+        <a href="@fs_url@index?folder_id=@contents.object_id@&n_past_days=@n_past_days@">@contents.name@</a>
+<if @contents.new_p@ and @contents.content_size@ gt 0><img src="graphics/new.gif" alt="new"></if>
       </td>
       <td>&nbsp;</td>
       <td>
@@ -25,21 +30,21 @@
 </if>
 <else>
 <if @contents.type@ eq "url">
-      <td><img src="graphics/file.gif"></td>
+      <td><a href="@fs_url@url-goto?url_id=@contents.object_id@"><img src="graphics/file.gif" alt="file" border=0></a></td>
       <td>
-      <a href="url-goto?url_id=@contents.object_id@">@contents.name@</a>
-<if @contents.new_p@>(&nbsp;new&nbsp;)</if>
+      <a href="@fs_url@url-goto?url_id=@contents.object_id@">@contents.name@</a>
+<if @contents.new_p@><img src="graphics/new.gif" alt="new"></if>
       </td>
-      <td>
-        <small>[
+      <td colspan="2">
+        <small>
 <if @contents.write_p@ or @contents.admin_p@>
-          <a href="simple-edit?object_id=@contents.object_id@">
+          [<a href="@fs_url@simple-edit?object_id=@contents.object_id@">
             edit
           </a>
 </if>
 <if @contents.delete_p@ or @contents.admin_p@>
           |
-          <a href="simple-delete?folder_id=@folder_id@&object_id=@contents.object_id@">
+          <a href="@fs_url@simple-delete?folder_id=@folder_id@&object_id=@contents.object_id@">
             delete
           </a>
 </if>
@@ -50,18 +55,18 @@
       <td>@contents.last_modified@</td>
 </if>
 <else>
-      <td><img src="graphics/file.gif"></td>
+      <td><a href="@fs_url@download/@contents.file_upload_name@?version_id=@contents.live_revision@"><img src="graphics/file.gif" alt="file" border="0"></a></td>
       <td>
-        <a href="download/index?version_id=@contents.live_revision@">
+        <a href="@fs_url@download/@contents.file_upload_name@?version_id=@contents.live_revision@">
           @contents.name@
         </a>
 <if @contents.new_p@>
-        (&nbsp;new&nbsp;)
+        <img src="graphics/new.gif" alt="new">
 </if>
       </td>
       <td>
         <small>[
-          <a href="file?file_id=@contents.object_id@">
+          <a href="@fs_url@file?file_id=@contents.object_id@">
             view details
           </a>
         ]</small>

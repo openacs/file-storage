@@ -10,7 +10,7 @@
 -- @cvs-id $Id$
 --
 
-select define_function_args('fs_simple_object__new','object_id,object_type;fs_simple_object,folder_id,name,description,creation_date,creation_user,creation_ip,context_id');
+select define_function_args('fs_simple_object__new','object_id,object_type,fs_simple_object,folder_id,name,description,creation_date,creation_user,creation_ip,context_id');
 
 create function fs_simple_object__new(integer,varchar,integer,varchar,varchar,timestamp,integer,varchar,integer)
 returns integer as '

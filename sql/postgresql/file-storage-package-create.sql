@@ -437,8 +437,7 @@ begin
       where folder_id = get_title__item_id;
   else if v_content_type = ''content_symlink'' 
        then
-         select label into v_title f
-         rom cr_symlinks 
+         select label into v_title from cr_symlinks 
          where symlink_id = get_title__item_id;
        else
          select name into v_title
@@ -450,6 +449,23 @@ begin
   return v_title;
 
 end;' language 'plpgsql';
+
+create function file_storage__get_parent_id (
+        integer --  item_id in cr_items.item_id%TYPE
+     ) returns integer as ' -- cr_items.item_id%TYPE
+     declare 
+         get_parent_id__item_id alias for $1;
+         v_parent_id          cr_items.item_id%TYPE;
+     begin
+
+         select parent_id
+         into v_parent_id
+         from cr_items
+         where item_id = get_parent_id__item_id;
+
+       return v_parent_id;
+
+end;'language 'plpgsql';
 
 
 create function file_storage__get_content_type (

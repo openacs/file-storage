@@ -193,29 +193,41 @@ ad_proc fs_maybe_create_new_mime_type {
     when we encounter something we haven't seen before.
 } {
 
-    set mime_type [ns_guesstype $file_name]
-    set extension [string trimleft [file extension $file_name] "."]
+    set file_extension [string trimleft [file extension $file_name] "."]
 
-    # don't know how to generate nice names like "JPEG Image"
-    # have to leave it blank for now
+    if {[empty_string_p $file_extension]} {
+	return "*/*"
+    }
 
-    #set pretty_mime_type ???
-
-    if { [db_string mime_type_exists {
-        select count(*)
+    if {![db_0or1row select_mime_type "select mime_type
         from cr_mime_types
-        where mime_type = :mime_type
-    }] == 0 } {
+        where file_extension = :file_extension"]} {
+
+	# A mime type for this file extension does not exist
+	# in the database.  Check to see AOLServer can 
+	# generate a mime type.
+
+	set mime_type [ns_guesstype $file_name]
+	
+	# Note: If AOLServer can't determine a mime type, 
+	# ns_guesstype will return */*. We still record
+	# a mime type for this file extension.  At a later
+	# date, the mime type for the file extension may be
+	# updated and, as a result, the files with that
+	# file extension will be associated with the
+	# proper mime types.
+
         db_dml new_mime_type {
             insert into cr_mime_types
             (mime_type, file_extension)
             values
-            (:mime_type, :extension)
+	    (:mime_type, :file_extension)
         }
     }
-
     return $mime_type
 }
+
+
 
 namespace eval fs {
 
@@ -357,12 +369,15 @@ namespace eval fs {
         {-user_id ""}
         {-n_past_days "99999"}
     } {
+        WARNING: This proc is not scalable because it does too many permission checks. 
+
         Retrieve the contents of the specified folder in the form of a list
         of ns_sets, one for each row returned. The keys for each row are as
         follows:
 
             object_id, name, live_revision, type,
-            last_modified, new_p, content_size, write_p, delete_p, admin_p
+            last_modified, new_p, content_size, file_upload_name
+            write_p, delete_p, admin_p, 
 
         @param folder_id The folder for which to retrieve contents
         @param user_id The viewer of the contents (to make sure they have
