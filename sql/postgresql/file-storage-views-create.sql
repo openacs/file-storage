@@ -88,7 +88,7 @@ as
         when cr_items.content_type = 'content_folder' then 0
         else 1
       end as sort_key,
-	cr_mime_types.label as pretty_type
+      cr_mime_types.label as pretty_type
 
     from cr_items left join cr_extlinks on (cr_items.item_id = cr_extlinks.extlink_id)
       
