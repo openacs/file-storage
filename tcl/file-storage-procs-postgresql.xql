@@ -128,4 +128,12 @@
         </querytext>
     </fullquery>
 
+    <fullquery name="fs::publish_versioned_object_to_file_system.select_object_content">
+        <querytext>
+            select lob
+            from cr_revisions
+            where revision_id = $live_revision
+        </querytext>
+    </fullquery>
+
 </queryset>
