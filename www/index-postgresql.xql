@@ -16,7 +16,7 @@
 	where  i.item_id       = o.object_id
 	and    i.parent_id     = :folder_id
 	and    acs_permission__permission_p(i.item_id, :user_id, 'read') = 't'
-	and    i.content_type = 'content_revision'
+	and    i.content_type = 'file_storage_object'
 	UNION
 	select 	i.item_id as file_id,
        		f.label as name,
