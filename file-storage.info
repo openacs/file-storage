@@ -7,14 +7,14 @@
     <initial-install-p>f</initial-install-p>
     <singleton-p>f</singleton-p>
     
-    <version name="5.1.0a15" url="http://openacs.org/repository/download/apm/file-storage-5.1.0a15.apm">
+    <version name="5.1.5d1" url="http://openacs.org/repository/download/apm/file-storage-5.1.5d1.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Collaborative document storage</summary>
         <release-date>2004-07-21</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/plain">Provides a versioned document store with storage in the filesystem or database (depending on configuration).  Documents and folders can be permissioned and folders downloaded.</description>
 
-        <provides url="file-storage" version="5.1.0a15"/>
+        <provides url="file-storage" version="5.1.5d1"/>
         <requires url="acs-content-repository" version="5.1.0d1"/>
         <requires url="acs-kernel" version="5.1.0d1"/>
         <requires url="oacs-dav" version="1.0b2"/>
@@ -37,6 +37,9 @@
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="StoreFilesInDatabaseP"  default="0" description="Flag to determine the storage type. A flag of 1 (true) will store the files in the database. If 0 (false) files are stored in the filesystem. ***This parameter should only be changed at package instance creation.***"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="UnzipBinary"  default="unzip" description="The path and name of the unzip binary to unpack zip files containing multiple files."/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="ExposeRssP"  default="0" description="Should we offer navigation to set up RSS feeds for folders?"/>
+	    <parameter datatype="number"  min_n_values="1"  max_n_values="1"
+            name="BehaveLikeFilesystemP"  default="1" description="Should this
+            file storage instance behave like a file system?" />
         </parameters>
     </version>
 </package>
