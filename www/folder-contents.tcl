@@ -111,6 +111,6 @@ set table [ad_table \
 ]
 
 set folder_name [fs::get_folder_name -folder_id $folder_id]
-set context_bar [fs_context_bar_list $folder_id]
+set context_bar [fs_context_bar_list -final Contents $folder_id]
 
 ad_return_template
