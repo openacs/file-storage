@@ -1,4 +1,4 @@
-<master src="master">
+<master>
 <property name="title">Create @pretty_name@</property>
 <property name="context">@context@</property>
 

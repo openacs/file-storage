@@ -1,4 +1,4 @@
-<master src="master">
+<master>
 <property name="title">Rename @title@</property>
 <property name="header">Rename @title@</property>
 <property name="context">@context@</property>

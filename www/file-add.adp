@@ -1,4 +1,4 @@
-<master src="master">
+<master>
 <property name="title">Upload New File</property>
 <property name="context">@context@</property>
 

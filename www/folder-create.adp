@@ -1,4 +1,4 @@
-<master src="master">
+<master>
 <property name="title">Create New Folder</property>
 <property name="context">@context@</property>
 

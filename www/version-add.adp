@@ -1,4 +1,4 @@
-<master src="master">
+<master>
 <property name="title">Upload New Version of @title@</property>
 <property name="context">@context@</property>
 
