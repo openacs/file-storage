@@ -40,6 +40,7 @@ ad_proc -private fs::install::register_implementation {
         name "file_storage_object"
         aliases {
             get fs::impl::fs_object::get
+            head fs::impl::fs_object::head	    
             put fs::impl::fs_object::put
 	    propfind fs::impl::fs_object::propfind
 	    delete fs::impl::fs_object::delete
