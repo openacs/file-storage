@@ -81,10 +81,10 @@ if {$admin_p} {
 
 set elements [list icon \
 		  [list label "" \
-		       display_template {<a href="@contents.file_url@"><img src="@contents.icon@"  border=0 alt="#file-storage.@contents.type@#" /></a>}] \
+		       display_template {<a href="@contents.file_url@"><img src="@contents.icon@"  border=0 alt="#file-storage.@contents.pretty_type@#" /></a>}] \
 		  name \
 		  [list label [_ file-storage.Name] \
-		       link_url_col file_url \
+		       display_template {<a href="@contents.file_url@">@contents.name@</a><br/><if @contents.name@ ne @contents.file_upload_name@><span style="color: \#999;">@contents.file_upload_name@</span></if>} \
 		       orderby_desc {fs_objects.name desc} \
 		       orderby_asc {fs_objects.name asc}] \
 		  content_size_pretty \
@@ -92,8 +92,9 @@ set elements [list icon \
 		       orderby_desc {content_size desc} \
 		       orderby_asc {content_size asc}] \
 		  type [list label [_ file-storage.Type] \
-			    orderby_desc {type desc} \
-			    orderby_asc {type asc}] \
+			    display_col pretty_type \
+			    orderby_desc {(sort_key =  0),pretty_type  desc} \
+			    orderby_asc {sort_key, pretty_type asc}] \
 		  last_modified_pretty \
 		  [list label [_ file-storage.Last_Modified] \
 		       orderby_desc {last_modified_ansi desc} \
@@ -128,13 +129,19 @@ if {[string equal $orderby ""]} {
 
 db_multirow -extend { icon last_modified_pretty content_size_pretty properties_link properties_url} contents select_folder_contents {} {
     set last_modified_ansi [lc_time_system_to_conn $last_modified_ansi]
-
+    
     set last_modified_pretty [lc_time_fmt $last_modified_ansi "%x %X"]
     if {[string equal $type "folder"]} {
         set content_size_pretty [lc_numeric $content_size]
 	append content_size_pretty " [_ file-storage.items]"
+	set pretty_type "Folder"
     } else {
-        set content_size_pretty [lc_numeric [expr $content_size / 1024 ]]
+	set type [string trimleft [file extension $file_upload_name] . ]
+	if {$content_size > 0 && $content_size < 1024} {
+	    set content_size_pretty [lc_numeric 1]
+	} else {
+	    set content_size_pretty [lc_numeric [expr $content_size / 1024 ]]
+	}
 	append content_size_pretty " [_ file-storage.kb]"
     }
 
