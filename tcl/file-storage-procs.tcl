@@ -320,4 +320,21 @@ namespace eval fs {
         return [db_list_of_ns_sets get_folder_contents {}]
     }
 
+    ad_proc -public get_folder_contents_count {
+        {-folder_id:required}
+        {-user_id ""}
+    } {
+        Retrieve the count of contents of the specified folder.
+
+        @param folder_id The folder for which to retrieve contents
+        @param user_id The viewer of the contents (to make sure they have
+                       permission)
+    } {
+        if {[empty_string_p $user_id]} {
+            set user_id [acs_magic_object "the_public"]
+        }
+
+        return [db_string get_folder_contents_count {}]
+    }
+
 }

@@ -47,8 +47,6 @@ set delete_p [ad_permission_p $folder_id delete]
 
 set package_id [ad_conn package_id]
 
-template::util::list_of_ns_sets_to_multirow \
-    -rows [fs::get_folder_contents -folder_id $folder_id -user_id $user_id] \
-    -var_name "file"
+set n_contents [fs::get_folder_contents_count -folder_id $folder_id -user_id $user_id]
 
 ad_return_template
