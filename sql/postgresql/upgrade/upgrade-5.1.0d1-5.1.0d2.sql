@@ -168,7 +168,7 @@ end;' language 'plpgsql';
 create or replace function file_storage__rename_file (
        --
        -- Rename a file and all
-       -- Wrapper to content_item__edit_name
+       -- Wrapper to content_item__rename
        --
        integer,         -- cr_items.item_id%TYPE,
        varchar          -- cr_items.name%TYPE
@@ -179,7 +179,7 @@ declare
 
 begin
 
-        return content_item__edit_name(
+        return content_item__rename(
                rename_file__file_id,  -- item_id
                rename_file__name     -- name
                );
