@@ -14,6 +14,7 @@ ad_page_contract {
     {show_items:boolean 0}
 }
 
+set objects_to_move $object_id
 set user_id [ad_conn user_id]
 
 set allowed_count 0
@@ -79,8 +80,10 @@ if {[info exists folder_id]} {
             }
         }
     set root_folder_id [fs::get_root_folder]
+    set object_id $objects_to_move
     db_multirow -extend {move_url} folder_tree get_folder_tree "" {
 	set move_url [export_vars -base "move" { object_id:multiple folder_id return_url }]
+
 	
     }
 
