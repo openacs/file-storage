@@ -19,7 +19,7 @@
        		acs_permission.permission_p(:file_id,:user_id,'write') as write_p,
        		acs_permission.permission_p(:file_id,:user_id,'delete') as delete_p,
        		acs_permission.permission_p(:file_id,:user_id,'admin') as admin_p,
-                content_item.get_path(o.object_id, :root_folder_id) as file_url
+                content_item.get_path(o.object_id, :root_folder_id) as file_url,	       i.live_revision
 	from   acs_objects o, cr_revisions r, cr_items i
 	where  o.object_id = :file_id
 	and    i.item_id   = o.object_id
