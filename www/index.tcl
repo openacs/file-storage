@@ -93,4 +93,6 @@ if { !${root_folder_p}} {
     }
 }
 
+set webdav_url [fs::webdav_url -item_id $folder_id]
+
 ad_return_template

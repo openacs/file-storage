@@ -705,3 +705,42 @@ ad_proc fs::add_version {
 
     return $revision_id
 }
+
+ad_proc fs::webdav_url {
+    -item_id
+    {-root_folder_id ""}
+    {-package_id ""}
+} {
+    Provide URL for webdav access to file or folder
+
+    @param item_id folder_id or item_id of file-storage folder or file
+    @param root_folder_id root folder to resolve URL from
+    
+    @return fully qualified URL for WebDAV access or empty string if
+            item is not WebDAV enabled
+} {
+
+    if {[empty_string_p $package_id]} {
+	set package_id [ad_conn package_id]
+    }
+    
+    if {[empty_string_p $root_folder_id]} {
+	set root_folder_id [fs::get_root_folder -package_id $package_id]
+    }
+
+    if {[string equal "t" [oacs_dav::folder_enabled -folder_id $root_folder_id]]} {
+    
+	set url_stub [item::get_url -root_folder_id $root_folder_id $item_id]
+
+	set package_url [apm_package_url_from_id $package_id]
+
+	set webdav_prefix [oacs_dav::uri_prefix]
+
+	return "[ad_url]${webdav_prefix}${package_url}${url_stub}"
+
+    } else {
+
+	return ""
+	
+    }
+}

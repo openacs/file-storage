@@ -108,7 +108,7 @@
 
     <fullquery name="fs_context_bar_list.title">
         <querytext>
-            select name from cr_items where item_id=:item_id
+            select file_storage__get_title(:item_id)
         </querytext>
     </fullquery>
 
