@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="file-storage" package_version="4.7d3" locale="en_US" charset="ISO-8859-1">
+<message_catalog package_key="file-storage" package_version="5.0.0a2" locale="en_US" charset="ISO-8859-1">
 
   <msg key="Action">Action</msg>
   <msg key="Actions">Actions:</msg>
@@ -73,6 +73,7 @@ This action cannot be reversed.</msg>
 so you cannot delete the file.</msg>
   <msg key="lt_This_folder_contains_">This folder contains items that you do not have permission to
 delete, therefore you cannot delete it.</msg>
+  <msg key="lt_This_is_a_ZIP">This is a ZIP file containing multiple files</msg>
   <msg key="lt_Use_the_Browse_button">Use the &quot;Browse...&quot; button to locate your file, 
     then click &quot;Open&quot;.</msg>
   <msg key="lt_version_not_valid">The specified version is not valid.</msg>
@@ -88,6 +89,7 @@ delete, therefore you cannot delete it.</msg>
   <msg key="lt_Your_search_on_query__1">Your search on &quot;%query%&quot; returned the following files:</msg>
   <msg key="Modified">Modified</msg>
   <msg key="Move">Move</msg>
+  <msg key="Multiple_files">Multiple files:</msg>
   <msg key="Name">Name</msg>
   <msg key="new">new</msg>
   <msg key="No_such_type">No such type</msg>
