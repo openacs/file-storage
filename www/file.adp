@@ -70,7 +70,7 @@
 
 <if @version:rowcount@ eq 0>
   <tr>
-    <td colspan=7><i>There are no versions of this file availible to you</i></td>
+    <td colspan=7><i>There are no versions of this file available to you</i></td>
   </tr>
 </if>
 </table>
