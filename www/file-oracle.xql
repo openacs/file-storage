@@ -31,8 +31,7 @@
        		r.description,
        		acs_permission.permission_p(r.revision_id,:user_id,'admin') as admin_p,
        		acs_permission.permission_p(r.revision_id,:user_id,'delete') as delete_p,
-       		-- dbms_lob.getlength(r.content) as content_size
-		r.content_length as content_size
+       		dbms_lob.getlength(r.content) as content_size
 	from   acs_objects o, cr_revisions r
 	where  o.object_id = r.revision_id
 	and    acs_permission.permission_p(r.revision_id, :user_id, 'read') = 't'

@@ -65,7 +65,11 @@ select r.title,
        r.description,
        acs_permission.permission_p(r.revision_id,:user_id,'admin') as admin_p,
        acs_permission.permission_p(r.revision_id,:user_id,'delete') as delete_p,
-       -- dbms_lob.getlength(r.content) as content_size
+       -- JS: For now, we stick to the original version.  According to DanW, we
+       -- JS: should take care of filling up content_length.   Ideally, we want to abstract away 
+       -- JS: the calculation of content_length independent of storage_type, so eventually this
+       -- JS: will just call the content_length attribute
+       dbms_lob.getlength(r.content) as content_size
        r.content_length as content_size
 from   acs_objects o, cr_revisions r
 where  o.object_id = r.revision_id
