@@ -172,7 +172,7 @@ db_multirow -extend { icon last_modified_pretty content_size_pretty properties_l
 	    set properties_url "${fs_url}file?[export_vars {{file_id $object_id}}]"
 	    set icon "/resources/file-storage/file.gif"
 	    set file_url "${fs_url}view/${file_url}"
-            set download_url "download/?[export_vars {{file_id $object_id}}]"                
+            set download_url "${fs_url}download/?[export_vars {{file_id $object_id}}]"                
 	}
 
     }
