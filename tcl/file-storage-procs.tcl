@@ -949,7 +949,12 @@ ad_proc -public fs::do_notifications {
     append text_version "[_ file-storage.lt_View_folder_contents_]"
 
     set html_version [ad_html_text_convert -from text/plain -to text/html -- $text_version]
-    append html_version "<br /><br />"
+    
+    # For whatever the reason, ad_html_text_convert somehow returns the text with \\n instead of <br /> inserted.
+    # Too busy to find out now. Needs fixing l8er.
+    regsub -all {\\n} $html_version {<br />} html_version
+
+    # append html_version "<br /><br />"
     # Do the notification for the file-storage
     
     notification::new \
@@ -969,7 +974,8 @@ ad_proc -public fs::do_notifications {
                           -short_name fs_fs_notif] \
             -object_id $parent_id \
             -notif_subject "[_ file-storage.lt_File_Storage_Notifica]" \
-            -notif_text $new_content
+            -notif_text $text_version \
+            -notif_html $html_version
         set folder_id $parent_id
     }
 }
