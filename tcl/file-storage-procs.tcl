@@ -258,6 +258,15 @@ ad_proc -public fs::get_root_folder {
     return [db_exec_plsql get_root_folder {}]
 }
 
+ad_proc -public fs::get_parent {
+    -item_id
+} {
+    Get the parent of a given item.
+} {
+    return [db_string get_parent_id ""]
+}
+
+
 ad_proc -public fs::new_folder {
     {-name:required}
     {-pretty_name:required}
@@ -670,31 +679,36 @@ ad_proc -public fs::add_file {
     db_transaction {
 	if {[empty_string_p $item_id] || ![db_string item_exists ""]} {
 	    set item_id [db_exec_plsql create_item ""]
-
+	    
 	    if {![empty_string_p $creation_user]} {
-	    permission::grant -party_id $creation_user -object_id $item_id -privilege admin
+		permission::grant -party_id $creation_user -object_id $item_id -privilege admin
 	    }
+	    set do_notify_here_p "t"
+	} else {
+	    set do_notify_here_p "f"
 	}
-
-
-    set revision_id [fs::add_version \
-			 -name $name \
-			 -parent_id $parent_id \
-			 -tmp_filename $tmp_filename \
-			 -package_id $package_id \
-			 -item_id $item_id \
-			 -creation_user $creation_user \
-			 -creation_ip $creation_ip \
-			 -title $title \
-			 -description $description
-		     ]
+	
+	set revision_id [fs::add_version \
+			     -name $name \
+			     -tmp_filename $tmp_filename \
+			     -package_id $package_id \
+			     -item_id $item_id \
+			     -creation_user $creation_user \
+			     -creation_ip $creation_ip \
+			     -title $title \
+			     -description $description \
+			     -suppress_notify_p $do_notify_here_p
+			]
+	
+	if {[string is true $do_notify_here_p]} {
+	    fs::do_notifications -folder_id $parent_id -filename $title -item_id $revision_id -action "new_file"
+	}
     }
-	return $revision_id
+    return $revision_id
 }
 
 ad_proc fs::add_version {
     -name
-    -parent_id
     -tmp_filename
     -package_id
     {-item_id ""}
@@ -702,6 +716,7 @@ ad_proc fs::add_version {
     {-creation_ip ""}
     {-title ""}
     {-description ""}
+    {-suppress_notify_p "f"}
     
 } {
     Create a new version of a file storage item 
@@ -716,6 +731,7 @@ ad_proc fs::add_version {
 
     set mime_type [cr_filename_to_mime_type -create $name]
     set tmp_size [file size $tmp_filename]
+    set parent_id [get_parent -item_id $item_id]
 
     set revision_id [cr_import_content \
 			 -item_id $item_id \
@@ -735,7 +751,42 @@ ad_proc fs::add_version {
 	db_dml set_live_revision ""
 	db_exec_plsql update_last_modified ""
 
+    if {[string is false $suppress_notify_p]} {
+	fs::do_notifications -folder_id $parent_id -filename $title -item_id $revision_id -action "new_version"
+    }
+
     return $revision_id
+}
+
+ad_proc fs::delete_file {
+    -item_id
+    {-parent_id ""}
+} {
+    Deletes a file and all its revisions
+} {
+    set version_name [get_object_name -object_id $item_id]
+    db_exec_plsql delete_file ""
+
+    if {[empty_string_p $parent_id]} {
+	set parent_id [get_parent -item_id $item_id]
+    }
+    
+    fs::do_notifications -folder_id $parent_id -filename $version_name -item_id $item_id -action "delete_file"
+}
+
+ad_proc fs::delete_version {
+    -item_id
+    -version_id
+} {
+    Deletes a revision. If it was the last revision, it deletes
+    the file as well.
+} {
+    set parent_id [db_exec_plsql delete_version ""]
+    
+    if {$parent_id > 0} {
+	delete_file -item_id $item_id -parent_id $parent_id
+    }
+    return $parent_id
 }
 
 ad_proc fs::webdav_url {
@@ -782,10 +833,8 @@ ad_proc fs::webdav_url {
 ad_proc -public fs::do_notifications {
     {-folder_id:required}
     {-filename:required}
-    {-file_id ""}
-    {-url_id ""}
+    {-item_id:required}
     -action
-    {-version_id ""}
 } {
     Send notifications for file-storage operations.
 
@@ -799,7 +848,6 @@ ad_proc -public fs::do_notifications {
         set action_type {New File Uploaded}
     } elseif {[string equal $action "new_url"]} {
         set action_type {New URL Uploaded}
-        set file_id $url_id
     } elseif {[string equal $action "new_version"]} {
         set action_type {New version of file uploaded}
     } elseif {[string equal $action "delete_file"]} {
@@ -813,14 +861,15 @@ ad_proc -public fs::do_notifications {
     set url "[ad_url]"
     set new_content ""
     if {[string equal $action "new_file"] || [string equal $action "new_url"] || [string equal $action "new_version"]} {
+	ns_log notice "getting owner for $item_id"
         db_1row get_owner_name { }
 
         if {[string equal $action "new_version"]} {
             set sql "select description as description from cr_revisions 
-                           where cr_revisions.revision_id = :version_id"
+                           where cr_revisions.revision_id = :item_id"
         } else {
             set sql "select description as description from cr_revisions 
-                           where cr_revisions.item_id = :file_id"
+                           where cr_revisions.item_id = :item_id"
         }
 
         db_0or1row description $sql
