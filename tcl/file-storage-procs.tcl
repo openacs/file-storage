@@ -193,8 +193,18 @@ ad_proc -public fs::after_mount {
     This sets the cr_items.name to the url of the site
     node.
 } {
-    array set sn [site_node::get -node_id $node_id]
-    regsub -all {/} $sn(name)  {} name
+#    array set sn [site_node::get -node_id $node_id]
+#    regsub -all {/} $sn(name)  {} name
+    # using site_node name for root folder name
+    # doesn't work in the case that multiple instances of
+    # a node called "file-storage" for example, are mounted
+    # all file storage root folders have parent_id=0 and
+    # parent_id, name must be unique.
+
+    # this isn't a problem in resolving URLs because we know which
+    # root folder is associated with a site_node/package_id
+    
+    set name "file-storage-${package_id}"
     fs::new_root_folder \
 	-package_id $package_id \
 	-pretty_name $sn(instance_name) \
@@ -632,7 +642,7 @@ ad_proc -public fs::add_file {
     if {[ad_parameter "StoreFilesInDatabaseP" -package_id $package_id]} {
 	set indbp "t"
     } else {
-	set indpb "f"
+	set indbp "f"
     }
 
     set mime_type [cr_filename_to_mime_type -create $name]
