@@ -3,7 +3,7 @@
 ad_page_contract {
     @author yon (yon@openforce.net)
     @creation-date Feb 22, 2002
-    @version $Id$
+    @cvs-id $Id$
 } -query {
 } -properties {
     folder_name:onevalue
