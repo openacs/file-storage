@@ -7,6 +7,7 @@
   <msg key="Add_File">Datei hochladen</msg>
   <msg key="Add_pretty_name">%pretty_name% hinzufügen</msg>
   <msg key="Author">Autor</msg>
+  <msg key="back_to_folder_view">&lt;a href=&quot;%folder_view_url%&quot;&gt;Zurück&lt;/a&gt; zur Ordnerübersicht</msg>
   <msg key="Change_Name">Umbenennen</msg>
   <msg key="Copy">Kopieren</msg>
   <msg key="Create">Erstellen</msg>
@@ -26,7 +27,13 @@
   <msg key="Edit_Folder">Ordner bearbeiten</msg>
   <msg key="Edit_URL">URL bearbeiten</msg>
   <msg key="file">Datei</msg>
+  <msg key="file_delete_page_title">%title% löschen</msg>
+  <msg key="file_edit_page_title">%title% umbenennen</msg>
+  <msg key="file_edit_page_title_1">%pretty_name% bearbeiten</msg>
+  <msg key="file_page_file_title_label">Name: %title% </msg>
+  <msg key="file_page_owner_label">Besitzer: %owner%</msg>
   <msg key="folder">Ordner</msg>
+  <msg key="folder_delete_page_title">%folder_name% löschen</msg>
   <msg key="Folder_ID">Ordner-ID</msg>
   <msg key="Folder_Name">Ordnername:</msg>
   <msg key="folder_type_pretty_name">Ordner</msg>
@@ -35,8 +42,11 @@
   <msg key="items">Elemente</msg>
   <msg key="Last_Modified">Zuletzt geändert</msg>
   <msg key="lt_administer_permission">Zugriffsberechtigungen verwalten</msg>
+  <msg key="lt_All_Versions_of_title">Alle Versionen von &quot;%title%&quot;</msg>
   <msg key="lt_Are_you_sure_that_you">Wollen Sie die Version &quot;%version_name%&quot; von &quot;%title%&quot; unwiderruflich löschen?</msg>
   <msg key="lt_bad_folder_id_folder_">Fehlende Ordner-ID</msg>
+  <msg key="lt_Comments_on_this_file">Kommentare zu dieser Datei:</msg>
+  <msg key="lt_contentscontent_size_">%contents.content_size_pretty% Bytes</msg>
   <msg key="lt_delete_file">Wollen Sie die Datei &quot;%title%&quot; mit allen Versionen unwiderruflich löschen?</msg>
   <msg key="lt_delete_folder">Wollen Sie den Ordner &quot;%folder_name%&quot; und seinen gesamten Inhalt unwiderruflich löschen?</msg>
   <msg key="lt_Delete_this_file_incl">Diese Datei mit allen Versionen löschen </msg>
@@ -69,6 +79,8 @@
   <msg key="lt_You_probably_clicked_">Wahrscheinlich haben Sie mehrmals auf die Schaltfläche 'Hochladen' geklickt. Überprüfen Sie, ob die Datei in den gewünschten Ordner %folder_link% geladen wurde, oder gehen Sie mit Hilfe Ihres Browsers zurück und geben Sie die Versionsdatei erneut an.</msg>
   <msg key="lt_Your_file_is_larger_t">Ihre Datei überschreitet die innerhalb des Systems zulässige Maximalgröße (%number_of_bytes% Bytes). </msg>
   <msg key="lt_Your_file_is_larger_t_1">Ihre Datei überschreitet die innerhalb des Systems zulässige Maximalgröße (%max_number_of_bytes% Bytes).</msg>
+  <msg key="lt_Your_search_on_query_">Ihre Suchanfrage für &quot;%query%&quot; ergab keine Treffer.</msg>
+  <msg key="lt_Your_search_on_query__1">Ihre Suchanfrage für &quot;%query%&quot; ergab folgende Treffer:</msg>
   <msg key="Modified">Geändert</msg>
   <msg key="Move">Verschieben</msg>
   <msg key="Name">Name</msg>
@@ -82,8 +94,10 @@
   <msg key="Search_again">Erneut suchen:</msg>
   <msg key="Search_Results">Suchergebnisse</msg>
   <msg key="show_all_versions">Alle Versionen anzeigen</msg>
+  <msg key="simple_add_page_title">%pretty_name%  erstellen</msg>
   <msg key="Size">Größe</msg>
   <msg key="Size_bytes">Größe (Bytes)</msg>
+  <msg key="this_may_take_a_while">&lt;strong&gt;Hinweis:&lt;/strong&gt; Dieser Vorgang kann einige Minuten dauern. </msg>
   <msg key="Title">Name:</msg>
   <msg key="Title_">Name:</msg>
   <msg key="Type">Typ</msg>
@@ -94,6 +108,8 @@
   <msg key="Upload_New_File">Neue Datei hochladen</msg>
   <msg key="Upload_New_Version">Neue Version hochladen</msg>
   <msg key="URL">URL:</msg>
+  <msg key="version_add_page_title">Neue Version von %title% hochladen</msg>
+  <msg key="version_delete_page_title">%version_name% löschen</msg>
   <msg key="Version_filename">Dateiname der Version</msg>
   <msg key="Version_filename_">Dateiname der Version:</msg>
   <msg key="Version_filename_1">Dateiname der Version:</msg>

@@ -8,6 +8,7 @@
   <msg key="Add_pretty_name">Add %pretty_name%</msg>
   <msg key="Author">Author</msg>
   <msg key="back_to_folder_view">&lt;a href=&quot;%folder_view_url%&quot;&gt;Back&lt;/a&gt; to folder view</msg>
+  <msg key="bytes">bytes</msg>
   <msg key="Change_Name">Change Name</msg>
   <msg key="Copy">Copy</msg>
   <msg key="Create">Create</msg>
@@ -40,6 +41,8 @@
   <msg key="item">item</msg>
   <msg key="items">items</msg>
   <msg key="Last_Modified">Last Modified</msg>
+  <msg key="last_month">Last Month</msg>
+  <msg key="last_week">Last Week</msg>
   <msg key="lt_administer_permission">administer permissions</msg>
   <msg key="lt_All_Versions_of_title">All Versions of &quot;%title%&quot;</msg>
   <msg key="lt_Are_you_sure_that_you">Are you sure that you want to delete this version &quot;%version_name%&quot; of &quot;%title%&quot;?
@@ -54,7 +57,6 @@ This action cannot be reversed.</msg>
   <msg key="lt_Either_there_is_alrea">Either there is already a folder with the name &quot;%folder_name%&quot; or you clicked on the button more than once.  You can use the Back button to return and choose a new name, or &lt;a href=&quot;%directory_url%&quot;&gt;return to the directory listing&lt;/a&gt; to see if your folder is there.</msg>
   <msg key="lt_Folder_folder_name_is">Folder %folder_name% is empty.</msg>
   <msg key="lt_It_appears_that_there">It appears that there is already a file with that name in this folder (although possibly you clicked more than once on the submit button.)</msg>
-  <msg key="lt_Leave_blank_for_linked_documents">Leave title blank when uploading multiple interlinked documents.</msg>
   <msg key="lt_Live_version_of_title">Live version of &quot;%title%&quot;</msg>
   <msg key="lt_Modify_permissions_on">Modify permissions on this file</msg>
   <msg key="lt_Modify_permissions_on_1">Modify permissions on this folder</msg>
@@ -73,7 +75,6 @@ This action cannot be reversed.</msg>
 so you cannot delete the file.</msg>
   <msg key="lt_This_folder_contains_">This folder contains items that you do not have permission to
 delete, therefore you cannot delete it.</msg>
-  <msg key="lt_This_is_a_ZIP">This is a ZIP file containing multiple files</msg>
   <msg key="lt_Use_the_Browse_button">Use the &quot;Browse...&quot; button to locate your file, 
     then click &quot;Open&quot;.</msg>
   <msg key="lt_version_not_valid">The specified version is not valid.</msg>
@@ -89,17 +90,20 @@ delete, therefore you cannot delete it.</msg>
   <msg key="lt_Your_search_on_query__1">Your search on &quot;%query%&quot; returned the following files:</msg>
   <msg key="Modified">Modified</msg>
   <msg key="Move">Move</msg>
-  <msg key="Multiple_files">Multiple files:</msg>
   <msg key="Name">Name</msg>
   <msg key="new">new</msg>
+  <msg key="New_Folder">New Folder</msg>
   <msg key="No_such_type">No such type</msg>
   <msg key="no_such_URL">no such URL</msg>
+  <msg key="Permissions">Permissions</msg>
+  <msg key="properties">properties</msg>
   <msg key="Rename">Rename</msg>
   <msg key="Rename_this_folder">Rename this folder</msg>
   <msg key="Save">Save</msg>
   <msg key="Search">Search</msg>
   <msg key="Search_again">Search again:</msg>
   <msg key="Search_Results">Search Results</msg>
+  <msg key="Set_Permissions">Set Permissions</msg>
   <msg key="show_all_versions">show all versions</msg>
   <msg key="simple_add_page_title">Create %pretty_name%</msg>
   <msg key="Size">Size</msg>
@@ -108,6 +112,7 @@ delete, therefore you cannot delete it.</msg>
   <msg key="Title">Title:</msg>
   <msg key="Title_">Title :</msg>
   <msg key="Type">Type</msg>
+  <msg key="untitled">untitled</msg>
   <msg key="Update">Update</msg>
   <msg key="Upload">Upload</msg>
   <msg key="Upload_a_file">Upload a file</msg>
