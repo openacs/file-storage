@@ -12,7 +12,8 @@
         <database>oracle</database>
         <database>postgresql</database>
     </database-support>
-        <owner url="mailto:kevin@arsdigita.com">Kevin Scaldeferri</owner>
+        <owner url="mailto:jowellsabino@netscape.net">Jowell S. Sabino</owner>
+        <!-- owner url="mailto:kevin@arsdigita.com" Kevin Scaldeferri -->
         <summary>this application allows users to collaboratively maintain documents on the web server	</summary>
         <release-date>2000-12-29</release-date>
         <vendor url="http://www.arsdigita.com/">ArsDigita Corporation</vendor>
