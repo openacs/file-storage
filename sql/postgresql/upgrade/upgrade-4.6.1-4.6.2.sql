@@ -19,6 +19,9 @@ begin
                     where cr_items.tree_sortkey between root.tree_sortkey and tree_right(root.tree_sortkey)
                       and cr_folders.folder_id = cr_items.item_id
       loop
+        if not content_folder__is_registered(folder.folder_id, ''content_symlink'', ''t'') then
+          perform content_folder__register_content_type(folder.folder_id, ''content_symlink'', ''t'');
+        end if;
         if not content_folder__is_registered(folder.folder_id, ''content_extlink'', ''t'') then
           perform content_folder__register_content_type(folder.folder_id, ''content_extlink'', ''t'');
         end if;
@@ -138,7 +141,7 @@ begin
                 order by c1.tree_sortkey desc
         loop
 
-                -- DRB: Why can't we just use object delete here?
+                -- DRB: Why can''t we just use object delete here?
 
 
                 -- We delete the item. On delete cascade should take care

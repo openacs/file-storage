@@ -247,6 +247,7 @@ as
         content_folder.register_content_type(v_folder_id,'content_revision','t');
         content_folder.register_content_type(v_folder_id,'content_folder','t');
         content_folder.register_content_type(v_folder_id,'content_extlink','t');
+        content_folder.register_content_type(v_folder_id,'content_symlink','t');
 
         -- set up default permissions
         acs_permission.grant_permission(
@@ -614,8 +615,14 @@ as
         );
 
         content_folder.register_content_type(
-            v_folder_id,                -- folder_id
-            'content_extlink',        -- content_type
+            v_folder_id,               -- folder_id
+            'content_extlink',         -- content_type
+            't'                        -- include_subtypes
+        );
+
+        content_folder.register_content_type(
+            v_folder_id,               -- folder_id
+            'content_symlink',         -- content_type
             't'                        -- include_subtypes
         );
 
