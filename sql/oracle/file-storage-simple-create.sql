@@ -20,6 +20,9 @@ create table fs_simple_objects (
                                      primary key,
        folder_id                     integer
                                      constraint fs_simp_folder_id_fk
+                                     references cr_folders,
+       name                          varchar(250) not null,
+       description                   varchar(4000)
 );
 
 create index fs_so_folder_id_idx on fs_simple_objects (folder_id);
