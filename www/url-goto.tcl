@@ -8,7 +8,7 @@ ad_page_contract {
     url_id:notnull
 } 
 
-# Check for write permission on this folder
+# Check for read permission on this url
 ad_require_permission $url_id read
 
 # Check the URL
@@ -19,4 +19,3 @@ if {![empty_string_p $url]} {
 } else {
     return -code error [_ file-storage.no_such_URL]
 }
-

@@ -6,158 +6,28 @@
     <pretty-plural>File Storage Areas</pretty-plural>
     <initial-install-p>f</initial-install-p>
     <singleton-p>f</singleton-p>
-
-    <version name="4.6.1" url="http://www.openacs.org/repository/download/apm/file-storage-4.6.1.apm">
-    <database-support>
-        <database>oracle</database>
-        <database>postgresql</database>
-    </database-support>
+    
+    <version name="4.6.2" url="http://www.openacs.org/repository/download/apm/file-storage-4.6.2.apm">
         <owner url="mailto:jowellsabino@netscape.net">Jowell S. Sabino</owner>
         <summary>This application allows users to collaboratively maintain documents on the web server	</summary>
         <release-date>2002-10-27</release-date>
         <vendor url="http://www.openacs.org/">OpenACS</vendor>
         <description format="text/plain">Now allows storage of files on the filesystem or database.</description>
 
-        <provides url="file-storage" version="4.6.1"/>
-        <requires url="acs-content-repository" version="4.0.1"/>
-        <requires url="acs-kernel" version="4.0"/>
+        <provides url="file-storage" version="4.6.2"/>
+        <requires url="acs-content-repository" version="4.6.5"/>
+        <requires url="acs-kernel" version="4.6.2"/>
 
-        <files>
-            <file path="ChangeLog"/>
-            <file type="package_spec" path="file-storage.info"/>
-            <file type="data_model_create" db_type="oracle" path="sql/oracle/file-storage-create.sql"/>
-            <file type="data_model_drop" db_type="oracle" path="sql/oracle/file-storage-drop.sql"/>
-            <file type="data_model" db_type="oracle" path="sql/oracle/file-storage-package-create.sql"/>
-            <file type="data_model" db_type="oracle" path="sql/oracle/file-storage-simple-create.sql"/>
-            <file type="data_model" db_type="oracle" path="sql/oracle/file-storage-simple-package-create.sql"/>
-            <file type="data_model" db_type="oracle" path="sql/oracle/file-storage-views-create.sql"/>
-            <file type="data_model" db_type="oracle" path="sql/oracle/file-storage-views-drop.sql"/>
-            <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-4.2-4.6.sql"/>
-            <file type="data_model_create" db_type="postgresql" path="sql/postgresql/file-storage-create.sql"/>
-            <file type="data_model_drop" db_type="postgresql" path="sql/postgresql/file-storage-drop.sql"/>
-            <file type="data_model" db_type="postgresql" path="sql/postgresql/file-storage-package-create.sql"/>
-            <file type="data_model" db_type="postgresql" path="sql/postgresql/file-storage-sc-create.sql"/>
-            <file type="data_model" db_type="postgresql" path="sql/postgresql/file-storage-sc-drop.sql"/>
-            <file type="data_model" db_type="postgresql" path="sql/postgresql/file-storage-simple-create.sql"/>
-            <file type="data_model" db_type="postgresql" path="sql/postgresql/file-storage-simple-package-create.sql"/>
-            <file type="data_model" db_type="postgresql" path="sql/postgresql/file-storage-views-create.sql"/>
-            <file type="data_model" db_type="postgresql" path="sql/postgresql/file-storage-views-drop.sql"/>
-            <file type="data_model_upgrade" db_type="postgresql" path="sql/postgresql/upgrade/upgrade-4.2-4.6.sql"/>
-            <file type="tcl_init" path="tcl/file-storage-init.tcl"/>
-            <file type="query_file" db_type="oracle" path="tcl/file-storage-procs-oracle.xql"/>
-            <file type="query_file" db_type="postgresql" path="tcl/file-storage-procs-postgresql.xql"/>
-            <file type="tcl_procs" path="tcl/file-storage-procs.tcl"/>
-            <file type="query_file" path="tcl/file-storage-procs.xql"/>
-            <file type="query_file" db_type="postgresql" path="tcl/file-storage-search-procs-postgresql.xql"/>
-            <file type="tcl_procs" path="tcl/file-storage-search-procs.tcl"/>
-            <file type="query_file" db_type="oracle" path="tcl/fs-simple-procs-oracle.xql"/>
-            <file type="query_file" db_type="postgresql" path="tcl/fs-simple-procs-postgresql.xql"/>
-            <file type="tcl_procs" path="tcl/fs-simple-procs.tcl"/>
-            <file type="query_file" path="tcl/fs-simple-procs.xql"/>
-            <file type="documentation" path="www/doc/design.html"/>
-            <file type="documentation" path="www/doc/index.html"/>
-            <file type="documentation" path="www/doc/requirements.html"/>
-            <file type="content_page" path="www/download-archive/index.vuh"/>
-            <file type="content_page" path="www/download/index.vuh"/>
-            <file type="query_file" db_type="oracle" path="www/file-add-2-oracle.xql"/>
-            <file type="query_file" db_type="postgresql" path="www/file-add-2-postgresql.xql"/>
-            <file type="content_page" path="www/file-add-2.tcl"/>
-            <file type="query_file" path="www/file-add-2.xql"/>
-            <file type="content_page" path="www/file-add.adp"/>
-            <file type="content_page" path="www/file-add.tcl"/>
-            <file type="query_file" db_type="oracle" path="www/file-copy-2-oracle.xql"/>
-            <file type="query_file" db_type="postgresql" path="www/file-copy-2-postgresql.xql"/>
-            <file type="content_page" path="www/file-copy-2.tcl"/>
-            <file type="query_file" path="www/file-copy-2.xql"/>
-            <file type="content_page" path="www/file-copy.adp"/>
-            <file type="content_page" path="www/file-copy.tcl"/>
-            <file type="query_file" path="www/file-copy.xql"/>
-            <file type="query_file" db_type="oracle" path="www/file-delete-oracle.xql"/>
-            <file type="query_file" db_type="postgresql" path="www/file-delete-postgresql.xql"/>
-            <file type="content_page" path="www/file-delete.adp"/>
-            <file type="content_page" path="www/file-delete.tcl"/>
-            <file type="query_file" path="www/file-delete.xql"/>
-            <file type="query_file" db_type="oracle" path="www/file-edit-2-oracle.xql"/>
-            <file type="query_file" db_type="postgresql" path="www/file-edit-2-postgresql.xql"/>
-            <file type="content_page" path="www/file-edit-2.tcl"/>
-            <file type="query_file" db_type="oracle" path="www/file-edit-oracle.xql"/>
-            <file type="query_file" db_type="postgresql" path="www/file-edit-postgresql.xql"/>
-            <file type="content_page" path="www/file-edit.adp"/>
-            <file type="content_page" path="www/file-edit.tcl"/>
-            <file type="query_file" db_type="oracle" path="www/file-move-2-oracle.xql"/>
-            <file type="query_file" db_type="postgresql" path="www/file-move-2-postgresql.xql"/>
-            <file type="content_page" path="www/file-move-2.tcl"/>
-            <file type="query_file" path="www/file-move-2.xql"/>
-            <file type="query_file" db_type="oracle" path="www/file-move-oracle.xql"/>
-            <file type="query_file" db_type="postgresql" path="www/file-move-postgresql.xql"/>
-            <file type="content_page" path="www/file-move.adp"/>
-            <file type="content_page" path="www/file-move.tcl"/>
-            <file type="query_file" db_type="oracle" path="www/file-oracle.xql"/>
-            <file type="query_file" db_type="postgresql" path="www/file-postgresql.xql"/>
-            <file type="content_page" path="www/file.adp"/>
-            <file type="content_page" path="www/file.tcl"/>
-            <file type="query_file" db_type="oracle" path="www/folder-chunk-oracle.xql"/>
-            <file type="query_file" db_type="oracle" path="www/folder-chunk-postgresql.xql"/>
-            <file type="content_page" path="www/folder-chunk.adp"/>
-            <file type="content_page" path="www/folder-chunk.tcl"/>
-            <file type="content_page" path="www/folder-contents.adp"/>
-            <file type="content_page" path="www/folder-contents.tcl"/>
-            <file type="query_file" db_type="oracle" path="www/folder-create-2-oracle.xql"/>
-            <file type="query_file" db_type="postgresql" path="www/folder-create-2-postgresql.xql"/>
-            <file type="content_page" path="www/folder-create-2.tcl"/>
-            <file type="query_file" path="www/folder-create-2.xql"/>
-            <file type="content_page" path="www/folder-create.adp"/>
-            <file type="content_page" path="www/folder-create.tcl"/>
-            <file type="query_file" db_type="oracle" path="www/folder-delete-oracle.xql"/>
-            <file type="query_file" db_type="postgresql" path="www/folder-delete-postgresql.xql"/>
-            <file type="content_page" path="www/folder-delete.adp"/>
-            <file type="content_page" path="www/folder-delete.tcl"/>
-            <file type="query_file" path="www/folder-delete.xql"/>
-            <file type="query_file" db_type="oracle" path="www/folder-edit-2-oracle.xql"/>
-            <file type="query_file" db_type="postgresql" path="www/folder-edit-2-postgresql.xql"/>
-            <file type="content_page" path="www/folder-edit-2.tcl"/>
-            <file type="content_page" path="www/folder-edit.adp"/>
-            <file type="content_page" path="www/folder-edit.tcl"/>
-            <file type="query_file" db_type="oracle" path="www/folder-list-oracle.xql"/>
-            <file type="query_file" db_type="postgresql" path="www/folder-list-postgresql.xql"/>
-            <file type="content_page" path="www/folder-list.adp"/>
-            <file type="content_page" path="www/folder-list.tcl"/>
-            <file type="content_page" path="www/graphics/file.gif"/>
-            <file type="content_page" path="www/graphics/folder.gif"/>
-            <file type="content_page" path="www/graphics/new.gif"/>
-            <file type="content_page" path="www/index.adp"/>
-            <file type="content_page" path="www/index.tcl"/>
-            <file type="query_file" db_type="oracle" path="www/search-oracle.xql"/>
-            <file type="query_file" db_type="postgresql" path="www/search-postgresql.xql"/>
-            <file type="content_page" path="www/search.adp"/>
-            <file type="content_page" path="www/search.tcl"/>
-            <file type="content_page" path="www/simple-add-2.tcl"/>
-            <file type="content_page" path="www/simple-add.adp"/>
-            <file type="content_page" path="www/simple-add.tcl"/>
-            <file type="content_page" path="www/simple-delete.tcl"/>
-            <file type="content_page" path="www/simple-edit-2.tcl"/>
-            <file type="content_page" path="www/simple-edit.adp"/>
-            <file type="content_page" path="www/simple-edit.tcl"/>
-            <file type="content_page" path="www/url-goto.tcl"/>
-            <file type="query_file" db_type="oracle" path="www/version-add-2-oracle.xql"/>
-            <file type="query_file" db_type="postgresql" path="www/version-add-2-postgresql.xql"/>
-            <file type="content_page" path="www/version-add-2.tcl"/>
-            <file type="content_page" path="www/version-add.adp"/>
-            <file type="content_page" path="www/version-add.tcl"/>
-            <file type="query_file" path="www/version-add.xql"/>
-            <file type="query_file" db_type="oracle" path="www/version-delete-oracle.xql"/>
-            <file type="query_file" db_type="postgresql" path="www/version-delete-postgresql.xql"/>
-            <file type="content_page" path="www/version-delete.adp"/>
-            <file type="content_page" path="www/version-delete.tcl"/>
-            <file type="query_file" path="www/version-delete.xql"/>
-        </files>
+            <!-- No files -->
+        <callbacks>
+        </callbacks>
         <parameters>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ArchiveExtension"  default="tgz" description="The extension that the programmer should add to the output file. This depends on the value of ArchiveCommand"/>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ArchiveCommand"  default="tar -czf {out_file} {in_file}" description="Program (and program options) to use for archiving file storage objects. Use the special tags {in_file} and {out_file} (including the curly braces) to denote the locations of the input and output files on the command line."/>
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="ShowAdministerPermissionsLinkP"  default="1" description="Whether or not to show a link to administer permissions on the file storage object."/>
-            <parameter datatype="number"  min_n_values="1" max_n_values="1"  name="GeneralCommentsP"  default="0" description="Allow comments to be attached to a file."/>
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="MaximumFileSize"  default="2000000" description="The maximum size, in bytes, of files that users are allowed to upload"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="StoreFilesInDatabaseP"  default="1" description="Flag to determine the storage type. A flag of 1 (true) will store the files in the database. If 0 (false) files are stored in the filesystem. ***This parameter should only be changed at package instance creation.***"/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="GeneralCommentsP"  default="0" description="Allow comments to be attached to a file."/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="MaximumFileSize"  default="2000000" description="The maximum size, in bytes, of files that users are allowed to upload"/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="ShowAdministerPermissionsLinkP"  default="1" description="Whether or not to show a link to administer permissions on the file storage object."/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ArchiveCommand"  default="tar -czf {out_file} {in_file}" description="Program (and program options) to use for archiving file storage objects. Use the special tags {in_file} and {out_file} (including the curly braces) to denote the locations of the input and output files on the command line."/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ArchiveExtension"  default="tgz" description="The extension that the programmer should add to the output file. This depends on the value of ArchiveCommand"/>
         </parameters>
 
     </version>

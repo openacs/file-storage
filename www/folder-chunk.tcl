@@ -8,15 +8,12 @@ ad_page_contract {
 } -properties {
     folder_name:onevalue
     contents:multirow
+    content_size_total:onevalue
 }
 
 if {![exists_and_not_null folder_id]} {
     ad_return_complaint 1 [_ file-storage.lt_bad_folder_id_folder_]
     ad_script_abort
-}
-
-if {![exists_and_not_null viewing_user_id]} {
-    set viewing_user_id [acs_magic_object "the_public"]
 }
 
 permission::require_permission -party_id $viewing_user_id -object_id $folder_id -privilege "read"
@@ -36,5 +33,14 @@ db_multirow contents select_folder_contents {} {
 }
 
 set folder_name [fs::get_object_name -object_id  $folder_id]
+
+set content_size_total 0
+
+db_multirow contents select_folder_contents {} {
+    set file_upload_name [fs::remove_special_file_system_characters -string $file_upload_name]
+    if { ![empty_string_p $content_size] } {
+        incr content_size_total $content_size
+    }
+}
 
 ad_return_template

@@ -32,10 +32,14 @@
        		acs_permission.permission_p(r.revision_id,:user_id,'delete') as delete_p,
        		r.content_length as content_size
 	from   acs_objects o, cr_revisions r, cr_items i
-	where  o.object_id = r.revision_id
-	and    acs_permission.permission_p(r.revision_id, :user_id, 'read') = 't'
-	and    r.item_id = i.item_id
-	and    r.item_id = :file_id
+	where o.object_id = r.revision_id
+	  and r.item_id = i.item_id
+	  and r.item_id = :file_id
+          and exists (select 1
+                      from acs_object_party_privilege_map m
+                      where m.object_id = r.revision_id
+                        and m.party_id = :user_id
+                        and m.privilege = 'read')
 	$show_versions order by last_modified desc
 
       </querytext>
