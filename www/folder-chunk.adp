@@ -23,7 +23,7 @@
       </td>
       <td>&nbsp;</td>
       <td>
-        @contents.content_size@ <if @contents.content_size@ ne 1>#file-storage.items#</if><else>#file-storage.item#</else>
+        @contents.content_size_pretty@ <if @contents.content_size@ ne 1>#file-storage.items#</if><else>#file-storage.item#</else>
       </td>
       <td>#file-storage.folder#</td>
       <td>@contents.last_modified@</td>
@@ -35,7 +35,7 @@
       <a href="@fs_url@url-goto?url_id=@contents.object_id@">@contents.name@</a>
 <if @contents.new_p@><font color="red">#file-storage.new#</font></if>
       </td>
-      <td colspan="2">
+      <td>
         <small>
 <if @contents.write_p@ or @contents.admin_p@>
           [<a href="@fs_url@simple-edit?object_id=@contents.object_id@">
@@ -71,7 +71,7 @@
           </a>
         ]</small>
       </td>
-      <td>@contents.content_size@ byte<if @contents.content_size@ ne 1>s</if></td>
+      <td>@contents.content_size_pretty@ byte<if @contents.content_size@ ne 1>s</if></td>
       <td>@contents.type@</td>
       <td>@contents.last_modified@</td>
 </else>

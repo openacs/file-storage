@@ -26,7 +26,7 @@
        		r.revision_id as version_id,
        		person__name(o.creation_user) as author,
        		r.mime_type as type,
-       		to_char(o.last_modified,'YYYY-MM-DD HH24:MI') as last_modified,
+                to_char(o.last_modified,'YYYY-MM-DD HH24:MI:SS') as last_modified_ansi,
        		r.description,
        		acs_permission__permission_p(r.revision_id,:user_id,'admin') as admin_p,
        		acs_permission__permission_p(r.revision_id,:user_id,'delete') as delete_p,

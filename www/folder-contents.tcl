@@ -69,7 +69,7 @@ lappend table_def [list name Name {fs_objects.name $order} "<td width=\"30%\"><a
 lappend table_def [list folder_name Folder {} "<td width=\"30%\"><a href=\"folder-contents?folder_id=\$parent_id&n_past_days=$n_past_days&recurse_p=$recurse_p&orderby=$orderby\">\$folder_name</a></td>"]
 lappend table_def {type Type {fs_objects.type $order} {c}}
 lappend table_def {content_size Size {fs_objects.content_size $order} {<td align=\"center\">[ad_decode $type folder "$content_size item[ad_decode $content_size 1 {} s]" url {} "$content_size byte[ad_decode $content_size 1 {} s]"]</td>}}
-lappend table_def {last_modified {Last Modified} {fs_objects.last_modified $order} {<td align=\"center\">[util_AnsiDatetoPrettyDate $last_modified]</td>}}
+lappend table_def {last_modified {Last Modified} {fs_objects.last_modified $order} {<td align=\"center\">[lc_time_format $last_modified "%q"]</td>}}
 
 #JCD BROKEN QUERY NEEDS db_map
 

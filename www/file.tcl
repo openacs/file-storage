@@ -57,22 +57,10 @@ if {[string equal $show_all_versions_p "t"]} {
     set show_versions [db_map show_live_version]
 }
 
-set sql "
-select r.title,
-       r.revision_id as version_id,
-       person.name(o.creation_user) as author,
-       r.mime_type as type,
-       to_char(o.last_modified,'YYYY-MM-DD HH24:MI') as last_modified,
-       r.description,
-       acs_permission.permission_p(r.revision_id,:user_id,'admin') as admin_p,
-       acs_permission.permission_p(r.revision_id,:user_id,'delete') as delete_p,
-       r.content_length as content_size
-from   acs_objects o, cr_revisions r
-where  o.object_id = r.revision_id
-and    acs_permission.permission_p(r.revision_id, :user_id, 'read') = 't'
-$show_versions"
-
-db_multirow version version_info $sql
+db_multirow -extend { last_modified content_size_pretty } version version_info {} {
+    set last_modified [lc_time_fmt $last_modified_ansi "%x %X"]
+    set content_size_pretty [lc_numeric $content_size]
+}
 
 ad_return_template
 
