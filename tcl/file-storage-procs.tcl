@@ -336,7 +336,7 @@ namespace eval fs {
     ad_proc -public get_folder_contents {
         {-folder_id ""}
         {-user_id ""}
-        {-n_past_days "-1"}
+        {-n_past_days "99999"}
     } {
         Retrieve the contents of the specified folder in the form of a list
         of ns_sets, one for each row returned. The keys for each row are as

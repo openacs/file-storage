@@ -7,7 +7,7 @@ ad_page_contract {
     @version $Id$
 } {
     {folder_id:integer [fs_get_root_folder]}
-    {n_past_days:integer "-1"}
+    {n_past_days:integer "99999"}
 } -validate {
     valid_folder -requires {folder_id:integer} {
 	if {![fs_folder_p $folder_id]} {

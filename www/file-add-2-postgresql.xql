@@ -5,7 +5,6 @@
 
 <fullquery name="new_lob_file">      
       <querytext>
-
     	select file_storage__new_file (
         	:title,           	-- title
         	:folder_id,          	-- parent_id
@@ -13,14 +12,11 @@
         	:creation_ip,        	-- creation_ip
 		true			-- indb_p
 		);
-
-
       </querytext>
 </fullquery>
 
 <fullquery name="new_fs_file">      
       <querytext>
-
     	select file_storage__new_file (
         	:title,           	-- title
         	:folder_id,          	-- parent_id
@@ -28,7 +24,6 @@
         	:creation_ip,        	-- creation_ip
 		false			-- indb_p
 		);
-
       </querytext>
 </fullquery>
 
