@@ -50,7 +50,7 @@ db_multirow -extend { last_modified_pretty content_size_pretty } contents select
     }
 
     set name [lang::util::localize $name]
-    set file_url [lang::util::localize $file_url]
+    set file_url [ad_urlencode $file_url]
 }
 
 ad_return_template
