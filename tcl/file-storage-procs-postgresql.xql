@@ -5,7 +5,11 @@
 
     <fullquery name="fs::new_root_folder.new_root_folder">
         <querytext>
-            select file_storage__new_root_folder(:package_id);
+            select file_storage__new_root_folder(
+                :package_id,
+                :pretty_name,
+                :description
+            );
         </querytext>
     </fullquery>
 

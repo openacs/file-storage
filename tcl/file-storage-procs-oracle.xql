@@ -7,7 +7,9 @@
         <querytext>
             begin
                 :1 := file_storage.new_root_folder(
-                    package_id => :package_id
+                    package_id => :package_id,
+                    folder_name => :pretty_name,
+                    description => :description
                 );
             end;
         </querytext>
