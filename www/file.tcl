@@ -34,17 +34,9 @@ set context [fs_context_bar_list $file_id]
 
 set show_administer_permissions_link_p [ad_parameter "ShowAdministerPermissionsLinkP"]
 
-db_1row file_info "
-select person.name(o.creation_user) as owner,
-       i.name,
-       r.title,
-       acs_permission.permission_p(:file_id,:user_id,'write') as write_p,
-       acs_permission.permission_p(:file_id,:user_id,'delete') as delete_p,
-       acs_permission.permission_p(:file_id,:user_id,'admin') as admin_p
-from   acs_objects o, cr_revisions r, cr_items i
-where  o.object_id = :file_id
-and    i.item_id   = o.object_id
-and    r.revision_id = i.live_revision"
+set root_folder_id [fs::get_root_folder]
+
+db_1row file_info {}
 
 # We use the new db_map here
 if {[string equal $show_all_versions_p "t"]} {
