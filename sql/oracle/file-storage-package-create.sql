@@ -674,7 +674,18 @@ begin
             content_folder.delete(v_rec.item_id);
         end if;
 
-        -- We may have to delete other items here, e.g., symlinks(future feature)
+        -- Instead of doing an if-else, we make sure we are deleting a folder.
+        if v_rec.content_type = 'content_symlink'
+        then
+            content_symlink.delete(v_rec.item_id);
+        end if;
+
+        -- Instead of doing an if-else, we make sure we are deleting a folder.
+        if v_rec.content_type = 'content_extlink'
+        then
+            content_extlink.delete(v_rec.item_id);
+        end if;
+
     end loop;
 end;
 /
