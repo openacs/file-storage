@@ -405,7 +405,9 @@ create function file_storage__move_file (
        -- Wrapper for content_item__move
        -- 
        integer,         -- cr_folders.folder_id%TYPE,
-       integer          -- cr_folders.folder_id%TYPE
+       integer,         -- cr_folders.folder_id%TYPE
+       integer,         -- ceration_user
+       varchar          -- creation_ip
 ) returns integer as '  -- 0 for success 
 declare
         move_file__file_id              alias for $1;
