@@ -3,7 +3,7 @@
 create or replace function tmp_fs_name_duplicate (
         varchar,
         integer
-) returns integer
+) returns varchar
 as '
 declare
   v_name  alias for $1; --cr_items.name%TYPE
