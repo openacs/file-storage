@@ -53,6 +53,7 @@ ad_proc fs::impl::fs_object::put {} {
         fs::add_file \
         -package_id $package_id \
         -name $name \
+        -title $name \
 	-item_id $item_id \
 	-parent_id $parent_id \
 	-tmp_filename $tmp_filename \
@@ -68,9 +69,9 @@ ad_proc fs::impl::fs_object::put {} {
     } else {
 	fs::add_version \
 	    -name $name\
+            -title $name \
 	    -tmp_filename $tmp_filename\
 	    -item_id $item_id \
-	    -parent_id $parent_id \
 	    -creation_user $user_id \
 	    -package_id $package_id
 	
