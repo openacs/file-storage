@@ -2,6 +2,8 @@
 <property name="title">@folder_name@</property>
 <property name="header">@folder_name@</property>
 <property name="context">@context;noquote@</property>
+<property name="displayed_object_id">@folder_id;noquote@</property>
+
 <if @up_url@ not nil>
     <p><a href="@up_url@" class="button">#file-storage.index_page_navigate_up_folder#</a></p>
 </if>
