@@ -5,7 +5,7 @@
 
 <ul>
 <if @write_p@ eq 1>
-  <li><a href="file-add?folder_id=@folder_id@">Upload a file</a>
+  <li><a href="file-add?folder_id=@folder_id@">Upload a file</a> &nbsp; &nbsp; | &nbsp; &nbsp; <a href="simple-add?folder_id=@folder_id@">Create a URL</a>
   <li><a href="folder-create?parent_id=@folder_id@">Create a new
   folder</a>
 </if>
