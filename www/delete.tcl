@@ -28,7 +28,7 @@ set not_allowed_count 0
 # make sure none of these items are root folders. There is no way to
 # click a checkbox, but who knows how the item_id might get in there
 
-set root_folders_count [db_string count_root_folder "" -default 0]
+set root_folders_count [db_string count_root_folders "" -default 0]
 if {$root_folders_count > 0} {
     ad_complain [_ file-storage.lt_You_may_not_delete_th]
     ad_script_abort
