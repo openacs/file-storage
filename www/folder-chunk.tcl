@@ -50,7 +50,10 @@ db_multirow -extend { last_modified_pretty content_size_pretty } contents select
     }
 
     set name [lang::util::localize $name]
-    set file_url [ad_urlencode $file_url]
+
+    # We need to encode the hashes in any i18n message keys (.LRN plays this trick on some of its folders).
+    # If we don't, the hashes will cause the path to be chopped off (by ns_conn url) at the leftmost hash.
+    regsub -all {#} $file_url {%23} file_url
 }
 
 ad_return_template
