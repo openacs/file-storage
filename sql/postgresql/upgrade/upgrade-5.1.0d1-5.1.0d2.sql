@@ -11,7 +11,6 @@ returns integer as '  -- fs_root_folders.folder_id%TYPE
 declare
         get_root_folder__package_id  alias for $1;
         v_folder_id                  fs_root_folders.folder_id%TYPE;
-        v_count                      integer;
 begin
         select folder_id into v_folder_id 
         from fs_root_folders
