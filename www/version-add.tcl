@@ -36,4 +36,12 @@ set context [fs_context_bar_list -final "[_ file-storage.Upload_New_Version]" $f
 # Message lookup uses variable title
 set page_title [_ file-storage.version_add_page_title]
 
+set upload_file_help [_ file-storage.lt_Use_the_Browse_button]
+set submit_label [_ file-storage.Update]
+ad_form -html { enctype multipart/form-data } -export { file_id title } -action version-add-2 -form {
+    {upload_file:file {label \#file-storage.Version_filename_1\#} {help_text $upload_file_help}}
+    {description:text(textarea),optional {html {rows 5 cols 50}} {label \#file-storage.Version_Notes_1\#}}
+    {submit:text(submit) {label $submit_label}}
+} -has_submit 1
+
 ad_return_template

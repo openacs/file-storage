@@ -60,7 +60,7 @@ This action cannot be reversed.</msg>
   <msg key="lt_Live_version_of_title">Live version of &quot;%title%&quot;</msg>
   <msg key="lt_Modify_permissions_on">Modify permissions on this file</msg>
   <msg key="lt_Modify_permissions_on_1">Modify permissions on this folder</msg>
-  <msg key="lt_Please_enter_the_new_">Please enter the new name for this file:</msg>
+  <msg key="lt_Please_enter_the_new_">Please enter the new name for this file</msg>
   <msg key="lt_Select_the_folder_tha">Select the folder that you would like to copy &quot;%file_name%&quot; to</msg>
   <msg key="lt_Select_the_folder_tha_1">Select the folder that you would like to move &quot;%file_name%&quot; under</msg>
   <msg key="lt_Show_files_modified_i">Show files modified in the past</msg>
