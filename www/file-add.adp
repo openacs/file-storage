@@ -35,7 +35,7 @@
 
 <tr>
 <td></td>
-<td><input type=submit value="Submit and Upload">
+<td><input type=submit value="Upload">
 </td>
 </tr>
 
