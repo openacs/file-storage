@@ -111,7 +111,7 @@
 
     <fullquery name="fs::publish_versioned_object_to_file_system.select_file_name">
         <querytext>
-            select filename
+            select content
             from cr_revisions
             where revision_id = :live_revision
         </querytext>
