@@ -38,7 +38,8 @@
  </if>
 </ul>
 
-
+<a href="index?folder_id=@folder_id@">Back</a> to folder view
+<p>
 <table border=1 cellspacing=2 cellpadding=2>
   <tr>
     <td colspan=7>
@@ -59,7 +60,7 @@
 <multiple name=version>
   <tr>
     <td><img src="graphics/file.gif">
-      <a href="download/index?version_id=@version.version_id@">@version.title@</a>
+      <a href="download/@version.title@?version_id=@version.version_id@">@version.title@</a>
     </td>
     <td>@version.author@</td>
     <td align=right>@version.content_size_pretty@</td>
