@@ -1,13 +1,13 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <message_catalog package_key="file-storage" package_version="4.7d3" locale="nl_NL" charset="ISO-8859-1">
 
   <msg key="Action">Handeling</msg>
   <msg key="Actions">Handelingen:</msg>
   <msg key="Actions_1">Handelingen</msg>
-  <msg key="Add_File">Toevoegen Bestand</msg>
+  <msg key="Add_File">Bestand toevoegen</msg>
   <msg key="Add_pretty_name">Toevoegen %pretty_name%</msg>
   <msg key="Author">Auteur</msg>
-  <msg key="Change_Name">Wijzig Naam</msg>
+  <msg key="Change_Name">Naam wijzigen</msg>
   <msg key="Copy">Kopieren</msg>
   <msg key="Create">Aanmaken</msg>
   <msg key="Create_a_new_folder">Aanmaken nieuwe map</msg>
@@ -17,12 +17,12 @@
   <msg key="days_as_new">dagen als nieuw.</msg>
   <msg key="Delete">Verwijderen</msg>
   <msg key="delete">verwijderen</msg>
-  <msg key="Delete_this_folder">Verwijder Map</msg>
-  <msg key="Delete_Version">Verwijder Variant</msg>
+  <msg key="Delete_this_folder">Deze map verwijderen</msg>
+  <msg key="Delete_Version">Versie verwijderen</msg>
   <msg key="Description">Beschrijving:</msg>
-  <msg key="Edit">Wijzigen</msg>
+  <msg key="Edit">Bewerken</msg>
   <msg key="edit">Wijzig</msg>
-  <msg key="Edit_Folder">Wijzig Map</msg>
+  <msg key="Edit_Folder">Map bewerken</msg>
   <msg key="Edit_URL">Wijzig URL</msg>
   <msg key="file">bestand</msg>
   <msg key="folder">map</msg>
@@ -31,21 +31,21 @@
   <msg key="folder_type_pretty_name">map</msg>
   <msg key="item">item</msg>
   <msg key="items">items</msg>
-  <msg key="Last_Modified">Laatste Wijziging</msg>
-  <msg key="lt_administer_permission">beheer permissies</msg>
+  <msg key="Last_Modified">Laatste wijziging</msg>
+  <msg key="lt_administer_permission">rechtenbeheer</msg>
   <msg key="lt_Are_you_sure_that_you">Weet u zeker dat u deze variant &quot;%version_name%&quot; van &quot;%title%&quot; wilt verwijderen? Deze handeling kan niet worden hersteld.</msg>
-  <msg key="lt_bad_folder_id_folder_">folder id ontbreekt</msg>
+  <msg key="lt_bad_folder_id_folder_">folderi-id ontbreekt</msg>
   <msg key="lt_delete_file">Weet u zeker dat u het bestand &quot;%title%&quot; met alle versies wilt verwijderen? Deze handeling kan niet worden hersteld.</msg>
   <msg key="lt_delete_folder">Weet u zeker dat u de map &quot;%folder_name%&quot; met alle items wilt verwijderen? Deze handeling kan niet worden hersteld.</msg>
   <msg key="lt_Delete_this_file_incl">Verwijder dit bestand (met alle versies)</msg>
   <msg key="lt_Either_there_is_alrea">Mogelijk is er al een map met die &quot;%folder_name%&quot; heet, anders heeft u meer dan eenmaal op de verzendknop geklikt. Gebruikt de Beck/Terug knop om een nieuwe naam te kiezen of bekijk de &lt;a href=&quot;%directory_url%&quot;&gt;lijst met bestanden&lt;/a&gt; om te zien of de map bestaat.</msg>
   <msg key="lt_Folder_folder_name_is">Map %folder_name% is leeg.</msg>
   <msg key="lt_It_appears_that_there">Het lijkt alsof er in deze map al een bestand is met deze naam (of er is meer dan eenmaal op de knop geklikt).</msg>
-  <msg key="lt_Modify_permissions_on">Wijzig permissies voor dit bestand</msg>
-  <msg key="lt_Modify_permissions_on_1">Wijzig permissies voor deze map</msg>
+  <msg key="lt_Modify_permissions_on">Wijzig rechten voor dit bestand</msg>
+  <msg key="lt_Modify_permissions_on_1">Wijzig rechten voor deze map</msg>
   <msg key="lt_Please_enter_the_new_">Voer de nieuwe naam voor dit bestand in:</msg>
   <msg key="lt_Show_files_modified_i">Toon gewijzigde bestanden in de laatste</msg>
-  <msg key="lt_show_only_live_versio">Toon allen versies die live zijn</msg>
+  <msg key="lt_show_only_live_versio">Toon alleen versies die actief zijn</msg>
   <msg key="lt_The_folder_link_you_s">De geselecteerde %folder_link% bevat al een bestand met dezelfde naam.</msg>
   <msg key="lt_The_specified_file_is">Het betreffende bestand is niet geldig.</msg>
   <msg key="lt_The_specified_folder_">De betreffende map bestaat niet.</msg>
@@ -54,12 +54,12 @@
   <msg key="lt_There_are_no_versions">Er is geen variant van dit bestand beschikbaar</msg>
   <msg key="lt_This_file_has_version">Het bestand heeft varianten die niet mogen worden verwijderd door u. Verwijderen van het bestand is niet mogelijk.</msg>
   <msg key="lt_This_folder_contains_">Deze map heeft items die niet mogen worden verwijderd door u. Verwijderen van de map is niet mogelijk.</msg>
-  <msg key="lt_Use_the_Browse_button">Gebruikde &quot;Browse/Snuffel...&quot; knop om het bestand te vinden en klik dan op &quot;Open&quot;.</msg>
+  <msg key="lt_Use_the_Browse_button">Gebruik de bladerknop om het bestand te vinden en klik dan op &quot;Open&quot;.</msg>
   <msg key="lt_version_not_valid">De betreffende variant is niet geldig.</msg>
   <msg key="lt_We_got_an_error_that_">Er is een fout opgetreden waarvan de oorzaak niet direct duidelijk is. Wilt u de systeembeheerder hiervan alstublieft op de hoogte stellen.</msg>
   <msg key="lt_We_received_an_error_">We ontvingen een foutmelding van de database. Waarschijnlijk bevat de map die u selecteerde al een bestand met dezelfde naam.</msg>
   <msg key="lt_Were_sorry_but_at_the">Het spijt ons, maar op dit moment kunnen deze mappen alleen worden verwijderd als ze leeg zijn. </msg>
-  <msg key="lt_You_may_not_delete_th">De basale map mag niet worden verwijderd.</msg>
+  <msg key="lt_You_may_not_delete_th">De hoofdmap mag niet worden verwijderd.</msg>
   <msg key="lt_You_probably_clicked_">Waarschijnlijk werd meer dan eenmaal op de Toevoegen knop geklikt. Controleer of het bestand correct is geladen in %folder_link%.  Gebruik anders de Back/Terug knop om het de handeling te herhalen.</msg>
   <msg key="lt_Your_file_is_larger_t">Het bestand is groter dan de maximaal toegestaan (%number_of_bytes% bytes)</msg>
   <msg key="lt_Your_file_is_larger_t_1">Het bestand is groter dan het maximaal toegestane formaat (%max_number_of_bytes% bytes)
@@ -71,14 +71,14 @@
   <msg key="No_such_type">een dergelijk type bestaat niet</msg>
   <msg key="no_such_URL">een dergelijk URL bestaat niet</msg>
   <msg key="Rename">Hernoemen</msg>
-  <msg key="Rename_this_folder">Hernoem Map</msg>
+  <msg key="Rename_this_folder">Map hernoemen</msg>
   <msg key="Save">Bewaren</msg>
   <msg key="Search">Zoeken</msg>
   <msg key="Search_again">Zoek opnieuw:</msg>
   <msg key="Search_Results">Zoekresultaten</msg>
   <msg key="show_all_versions">toon alle versies</msg>
   <msg key="Size">Grootte</msg>
-  <msg key="Size_bytes">Groote (bytes)</msg>
+  <msg key="Size_bytes">Grootte (bytes)</msg>
   <msg key="Title">Titel:</msg>
   <msg key="Title_">Titel:</msg>
   <msg key="Type">Type</msg>
@@ -89,11 +89,11 @@
   <msg key="Upload_New_File">Nieuw bestand laden</msg>
   <msg key="Upload_New_Version">Nieuwe versie laden</msg>
   <msg key="URL">URL:</msg>
-  <msg key="Version_filename">Variant bestandsnaam</msg>
-  <msg key="Version_filename_">Variant bestandsnaam:</msg>
-  <msg key="Version_filename_1">Variant bestandsnaam:</msg>
-  <msg key="Version_Notes">Variant Aantekening</msg>
-  <msg key="Version_Notes_1">Variant Aantekeningen:</msg>
+  <msg key="Version_filename">Bestandsnaam versie</msg>
+  <msg key="Version_filename_">Bestandsnaam versie:</msg>
+  <msg key="Version_filename_1">Bestandsnaam versie:</msg>
+  <msg key="Version_Notes">Versie-aantekeningen</msg>
+  <msg key="Version_Notes_1">Versie-aantekeningen:</msg>
   <msg key="view_details">bekijk details</msg>
   <msg key="Yes_Delete_It">Ja, verwijder</msg>
 </message_catalog>
