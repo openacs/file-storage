@@ -75,6 +75,13 @@ db_transaction {
 
     }
 
+    # We know the user has write permission to this folder, but they may not have admin privileges.
+    # They should always be able to admin their own file by default, so they can delete it, control
+    # who can read it, etc.
+
+    if { [string is false [permission::permission_p -party_id $user_id -object_id $folder_id -privilege admin]] } {
+        permission::grant -party_id $user_id -object_id $file_id -privilege admin
+    }
 
 } on_error {
 
@@ -92,7 +99,7 @@ db_transaction {
 #	<pre>$errmsg</pre>"
 #    }
  
-       ad_return_complaint 1 "You probably clicked on the Add button more than once. Check if the file is properly loaded on the <a href=\"index?folder_id?$folder_id\">folder</a> you wan, or you can use the Back button to return and re-enter the version file."      
+       ad_return_complaint 1 "You probably clicked on the Add button more than once. Check if the file is in the <a href=\"index?folder_id?$folder_id\">folder</a>, or you can use the Back button to return and re-enter the version file."      
 
        ad_script_abort
 }
