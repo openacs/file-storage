@@ -67,8 +67,8 @@
                  fs_urls_full.last_modified,
                  fs_urls_full.url,
                  fs_urls_full.folder_id as parent_id,
-                 acs_permission__permission_p(fs_urls.url_id, :viewing_user_id, 'write') as write_p,
-                 acs_permission__permission_p(fs_urls.url_id, :viewing_user_id, 'delete') as delete_p,
+                 acs_permission__permission_p(fs_urls_full.url_id, :viewing_user_id, 'write') as write_p,
+                 acs_permission__permission_p(fs_urls_full.url_id, :viewing_user_id, 'delete') as delete_p,
                  1 as sort_key
                from fs_urls_full
                where fs_urls_full.folder_id = :folder_id
