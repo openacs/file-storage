@@ -71,19 +71,6 @@ ad_proc -private fs::install::register_implementation {
 
     acs_sc::impl::new_from_spec -spec $spec
 
-    ### dav_mkcol_type
-
-    set spec {
-	name "file-storage"
-	aliases {
-	    get_type fs::impl::dav_mkcol_type::get_type
-	}
-	contract_name {dav_mkcol_type}
-	owner "file-storage"
-    }
-    
-    acs_sc::impl::new_from_spec -spec $spec
-    
     set spec {
 	name "file-storage"
 	aliases {
