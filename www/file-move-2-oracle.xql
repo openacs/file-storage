@@ -9,7 +9,9 @@
 	begin
     		file_storage.move_file (
     			file_id => :file_id,
-    			target_folder_id => :parent_id
+    			target_folder_id => :parent_id,
+                        creation_user => :user_id,
+                        creation_ip => :address
     			);
 	end;
 

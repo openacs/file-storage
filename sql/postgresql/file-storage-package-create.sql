@@ -225,7 +225,7 @@ begin
 
         end if;
 
-        perform acs_object__update_last_modified(new_file__folder_id);
+        perform acs_object__update_last_modified(new_file__folder_id,new_file__user_id,new_file__creation_ip);
 
         return v_item_id;
 
@@ -392,7 +392,7 @@ begin
 
         end if;
 
-        perform acs_object__update_last_modified(copy_file__target_folder_id);
+        perform acs_object__update_last_modified(copy_file__target_folder_id,copy_file__creation_user,copy_file__creation_ip);
 
         return v_new_version_id;
 
@@ -410,6 +410,8 @@ create function file_storage__move_file (
 declare
         move_file__file_id              alias for $1;
         move_file__target_folder_id     alias for $2;
+        move_file__creation_user        alias for $3;
+        move_file__creation_ip          alias for $4;
 begin
 
         perform content_item__move(
@@ -417,7 +419,7 @@ begin
                move_file__target_folder_id      -- target_folder_id
                );
 
-        perform acs_object__update_last_modified(move_file__target_folder_id);
+        perform acs_object__update_last_modified(move_file__target_folder_id,move_file__creation_user,move_file__creation_ip);
 
         return 0;
 end;' language 'plpgsql';
@@ -554,7 +556,7 @@ begin
         from cr_items
         where cr_items.item_id = new_version__item_id;
 
-        perform acs_object__update_last_modified(v_folder_id);
+        perform acs_object__update_last_modified(v_folder_id,new_version__creation_user,new_version__creation_ip);
 
         return v_revision_id;
 

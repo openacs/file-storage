@@ -1,10 +1,5 @@
---
--- packages/file-storage/sql/file-storage-package-create.sql
---
--- @author yon (yon@openforce.net)
--- @creation-date 2002-04-03
--- @version $Id$
---
+-- Need to recreate package, to add user and IP to update_last_modified
+-- $Id
 
 create or replace package file_storage
 as
