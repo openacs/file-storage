@@ -6,6 +6,22 @@
 -- @cvs-id $Id$
 --
 
+
+-- To enable site-wide search to distinguish CR items as File Storage items
+-- we create an item subtype of content_item in the ACS Object Model
+ select acs_object_type__create_type (
+   'file_storage_item',     -- object_type
+   'File Storage Item',     -- pretty_name
+   'File Storage Items',    -- pretty_plural
+   'content_item',	    -- supertype
+   'fs_root_folders',	    -- table_name (JS: Will not do anything, but we have to insert something)
+   'folder_id',		    -- id_column  (JS: Same)
+   null,		    -- package_name (default)
+   'f',			    -- abstract_p (default)
+   null,		    -- type_extension_table (default)
+   'content_item.get_title' -- name_method
+ );
+
 --
 -- We need to create a root folder in the content repository for 
 -- each instance of file storage
