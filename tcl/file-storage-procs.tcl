@@ -803,6 +803,9 @@ ad_proc fs::webdav_url {
             item is not WebDAV enabled
 } {
 
+    if {  [ad_parameter "UseWebDavP"] == 0 } {
+	return "ho"
+    }  
     if {[empty_string_p $package_id]} {
 	set package_id [ad_conn package_id]
     }

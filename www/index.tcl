@@ -101,7 +101,11 @@ if { !${root_folder_p}} {
     }
 }
 
-set webdav_url [fs::webdav_url -item_id $folder_id]
+set use_webdav_p  [ad_parameter "UseWebDavP"]
+
+if { $use_webdav_p == 1} { 
+    set webdav_url [fs::webdav_url -item_id $folder_id]
+}
 
 # FIXME make this a parameter!
 

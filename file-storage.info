@@ -7,7 +7,7 @@
     <initial-install-p>f</initial-install-p>
     <singleton-p>f</singleton-p>
     
-    <version name="5.1.0a5" url="http://openacs.org/repository/download/apm/file-storage-5.1.0a5.apm">
+    <version name="5.1.0a6" url="http://openacs.org/repository/download/apm/file-storage-5.1.0a6.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Collaborative document storage</summary>
         <release-date>2004-07-21</release-date>
@@ -30,6 +30,7 @@
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ArchiveCommand"  default="tar cf - {in_file} | gzip > {out_file}" description="Program (and program options) to use for archiving file storage objects. Use the special tags {in_file} and {out_file} (including the curly braces) to denote the locations of the input and output files on the command line."/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ArchiveExtension"  default="tgz" description="The extension that the programmer should add to the output file. This depends on the value of ArchiveCommand"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="GeneralCommentsP"  default="0" description="Allow comments to be attached to a file."/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="UseWebDavP"  default="0" description="Flag to determine if WebDav is active.  A flag of 1 (true) means WebDav is active and we will show WebDav links"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="MaximumFileSize"  default="20000000" description="The maximum size, in bytes, of files that users are allowed to upload.  Should not be set larger than the systemwide AOLServer parameter maxinput."/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="ShowAdministerPermissionsLinkP"  default="1" description="Whether or not to show a link to administer permissions on the file storage object."/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="StoreFilesInDatabaseP"  default="0" description="Flag to determine the storage type. A flag of 1 (true) will store the files in the database. If 0 (false) files are stored in the filesystem. ***This parameter should only be changed at package instance creation.***"/>
