@@ -10,7 +10,8 @@
 
 --
 -- content repository is set up to cascade, so we should just have to 
--- delete the root folders
+-- delete the root folders  (JS: this is just plain wrong. The only reason
+-- this works is because of the triggers I added)
 --
 
 declare
@@ -25,6 +26,9 @@ begin
 end;
 /
 show errors
+
+drop trigger fs_package_items_delete_trig;
+drop trigger fs_root_folder_delete_trig;
 
 drop table fs_root_folders;
 drop package file_storage;
