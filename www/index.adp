@@ -42,6 +42,17 @@
   <tr>
     <td><li></td>
     <td>
+      <a href="download-archive/index?object_id=@folder_id@">
+        Download an archive of the contents of this folder
+      </a>
+      <br>
+      <i><strong>Note:</strong> This may take a while, so please be patient.</i>
+    </td>
+  </tr>
+  <tr><td colspan="2"><br></td></tr>
+  <tr>
+    <td><li></td>
+    <td>
 <formtemplate id="n_past_days_form">
       Show files modified in the past <formwidget id="n_past_days"> days as new.
 </formtemplate>

@@ -103,14 +103,14 @@ if {$recurse_p} {
 
 set table [ad_table \
     -Torderby $orderby \
-    -Tmissing_text "<blockquote><i>Folder [fs::get_folder_name -folder_id $folder_id] is empty.</i></blockquote>" \
+    -Tmissing_text "<blockquote><i>Folder [fs::get_object_name -object_id $folder_id] is empty.</i></blockquote>" \
     -Ttable_extra_html {width="95%"} \
     select_folder_contents \
     $sql \
     $table_def
 ]
 
-set folder_name [fs::get_folder_name -folder_id $folder_id]
+set folder_name [fs::get_object_name -object_id $folder_id]
 set context_bar [fs_context_bar_list -final Contents $folder_id]
 
 ad_return_template

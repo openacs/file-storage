@@ -23,7 +23,7 @@ if {![exists_and_not_null n_past_days]} {
     set n_past_days -1
 }
 
-set folder_name [fs_get_folder_name $folder_id]
+set folder_name [fs::get_object_name -object_id  $folder_id]
 
 set rows [fs::get_folder_contents \
     -folder_id $folder_id \
