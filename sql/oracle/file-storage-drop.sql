@@ -34,8 +34,8 @@ drop table fs_root_folders;
 drop package file_storage;
 
 begin
-acs_object_type.drop_type ( 
-  object_type => 'file_storage_item');
+content_type.drop_type ( 
+  content_type => 'file_storage_object');
 end;
 /
 show errors
