@@ -73,7 +73,7 @@ as
               where ci.content_type <> 'content_folder'
               connect by prior ci.item_id = ci.parent_id
               start with ci.item_id = cr_folders.folder_id)
-        else 0
+        else cr_revisions.content_length
       end as content_size,
       case
         when cr_items.content_type = 'content_folder' then cr_folders.label
