@@ -149,4 +149,10 @@
         </querytext>
     </fullquery>
 
+    <fullquery name="fs::get_item_id.get_item_id">
+      <querytext>
+        select content_item.get_id ( :name, :folder_id, 'f' )
+      </querytext>
+    </fullquery>
+
 </queryset>

@@ -8,7 +8,7 @@
 
     	select file_storage__rename_file (
         	:file_id, -- file_id
-        	:title	  -- title
+        	:filename	  -- title
     		);
 
       </querytext>

@@ -6,7 +6,7 @@
 <fullquery name="new_lob_file">      
       <querytext>
       select file_storage__new_file (
-        	:title,           	-- title
+        	:filename,           	-- filename
         	:folder_id,          	-- parent_id
         	:user_id,            	-- creation_user
         	:creation_ip,        	-- creation_ip
@@ -18,7 +18,7 @@
 <fullquery name="new_fs_file">      
       <querytext>
         select file_storage__new_file (
-        	:title,           	-- title
+        	:filename,           	-- filename
         	:folder_id,          	-- parent_id
         	:user_id,            	-- creation_user
         	:creation_ip,        	-- creation_ip
@@ -32,7 +32,7 @@
       <querytext>
 
     	select file_storage__new_version (
-		:filename,		-- filename
+		:title,		-- title
        		:description,		-- description
        		:mime_type,		-- mime_type
        		:file_id,		-- item_id

@@ -3,12 +3,22 @@
 <queryset>
    <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
+
+
+<fullquery name="get_folder">      
+      <querytext>
+	select content_item__get_parent_folder(:file_id)
+	from dual
+      </querytext>
+</fullquery>
+
+  
 <fullquery name="file_info">      
       <querytext>
       
 	select person__name(o.creation_user) as owner,
-       		i.name as title,
-       		r.title as name,
+       		i.name ,
+       		r.title ,
        		acs_permission__permission_p(:file_id,:user_id,'write') as write_p,
        		acs_permission__permission_p(:file_id,:user_id,'delete') as delete_p,
        		acs_permission__permission_p(:file_id,:user_id,'admin') as admin_p
