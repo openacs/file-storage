@@ -36,3 +36,5 @@ set context [fs_context_bar_list -final "[_ file-storage.Add_File]" $folder_id]
 if {[empty_string_p $title]} {
     set lock_title_p 0
 }
+
+set unpack_available_p [expr ![empty_string_p [string trim [parameter::get -parameter UnzipBinary]]]]
