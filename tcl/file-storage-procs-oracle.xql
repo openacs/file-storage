@@ -142,6 +142,22 @@
         </querytext>
     </fullquery>
 
+   <fullquery name="fs::do_notifications.get_owner_name">
+        <querytext>
+	  select person.name(o.creation_user) as owner
+		 from acs_objects o where o.object_id = :file_id
+        </querytext>
+    </fullquery>
+
+    <fullquery name="fs::do_notifications.path1">
+       <querytext>
+		select site_node.url(node_id) as path1 from site_nodes
+		where object_id = (select package_id
+				   from fs_root_folders where
+				   fs_root_folders.folder_id = :root_folder)
+       </querytext>
+    </fullquery>
+
     <fullquery name="fs::publish_versioned_object_to_file_system.select_object_content">
         <querytext>
             select content
