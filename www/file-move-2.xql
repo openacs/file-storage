@@ -27,7 +27,7 @@
     	select count(*)
     	from   cr_items
     	where  name = :filename
-    	and    parent_id = :folder_id
+    	and    parent_id = :parent_id
 
       </querytext>
 </fullquery>
