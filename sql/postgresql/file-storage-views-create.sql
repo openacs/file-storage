@@ -25,15 +25,16 @@ as
     select cr_folders.folder_id,
            cr_folders.label as name,
            acs_objects.last_modified, -- JCD needs to walk tree as oracle ver
-           (select count(*)
-             from fs_simple_objects
-             where fs_simple_objects.folder_id = cr_folders.folder_id) as content_size,
-           cr_items.parent_id,
-           cr_items.name as key
+           (select count(*) -- DRB: needs to walk tree and won't scale worth shit
+            from cr_items ci2
+	    where ci2.content_type <> 'content_folder'
+              and ci2.tree_sortkey between ci.tree_sortkey and tree_right(ci.tree_sortkey)) as content_size,
+           ci.parent_id,
+           ci.name as key
     from cr_folders,
-         cr_items,
+         cr_items ci,
          acs_objects
-    where cr_folders.folder_id = cr_items.item_id
+    where cr_folders.folder_id = ci.item_id
     and cr_folders.folder_id = acs_objects.object_id;
 
 
@@ -70,7 +71,7 @@ as
            fs_folders.key,
            0 as sort_key
     from fs_folders
-    union
+    union all
     select fs_files.file_id as object_id,
            fs_files.live_revision,
            fs_files.type,
@@ -83,7 +84,7 @@ as
            fs_files.key,
            1 as sort_key
     from fs_files
-    union
+    union all
     select fs_urls_full.url_id as object_id,
            0 as live_revision,
            'url' as type,
