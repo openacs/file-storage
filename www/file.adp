@@ -15,7 +15,7 @@
     <a href="file?file_id=@file_id@&show_all_versions_p=t">show all versions</a>
   </else>
   <if @write_p@ true>
-    | <a href="version-add?file_id=@file_id@">Upload a new version</a>
+    | <a href="file-add?file_id=@file_id@">Upload a new version</a>
   </if>
     | <a href="file-copy?file_id=@file_id@">Copy</a>
   <if @write_p@ true>
