@@ -55,7 +55,7 @@ if {$admin_p} {
 #set n_past_filter_values [list [list "Yesterday" 1] [list [_ file-storage.last_week] 7] [list [_ file-storage.last_month] 30]]
 set elements [list icon \
 		  [list label "" \
-		       display_template {<a href="@contents.file_url@"><img src="@contents.icon@"  border=0 alt="#file-storage.folder#" /></a>}] \
+		       display_template {<a href="@contents.file_url@"><img src="@contents.icon@"  border=0 alt="#file-storage.@contents.type@#" /></a>}] \
 		  name \
 		  [list label [_ file-storage.Name] \
 		       link_url_col file_url \
@@ -111,16 +111,26 @@ db_multirow -extend { icon last_modified_pretty content_size_pretty properties_l
     }
 
     set name [lang::util::localize $name]
-    if {![string equal $type folder]} {
-	set properties_link [_ file-storage.properties]
-	set properties_url "file?[export_vars {{file_id $object_id}}]"
-	set icon "/resources/file-storage/file.gif"
-        set file_url "view/${file_url}"
-    } else {
-	set properties_link ""
-	set properties_url ""
-	set icon "/resources/file-storage/folder.gif"
-	set file_url "index?[export_vars {{folder_id $object_id}}]"
+
+    switch -- $type {
+	folder {
+	    set properties_link ""
+	    set properties_url ""
+	    set icon "/resources/file-storage/folder.gif"
+	    set file_url "index?[export_vars {{folder_id $object_id}}]"
+	}
+	url {
+	    set properties_link "properties"
+	    set properties_url "simple-edit?[export_vars object_id]"
+	    set icon "/resources/url-button.gif"
+	    set file_url ${url}
+	}
+	default {
+	    set properties_link [_ file-storage.properties]
+	    set properties_url "file?[export_vars {{file_id $object_id}}]"
+	    set icon "/resources/file-storage/file.gif"
+	    set file_url "view/${file_url}"
+	}
     }
     
 
