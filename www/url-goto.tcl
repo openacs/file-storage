@@ -12,7 +12,7 @@ ad_page_contract {
 ad_require_permission $url_id read
 
 # Check the URL
-set url [db_string select_url "select url from fs_urls where url_id= :url_id" -default ""]
+set url [db_string select_url {} -default {}]
 
 if {![empty_string_p $url]} {
     ad_returnredirect $url
