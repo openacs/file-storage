@@ -46,10 +46,10 @@ db_transaction {
     end;"
 
 } on_error {
-    ad_return_complaint 1 "We received an error from the database.  Probably
-    the folder you selected already contains a file with the same name.
 
-    <pre>$errmsg</pre>"
+    ad_return_complaint 1 "The <a href=\"index?folder_id=$parent_id\">folder</a> you selected already contains a file with the same name. " 
+
+#    <pre>$errmsg</pre>
 
     return
 }
