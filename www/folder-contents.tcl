@@ -8,7 +8,7 @@ ad_page_contract {
     {folder_id:integer {[fs::get_root_folder]}}
     {recurse_p:boolean 0}
     {n_past_days:integer 999999}
-    {orderby "fs_objects.name"}
+    {orderby "name"}
 } -validate {
     valid_folder -requires {folder_id:integer} {
         if {[empty_string_p $folder_id] || ![fs::folder_p -object_id $folder_id]} {
@@ -26,6 +26,8 @@ ad_page_contract {
     orderby:onevalue
     table:onevalue
 }
+
+set user_id [ad_verify_and_get_user_id]
 
 form create n_past_days_form
 
@@ -63,7 +65,7 @@ if {[form is_valid n_past_days_form]} {
 
 set table_def [list]
 
-lappend table_def [list name Name {fs_objects.name $order} "<td width=\"30%\"><a href=\"\[ad_decode \$type Folder \"folder-contents?folder_id=\$object_id&n_past_days=$n_past_days&recurse_p=$recurse_p&orderby=$orderby\" URL {url-goto?url_id=\$object_id} {download/\$name?version_id=\$live_revision}]\">\$name</a></td>"]
+lappend table_def [list name Name {fs_objects.name $order} "<td width=\"30%\"><a href=\"\[ad_decode \$type Folder \"folder-contents?folder_id=\$object_id&n_past_days=$n_past_days&recurse_p=$recurse_p&orderby=$orderby\" URL \"url-goto?url_id=\$object_id\" \"download/\$name?version_id=\$live_revision\"]\">\$name</a></td>"]
 lappend table_def [list folder_name Folder {} "<td width=\"30%\"><a href=\"folder-contents?folder_id=\$parent_id&n_past_days=$n_past_days&recurse_p=$recurse_p&orderby=$orderby\">\$folder_name</a></td>"]
 lappend table_def {type Type {fs_objects.type $order} {c}}
 lappend table_def {size Size {fs_objects.content_size $order} {<td align=\"center\">[ad_decode $type Folder "$content_size item[ad_decode $content_size 1 {} s]" URL {} "$content_size byte[ad_decode $content_size 1 {} s]"]</td>}}
@@ -82,6 +84,7 @@ if {$recurse_p} {
         and fs_objects.parent_id = fs_folders.folder_id
         and fs_objects.type <> 'Folder'
         and fs_objects.last_modified >= (sysdate - :n_past_days)
+        and 't' = acs_permission.permission_p(fs_objects.object_id, :user_id, 'read')
         [ad_order_by_from_sort_spec $orderby $table_def]
     "
 } else {
@@ -93,6 +96,7 @@ if {$recurse_p} {
         where fs_objects.parent_id = :folder_id
         and fs_folders.folder_id = :folder_id
         and fs_objects.last_modified >= (sysdate - :n_past_days)
+        and 't' = acs_permission.permission_p(fs_objects.object_id, :user_id, 'read')
         [ad_order_by_from_sort_spec $orderby $table_def]
     "
 }
