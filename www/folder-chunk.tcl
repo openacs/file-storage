@@ -79,18 +79,18 @@ if {$delete_p} {
 if {$admin_p} {
     set return_url [ad_conn url]
     lappend actions "\#file-storage.Edit_Folder\#" "${fs_url}folder-edit?folder_id=$folder_id" "\#file-storage.Rename_this_folder\#"
-    lappend actions "\#file-storage.lt_Modify_permissions_on_1\#" "/permissions/one?[export_vars -override {{object_id $folder_id}} {return_url}]" "\#file-storage.lt_Modify_permissions_on_1\#"
+    lappend actions "\#file-storage.lt_Modify_permissions_on_1\#" "${fs_url}permissions?[export_vars -override {{object_id $folder_id}} {return_url}]" "\#file-storage.lt_Modify_permissions_on_1\#"
     if { $expose_rss_p } {
 	lappend actions "Configure RSS" "${fs_url}admin/rss-subscrs?folder_id=$folder_id" "Configure RSS"
     }
 }
 
 #set n_past_filter_values [list [list "Yesterday" 1] [list [_ file-storage.last_week] 7] [list [_ file-storage.last_month] 30]]
-
-set elements [list icon \
-		  [list label "" \
-		       display_template {<a href="@contents.download_url@"><img src="@contents.icon@"  border=0 alt="#file-storage.@contents.pretty_type@#" /></a>}] \
-		  name \
+set elements [list type [list label [_ file-storage.Type] \
+                             display_template {<a href="@contents.download_url@"><img src="@contents.icon@"  border=0 alt="#file-storage.@contents.pretty_type@#" /></a>@contents.pretty_type@} \
+			    orderby_desc {(sort_key =  0),pretty_type  desc} \
+			    orderby_asc {sort_key, pretty_type asc}] \
+                  name \
 		  [list label [_ file-storage.Name] \
                        display_template {<a href="@contents.file_url@"><if @contents.title@ nil>@contents.name@</a></if><else>@contents.title@</a><br/><if @contents.name@ ne @contents.title@><span style="color: \#999;">@contents.name@</span></if></else>} \
 		       orderby_desc {fs_objects.name desc} \
@@ -103,19 +103,19 @@ set elements [list icon \
  		       orderby_asc {fs_objects.name asc}] \
 		  content_size_pretty \
 		  [list label [_ file-storage.Size] \
+ 		       display_template {@contents.content_size_pretty;noquote@} \
 		       orderby_desc {content_size desc} \
 		       orderby_asc {content_size asc}] \
-		  type [list label [_ file-storage.Type] \
-			    display_col pretty_type \
-			    orderby_desc {(sort_key =  0),pretty_type  desc} \
-			    orderby_asc {sort_key, pretty_type asc}] \
 		  last_modified_pretty \
 		  [list label [_ file-storage.Last_Modified] \
 		       orderby_desc {last_modified_ansi desc} \
 		       orderby_asc {last_modified_ansi asc}] \
 		  properties_link \
 		  [list label "" \
-		       link_url_col properties_url]
+		       link_url_col properties_url] \
+                  new_version_link \
+		  [list label "" \
+		       link_url_col new_version_url]
 	      ]
 
 if {$allow_bulk_actions} {
@@ -159,19 +159,19 @@ if {[string equal $orderby ""]} {
     set orderby " order by fs_objects.sort_key, fs_objects.name asc"
 }
 
-db_multirow -extend {label icon last_modified_pretty content_size_pretty properties_link properties_url download_url} contents select_folder_contents {} {
+db_multirow -extend {label icon last_modified_pretty content_size_pretty properties_link properties_url download_url new_version_link new_version_url} contents select_folder_contents {} {
     set last_modified_ansi [lc_time_system_to_conn $last_modified_ansi]
     
     set last_modified_pretty [lc_time_fmt $last_modified_ansi "%x "]
     if {[string equal $type "folder"]} {
         set content_size_pretty [lc_numeric $content_size]
-	append content_size_pretty " [_ file-storage.items]"
+	append content_size_pretty "&nbsp;[_ file-storage.items]"
 	set pretty_type "Folder"
     } else {
 	if {$content_size < 1024} {
-	    set content_size_pretty "[lc_numeric $content_size] [_ file-storage.bytes]"
+	    set content_size_pretty "[lc_numeric $content_size]&nbsp;[_ file-storage.bytes]"
 	} else {
-	    set content_size_pretty "[lc_numeric [expr $content_size / 1024 ]] [_ file-storage.kb]"
+	    set content_size_pretty "[lc_numeric [expr $content_size / 1024 ]]&nbsp;[_ file-storage.kb]"
 	}
 
     }
@@ -189,6 +189,8 @@ db_multirow -extend {label icon last_modified_pretty content_size_pretty propert
 	folder {
 	    set properties_link ""
 	    set properties_url ""
+	    set new_version_link {}
+	    set new_version_url {}
 	    set icon "/resources/file-storage/folder.gif"
 	    set file_url "${fs_url}index?[export_vars {{folder_id $object_id}}]"
             set download_url $file_url
@@ -196,6 +198,8 @@ db_multirow -extend {label icon last_modified_pretty content_size_pretty propert
 	url {
 	    set properties_link [_ file-storage.properties]
 	    set properties_url "${fs_url}simple?[export_vars object_id]"
+	    set new_version_link [_ acs-kernel.common_New]
+	    set new_version_url "${fs_url}file-add?[export_vars {{file_id $object_id}}]"
 	    set icon "/resources/acs-subsite/url-button.gif"
 	    set file_url ${url}
             set download_url $file_url
@@ -203,6 +207,8 @@ db_multirow -extend {label icon last_modified_pretty content_size_pretty propert
 	default {
 	    set properties_link [_ file-storage.properties]
 	    set properties_url "${fs_url}file?[export_vars {{file_id $object_id}}]"
+	    set new_version_link [_ acs-kernel.common_New]
+	    set new_version_url "${fs_url}file-add?[export_vars {{file_id $object_id}}]"
 	    set icon "/resources/file-storage/file.gif"
 	    set file_url "${fs_url}view/${file_url}"
             set download_url "${fs_url}download/?[export_vars {{file_id $object_id}}]"                

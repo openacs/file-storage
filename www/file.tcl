@@ -25,7 +25,7 @@ ad_page_contract {
 
 # check they have read permission on this file
 
-ad_require_permission $file_id read
+permission::require_permission -object_id $file_id -privilege read
 
 #set templating datasources
 
@@ -51,7 +51,7 @@ set actions [list "[_ file-storage.Upload_Revision]" file-add?[export_vars [list
 		 "[_ file-storage.Delete_File]" file-delete?[export_vars file_id] "Delete file"]
 
 if {[string equal $delete_p "t"]} {
-    lappend actions [_ file-storage.Set_Permissions] "/permissions/one?[export_vars {{object_id $file_id}}]" [_ file-storage.lt_Modify_permissions_on]
+    lappend actions [_ file-storage.Set_Permissions] [export_vars -base permissions {{object_id $file_id}}] [_ file-storage.lt_Modify_permissions_on]
 }
 
 template::list::create \
