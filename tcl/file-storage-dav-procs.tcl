@@ -29,7 +29,7 @@ ad_proc fs::impl::fs_object::put {} {
     set tmp_filename [oacs_dav::conn tmpfile]
     set tmp_size [file size $tmp_filename]
     # authenticate that user has write privilege
-
+ns_log notice "OACS-DAV File Storage PUT tmp_filename $tmp_filename tmp_size $tmp_size"
     # we need to calculate parent_id from the URI
     # it might not be the root DAV folder for the package
     # check for folder or not

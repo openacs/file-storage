@@ -200,6 +200,7 @@ ad_proc -public fs::after_mount {
 	-pretty_name $sn(instance_name) \
 	-name $name
 }
+
 ad_proc -public fs::new_root_folder {
     {-package_id ""}
     {-pretty_name ""}
@@ -627,6 +628,15 @@ ad_proc -public fs::add_file {
 
     set mime_type [cr_filename_to_mime_type -create $name]
     set tmp_size [file size $tmp_filename]
+    switch  [cr_registered_type_for_mime_type $mime_type] {
+        image {
+	    set content_type "image"
+	}
+	default {
+	    set content_type "file_storage_object"
+	}
+    }
+
     db_transaction {
 	if {[empty_string_p $item_id] || ![db_string item_exists ""]} {
 	    set item_id [db_exec_plsql create_item ""]
