@@ -39,7 +39,7 @@ BEGIN
         (object_id, folder_id, name, description) values
         (v_object_id, p_folder_id, p_name, p_description);
 
-        acs_object__update_last_modified(p_folder_id);
+        PERFORM acs_object__update_last_modified(p_folder_id);
 
         return v_object_id;
 
