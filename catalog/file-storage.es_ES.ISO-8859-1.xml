@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="file-storage" package_version="5.1.0a2" locale="es_ES" charset="ISO-8859-1">
+<message_catalog package_key="file-storage" package_version="5.1.0a10" locale="es_ES" charset="ISO-8859-1">
 
   <msg key="Action">Opciones</msg>
   <msg key="Actions">Opciones:</msg>
@@ -42,6 +42,7 @@
   <msg key="index_page_navigate_up_folder">Subir a %up_name%</msg>
   <msg key="item">archivo</msg>
   <msg key="items">archivos</msg>
+  <msg key="kb">kb</msg>
   <msg key="Last_Modified">Última Modificación</msg>
   <msg key="last_month">Último Mes</msg>
   <msg key="last_week">Última Semana</msg>
@@ -55,6 +56,7 @@
   <msg key="lt_delete_file">¿Desea realmente borrar el archivo &quot;%title%&quot; y todas sus versiones? No se podrá recuperar.</msg>
   <msg key="lt_delete_folder">¿Desea realmente borrar la carpeta &quot;%folder_name%&quot; y todo su contenido? No se podrá recuperar.</msg>
   <msg key="lt_Delete_this_file_incl">Borrar este archivo (y todas sus versiones)</msg>
+  <msg key="lt_Do_you_want_to_delete">¿Desea borrar los archivos listados?</msg>
   <msg key="lt_Download_an_archive_o">Descargar un archivo con los contenidos de esta carpeta</msg>
   <msg key="lt_Either_there_is_alrea">O ya existe una carpeta con el nombre &quot;%folder_name%&quot;, o ha pulsado el botón más de una vez. Utilice el botón Atrás de su navegador y elija otro nombre, o &lt;a href=&quot;%directory_url%&quot;&gt;vuelva al listado&lt;/a&gt; para comprobar la carpeta.</msg>
   <msg key="lt_Folder_folder_name_is">La carpeta %folder_name% está vacía.</msg>
@@ -63,6 +65,9 @@
   <msg key="lt_Live_version_of_title">Versión actual de &quot;%title%&quot;</msg>
   <msg key="lt_Modify_permissions_on">Modificar permisos de este archivo</msg>
   <msg key="lt_Modify_permissions_on_1">Modificar permisos de esta carpeta</msg>
+  <msg key="lt_Moving_allowed_count_">Moviendo %allowed_count% archivos.</msg>
+  <msg key="lt_No_valid_items_to_be_">No existen archivos válidos para mover.</msg>
+  <msg key="lt_not_allowed_count_ite">%not_allowed_count% archivos no pueden ser movidos</msg>
   <msg key="lt_Please_enter_the_new_">Por favor, introduzca el nuevo nombre del archivo:</msg>
   <msg key="lt_Select_the_folder_tha">Seleccione la carpeta que quiere copiar en &quot;%file_name%</msg>
   <msg key="lt_Select_the_folder_tha_1">Seleccione la carpeta donde quiere mover poner &quot;%file_name%&quot;</msg>

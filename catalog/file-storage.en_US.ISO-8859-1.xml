@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="file-storage" package_version="5.1.0a8" locale="en_US" charset="ISO-8859-1">
+<message_catalog package_key="file-storage" package_version="5.1.0a10" locale="en_US" charset="ISO-8859-1">
 
   <msg key="_Copy">File</msg>
   <msg key="_Delete">File</msg>
@@ -37,18 +37,18 @@
   <msg key="edit">edit</msg>
   <msg key="Edit_Folder">Edit Folder</msg>
   <msg key="Edit_URL">Edit URL</msg>
-  <msg key="File_deleted">File deleted</msg>
   <msg key="file">file</msg>
   <msg key="file_delete_page_title">Delete %title%</msg>
+  <msg key="File_deleted">File deleted</msg>
   <msg key="file_edit_page_title">Rename %title%</msg>
   <msg key="file_edit_page_title_1">Edit %pretty_name%</msg>
   <msg key="file_page_file_title_label">Title: %title%</msg>
   <msg key="file_page_owner_label">Owner: %owner%</msg>
   <msg key="Folder">Folder</msg>
   <msg key="folder">folder</msg>
-  <msg key="Folder_deleted">Folder deleted</msg>
   <msg key="Folder_available_via_WebDAV_at">This folder is available via WebDAV at %webdav_url%</msg>
   <msg key="folder_delete_page_title">Delete %folder_name%</msg>
+  <msg key="Folder_deleted">Folder deleted</msg>
   <msg key="Folder_ID">Folder ID</msg>
   <msg key="Folder_Name">Folder Name:</msg>
   <msg key="folder_type_pretty_name">folder</msg>
@@ -106,8 +106,8 @@ delete, therefore you cannot delete it.</msg>
   <msg key="lt_This_is_a_ZIP">This is a ZIP file containing multiple files. Expect a long upload time for large files.  You may minimize your browser while waiting.</msg>
   <msg key="lt_Use_the_Browse_button">Use the &quot;Browse...&quot; button to locate your file, 
     then click &quot;Open&quot;.</msg>
-  <msg key="lt_Version_Notes_descrip">Version Notes: %description%\n</msg>
   <msg key="lt_version_not_valid">The specified version is not valid.</msg>
+  <msg key="lt_Version_Notes_descrip">Version Notes: %description%\n</msg>
   <msg key="lt_View_folder_contents_">View folder contents: %url_version% \n\n</msg>
   <msg key="lt_We_got_an_error_that_">We got an error that we couldn't readily identify.  Please let the system owner know about this.</msg>
   <msg key="lt_We_received_an_error_">We received an error from the database.  Probably
@@ -162,7 +162,7 @@ delete, therefore you cannot delete it.</msg>
   <msg key="Upload_Revision">Upload Revision</msg>
   <msg key="Uploaded_by_ownern">Uploaded by: %owner%\n</msg>
   <msg key="URL">URL:</msg>
-  <msg key="URL_deleted">URL deleted</msg> 
+  <msg key="URL_deleted">URL deleted</msg>
   <msg key="version_add_page_title">Upload New Version of %title%</msg>
   <msg key="version_delete_page_title">Delete %version_name%</msg>
   <msg key="Version_filename">Version filename</msg>
