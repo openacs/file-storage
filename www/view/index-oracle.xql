@@ -21,7 +21,9 @@
 	    and i.parent_id = (select item_id 
 			       from cr_items 
 			       where name = :item_url_folder
-		 	       and rownum = 1) 
+			       and parent_id = (select item_id
+						from cr_items
+						where name = :item_url_parent_folder))
 	    and rownum = 1
 	    order by revision_id desc
 
