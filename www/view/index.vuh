@@ -19,6 +19,9 @@ set content_type "content_revision"
 # Get the IDs
 set content_root [fs::get_root_folder]
 set template_root [db_string template_root ""]
+set file_id [::content::item::get_id -item_path $the_url \
+                   -root_folder_id $content_root \
+                   -resolve_index "f"]
 
 
 # Serve the page
@@ -27,17 +30,46 @@ set template_root [db_string template_root ""]
 # as though it's been passed by reference.   This requires that the redirect treat the
 # path as an absolute path within the filesystem.
 
-if { [content::init the_url the_root $content_root $template_root public $revision_id $content_type] } {
-  set file "$the_root/$the_url"
-  rp_internal_redirect -absolute_path $file
-} else {
-  # ns_returnnotfound
-  set page "[ad_header {Content Item Not Found}]"
-  append page "<h3>Content Item Not Found</h3>"
-  append page "The requested item is not available for viewing.  "
-  append page "The item is either not available on this server or it is not in a publishable state  "
-  append page "Unpublished items can be viewed via the CMS interface if the CMS package is installed.<br>"
-  append page "[ad_footer]"
-  doc_return 200 text/html $page
-}
+if {[parameter::get -parameter BehaveLikeFilesystemP -default 0]} {
+    
+    # Make sure we are not dealing with an upgraded file and there exists a file with the title
+    if { [string equal "" $file_id] } {
+	set splitted_url [split $the_url "/"]
+	set item_url_title [lindex $splitted_url end]
+	set item_url_folder [lindex $splitted_url end-1]
+	set file_id [db_string test {select i.item_id
+	    from cr_revisions r, cr_items i 
+	    where r.item_id = i.item_id 
+	    and r.title = :item_url_title 
+	    and i.parent_id = (select item_id 
+			       from cr_items 
+			       where name = :item_url_folder) 
+	    order by revision_id desc limit 1}]
+    }
 
+    if {![exists_and_not_null version_id]} {
+	set version_id [item::get_live_revision $file_id]
+    }
+
+    set user_id [ad_conn user_id]
+    
+    ad_require_permission $version_id "read"
+    
+    cr_write_content -revision_id $version_id
+
+} else {
+    
+    if { [content::init the_url the_root $content_root $template_root public $revision_id $content_type] } {
+	set file "$the_root/$the_url"
+	rp_internal_redirect -absolute_path $file
+    } else {
+	# ns_returnnotfound
+	set page "[ad_header {Content Item Not Found}]"
+	append page "<h3>Content Item Not Found</h3>"
+	append page "The requested item is not available for viewing.  "
+	append page "The item is either not available on this server or it is not in a publishable state  "
+	append page "Unpublished items can be viewed via the CMS interface if the CMS package is installed.<br>"
+	append page "[ad_footer]"
+	doc_return 200 text/html $page
+    }
+}
