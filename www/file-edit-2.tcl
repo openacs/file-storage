@@ -19,19 +19,11 @@ ad_page_contract {
 
 ad_require_permission $file_id write
 
-if [catch {db_exec_plsql rename_file "
-begin
-    content_item.rename (
-        item_id => :file_id,
-        name => :title
-    );
-end;"} errmsg] {
+if [catch {
+    db_exec_plsql rename_file {}
+} errmsg] {
 
-    if [db_string duplicate_check "
-    select count(*)
-    from   cr_items
-    where  name = :name
-    and    parent_id = content_item.get_parent_folder(:file_id)"] {
+    if { [db_string duplicate_check {}] } {
 	ad_return_complaint 1 "[_ file-storage.lt_It_appears_that_there]"
     } else {
 	ad_return_complaint 1 "[_ file-storage.lt_We_got_an_error_that_]
