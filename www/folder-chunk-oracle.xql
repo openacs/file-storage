@@ -12,6 +12,7 @@
                    to_char(fs_objects.last_modified, 'YYYY-MM-DD HH24:MI:SS') as last_modified,
                    fs_objects.content_size,
                    fs_objects.url,
+                   content_item.get_path(fs_objects.object_id, :root_folder_id) as file_url,
                    fs_objects.sort_key,
                    fs_objects.file_upload_name,
                    case when fs_objects.last_modified >= (sysdate - :n_past_days) then 1 else 0 end as new_p,
