@@ -51,7 +51,11 @@ if {![exists_and_not_null root_folder_id]} {
     set root_folder_id [fs::get_root_folder]
 }
 
-set folder_path [db_exec_plsql get_folder_path {}]
+if {![string equal $root_folder_id $folder_id]} {
+    set folder_path [db_exec_plsql get_folder_path {}]
+} else {
+    set folder_path ""
+}
 
 set actions [list]
 
