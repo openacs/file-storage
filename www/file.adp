@@ -27,7 +27,17 @@
   <if @delete_p@ true>
     | <a href="file-delete?file_id=@file_id@">#file-storage.lt_Delete_this_file_incl#</a>
   </if>
+ <if @gc_comments@ not nil>
+ <li>Comments on this file:
+ <ul>
+ @gc_comments@
+ </ul>
+ </if>
+ <if @gc_link@ not nil>
+   <li>@gc_link@
+ </if>
 </ul>
+
 
 <table border=1 cellspacing=2 cellpadding=2>
   <tr>
@@ -55,7 +65,7 @@
     <td align=right>@version.content_size_pretty@</td>
     <td>@version.type@</td>
     <td>@version.last_modified@</td>
-    <td>@version.description@</td>
+    <td>@version.description@&nbsp;</td>
     <td>
       &nbsp;<if @version.delete_p@ true>
       <a href="version-delete?version_id=@version.version_id@">#file-storage.delete#</a> 
