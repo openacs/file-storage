@@ -204,7 +204,7 @@
       </querytext>
 </fullquery>
 
-<fullquery name="fs::delete_file.delete_file">      
+  <fullquery name="fs::delete_file.delete_file">      
       <querytext>
 	
 	begin
@@ -214,8 +214,17 @@
 	end;
 
       </querytext>
-</fullquery>
+  </fullquery>
 
+  <fullquery name="fs::delete_file.delete_file">      
+      <querytext>
+		file_storage.delete_folder (
+			:folder_id,
+                        :cascade_p
+			)
+      </querytext>
+  </fullquery>
+  
   <fullquery name="fs::add_version.update_last_modified">
     <querytext>
       begin
