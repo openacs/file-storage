@@ -67,6 +67,8 @@ begin;
   drop function inline_0();
   drop view fs_objects;
   drop view fs_urls_full;
+  drop view fs_folders;
+
   drop table fs_urls;
   drop table fs_simple_objects;
 end;
@@ -120,6 +122,26 @@ as
       left join cr_folders on (cr_items.item_id = cr_folders.folder_id)
       left join cr_revisions on (cr_items.live_revision = cr_revisions.revision_id)
       join acs_objects on (cr_items.item_id = acs_objects.object_id);
+
+
+
+
+create view fs_folders
+as
+    select cr_folders.folder_id,
+           cr_folders.label as name,
+           acs_objects.last_modified, -- JCD needs to walk tree as oracle ver
+           (select count(*) -- DRB: needs to walk tree and won't scale worth shit
+            from cr_items ci2
+	    where ci2.content_type <> 'content_folder'
+              and ci2.tree_sortkey between ci.tree_sortkey and tree_right(ci.tree_sortkey)) as content_size,
+           ci.parent_id,
+           ci.name as key
+    from cr_folders,
+         cr_items ci,
+         acs_objects
+    where cr_folders.folder_id = ci.item_id
+    and cr_folders.folder_id = acs_objects.object_id;
 
 -- JS: BEFORE DELETE TRIGGER to clean up CR entries (except root folder)
 drop function fs_package_items_delete_trig ();
