@@ -24,7 +24,6 @@
 
 	select  r.title,
        		r.revision_id as version_id,
-       		file_storage__get_path(i.item_id,file_storage__get_root_folder([ad_conn package_id]),r.revision_id) as file_path,
        		person__name(o.creation_user) as author,
        		r.mime_type as type,
        		to_char(o.last_modified,'YYYY-MM-DD HH24:MI') as last_modified,
@@ -57,3 +56,5 @@
 </partialquery> 	
 
 </queryset>
+
+
