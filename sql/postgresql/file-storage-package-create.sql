@@ -43,18 +43,19 @@ create function file_storage__get_package_id (
 declare
     get_package_id__item_id     alias for $1;
     v_package_id                fs_root_folders.package_id%TYPE;
+    v_tree_sortkey              cr_items.tree_sortkey%TYPE;
 begin
+    select tree_ancestor_key(tree_sortkey, 2)
+    into v_tree_sortkey
+    from cr_items
+    where item_id = get_package_id__item_id;
+
     select fs_root_folders.package_id
     into v_package_id
     from fs_root_folders,
-         (select c1.item_id
-          from cr_items c1,
-               cr_items c2
-          where c2.item_id = get_package_id__item_id
-          and c1.tree_sortkey between c2.tree_sortkey and tree_right(c2.tree_sortkey)
-          and c1.item_id <> get_package_id__item_id
-          order by c1.tree_sortkey desc) this
-    where fs_root_folders.folder_id = this.item_id;
+         cr_items
+    where fs_root_folders.folder_id = cr_items.item_id
+    and cr_items.tree_sortkey = v_tree_sortkey;
 
     if NOT FOUND then
         return null;
