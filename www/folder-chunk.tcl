@@ -1,7 +1,7 @@
 # file-storage/www/folder-chunk.tcl
 
 ad_page_contract {
-    @author yon (yon@milliped.com)
+    @author yon (yon@openforce.net)
     @creation-date Feb 22, 2002
     @version $Id$
 } -query {
