@@ -148,4 +148,5 @@ delete, therefore you cannot delete it.</msg>
   <msg key="Change_upload_limit">Change upload limit</msg>
   <msg key="Upload_limit_error">Upload limit must be no more than</msg>
   <msg key="Upload_limit_error_2">bytes. Increase the upload limit in your AOLserver's Tcl configuration file.</msg>
+  <msg key="Choose_Destination_Folder">Choose a destination folder</msg>
 </message_catalog>
