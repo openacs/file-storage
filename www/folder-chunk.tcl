@@ -16,6 +16,9 @@ if {![exists_and_not_null folder_id]} {
     ad_return_complaint 1 [_ file-storage.lt_bad_folder_id_folder_]
     ad_script_abort
 }
+if {![exists_and_not_null allow_bulk_actions]} {
+    set allow_bulk_actions "0"
+}
 
 set viewing_user_id [ad_conn user_id]
 
@@ -100,11 +103,18 @@ set elements [list icon \
 		       link_url_col properties_url]
 	      ]
 
+if {$allow_bulk_actions} {
+    set bulk_actions [list "Move" "move" "Move Checked Items to Another Folder" "Copy" "copy" "Copy Checked Items to Another Folder" "Delete" "delete" "Delete Checked Items"]
+} else {
+    set bulk_actions ""
+}
+
 template::list::create \
     -name contents \
     -multirow contents \
     -key object_id \
     -actions $actions \
+    -bulk_actions $bulk_actions \
     -filters {
 	folder_id {hide_p 1}
     } \

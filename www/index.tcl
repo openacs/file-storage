@@ -95,4 +95,8 @@ if { !${root_folder_p}} {
 
 set webdav_url [fs::webdav_url -item_id $folder_id]
 
+# FIXME make this a parameter!
+
+set allow_bulk_actions 1
+
 ad_return_template
