@@ -46,7 +46,7 @@ begin
 
 end;' language 'plpgsql' with (iscachable);
 
-drop function file_storage__new_root_folder (integer);
+-- drop function file_storage__new_root_folder (integer);
 
 create or replace function file_storage__new_file(
        -- 
