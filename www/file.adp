@@ -52,7 +52,7 @@
       <a href="download/index?version_id=@version.version_id@">@version.title@</a>
     </td>
     <td>@version.author@</td>
-    <td align=right>@version.content_size@</td>
+    <td align=right>@version.content_size_pretty@</td>
     <td>@version.type@</td>
     <td>@version.last_modified@</td>
     <td>@version.description@</td>

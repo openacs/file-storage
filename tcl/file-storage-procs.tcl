@@ -379,7 +379,18 @@ namespace eval fs {
             set user_id [acs_magic_object the_public]
         }
 
-        return [db_list_of_ns_sets select_folder_contents {}]
+        set list_of_ns_sets [db_list_of_ns_sets select_folder_contents {}]
+        
+        foreach set $list_of_ns_sets {
+            # in plain Tcl:
+            # set last_modified [lc_time_fmt $last_modified_ansi "%x %X"]
+            ns_set put $set last_modified [lc_time_fmt [ns_set get $set last_modified_ansi] "%x %X"]
+
+            # set content_size_pretty [lc_numeric $content_size]
+            ns_set put $set content_size_pretty [lc_numeric [ns_set get $set content_size]]
+        }
+
+        return $list_of_ns_sets
     }
 
     ad_proc -public get_folder_contents_count {
