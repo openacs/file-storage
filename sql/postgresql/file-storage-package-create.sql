@@ -647,7 +647,7 @@ begin
 
         return file_storage__delete_folder(
                     delete_folder__folder_id,  -- folder_id
-                    'f'
+                    ''f''
                     );
 
 end;' language 'plpgsql';
