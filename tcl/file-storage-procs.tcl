@@ -847,7 +847,11 @@ ad_proc fs::webdav_url {
 
 	set webdav_prefix [oacs_dav::uri_prefix]
 
-	return "[ad_url]${webdav_prefix}${package_url}${url_stub}"
+	if { [security::RestrictLoginToSSLP] } {
+	    return "[security::get_secure_location]${webdav_prefix}${package_url}${url_stub}"
+	} else {
+	    return "[ad_url]${webdav_prefix}${package_url}${url_stub}"
+	}
 
     } else {
 
