@@ -48,6 +48,7 @@
 
             select fs_objects.object_id,
                    fs_objects.name,
+                   fs_objects.title,
                    fs_objects.live_revision,
                    fs_objects.type,
                    to_char(fs_objects.last_modified, 'YYYY-MM-DD HH24:MI:SS') as last_modified_ansi,
