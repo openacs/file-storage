@@ -78,7 +78,7 @@ as
       case
         when cr_items.content_type = 'content_folder' then cr_folders.label
         when cr_items.content_type = 'content_extlink' then cr_extlinks.label
-        else cr_items.name
+        else nvl(cr_revisions.filename,cr_items.name)
       end as name,
       cr_items.name as file_upload_name,
       cr_revisions.title,
