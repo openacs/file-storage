@@ -33,8 +33,7 @@
                    where m.object_id = fs_objects.object_id
                      and m.party_id = :viewing_user_id
                      and m.privilege = 'read')
-            order by fs_objects.sort_key, fs_objects.name
-
+		$orderby
         </querytext>
     </fullquery>
 </queryset>
