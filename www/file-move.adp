@@ -7,7 +7,7 @@
 <form method=GET action="file-move-2">
 <input type=hidden name=file_id value="@file_id@">
 
-<include src="folder_list" file_id="@file_id@">
+<include src="folder-list" file_id="@file_id@">
 <p>
 <input type=submit value="Move">
 </form>
