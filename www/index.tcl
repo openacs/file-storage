@@ -8,6 +8,7 @@ ad_page_contract {
 } {
     {folder_id:integer [fs_get_root_folder]}
     {n_past_days:integer "99999"}
+    {orderby:optional}
 } -validate {
     valid_folder -requires {folder_id:integer} {
 	if {![fs_folder_p $folder_id]} {
@@ -80,9 +81,14 @@ if {[form is_valid n_past_days_form]} {
 set context [fs_context_bar_list $folder_id]
 
 set up_url {}
-if { [llength $context] > 1 } {
-    set up_url [lindex [lindex $context end-1] 0]
-    set up_name [lindex [lindex $context end-1] 1]
+if { !${root_folder_p}} {
+    if {[llength $context] == 1} {
+	set up_url [ad_conn package_url]
+	set up_name [ad_conn instance_name]
+    } else {
+	set up_url [lindex [lindex $context end-1] 0]
+	set up_name [lindex [lindex $context end-1] 1]
+    }
 }
 
 ad_return_template

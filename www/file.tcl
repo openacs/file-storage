@@ -33,26 +33,63 @@ set user_id [ad_conn user_id]
 set context [fs_context_bar_list $file_id]
 
 set show_administer_permissions_link_p [ad_parameter "ShowAdministerPermissionsLinkP"]
-
 set root_folder_id [fs::get_root_folder]
-
-db_1row file_info {}
+db_1row file_info ""
 
 # We use the new db_map here
 if {[string equal $show_all_versions_p "t"]} {
-#    append sql "
-#and r.item_id = :file_id"
     set show_versions [db_map show_all_versions]
 } else {
-#    append sql "
-#and r.revision_id = (select live_revision from cr_items where item_id = :file_id)"
     set show_versions [db_map show_live_version]
 }
+set actions [list "Upload Revision" version-add?[export_vars file_id] "Upload a new version of this file" \
+		 "Rename File" file-edit?[export_vars file_id] "Rename file" \
+		 "Copy File" file-copy?[export_vars file_id] "Copy file" \
+		 "Move File" file-move?[export_vars file_id] "Move file" \
+		 "Delete File" file-delete?[export_vars file_id] "Delete file"]
 
-db_multirow -unclobber -extend { last_modified_pretty content_size_pretty } version version_info {} {
+if {[string equal $delete_p "t"]} {
+    lappend actions [_ file-storage.Set_Permissions] "/permissions/one?[export_vars {{object_id $file_id}}]" [_ file-storage.lt_Modify_permissions_on]
+}
+
+template::list::create \
+    -name version \
+    -no_data [_ file-storage.lt_There_are_no_versions] \
+    -multirow version \
+    -actions $actions \
+    -elements {
+	title {
+	    label \#file-storage.Title\#
+	    link_url_col version_url
+	}
+	author { label \#file-storage.Author\#}
+	content_size {
+	    label \#file-storage.Size\#
+	    display_col content_size_pretty
+	}
+	type { label \#file-storage.Type\#}
+	last_modified_ansi {
+	    label \#file-storage.Last_Modified\#
+	    display_col last_modified_pretty
+	}
+	description { label \#file-storage.Version_Notes\#}
+	version_delete {label "" link_url_col version_delete_url}
+    }
+
+db_multirow -unclobber -extend { last_modified_pretty content_size_pretty version_url version_delete version_delete_url} version version_info {} {
     set last_modified_ansi [lc_time_system_to_conn $last_modified_ansi]
     set last_modified_pretty [lc_time_fmt $last_modified_ansi "%x %X"]
-    set content_size_pretty [lc_numeric $content_size]
+    set content_size_pretty "[lc_numeric $content_size] [_ file-storage.bytes]"
+    if {[string equal $title ""]} {
+	set title "[_ file-storage.untitled]"
+    }
+    if {[string equal $version_id $live_revision]} {
+	set version_url "view/${file_url}?[export_vars {{revision_id $version_id}}]"
+    } else {
+	set version_url "view/${file_url}"
+    }
+    set version_delete [_ file-storage.Delete_Version]
+    set version_delete_url "version-delete?[export_vars version_id]"
 }
 
 set return_url "[ad_conn url]?file_id=$file_id"
