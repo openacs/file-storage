@@ -24,13 +24,11 @@
   <msg key="edit">rediger</msg>
   <msg key="Edit_Folder">Rediger Mappe</msg>
   <msg key="Edit_URL">Redigér URL</msg>
-  <msg key="exclude">ekskluderet</msg>
   <msg key="file">file</msg>
   <msg key="folder">mappe</msg>
   <msg key="Folder_ID">Mappe ID</msg>
   <msg key="Folder_Name">Mappe Navn:</msg>
   <msg key="folder_type_pretty_name">folder</msg>
-  <msg key="include">inkluder</msg>
   <msg key="item">objekt</msg>
   <msg key="items">objekter</msg>
   <msg key="Last_Modified">Senest Ændret</msg>
@@ -40,7 +38,6 @@
   <msg key="lt_delete_file">Er du sikker på at du vil slette filen &quot;%title%&quot; og alle dens revisioner? Denne handling kan ikke fortrydes.</msg>
   <msg key="lt_delete_folder">Er du sikker på at du vil slette mappen &quot;%folder_name%&quot; og alle de ting den indeholder? Denne handling kan ikke gøres om.</msg>
   <msg key="lt_Delete_this_file_incl">Slet denne fil (inklusiv alle versioner)</msg>
-  <msg key="lt_Download_an_archive_o">Download et arkiv med indholdet af denne mappe.</msg>
   <msg key="lt_Either_there_is_alrea">Der er enten allerede en mappe med navnet &quot;%folder_name%&quot;, eller du har klikket på knappen mere end én gang. Du kan bruge Tilbage-knappen og vælge et nyt navn, eller du kan &lt;a href=&quot;%directory_url%&quot;&gt;vende tilbage til mappeoversigten&lt;/a&gt; og se, om din mappe er oprettet dér.</msg>
   <msg key="lt_Folder_folder_name_is">Mappen %folder_name% er tom</msg>
   <msg key="lt_It_appears_that_there">Der er allerede en fil med det navn i denne mappe. Måske har du klikket to gange.</msg>
@@ -49,7 +46,6 @@
   <msg key="lt_Please_enter_the_new_">Skriv venligst det nye navn for denne fil:</msg>
   <msg key="lt_Show_files_modified_i">Vis filer ændret indenfor de sidste</msg>
   <msg key="lt_show_only_live_versio">Vis kun seneste version</msg>
-  <msg key="lt_Showing_files_modifie">Oversigt over filer ændret siden</msg>
   <msg key="lt_The_folder_link_you_s">Den folder &quot;%folder_link%&quot; du har valgt indeholder allerede en fil med samme navn.</msg>
   <msg key="lt_The_specified_file_is">Den angivne fil er ikke gyldig.</msg>
   <msg key="lt_The_specified_folder_">Den angivne mappe eksisterer ikke.</msg>
@@ -58,7 +54,6 @@
   <msg key="lt_There_are_no_versions">Der er ingen versioner af denne fil tilgængelig.</msg>
   <msg key="lt_This_file_has_version">Denne fil har en version, du ikke har rettighed til at ændre.</msg>
   <msg key="lt_This_folder_contains_">Denne mappe kan ikke slettes, da den indeholder version du ikke har rettighed til at ændre.</msg>
-  <msg key="lt_This_may_take_a_while">Dette tager et stykke tid. Tålmodighed tak.</msg>
   <msg key="lt_Use_the_Browse_button">Brug &quot;Gennemse...&quot;-knappen til at finde din fil og klik herefter &quot;Åben&quot;.</msg>
   <msg key="lt_version_not_valid">Den angivne version er ikke gyldig.</msg>
   <msg key="lt_We_got_an_error_that_">Vi fik en uidentificeret fejl. Snak med den sysop.</msg>
@@ -74,9 +69,6 @@
   <msg key="new">ny</msg>
   <msg key="No_such_type">Ingen sådan type</msg>
   <msg key="no_such_URL">URL'en var ikke gyldig</msg>
-  <msg key="Note">Note:</msg>
-  <msg key="Order_By">Sortér Efter</msg>
-  <msg key="Recurse">Gentag for alle (rekursiv)?</msg>
   <msg key="Rename">Omdøb</msg>
   <msg key="Rename_this_folder">Omdøb denne mappe</msg>
   <msg key="Save">Gem</msg>

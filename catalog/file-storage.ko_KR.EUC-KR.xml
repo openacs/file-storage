@@ -24,13 +24,11 @@
   <msg key="edit">수정</msg>
   <msg key="Edit_Folder">폴더 수정</msg>
   <msg key="Edit_URL">URL 수정</msg>
-  <msg key="exclude">제외하다</msg>
   <msg key="file">파일</msg>
   <msg key="folder">폴더</msg>
   <msg key="Folder_ID">폴더 아이디</msg>
   <msg key="Folder_Name">폴더 이름:</msg>
   <msg key="folder_type_pretty_name">폴더</msg>
-  <msg key="include">포함하다</msg>
   <msg key="item">항목</msg>
   <msg key="items">항목</msg>
   <msg key="Last_Modified">마지막 수정</msg>
@@ -40,7 +38,6 @@
   <msg key="lt_delete_file">파일 &quot;%title%&quot;(을)를 삭제하시겠습니까? 삭제작업은 복구가 불가능합니다.</msg>
   <msg key="lt_delete_folder">폴더 &quot;%folder_name%&quot;(와)과 폴더안의 모든 내용을 삭제하시겠습니까? 삭제작업은 복구가 불가능합니다.</msg>
   <msg key="lt_Delete_this_file_incl">파일 삭제</msg>
-  <msg key="lt_Download_an_archive_o">이 폴더의 내용들을 다운로드</msg>
   <msg key="lt_Either_there_is_alrea">&quot;%folder_name%&quot;을 가진 폴더가 이미 존재하거나 버튼을 한번이상 클릭했습니다. 뒤로 가기 버튼을 사용하여 돌아가서 새로운 이름을 선택하거나 폴더가 제대로 있는지를 보기 위해서 &lt;a href=&quot;%directory_url%&quot;&gt;디렉토리 리스트로 돌아가기&lt;/a&gt;를 누르시오. </msg>
   <msg key="lt_Folder_folder_name_is">폴더 %folder_name% (이)가 비었습니다.</msg>
   <msg key="lt_It_appears_that_there">(비록 실행버튼을 한번이상 클릭했을지라도) 이 폴더안에 파일이름이 이미 존재합니다. </msg>
@@ -49,7 +46,6 @@
   <msg key="lt_Please_enter_the_new_">이 파일에 대한 새로운 이름을 입력하시오:</msg>
   <msg key="lt_Show_files_modified_i">과거에 수정한 파일 보여주기</msg>
   <msg key="lt_show_only_live_versio">사용중인 버전만 보여주기</msg>
-  <msg key="lt_Showing_files_modifie">과거에 수정한 파일 보여주기</msg>
   <msg key="lt_The_folder_link_you_s">%folder_link% 선택한 폴더에 이미 동일한 이름의 파일이 있습니다.</msg>
   <msg key="lt_The_specified_file_is">지정한 파일이 유효하지 않습니다.</msg>
   <msg key="lt_The_specified_folder_">지정한 폴더가 존재하지 않습니다.</msg>
@@ -58,7 +54,6 @@
   <msg key="lt_There_are_no_versions">유효한 파일 버전이 없습니다.</msg>
   <msg key="lt_This_file_has_version">이 파일에 대해 삭제 권한을 가지고 있지 않으므로, 파일을 삭제할 수 없습니다. </msg>
   <msg key="lt_This_folder_contains_">이 폴더에는 여러분이 삭제 권한을 가지고 있지 않은 항목을 포함하고 있기때문에 폴더를 삭제할 수 없습니다. </msg>
-  <msg key="lt_This_may_take_a_while">잠시동안 기다리시오.</msg>
   <msg key="lt_Use_the_Browse_button">&quot;찾아보기..&quot; 버튼으로 파일을 찾고, &quot;열기&quot;버튼을 클릭하시오.</msg>
   <msg key="lt_version_not_valid">지정한 버전이 유효하지 않습니다.</msg>
   <msg key="lt_We_got_an_error_that_">여러분의 신분을 확인할 수 없습니다. 시스템의 소유자에게 알리시기 바랍니다.</msg>
@@ -74,9 +69,6 @@
   <msg key="new">새로운</msg>
   <msg key="No_such_type">이 유형이 없습니다</msg>
   <msg key="no_such_URL">URL이 없습니다.</msg>
-  <msg key="Note">주:</msg>
-  <msg key="Order_By">에 의한 순서</msg>
-  <msg key="Recurse">순환?</msg>
   <msg key="Rename">재명명</msg>
   <msg key="Rename_this_folder">이 폴더를 재명명</msg>
   <msg key="Save">저장</msg>

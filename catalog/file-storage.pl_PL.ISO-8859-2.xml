@@ -24,13 +24,11 @@
   <msg key="edit">edytuj</msg>
   <msg key="Edit_Folder">Edytuj Folder</msg>
   <msg key="Edit_URL">Edytuj URL</msg>
-  <msg key="exclude">wy³±cz</msg>
   <msg key="file">plik</msg>
   <msg key="folder">folder</msg>
   <msg key="Folder_ID">ID Foldera</msg>
   <msg key="Folder_Name">Nazwa Foldera:</msg>
   <msg key="folder_type_pretty_name">folder</msg>
-  <msg key="include">w³±cz</msg>
   <msg key="item">obiekt</msg>
   <msg key="items">pliki</msg>
   <msg key="Last_Modified">Ostatnio Zmieniane</msg>
@@ -40,7 +38,6 @@
   <msg key="lt_delete_file">Czy na pewno usun±æ plik &quot;%title%&quot; i wszystkie jego wersje? Usuniêcie jest nieodwracalne.</msg>
   <msg key="lt_delete_folder">Czy na pewno usun±æ folder &quot;%folder_name%&quot; i wszystko co zawiera? Usuniêcie bêdzie nieodwracalne.</msg>
   <msg key="lt_Delete_this_file_incl">Usuñ ten plik (w³±czaj±c wszystkie jego wersje)</msg>
-  <msg key="lt_Download_an_archive_o">¦ci±gnij archiwum zawarto¶ci tego foldera</msg>
   <msg key="lt_Either_there_is_alrea">Albo folder &quot;%folder_name%&quot; ju¿ istnieje albo klikniêto przycisk dwukrotnie. Mo¿esz cofn±æ siê i wybraæ now± nazwê, lub &lt;a href=&quot;%directory_url%&quot;&gt;powróciæ do spisu zawarto¶ci&lt;/a&gt; by zobaczyæ czy Twój folder tam jest.</msg>
   <msg key="lt_Folder_folder_name_is">Folder %folder_name% jest pusty.</msg>
   <msg key="lt_It_appears_that_there">Plik o takiej nazwie ju¿ istnieje w tym katalogu (albo klikniêto przycisk &quot;Utwórz&quot; dwukrotnie).</msg>
@@ -49,7 +46,6 @@
   <msg key="lt_Please_enter_the_new_">Proszê wprowadziæ now± nazwê tego pliku:</msg>
   <msg key="lt_Show_files_modified_i">Poka¿ pliki zmieniane </msg>
   <msg key="lt_show_only_live_versio">poka¿ tylko aktywn± wersjê</msg>
-  <msg key="lt_Showing_files_modifie">Pliki zmieniane w ci±gu </msg>
   <msg key="lt_The_folder_link_you_s">%folder_link% zawiera ju¿ plik o takiej samej nazwie.</msg>
   <msg key="lt_The_specified_file_is">¯±dany plik jest nieprawid³owy.</msg>
   <msg key="lt_The_specified_folder_">¯±dany folder nie istnieje.</msg>
@@ -58,7 +54,6 @@
   <msg key="lt_There_are_no_versions">Brak wersji tego pliku, które mo¿esz ogl±daæ</msg>
   <msg key="lt_This_file_has_version">Nie masz prawa usun±æ tego pliku.</msg>
   <msg key="lt_This_folder_contains_">Nie masz prawa usun±æ tego foldera.</msg>
-  <msg key="lt_This_may_take_a_while">To mo¿e potrwaæ... proszê o cierpliwo¶æ.</msg>
   <msg key="lt_Use_the_Browse_button">Okre¶l plik za pomoc± przycisku &quot;Przegl±daj&quot; albo &quot;Browse&quot;, nastêpnie kliknij &quot;Otwórz&quot; lub &quot;Open&quot;.</msg>
   <msg key="lt_version_not_valid">¯±dana wersja jest nieprawid³owa.</msg>
   <msg key="lt_We_got_an_error_that_">Wyst±pi³ nieznany b³±d. Proszê powiadomiæ o tym w³a¶ciciela systemu.</msg>
@@ -74,9 +69,6 @@
   <msg key="new">nowy</msg>
   <msg key="No_such_type">Brak takiego typu</msg>
   <msg key="no_such_URL">nie ma takiego URL</msg>
-  <msg key="Note">Uwaga:</msg>
-  <msg key="Order_By">Sortuj wg.</msg>
-  <msg key="Recurse">/???/ powtarzaæ?</msg>
   <msg key="Rename">Zmieñ nazwê</msg>
   <msg key="Rename_this_folder">Zmieñ nazwê tego foldera</msg>
   <msg key="Save">Zapisz</msg>

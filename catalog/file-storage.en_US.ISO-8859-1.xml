@@ -24,13 +24,11 @@
   <msg key="edit">edit</msg>
   <msg key="Edit_Folder">Edit Folder</msg>
   <msg key="Edit_URL">Edit URL</msg>
-  <msg key="exclude">exclude</msg>
   <msg key="file">file</msg>
   <msg key="folder">folder</msg>
   <msg key="Folder_ID">Folder ID</msg>
   <msg key="Folder_Name">Folder Name:</msg>
   <msg key="folder_type_pretty_name">folder</msg>
-  <msg key="include">include</msg>
   <msg key="item">item</msg>
   <msg key="items">items</msg>
   <msg key="Last_Modified">Last Modified</msg>
@@ -41,7 +39,6 @@ This action cannot be reversed.</msg>
   <msg key="lt_delete_file">Are you sure you want to delete the file &quot;%title%&quot; and all of its versions?  This action cannot be reversed.</msg>
   <msg key="lt_delete_folder">Are you sure you want to delete the folder &quot;%folder_name%&quot; and all the items it contains?  This action cannot be reversed.</msg>
   <msg key="lt_Delete_this_file_incl">Delete this file (including all versions)</msg>
-  <msg key="lt_Download_an_archive_o">Download an archive of the contents of this folder</msg>
   <msg key="lt_Either_there_is_alrea">Either there is already a folder with the name &quot;%folder_name%&quot; or you clicked on the button more than once.  You can use the Back button to return and choose a new name, or &lt;a href=&quot;%directory_url%&quot;&gt;return to the directory listing&lt;/a&gt; to see if your folder is there.</msg>
   <msg key="lt_Folder_folder_name_is">Folder %folder_name% is empty.</msg>
   <msg key="lt_It_appears_that_there">It appears that there is already a file with that name in this folder (although possibly you clicked more than once on the submit button.)</msg>
@@ -50,7 +47,6 @@ This action cannot be reversed.</msg>
   <msg key="lt_Please_enter_the_new_">Please enter the new name for this file:</msg>
   <msg key="lt_Show_files_modified_i">Show files modified in the past</msg>
   <msg key="lt_show_only_live_versio">show only live version</msg>
-  <msg key="lt_Showing_files_modifie">Showing files modified within the past</msg>
   <msg key="lt_The_folder_link_you_s">The %folder_link% you selected already contains a file with the same name.</msg>
   <msg key="lt_The_specified_file_is">The specified file is not valid.</msg>
   <msg key="lt_The_specified_folder_">The specified folder does not exist.</msg>
@@ -61,7 +57,6 @@ This action cannot be reversed.</msg>
 so you cannot delete the file.</msg>
   <msg key="lt_This_folder_contains_">This folder contains items that you do not have permission to
 delete, therefore you cannot delete it.</msg>
-  <msg key="lt_This_may_take_a_while">This may take a while, please be patient.</msg>
   <msg key="lt_Use_the_Browse_button">Use the &quot;Browse...&quot; button to locate your file, 
     then click &quot;Open&quot;.</msg>
   <msg key="lt_version_not_valid">The specified version is not valid.</msg>
@@ -79,9 +74,6 @@ delete, therefore you cannot delete it.</msg>
   <msg key="new">new</msg>
   <msg key="No_such_type">No such type</msg>
   <msg key="no_such_URL">no such URL</msg>
-  <msg key="Note">Note:</msg>
-  <msg key="Order_By">Order By</msg>
-  <msg key="Recurse">Recurse?</msg>
   <msg key="Rename">Rename</msg>
   <msg key="Rename_this_folder">Rename this folder</msg>
   <msg key="Save">Save</msg>

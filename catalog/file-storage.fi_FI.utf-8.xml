@@ -24,16 +24,11 @@
   <msg key="edit">muokkaa</msg>
   <msg key="Edit_Folder">Muokkaa kansiota</msg>
   <msg key="Edit_URL">Muokkaa URL-osoitetta</msg>
-  <msg key="exclude">sulje pois
-
-
-</msg>
   <msg key="file">tiedosto</msg>
   <msg key="folder">kansio</msg>
   <msg key="Folder_ID">Kansion ID</msg>
   <msg key="Folder_Name">Kansion nimi:</msg>
   <msg key="folder_type_pretty_name">kansio</msg>
-  <msg key="include">sisällytä</msg>
   <msg key="item">kpl</msg>
   <msg key="items">kpl</msg>
   <msg key="Last_Modified">Muokattu</msg>
@@ -43,7 +38,6 @@
   <msg key="lt_delete_file">Haluatko todellakin poistaa kaikki tiedoston &quot;%title%&quot; versiot? Toimintoa ei voi peruuttaa.</msg>
   <msg key="lt_delete_folder">Haluatko varmasti poistaa kansion &quot;%folder_name%&quot; ja kaikki sen sisältämät kohteet? Toimintoa ei voi perua.</msg>
   <msg key="lt_Delete_this_file_incl">Poista tiedosto (mukaanlukien kaikki sen versiot)</msg>
-  <msg key="lt_Download_an_archive_o">Imuroi tämän kansion sisältö pakattuna tiedostona</msg>
   <msg key="lt_Either_there_is_alrea">Joko kansio nimeltä &quot;%folder_name%&quot; on jo olemassa, tai painoit lähetä-nappulaa useammin kuin kerran. Voit palata takaisin selaimesi back-napilla ja antaa kansiolle uuden nimen, tai &lt;a href=&quot;%directory_url%&quot;&gt;palata hakemiston sisältösivulle&lt;/a&gt; katsomaan, löytyykö  kansiosi sieltä.</msg>
   <msg key="lt_Folder_folder_name_is">Kansio %folder_name% on tyhjä.</msg>
   <msg key="lt_It_appears_that_there">Vaikuttaa siltä, että kansiossa on jo samanniminen tiedosto (tosin on myös mahdollista, että painoit lähetä-nappulaa useammin kuin kerran).</msg>
@@ -60,7 +54,6 @@
   <msg key="lt_There_are_no_versions">Tästä tiedostosta ei ole yhtään versiota, johon sinulla olisi oikeudet</msg>
   <msg key="lt_This_file_has_version">Tästä tiedostosta on versioita, joihin sinulla ei ole poisto-oikeutta. Tämän takia et pysty poistamaan tiedostoa.</msg>
   <msg key="lt_This_folder_contains_">Kansiossa on tiedostoja, joihin sinulla ei ole poisto-oikeutta, joten et voi poistaa kansiota.</msg>
-  <msg key="lt_This_may_take_a_while">Toiminto kestää hetken aikaa, älä hermostu.</msg>
   <msg key="lt_Use_the_Browse_button">Paina &quot;Browse&quot;-nappulaa etsiäksesi tiedoston koneeltasi, ja paina sitten &quot;Open&quot;.</msg>
   <msg key="lt_version_not_valid">Määritelty versio on virheellinen.</msg>
   <msg key="lt_We_got_an_error_that_">Tapahtui virhe, jonka syytä emme pysty tunnistamaan. Lähetäthän tiedon asiasta järjestelmän ylläpitäjälle.</msg>
@@ -77,9 +70,6 @@
   <msg key="new">Uusi</msg>
   <msg key="No_such_type">Kyseistä tyyppiä ei ole olemassa</msg>
   <msg key="no_such_URL">Kyseistä URL:ää ei ole olemassa</msg>
-  <msg key="Note">Huom:</msg>
-  <msg key="Order_By">Järjestä seuraavan mukaan</msg>
-  <msg key="Recurse">Rekursiivisesti?</msg>
   <msg key="Rename">Nimeä uudelleen</msg>
   <msg key="Rename_this_folder">Nimeä kansio uudelleen</msg>
   <msg key="Save">Tallenna</msg>

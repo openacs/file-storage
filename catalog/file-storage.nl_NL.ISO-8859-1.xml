@@ -24,13 +24,11 @@
   <msg key="edit">Wijzig</msg>
   <msg key="Edit_Folder">Wijzig Map</msg>
   <msg key="Edit_URL">Wijzig URL</msg>
-  <msg key="exclude">uitsluiten</msg>
   <msg key="file">bestand</msg>
   <msg key="folder">map</msg>
   <msg key="Folder_ID">Folder ID</msg>
   <msg key="Folder_Name">Mapnaam:</msg>
   <msg key="folder_type_pretty_name">map</msg>
-  <msg key="include">insluiten</msg>
   <msg key="item">item</msg>
   <msg key="items">items</msg>
   <msg key="Last_Modified">Laatste Wijziging</msg>
@@ -40,7 +38,6 @@
   <msg key="lt_delete_file">Weet u zeker dat u het bestand &quot;%title%&quot; met alle versies wilt verwijderen? Deze handeling kan niet worden hersteld.</msg>
   <msg key="lt_delete_folder">Weet u zeker dat u de map &quot;%folder_name%&quot; met alle items wilt verwijderen? Deze handeling kan niet worden hersteld.</msg>
   <msg key="lt_Delete_this_file_incl">Verwijder dit bestand (met alle versies)</msg>
-  <msg key="lt_Download_an_archive_o">Importeer een archief van de mapinhoud</msg>
   <msg key="lt_Either_there_is_alrea">Mogelijk is er al een map met die &quot;%folder_name%&quot; heet, anders heeft u meer dan eenmaal op de verzendknop geklikt. Gebruikt de Beck/Terug knop om een nieuwe naam te kiezen of bekijk de &lt;a href=&quot;%directory_url%&quot;&gt;lijst met bestanden&lt;/a&gt; om te zien of de map bestaat.</msg>
   <msg key="lt_Folder_folder_name_is">Map %folder_name% is leeg.</msg>
   <msg key="lt_It_appears_that_there">Het lijkt alsof er in deze map al een bestand is met deze naam (of er is meer dan eenmaal op de knop geklikt).</msg>
@@ -49,7 +46,6 @@
   <msg key="lt_Please_enter_the_new_">Voer de nieuwe naam voor dit bestand in:</msg>
   <msg key="lt_Show_files_modified_i">Toon gewijzigde bestanden in de laatste</msg>
   <msg key="lt_show_only_live_versio">Toon allen versies die live zijn</msg>
-  <msg key="lt_Showing_files_modifie">Bestanden gewijzigd in de laatste</msg>
   <msg key="lt_The_folder_link_you_s">De geselecteerde %folder_link% bevat al een bestand met dezelfde naam.</msg>
   <msg key="lt_The_specified_file_is">Het betreffende bestand is niet geldig.</msg>
   <msg key="lt_The_specified_folder_">De betreffende map bestaat niet.</msg>
@@ -58,7 +54,6 @@
   <msg key="lt_There_are_no_versions">Er is geen variant van dit bestand beschikbaar</msg>
   <msg key="lt_This_file_has_version">Het bestand heeft varianten die niet mogen worden verwijderd door u. Verwijderen van het bestand is niet mogelijk.</msg>
   <msg key="lt_This_folder_contains_">Deze map heeft items die niet mogen worden verwijderd door u. Verwijderen van de map is niet mogelijk.</msg>
-  <msg key="lt_This_may_take_a_while">Wees geduldig, dit kan even duren.</msg>
   <msg key="lt_Use_the_Browse_button">Gebruikde &quot;Browse/Snuffel...&quot; knop om het bestand te vinden en klik dan op &quot;Open&quot;.</msg>
   <msg key="lt_version_not_valid">De betreffende variant is niet geldig.</msg>
   <msg key="lt_We_got_an_error_that_">Er is een fout opgetreden waarvan de oorzaak niet direct duidelijk is. Wilt u de systeembeheerder hiervan alstublieft op de hoogte stellen.</msg>
@@ -75,9 +70,6 @@
   <msg key="new">Nieuw</msg>
   <msg key="No_such_type">een dergelijk type bestaat niet</msg>
   <msg key="no_such_URL">een dergelijk URL bestaat niet</msg>
-  <msg key="Note">Bericht:</msg>
-  <msg key="Order_By">Sorteer op</msg>
-  <msg key="Recurse">Herhalen?</msg>
   <msg key="Rename">Hernoemen</msg>
   <msg key="Rename_this_folder">Hernoem Map</msg>
   <msg key="Save">Bewaren</msg>

@@ -24,13 +24,11 @@
   <msg key="edit">rediger</msg>
   <msg key="Edit_Folder">Rediger mappe</msg>
   <msg key="Edit_URL">Rediger URL</msg>
-  <msg key="exclude">ekskluder</msg>
   <msg key="file">fil</msg>
   <msg key="folder">mappe</msg>
   <msg key="Folder_ID">Mappe ID</msg>
   <msg key="Folder_Name">Navn på mappe:</msg>
   <msg key="folder_type_pretty_name">mappe</msg>
-  <msg key="include">inkluder</msg>
   <msg key="item">innlegg</msg>
   <msg key="items">innlegg</msg>
   <msg key="Last_Modified">Sist endret</msg>
@@ -40,7 +38,6 @@
   <msg key="lt_delete_file">Er du sikker på at di vil slette filen &quot;%title%&quot; og alle versjonene av den? Denne ordren kan ikke omgjøres.</msg>
   <msg key="lt_delete_folder">Er du sikker på at di vil slette mappen &quot;%folder_name%&quot; og alle innleggene den inneholder? Denne ordren kan ikke omgjøres.</msg>
   <msg key="lt_Delete_this_file_incl">Slett denne filen (med alle versjoner)</msg>
-  <msg key="lt_Download_an_archive_o">Last ned et arkiv av innholdet i denne mappen</msg>
   <msg key="lt_Either_there_is_alrea">Enten er det allerede en mappe som heter &quot;%folder_name%&quot; eller så har du klikket på knappen mer enn en gang. Du kan bruke Tilbake-knappen for å gå tilbake og velge et nytt navn eller &lt;a href=&quot;%directory_url%&quot;&gt;gå tilbake til innkoldlisten&lt;/a&gt; for å se om mappen din er der.</msg>
   <msg key="lt_Folder_folder_name_is">Mappen %folder_name% er tom. </msg>
   <msg key="lt_It_appears_that_there">Det virker som om det allerede er en fil med dette navnet i denne mappen (eller kanskje har du klikket mer enn en gang på send-knappen.)</msg>
@@ -49,7 +46,6 @@
   <msg key="lt_Please_enter_the_new_">Vennligst skriv det nye navnet på denne filen:</msg>
   <msg key="lt_Show_files_modified_i">Vis filer endret de siste</msg>
   <msg key="lt_show_only_live_versio">vis bare aktiv versjon</msg>
-  <msg key="lt_Showing_files_modifie">Viser filer endret de siste</msg>
   <msg key="lt_The_folder_link_you_s">Mappen %folder_link% du har valgt har allerede en fil med samme navn.</msg>
   <msg key="lt_The_specified_file_is">Den spesifiserte filen er ikke gyldig.</msg>
   <msg key="lt_The_specified_folder_">Den spesifiserte mappen eksisterer ikke.</msg>
@@ -58,7 +54,6 @@
   <msg key="lt_There_are_no_versions">Det er ingen versjoner av denne filen tilgjengelig for deg</msg>
   <msg key="lt_This_file_has_version">Denne filen har versjoner som du ikke har tillatelse til å slette, så du kan ikke slette denne filen.</msg>
   <msg key="lt_This_folder_contains_">Denne mappen inneholder innlegg som du ikke har tillatelse til å slette, derfor kan du ikke slette den.</msg>
-  <msg key="lt_This_may_take_a_while">Dette kan ta litt tid, så vennligst vis tålmodighet.</msg>
   <msg key="lt_Use_the_Browse_button">Bruk &quot;Browse...&quot; knappen for å finne filen din, og klikk &quot;Last opp&quot;.</msg>
   <msg key="lt_version_not_valid">Den angitte versjonen er ikke gyldig.</msg>
   <msg key="lt_We_got_an_error_that_">Vi har en feil som vi ikke kunne identifisere med en gang. Vennligst fortell dette til systemeier.</msg>
@@ -74,9 +69,6 @@
   <msg key="new">ny</msg>
   <msg key="No_such_type">Ingen sådan type</msg>
   <msg key="no_such_URL">ingen sådan URL</msg>
-  <msg key="Note">Obs:</msg>
-  <msg key="Order_By">Sorter etter</msg>
-  <msg key="Recurse">Omvendt?</msg>
   <msg key="Rename">Gi nytt navn</msg>
   <msg key="Rename_this_folder">Nytt mappenavn</msg>
   <msg key="Save">Lagre</msg>

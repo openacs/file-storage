@@ -24,13 +24,11 @@
   <msg key="edit">editar</msg>
   <msg key="Edit_Folder">Editar Pasta</msg>
   <msg key="Edit_URL">Editar URL</msg>
-  <msg key="exclude">excluir</msg>
   <msg key="file">arquivo</msg>
   <msg key="folder">pasta</msg>
   <msg key="Folder_ID">ID da Pasta</msg>
   <msg key="Folder_Name">Nome da Pasta:</msg>
   <msg key="folder_type_pretty_name">pasta</msg>
-  <msg key="include">incluir</msg>
   <msg key="item">item</msg>
   <msg key="items">item(s)</msg>
   <msg key="Last_Modified">Última Modificação</msg>
@@ -40,7 +38,6 @@
   <msg key="lt_delete_file">Você tem certeza que quer remover o arquivo &quot;%title%&quot; e todas suas versões? Esta ação é irreversível.</msg>
   <msg key="lt_delete_folder">Você tem certeza que quer remover a pasta &quot;%folder_name%&quot; e todos os itens que ela contém? Esta ação é irreversível.</msg>
   <msg key="lt_Delete_this_file_incl">Remover este arquivo (incluindo todas as versões)</msg>
-  <msg key="lt_Download_an_archive_o">Baixar um arquivo com o conteúdo desta pasta</msg>
   <msg key="lt_Either_there_is_alrea">Já existe uma pasta com o nome &quot;%folder_name%&quot; ou você clicou no botão mais do que uma vez. Você pode usar o botão Voltar para retornar e escolher um novo nome, ou &lt;a href=&quot;%directory_url%&quot;&gt;retorne a lista de diretórios&lt;/a&gt; para ver se sua pasta está lá.</msg>
   <msg key="lt_Folder_folder_name_is">Pasta %folder_name% está vazia.</msg>
   <msg key="lt_It_appears_that_there">Parece que já existe um arquivo com aquele nome nesta pasta (embora possivelmente você clicou mais que uma vez no botão submeter.)</msg>
@@ -49,7 +46,6 @@
   <msg key="lt_Please_enter_the_new_">Por favor digite o novo nome para este arquivo:</msg>
   <msg key="lt_Show_files_modified_i">Mostrar arquivos modificados nos últimos</msg>
   <msg key="lt_show_only_live_versio">mostrar somente versão ativa</msg>
-  <msg key="lt_Showing_files_modifie">Mostrando arquivos modificados no passado</msg>
   <msg key="lt_The_folder_link_you_s">O %folder_link% que você selecionou já contém um arquivo com o mesmo nome.</msg>
   <msg key="lt_The_specified_file_is">O arquivo especificado é inválido.</msg>
   <msg key="lt_The_specified_folder_">A pasta específica não existe.</msg>
@@ -58,7 +54,6 @@
   <msg key="lt_There_are_no_versions">Não há nenhuma versão deste arquivo disponível para você</msg>
   <msg key="lt_This_file_has_version">Este arquivo tem versões que você não tem permissão para remover, assim você não pode remover o arquivo.</msg>
   <msg key="lt_This_folder_contains_">Esta pasta contém itens que você não tem permissão para remover, então você não pode removê-la.</msg>
-  <msg key="lt_This_may_take_a_while">Pode levar algum tempo, por favor tenha paciência.</msg>
   <msg key="lt_Use_the_Browse_button">Use o botão &quot;Navegar...&quot; para localizar seu arquivo, depois então clique &quot;Abrir&quot;.</msg>
   <msg key="lt_version_not_valid">A versão especificada é inválida.</msg>
   <msg key="lt_We_got_an_error_that_">Nós tivemos um erro que nós não pudemos facilmente identificar. Por favor deixe o proprietário do sistema saber sobre isto.</msg>
@@ -74,9 +69,6 @@
   <msg key="new">novo</msg>
   <msg key="No_such_type">Nenhum desse tipo</msg>
   <msg key="no_such_URL">Nenhum deste URL</msg>
-  <msg key="Note">Nota:</msg>
-  <msg key="Order_By">Ordenar Por</msg>
-  <msg key="Recurse">Recursivo?</msg>
   <msg key="Rename">Renomear</msg>
   <msg key="Rename_this_folder">Renomear esta pasta</msg>
   <msg key="Save">Salvar</msg>
