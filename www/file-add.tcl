@@ -5,30 +5,28 @@ ad_page_contract {
     @creation-date 6 Nov 2000
     @cvs-id $Id$
 } {
-    item_id:integer,optional
-    folder_id:integer,notnull
+    file_id:integer,optional,notnull
+    folder_id:integer,optional,notnull
     upload_file:trim,optional
     upload_file.tmpfile:tmpfile,optional
     {title ""}
     {lock_title_p 0}
-} -validate {
-    valid_folder -requires {folder_id:integer} {
-	if ![fs_folder_p $folder_id] {
-	    ad_complain "The specified parent folder is not valid."
-	}
-    }
 } -properties {
     folder_id:onevalue
     context:onevalue
     title:onevalue
     lock_title_p:onevalue
 } -validate {
-        valid_folder -requires {folder_id:integer} {
-	if ![fs_folder_p $folder_id] {
+    file_id_or_folder_id {
+	if {[exists_and_not_null file_id]} {
+	    set folder_id [db_string get_folder_id "" -default ""]
+	} else {
+	    set folder_id ""
+	}
+	if {![fs_folder_p $folder_id]} {
 	    ad_complain "The specified parent folder is not valid."
 	}
     }
-
     max_size -requires {upload_file} {
 	set n_bytes [file size ${upload_file.tmpfile}]
 	set max_bytes [ad_parameter "MaximumFileSize"]
@@ -54,27 +52,27 @@ if {[empty_string_p $title]} {
 }
 
 ad_form -html { enctype multipart/form-data } -export { folder_id } -form {
-    item_id:key
+    file_id:key
     {upload_file:file {label "Upload File"} {html "size 30"}}
     {title:text,optional {label "Title"} {html "size 30"}}
     {description:text(textarea),optional {label "Description"} {html "rows 5 cols 35"}}
-} -new_data {
+} -select_query_name {get_file} -new_data {
     set name [template::util::file::get_property filename $upload_file]
     set package_id [ad_conn package_id]
     set existing_item_id [fs::get_item_id -name $name -folder_id $folder_id]
     if {![empty_string_p $existing_item_id]} {
 	# file with the same name already exists
 	# in this folder, create a new revision
-	set item_id $existing_item_id
+	set file_id $existing_item_id
 	permission::require_permission \
-	    -object_id $item_id \
+	    -object_id $file_id \
 	    -party_id $user_id \
 	    -privilege $write
     }
     
     fs::add_file \
 	-name [template::util::file::get_property filename $upload_file] \
-	-item_id $item_id \
+	-item_id $file_id \
 	-parent_id $folder_id \
 	-tmp_filename [template::util::file::get_property tmp_filename $upload_file] \
 	-creation_user $user_id \
