@@ -90,6 +90,7 @@ db_multirow -unclobber -extend { last_modified_pretty content_size_pretty versio
     }
     set version_delete [_ file-storage.Delete_Version]
     set version_delete_url "version-delete?[export_vars version_id]"
+    set file_url [ad_urlencode $file_url]
 }
 
 set return_url "[ad_conn url]?file_id=$file_id"
