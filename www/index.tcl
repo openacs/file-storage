@@ -26,7 +26,10 @@ ad_page_contract {
 }
 
 # Don't allow delete if root folder
-set nonroot_folder_p [expr $folder_id - [fs_get_root_folder]]
+set root_folder_p 0
+if {$folder_id == [fs_get_root_folder]} {
+    set root_folder_p 1
+}
 
 # check the user has permission to read this folder
 ad_require_permission $folder_id read
