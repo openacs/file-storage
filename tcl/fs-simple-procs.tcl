@@ -11,7 +11,7 @@ namespace eval fs {
 
     ad_proc -public simple_get_types {} {
         return {
-            {fs_url "URL"}
+            {fs_url "url"}
         }
     }
 

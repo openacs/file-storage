@@ -69,4 +69,43 @@
         </querytext>
     </fullquery>
 
+    <fullquery name="fs::publish_simple_object_to_file_system.select_object_content">
+        <querytext>
+            select fs_objects.*
+            from fs_objects
+            where fs_objects.object_id = :object_id
+        </querytext>
+    </fullquery>
+
+    <fullquery name="fs::publish_object_to_file_system.select_object_metadata">
+        <querytext>
+            select fs_objects.*,
+                   cr_items.storage_type,
+                   cr_items.storage_area_key,
+                   cr_revisions.title
+            from fs_objects,
+                 cr_items,
+                 cr_revisions
+            where fs_objects.object_id = :object_id
+            and fs_objects.object_id = cr_items.item_id
+            and fs_objects.live_revision = cr_revisions.revision_id
+        </querytext>
+    </fullquery>
+
+    <fullquery name="fs::publish_object_to_file_system.select_object_content">
+        <querytext>
+            select content
+            from cr_revisions
+            where revision_id = $live_revision
+        </querytext>
+    </fullquery>
+
+    <fullquery name="fs::publish_object_to_file_system.select_file_name">
+        <querytext>
+            select filename
+            from cr_revisions
+            where revision_id = :live_revision
+        </querytext>
+    </fullquery>
+
 </queryset>

@@ -62,7 +62,7 @@ create or replace view fs_objects
 as
     select fs_folders.folder_id as object_id,
            0 as live_revision,
-           'Folder' as type,
+           'folder' as type,
            fs_folders.content_size,
            fs_folders.name,
            fs_folders.last_modified,
@@ -86,7 +86,7 @@ as
     union
     select fs_urls_full.url_id as object_id,
            0 as live_revision,
-           'URL' as type,
+           'url' as type,
            0 as content_size,
            fs_urls_full.name,
            fs_urls_full.last_modified,

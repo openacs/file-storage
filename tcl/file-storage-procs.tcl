@@ -342,7 +342,7 @@ namespace eval fs {
         @param n_past_days Mark files that are newer than the past N days as new
     } {
         if {[empty_string_p $folder_id]} {
-            set folder_id [fs::get_root_folder -package_id [ad_conn package_id]]
+            set folder_id [get_root_folder -package_id [ad_conn package_id]]
         }
 
         if {[empty_string_p $user_id]} {
@@ -363,7 +363,7 @@ namespace eval fs {
                        permission)
     } {
         if {[empty_string_p $folder_id]} {
-            set folder_id [fs::get_root_folder -package_id [ad_conn package_id]]
+            set folder_id [get_root_folder -package_id [ad_conn package_id]]
         }
 
         if {[empty_string_p $user_id]} {
@@ -371,6 +371,141 @@ namespace eval fs {
         }
 
         return [db_string select_folder_contents_count {}]
+    }
+
+    ad_proc -public publish_folder_to_file_system {
+        {-folder_id:required}
+        {-path ""}
+        {-folder_name ""}
+        {-user_id ""}
+    } {
+        publish the contents of a file storage folder to the file system
+    } {
+        if {[empty_string_p $path]} {
+            set path [ns_tmpnam]
+        }
+
+        if {[empty_string_p $folder_name]} {
+            set folder_name [get_folder_name -folder_id $folder_id]
+        }
+
+        set dir "${path}/${folder_name}"
+        file mkdir $dir
+
+        # lets truncate the file that stores URLs
+        set url_file "${folder_name} URLs.txt"
+        file delete -force "${dir}/${url_file}"
+
+        foreach object [get_folder_contents -folder_id $folder_id -user_id $user_id] {
+            set object_id [ns_set get $object object_id]
+            set name [ns_set get $object name]
+            set type [ns_set get $object type]
+
+            if {[string match folder $type]} {
+                file mkdir "${dir}/${name}"
+                publish_folder_to_file_system -folder_id $object_id -path $dir -folder_name $name -user_id $user_id
+            } elseif {[string match url $type]} {
+                publish_simple_object_to_file_system -object_id $object_id -path $dir -file_name $url_file
+            } else {
+                publish_object_to_file_system -object_id $object_id -path $dir
+            }
+
+        }
+
+        return $dir
+    }
+
+    ad_proc -public publish_simple_object_to_file_system {
+        {-object_id:required}
+        {-path:required}
+        {-file_name:required}
+    } {
+        publish a simple object to the file system; you must implement a proc
+        named 'fs::publish_simple_<type>_to_file_system', where <type> is the
+        fs_simple_object type that you create, for each new simple file storage
+        object you create.
+    } {
+        set object [db_list_of_ns_sets select_object_content {}]
+
+        publish_simple_[ns_set get $object type]_to_file_system -object $object -path $path -file_name $file_name
+    }
+
+    ad_proc -public publish_simple_url_to_file_system {
+        {-object:required}
+        {-path:required}
+        {-file_name ""}
+    } {
+        publish a url object to the file system
+    } {
+        set object [lindex $object 0]
+
+        if {[empty_string_p $file_name]} {
+            set $file_name [ns_set get $object name]
+        }
+
+        set fp [open "${path}/${file_name}" a+]
+        puts $fp "[ns_set get $object name] ([ns_set get $object url])"
+        close $fp
+    }
+
+    ad_proc -public publish_object_to_file_system {
+        {-object_id:required}
+        {-path:required}
+        {-file_name ""}
+    } {
+        publish an object to the file system
+    } {
+        db_1row select_object_metadata {}
+
+        if {[empty_string_p $file_name]} {
+            set file_name $title
+        }
+
+        switch $storage_type {
+            lob {
+                # FIXME: db_blob_get_file is failing when i use bind variables
+                db_blob_get_file select_object_content {} -file "${path}/${file_name}"
+            }
+            text {
+                set content [db_string select_object_content {}]
+
+                set fp [open "${path}/${file_name}" w]
+                puts $fp $content
+                close $fp
+            }
+            file {
+                set cr_path [cr_fs_path $storage_area_key]
+                set cr_file_name [db_string select_file_name {}]
+
+                set ifp [open "${cr_path}${cr_file_name}" r]
+                set ofp [open "${path}/${file_name}" w]
+
+                ns_cpfp $ifp $ofp
+
+                close $ifp
+                close $ofp
+            }
+        }
+    }
+
+    ad_proc -public get_archive_cmd {
+        {-in_file ""}
+        {-out_file ""}
+    } {
+        return the archive command after replacing {in_file} and {out_file} with
+        their respective values.
+    } {
+        set archive_cmd [parameter::get -parameter ArchiveCmd -default "cat `find {in_file} -type f` > {out_file}"]
+
+        regsub -all {(\W)} $in_file {\\\1} in_file
+        regsub -all {\\/} $in_file {/} in_file
+        regsub -all {(\W)} $out_file {\\\1} out_file
+        regsub -all {\\/} $out_file {/} out_file
+
+        regsub -all {{in_file}} $archive_cmd $in_file archive_cmd
+        regsub -all {{out_file}} $archive_cmd $out_file archive_cmd
+
+        return $archive_cmd
     }
 
 }
