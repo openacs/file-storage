@@ -53,6 +53,7 @@ db_multirow -unclobber -extend { last_modified_pretty content_size_pretty } vers
     set last_modified_ansi [lc_time_system_to_conn $last_modified_ansi]
     set last_modified_pretty [lc_time_fmt $last_modified_ansi "%x %X"]
     set content_size_pretty [lc_numeric $content_size]
+    set file_url [lang::util::localize $file_url]
 }
 
 set return_url "[ad_conn url]?file_id=$file_id"

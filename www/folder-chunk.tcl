@@ -26,7 +26,7 @@ if {![exists_and_not_null fs_url]} {
     set fs_url ""
 }
 
-set folder_name [fs::get_object_name -object_id  $folder_id]
+set folder_name [lang::util::localize [fs::get_object_name -object_id  $folder_id]]
 
 set content_size_total 0
 
@@ -50,6 +50,7 @@ db_multirow -extend { last_modified_pretty content_size_pretty } contents select
     }
 
     set name [lang::util::localize $name]
+    set file_url [lang::util::localize $file_url]
 }
 
 ad_return_template
