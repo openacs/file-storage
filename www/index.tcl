@@ -41,11 +41,12 @@ set admin_p [ad_permission_p $folder_id admin]
 
 set delete_p [ad_permission_p $folder_id delete]
 
+set package_id [ad_conn package_id]
 db_multirow file file_select "
 select i.item_id as file_id,
        r.title as name,
        i.live_revision,
-       content_item.get_path(i.item_id,file_storage.get_root_folder([ad_conn package_id])) as path,
+       content_item.get_path(i.item_id,file_storage.get_root_folder(:package_id)) as path,
        r.mime_type as type,
        to_char(o.last_modified,'YYYY-MM-DD HH24:MI') as last_modified,
        dbms_lob.getlength(r.content) as content_size,
