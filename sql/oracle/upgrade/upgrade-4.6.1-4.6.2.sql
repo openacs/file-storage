@@ -169,7 +169,7 @@ as
     procedure rename_file(
         --
         -- Rename a file and all
-        -- Wrapper to content_item__edit_name
+        -- Wrapper to content_item__rename
         --
         file_id in cr_items.item_id%TYPE,
         title in cr_items.name%TYPE
@@ -439,14 +439,14 @@ as
     procedure rename_file(
         --
         -- Rename a file and all
-        -- Wrapper to content_item__edit_name
+        -- Wrapper to content_item__rename
         --
         file_id in cr_items.item_id%TYPE,
         title in cr_items.name%TYPE
     )
     is
     begin
-        content_item.edit_name(
+        content_item.rename(
             item_id => file_storage.rename_file.file_id,
             name => file_storage.rename_file.title
         );

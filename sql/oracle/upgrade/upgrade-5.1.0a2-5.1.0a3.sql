@@ -1,6 +1,3 @@
--- Need to recreate package, to add user and IP to update_last_modified
--- $Id
-
 create or replace package file_storage
 as
 
@@ -22,6 +19,7 @@ as
         --
         package_id in apm_packages.package_id%TYPE,
         folder_name in cr_folders.label%TYPE default null,
+        folder_url in cr_items.name%TYPE default null,
         description in cr_folders.description%TYPE default null
     ) return fs_root_folders.folder_id%TYPE;
 
@@ -49,7 +47,7 @@ as
     procedure rename_file(
         --
         -- Rename a file and all
-        -- Wrapper to content_item__rename
+        -- Wrapper to content_item__edit_name
         --
         file_id in cr_items.item_id%TYPE,
         title in cr_items.name%TYPE
@@ -136,8 +134,12 @@ as
     procedure delete_folder(
         --
         -- Delete a folder
-        --
-        folder_id in cr_folders.folder_id%TYPE
+        -- adding cascade_p but defaulting to false
+	-- this will fail if a folder contains anything
+	-- but just in case some other application uses
+	-- this api it will not change the behavior
+        folder_id in cr_folders.folder_id%TYPE,
+	cascade_p in char default 'f'
     );
 
 end file_storage;
@@ -152,22 +154,11 @@ as
     ) return fs_root_folders.folder_id%TYPE
     is
         v_folder_id             fs_root_folders.folder_id%TYPE;
-        v_count                 integer;
     begin
-        select count(*)
-        into v_count
+        select folder_id
+        into v_folder_id
         from fs_root_folders
         where package_id = get_root_folder.package_id;
-
-        if v_count > 0 then
-            select folder_id
-            into v_folder_id
-            from fs_root_folders
-            where package_id = get_root_folder.package_id;
-        else
-            -- must be a new instance.  Gotta create a new root folder
-            v_folder_id := new_root_folder(package_id);
-        end if;
 
         return v_folder_id;
     end get_root_folder;
@@ -199,39 +190,19 @@ as
         -- code automatically when a new package instance is created.
         --
         package_id in apm_packages.package_id%TYPE,
-        folder_name in cr_folders.label%TYPE default null,
+        folder_name in cr_folders.label%TYPE,
+        folder_url in cr_items.name%TYPE,
         description in cr_folders.description%TYPE default null
     ) return fs_root_folders.folder_id%TYPE
     is
         v_folder_id             fs_root_folders.folder_id%TYPE;
-        v_package_name          apm_packages.instance_name%TYPE;
-        v_package_key           apm_packages.package_key%TYPE;
-        v_folder_name           cr_folders.label%TYPE;
-        v_description           cr_folders.description%TYPE;
     begin
-        select instance_name, package_key
-        into v_package_name, v_package_key
-        from apm_packages
-        where package_id = new_root_folder.package_id;
-
-        if new_root_folder.folder_name is null
-        then
-            v_folder_name := v_package_name || ' Root Folder';
-        else
-            v_folder_name := folder_name;
-        end if;
-
-        if new_root_folder.description is null
-        then
-            v_description := 'Root folder for the file-storage system. All other folders in file storage are subfolders of this one.';
-        else
-            v_description := description;
-        end if;
 
         v_folder_id := content_folder.new(
-            name => v_package_key || '_' || package_id,
-            label => v_folder_name,
-            description => v_description
+            name => file_storage.new_root_folder.folder_url,
+            label => file_storage.new_root_folder.folder_name,
+            context_id => file_storage.new_root_folder.package_id,
+            description => file_storage.new_root_folder.description
         );
 
         insert
@@ -245,19 +216,6 @@ as
         content_folder.register_content_type(v_folder_id,'content_folder','t');
         content_folder.register_content_type(v_folder_id,'content_extlink','t');
         content_folder.register_content_type(v_folder_id,'content_symlink','t');
-
-        -- set up default permissions
-        acs_permission.grant_permission(
-            object_id => v_folder_id,
-            grantee_id => acs.magic_object_id('the_public'),
-            privilege => 'read'
-        );
-
-        acs_permission.grant_permission(
-            object_id => v_folder_id,
-            grantee_id => acs.magic_object_id('registered_users'),
-            privilege => 'write'
-        );
 
         return v_folder_id;
     end new_root_folder;
@@ -316,20 +274,20 @@ as
     )
     is
     begin
-        content_item.delete(item_id => file_storage.delete_file.file_id);
+        content_item.del(item_id => file_storage.delete_file.file_id);
     end delete_file;
 
     procedure rename_file(
         --
         -- Rename a file and all
-        -- Wrapper to content_item__rename
+        -- Wrapper to content_item__edit_name
         --
         file_id in cr_items.item_id%TYPE,
         title in cr_items.name%TYPE
     )
     is
     begin
-        content_item.rename(
+        content_item.edit_name(
             item_id => file_storage.rename_file.file_id,
             name => file_storage.rename_file.title
         );
@@ -457,7 +415,7 @@ as
         where cr_items.item_id = file_storage.new_version.item_id;
 
         acs_object.update_last_modified(v_folder_id,new_version.creation_user,new_version.creation_ip);
-
+        acs_object.update_last_modified(new_version.item_id,new_version.creation_user,new_version.creation_ip);
         return v_revision_id;
 
         exception when NO_DATA_FOUND then
@@ -559,12 +517,12 @@ as
     begin
         if file_storage.delete_version.version_id = content_item.get_live_revision(file_storage.delete_version.file_id)
         then
-            content_revision.delete(file_storage.delete_version.version_id);
+            content_revision.del(file_storage.delete_version.version_id);
             content_item.set_live_revision(
                 content_item.get_latest_revision(file_storage.delete_version.file_id)
             );
         else
-            content_revision.delete(file_storage.delete_version.version_id);
+            content_revision.del(file_storage.delete_version.version_id);
         end if;
 
         -- If the live revision is null, we have deleted the last version above
@@ -639,12 +597,14 @@ as
         --
         -- Delete a folder
         --
-        folder_id in cr_folders.folder_id%TYPE
+        folder_id in cr_folders.folder_id%TYPE,
+	cascade_p in char default 'f'
     )
     is
     begin
-        content_folder.delete(
-            folder_id => file_storage.delete_folder.folder_id
+        content_folder.del(
+            folder_id => file_storage.delete_folder.folder_id,
+	    cascade_p => file_storage.delete_folder.cascade_p
         );
     end delete_folder;
 
@@ -671,25 +631,25 @@ begin
         -- of deletion of revisions.
         if v_rec.content_type = 'file_storage_object'
         then
-            content_item.delete(v_rec.item_id);
+            content_item.del(v_rec.item_id);
         end if;
 
         -- Instead of doing an if-else, we make sure we are deleting a folder.
         if v_rec.content_type = 'content_folder'
         then
-            content_folder.delete(v_rec.item_id);
+            content_folder.del(v_rec.item_id);
         end if;
 
         -- Instead of doing an if-else, we make sure we are deleting a folder.
         if v_rec.content_type = 'content_symlink'
         then
-            content_symlink.delete(v_rec.item_id);
+            content_symlink.del(v_rec.item_id);
         end if;
 
         -- Instead of doing an if-else, we make sure we are deleting a folder.
         if v_rec.content_type = 'content_extlink'
         then
-            content_extlink.delete(v_rec.item_id);
+            content_extlink.del(v_rec.item_id);
         end if;
 
     end loop;
@@ -702,7 +662,7 @@ create or replace trigger fs_root_folder_delete_trig
 after delete on fs_root_folders
 for each row
 begin
-    content_folder.delete(:old.folder_id);
+    content_folder.del(:old.folder_id);
 end;
 /
 show errors;
