@@ -31,6 +31,19 @@
         </querytext>
     </fullquery>
 
+    <fullquery name="fs::rename_folder.rename_folder">
+        <querytext>
+            begin
+                select content_folder__rename(
+                    :folder_id,
+                    null,
+                    :name,
+                    null
+                );
+            end;
+        </querytext>
+    </fullquery>
+
     <fullquery name="fs::get_folder_contents.select_folder_contents">
         <querytext>
             select fc.*
