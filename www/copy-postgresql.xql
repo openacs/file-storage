@@ -16,7 +16,7 @@
   <fullquery name="get_copy_objects">
     <querytext>
       select fs.object_id, fs.name,
-      acs_permission__permission_p(fs.object_id, :user_id, 'read') as copy_p
+      acs_permission__permission_p(fs.object_id, :user_id, 'read') as copy_p, fs.type
       from fs_objects fs
       where fs.object_id in ([template::util::tcl_to_sql_list $object_id])
 	order by copy_p
@@ -26,6 +26,17 @@
   <fullquery name="copy_item">
     <querytext>
       select file_storage__copy_file(
+           :object_id,
+           :folder_id,
+	   :user_id,
+           :peer_addr
+      )
+    </querytext>
+  </fullquery>
+
+  <fullquery name="copy_folder">
+    <querytext>
+      select content_folder__copy (
            :object_id,
            :folder_id,
 	   :user_id,

@@ -51,9 +51,13 @@ if {[info exists folder_id]} {
     # but the existing file-copy page checks for WRITE
       
     template::multirow foreach copy_objects {
-      db_transaction {
- 	db_exec_plsql copy_item {}
-     }
+        db_transaction {
+            if {![string equal $type "folder"] } {
+                db_exec_plsql copy_item {}
+            } else {
+                db_exec_plsql copy_folder {}
+            }
+        }
     }
 
      ad_returnredirect $return_url
