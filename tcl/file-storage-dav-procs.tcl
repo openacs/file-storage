@@ -18,6 +18,12 @@ ad_proc fs::impl::fs_object::get {} {
     return [oacs_dav::impl::content_revision::get]
 }
 
+ad_proc fs::impl::fs_object::head {} {
+    HEAD method
+} {
+    return [oacs_dav::impl::content_revision::head]
+}
+
 ad_proc fs::impl::fs_object::put {} {
     PUT method
 } {
