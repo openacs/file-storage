@@ -71,9 +71,5 @@ where  object_id = :file_id"
     return
 }
 
-
 ad_returnredirect "?folder_id=$parent_id"
-
-
-
 
