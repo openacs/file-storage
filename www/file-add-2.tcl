@@ -30,7 +30,7 @@ ad_page_contract {
 ad_require_permission $folder_id write
 
 # Get the filename part of the upload file
-if ![regexp {[^//\\]+$} $upload_file filename] {
+if { ![regexp {[^//\\]+$} $upload_file filename] } {
     # no match
     set filename $upload_file
 }
