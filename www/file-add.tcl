@@ -122,7 +122,8 @@ ad_form -extend -form {} -select_query_name {get_file} -new_data {
 	set upload_files [list [template::util::file::get_property filename $upload_file]]
 	set upload_tmpfiles [list [template::util::file::get_property tmp_filename $upload_file]]
     }
-    
+    set i 0
+    set number_upload_files [llength $upload_files]
     foreach upload_file $upload_files tmpfile $upload_tmpfiles {
 	set this_file_id $file_id
 	set this_title $title
@@ -157,7 +158,17 @@ ad_form -extend -form {} -select_query_name {get_file} -new_data {
 	    -title $this_title \
 	    -description $description \
 	    -package_id $package_id
-	
+	incr i
+        ns_log notice "
+DB --------------------------------------------------------------------------------
+DB DAVE debugging /var/lib/aolserver/openacs-5-1/packages/file-storage/www/file-add.tcl
+DB --------------------------------------------------------------------------------
+DB i = '${i}'
+DB number_upload_files = '${number_upload_files}'
+DB --------------------------------------------------------------------------------"
+        if {$i < $number_upload_files} {
+            set file_id [db_nextval "acs_object_id_seq"]
+        }
     }
     
 } -edit_data {
