@@ -65,7 +65,19 @@ ad_form -extend -name delete_confirm -on_submit {
     db_transaction {
         template::multirow foreach delete_list {
             if {$delete_p} {
-		fs::delete_file -item_id $fs_object_id -parent_id $parent_id 
+                switch $type {
+                    folder {
+                        fs::delete_folder \
+                            -folder_id $fs_object_id \
+                            -parent_id $parent_id
+                    }
+                    default {
+                        fs::delete_file \
+                            -item_id $fs_object_id \
+                            -parent_id $parent_id 
+                    }
+                }
+
 	    }
 	}
     }

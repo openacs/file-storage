@@ -192,6 +192,15 @@
       </querytext>
   </fullquery>
 
+  <fullquery name="fs::delete_folder.delete_folder">
+     <querytext>
+        select file_storage__delete_folder (
+                       :folder_id,
+                       :cascade_p
+                       )
+     </querytext>
+  </fullquery>
+  
   <fullquery name="fs::add_version.update_last_modified">
     <querytext>
       begin

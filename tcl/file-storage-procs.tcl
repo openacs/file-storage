@@ -775,6 +775,24 @@ ad_proc fs::delete_file {
     fs::do_notifications -folder_id $parent_id -filename $version_name -item_id $item_id -action "delete_file"
 }
 
+ad_proc fs::delete_folder {
+    -folder_id
+    {-cascade_p "t"}
+    {-parent_id ""}
+} {
+    Deletes a folder and all contents
+} {
+    set version_name [get_object_name -object_id $folder_id]
+    db_exec_plsql delete_folder ""
+
+    if {[empty_string_p $parent_id]} {
+	set parent_id [get_parent -item_id $folder_id]
+    }
+    
+    fs::do_notifications -folder_id $parent_id -filename $version_name -item_id $folder_id -action "delete_folder"
+    
+}
+
 ad_proc fs::delete_version {
     -item_id
     -version_id
@@ -846,6 +864,7 @@ ad_proc -public fs::do_notifications {
     Note that not all possible operations are implemented, e.g. move, copy etc. See documentation.
 
     @param action The kind of operation. One of: new_file, new_version, new_url, delete_file, delete_url
+                  delete_folder
 } {
     if {[string equal "" $package_id]} {
         set package_id [ad_conn package_id]
@@ -862,6 +881,8 @@ ad_proc -public fs::do_notifications {
         set action_type {File deleted}
     } elseif {[string equal $action "delete_url"]} {
         set action_type {URL deleted}
+    } elseif {[string equal $action "delete_folder"]} {
+        set action_type {Folder deleted}
     } else {
         error "Unknown file-storage notification action: $action"
     }
@@ -874,6 +895,8 @@ ad_proc -public fs::do_notifications {
         if {[string equal $action "new_version"]} {
             set sql "select description as description from cr_revisions 
                            where cr_revisions.revision_id = :item_id"
+        } elseif {[string match "*folder" $action]} {
+            set sql "select description from cr_folders where folder_id=:item_id"
         } else {
             set sql "select description as description from cr_revisions 
                            where cr_revisions.item_id = :item_id"
