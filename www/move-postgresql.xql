@@ -26,7 +26,7 @@
   <fullquery name="move_item">
     <querytext>
       select content_item__move(
-           :one_item,
+           :object_id,
            :folder_id
       )
     </querytext>
