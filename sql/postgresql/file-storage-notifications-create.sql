@@ -7,7 +7,8 @@ begin
         impl_id := acs_sc_impl__new (
                       ''NotificationType'',
                       ''fs_fs_notif_type'',
-                      ''file_storage''
+                      ''file_storage'',
+		      ''file_storage''
                    );
 	
 	v_foo := acs_sc_impl_alias__new (
