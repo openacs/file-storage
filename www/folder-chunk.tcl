@@ -138,11 +138,11 @@ db_multirow -extend { icon last_modified_pretty content_size_pretty properties_l
     } else {
 	set type [string trimleft [file extension $file_upload_name] . ]
 	if {$content_size > 0 && $content_size < 1024} {
-	    set content_size_pretty [lc_numeric 1]
+	    set content_size_pretty "[lc_numeric $content_size] [_ file-storage.bytes]"
 	} else {
-	    set content_size_pretty [lc_numeric [expr $content_size / 1024 ]]
+	    set content_size_pretty "[lc_numeric [expr $content_size / 1024 ]] [_ file-storage.kb]"
 	}
-	append content_size_pretty " [_ file-storage.kb]"
+
     }
 
     set file_upload_name [fs::remove_special_file_system_characters -string $file_upload_name]
