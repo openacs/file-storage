@@ -727,7 +727,7 @@ begin
             from cr_items i, cr_revisions r
 	    where i.item_id=r.item_id
 	    and i.live_revision=r.revision_id
-	    and i.content_type=''file_storage_object'';
+	    and i.content_type=''file_storage_object''
 	loop
 
 	   update cr_items set name=v_item_row.name
