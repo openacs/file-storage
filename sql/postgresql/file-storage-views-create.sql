@@ -32,9 +32,6 @@ as
             (select count(*)
              from fs_simple_objects
              where fs_simple_objects.folder_id = cr_folders.folder_id)) as content_size,
-           (select site_node__url(site_nodes.node_id)
-            from site_nodes
-            where site_nodes.object_id = file_storage__get_package_id(cr_items.item_id)) as url,
            cr_items.parent_id
     from cr_folders,
          cr_items,
@@ -51,9 +48,6 @@ as
            cr_revisions.content_length as content_size,
            cr_items.name,
            acs_objects.last_modified,
-           (select site_node__url(site_nodes.node_id)
-            from site_nodes
-            where site_nodes.object_id = file_storage__get_package_id(cr_items.item_id)) as url,
            cr_items.parent_id
     from cr_revisions,
          cr_items,
@@ -71,7 +65,7 @@ as
            fs_folders.content_size,
            fs_folders.name,
            fs_folders.last_modified,
-           fs_folders.url,
+           '' as url,
            fs_folders.parent_id,
            0 as sort_key
     from fs_folders
@@ -82,7 +76,7 @@ as
            fs_files.content_size,
            fs_files.name,
            fs_files.last_modified,
-           fs_files.url,
+           '' as url,
            fs_files.parent_id,
            1 as sort_key
     from fs_files
