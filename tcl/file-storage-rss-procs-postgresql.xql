@@ -34,7 +34,7 @@
             and type != 'folder'
             and $revisions_clause
           order by last_modified desc
-        ) as v limit :max_items
+        ) as v limit $max_items
     </querytext>
   </fullquery>
 
