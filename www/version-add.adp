@@ -1,6 +1,6 @@
-<master src="fs_master">
+<master src="master">
 <property name="title">Upload New Version of @title@</property>
-<property name="context_bar">@context_bar@</property>
+<property name="context">@context@</property>
 
 <form enctype=multipart/form-data method=POST action=version-add-2>
 <input type=hidden name=file_id value="@file_id@">

@@ -18,7 +18,7 @@ ad_page_contract {
     }
 } -properties {
     folder_id:onevalue
-    context_bar:onevalue
+    context:onevalue
 }
 
 # check for write permission on the folder
@@ -32,7 +32,7 @@ if {[empty_string_p $pretty_name]} {
     return -code error "No such type"
 }
 
-set context_bar [fs_context_bar_list -final "Add $pretty_name" $folder_id]
+set context [fs_context_bar_list -final "Add $pretty_name" $folder_id]
 
 # Should probably generate the item_id and version_id now for
 # double-click protection

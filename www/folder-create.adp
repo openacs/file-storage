@@ -1,6 +1,6 @@
-<master src="fs_master">
+<master src="master">
 <property name="title">Create New Folder</property>
-<property name="context_bar">@context_bar@</property>
+<property name="context">@context@</property>
 
 
 <form method=POST action=folder-create-2>

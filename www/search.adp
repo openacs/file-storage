@@ -1,6 +1,6 @@
-<master src="fs_master">
+<master src="master">
 <property name="title">Search Results</property>
-<property name="context_bar">@context_bar@</property>
+<property name="context">@context@</property>
 
 <if @results:rowcount@ eq 0>
 <p>Your search on "@query@" did not return any results.

@@ -22,7 +22,7 @@ ad_page_contract {
     write_p:onevalue
     admin_p:onevalue
     delete_p:onevalue
-    context_bar:onevalue
+    context:onevalue
 }
 
 # Don't allow delete if root folder
@@ -77,6 +77,6 @@ if {[form is_valid n_past_days_form]} {
     form get_values n_past_days_form n_past_days folder_id
 }
 
-set context_bar [fs_context_bar_list $folder_id]
+set context [fs_context_bar_list $folder_id]
 
 ad_return_template

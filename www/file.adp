@@ -1,7 +1,7 @@
-<master src="fs_master">
+<master src="master">
 <property name="title">@title@</property>
 <property name="header">@title@</property>
-<property name="context_bar">@context_bar@</property>
+<property name="context">@context@</property>
 
 <ul>
   <li>Title: @title@ <if @write_p@ true>(<a href="file-edit?file_id=@file_id@">edit</a>)</if>

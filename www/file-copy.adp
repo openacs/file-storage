@@ -1,6 +1,6 @@
-<master src="fs_master">
+<master src="master">
 <property name="title">Copy</property>
-<property name="context_bar">@context_bar@</property>
+<property name="context">@context@</property>
 
 <P>Select the folder that you would like to copy "@file_name@" to
 

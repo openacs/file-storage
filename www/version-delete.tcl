@@ -17,7 +17,7 @@ ad_page_contract {
     version_id:onevalue
     version_name:onevalue
     title:onevalue
-    context_bar:onevalue
+    context:onevalue
 }
 
 # check for delete permission on the version
@@ -66,6 +66,6 @@ if {[string equal $confirmed_p "t"]} {
     where i.item_id = r.item_id
     and revision_id = :version_id"
 
-    set context_bar [fs_context_bar_list -final "Delete Version" $item_id]
+    set context [fs_context_bar_list -final "Delete Version" $item_id]
     ad_return_template
 }
