@@ -75,4 +75,19 @@ namespace eval fs {
         # delete the item
         db_exec_plsql delete_item {}
     }
+
+    ad_proc -public simple_p {
+        {-object_id:required}
+    } {
+        # is this thing a simple fs object?
+        return [db_string simple_check {}]
+    }
+    ad_proc -public url_copy {
+        {-url_id:required}
+        {-target_folder_id:required}
+    } {
+        # is this thing a simple fs object?
+        return [db_exec_plsql copy {}]
+    }
+
 }

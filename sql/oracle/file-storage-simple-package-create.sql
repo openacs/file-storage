@@ -95,6 +95,12 @@ as
     procedure delete (
         url_id in fs_urls.url_id%TYPE
     );
+
+    function copy (
+        url_id in fs_urls.url_id%TYPE,
+        target_folder_id in fs_simple_objects.folder_id%TYPE
+    ) return fs_urls.url_id%TYPE;
+
 end fs_url;
 /
 show errors
@@ -144,6 +150,47 @@ as
 
         fs_simple_object.delete(url_id);
     end delete;
+
+    function copy (
+        url_id in fs_urls.url_id%TYPE,
+        target_folder_id in fs_simple_objects.folder_id%TYPE
+    ) return fs_urls.url_id%TYPE
+    is
+        v_new_url_id            fs_urls.url_id%TYPE;
+        v_url                   fs_urls.url%TYPE;
+        v_name                  fs_simple_objects.name%TYPE;
+        v_description           fs_simple_objects.description%TYPE;
+        v_creation_user         acs_objects.creation_user%TYPE;
+        v_creation_ip           acs_objects.creation_ip%TYPE;
+    begin
+
+        select url
+        into v_url
+        from fs_urls
+        where url_id = copy.url_id;
+
+        select name, description 
+        into v_name, v_description 
+        from fs_simple_objects
+        where object_id = copy.url_id;
+
+        select creation_user, creation_ip
+        into v_creation_user, v_creation_ip
+        from acs_objects
+        where object_id = copy.url_id;
+
+        v_new_url_id := fs_url.new( 
+            url           => v_url,
+            folder_id     => copy.target_folder_id,
+            name          => v_name,
+            description   => v_description,
+            creation_user => v_creation_user,
+            creation_ip   => v_creation_ip,
+            context_id    => copy.target_folder_id
+        );
+
+        return v_new_url_id;
+    end copy;
 
 end fs_url;
 /
