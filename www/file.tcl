@@ -42,7 +42,9 @@ if {[string equal $show_all_versions_p "t"]} {
 } else {
     set show_versions [db_map show_live_version]
 }
-set actions [list "Upload Revision" version-add?[export_vars file_id] "Upload a new version of this file" \
+set return_url [ad_conn url]?[export_vars file_id]
+
+set actions [list "Upload Revision" file-add?[export_vars [list file_id return_url]] "Upload a new version of this file" \
 		 "Rename File" file-edit?[export_vars file_id] "Rename file" \
 		 "Copy File" file-copy?[export_vars file_id] "Copy file" \
 		 "Move File" file-move?[export_vars file_id] "Move file" \

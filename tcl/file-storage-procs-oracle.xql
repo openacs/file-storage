@@ -145,7 +145,7 @@
    <fullquery name="fs::do_notifications.get_owner_name">
         <querytext>
 	  select person.name(o.creation_user) as owner
-		 from acs_objects o where o.object_id = :file_id
+		 from acs_objects o where o.object_id = :item_id
         </querytext>
     </fullquery>
 
@@ -190,6 +190,31 @@
 	end;
     </querytext>
   </fullquery>
+
+<fullquery name="fs::delete_version::delete_version">      
+      <querytext>
+
+	begin
+	   :1 := file_storage.delete_version(
+			:item_id,
+			:version_id
+			);
+	end;
+
+      </querytext>
+</fullquery>
+
+<fullquery name="fs::delete_file.delete_file">      
+      <querytext>
+	
+	begin
+		file_storage.delete_file(
+			:item_id
+			);
+	end;
+
+      </querytext>
+</fullquery>
 
   <fullquery name="fs::add_version.update_last_modified">
     <querytext>
