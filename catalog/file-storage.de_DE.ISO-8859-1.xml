@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="file-storage" package_version="5.0.0b4" locale="de_DE" charset="ISO-8859-1">
+<message_catalog package_key="file-storage" package_version="5.0.1" locale="de_DE" charset="ISO-8859-1">
 
   <msg key="Action">Aktion</msg>
   <msg key="Actions">Aktionen:</msg>
@@ -42,8 +42,8 @@
   <msg key="item">Element</msg>
   <msg key="items">Elemente</msg>
   <msg key="Last_Modified">Zuletzt geändert</msg>
-  <msg key="last_month">Letzer Monat</msg>
-  <msg key="last_week">Letze Woche</msg>
+  <msg key="last_month">Letzter Monat</msg>
+  <msg key="last_week">Letzte Woche</msg>
   <msg key="lt_administer_permission">Zugriffsberechtigungen verwalten</msg>
   <msg key="lt_All_Versions_of_title">Alle Versionen von &quot;%title%&quot;</msg>
   <msg key="lt_Are_you_sure_that_you">Wollen Sie die Version &quot;%version_name%&quot; von &quot;%title%&quot; unwiderruflich löschen?</msg>
