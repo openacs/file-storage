@@ -50,12 +50,3 @@
 
 
 <include src="folder-chunk" folder_id=@folder_id;noquote@ viewing_user_id=@user_id;noquote@ n_past_days=@n_past_days;noquote@>
-
-<p>
-      <a href="download-archive/index?object_id=@folder_id@">
-        #file-storage.lt_Download_an_archive_o#
-      </a>
-      <br>
-      <small><i><strong>#file-storage.Note#</strong> #file-storage.lt_This_may_take_a_while#</i></small>
-
-
