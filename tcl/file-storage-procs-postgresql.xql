@@ -76,7 +76,7 @@
 <fullquery name="fs_context_bar_list.context_bar">      
       <querytext>
 
-    	select (case when content_item__get_content_type(i.item_id) = 'content_folder' 
+    	select (case when content_item__get_content_type(j.item_id) = 'content_folder' 
 	             then '?folder_id=' 
 	             else 'file?file_id=' 
                 end) || j.item_id,
@@ -91,7 +91,7 @@
 	and i.item_id = :start_id
 	and j.tree_sortkey <= i.tree_sortkey
 	and i.tree_sortkey like (j.tree_sortkey || '%')
-    	order by j.tree_sortkey desc
+    	order by j.tree_sortkey asc
 
       </querytext>
 </fullquery>
