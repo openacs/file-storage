@@ -63,13 +63,15 @@ create or replace function file_storage__new_root_folder (
        --
        integer,         -- apm_packages.package_id%TYPE
        varchar,         -- cr_folders.label%TYPE
-       varchar          -- cr_items.name%TYPE
+       varchar,          -- cr_items.name%TYPE
+       description
 )
 returns integer as '    --  fs_root_folders.folder_id%TYPE
 declare
         new_root_folder__package_id         alias for $1;
         new_root_folder__folder_name        alias for $2;
 	new_root_folder__url	            alias for $3;
+        new_root_folder__description        alias for $4;
         v_folder_id                         fs_root_folders.folder_id%TYPE;
 begin
 
@@ -77,7 +79,7 @@ begin
         v_folder_id := content_folder__new (
             new_root_folder__url, -- name
             new_root_folder__folder_name, -- label
-	    null, -- description
+	    new_root_folder__description, -- description
             null,  -- parent_id (default)
 	    new_root_folder__package_id, --context_id
 	    null, --folder_id
