@@ -6,9 +6,9 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     file_id:integer,notnull
-    name:notnull
     upload_file:trim,notnull
     upload_file.tmpfile:tmpfile
+    title:notnull
     description:trim
 } -validate {
     valid_file -requires {file_id} {
@@ -26,44 +26,74 @@ ad_page_contract {
     }
 }
 
-set user_id [ad_conn user_id]
 
-#check for write permission on the file
-
+# Check for write permission on the file
 ad_require_permission $file_id write
 
-# get the ip
-set ip_addr [ad_conn peeraddr]
+# Get the user_id
+set user_id [ad_conn user_id]
+
+# Get the filename part of the upload file
+if ![regexp {[^//\\]+$} $upload_file filename] {
+    # no match
+    set filename $upload_file
+}
+
+# Get the ip
+set creation_ip [ad_conn peeraddr]
+
+# The content repository is kinda stupid about mime types,
+# so we have to check if we know about this one and possibly 
+# add it.
+set mime_type [fs_maybe_create_new_mime_type $upload_file]
+
+# Get the storage type
+set indb_p [ad_parameter "StoreFilesInDatabaseP" -package_id [ad_conn package_id]]
 
 db_transaction {
 
-set mime_type [fs_maybe_create_new_mime_type $upload_file]
+    # create the new version
+    set version_id [db_exec_plsql new_version "
+	begin
+	   :1 := file_storage__create_file (
+                  name => :filename,
+                  parent_id => :folder_id,
+                  context_id => :folder_id,
+                  creation_user => :user_id,
+                  creation_ip => :creation_ip,
+                  item_subtype => 'file_storage_item' -- needed by site-wide search
+                  );
+        end;"]
 
-set revision_id [db_exec_plsql revision_add "
-begin
-    :1 := content_revision.new (
-        title => :name,
-        description => :description,
-        mime_type => :mime_type,
-        item_id => :file_id,
-        creation_user => :user_id,
-        creation_ip => :ip_addr
-    );
-end;"]
 
-db_dml content_add "
-update cr_revisions
-set    content = empty_blob()
-where  revision_id = :revision_id
-returning content into :1" -blob_files [list ${upload_file.tmpfile}]
+    if {$indb_p} {
 
-# This should probably depend on a toggle on the previous page
-db_exec_plsql make_live "
-begin
-    content_item.set_live_revision(:revision_id);
-end;"
+	db_dml lob_content "
+	update cr_revisions
+	set    content = empty_blob()
+	where  revision_id = :version_id
+	returning content into :1" -blob_files [list ${upload_file.tmpfile}]
 
-# Should we change the modification info on the file?
+
+	# Unfortunately, we can only calculate the file size after the lob is uploaded 
+	db_dml lob_size "
+	update cr_revisions
+	set    content_length = lob_length(lob)
+	where  revision_id = :version_id"
+
+    } else {
+
+	set tmp_filename [cr_create_content_file $file_id $version_id ${upload_file.tmpfile}]
+	set tmp_size [cr_file_size $tmp_filename]
+
+	db_dml fs_content_size "
+	update cr_revisions
+	set filename = '$tmp_filename',
+            content_length = $tmp_size
+	where  revision_id = :version_id"
+
+    }
+
 
 }
 
