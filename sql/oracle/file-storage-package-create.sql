@@ -142,8 +142,12 @@ as
     procedure delete_folder(
         --
         -- Delete a folder
-        --
-        folder_id in cr_folders.folder_id%TYPE
+        -- adding cascade_p but defaulting to false
+	-- this will fail if a folder contains anything
+	-- but just in case some other application uses
+	-- this api it will not change the behavior
+        folder_id in cr_folders.folder_id%TYPE,
+	cascade_p in char default 'f'
     );
 
 end file_storage;
@@ -601,12 +605,14 @@ as
         --
         -- Delete a folder
         --
-        folder_id in cr_folders.folder_id%TYPE
+        folder_id in cr_folders.folder_id%TYPE,
+	cascade_p in char default 'f'
     )
     is
     begin
         content_folder.del(
-            folder_id => file_storage.delete_folder.folder_id
+            folder_id => file_storage.delete_folder.folder_id,
+	    cascade_p => file_storage.delete_folder.cascade_p
         );
     end delete_folder;
 
