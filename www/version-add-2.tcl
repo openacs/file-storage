@@ -22,7 +22,7 @@ ad_page_contract {
 	set max_bytes [ad_parameter "MaximumFileSize"]
 	if { $n_bytes > $max_bytes } {
             set number_of_bytes "[util_commify_number $max_bytes]"
-	    ad_complain [_ [ad_conn locale] file-storage.lt_Your_file_is_larger_t] "" [list number_of_bytes $number_of_bytes]]
+	    ad_complain [_ file-storage.lt_Your_file_is_larger_t] [list number_of_bytes $number_of_bytes]]
 	}
     }
 }

@@ -105,7 +105,7 @@ if {$recurse_p} {
 
 set table [ad_table \
     -Torderby $orderby \
-    -Tmissing_text "<blockquote><i>[_ [ad_conn locale] file-storage.lt_Folder_folder_name_is] "" [list folder_name [fs::get_object_name -object_id $folder_id]]]</i></blockquote>" \
+    -Tmissing_text "<blockquote><i>[_ file-storage.lt_Folder_folder_name_is] [list folder_name [fs::get_object_name -object_id $folder_id]]]</i></blockquote>" \
     -Ttable_extra_html {width="95%"} \
     select_folder_contents \
     $sql \
