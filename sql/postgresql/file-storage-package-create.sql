@@ -35,7 +35,7 @@ begin
 
         return v_folder_id;
 
-end;' language 'plpgsql' with (iscachable);
+end;' language 'plpgsql' stable;
 
 create function file_storage__get_package_id (
     integer                     -- cr_items.item_id%TYPE
@@ -61,7 +61,7 @@ begin
         return v_package_id;
     end if;
 
-end;' language 'plpgsql' with (iscachable);
+end;' language 'plpgsql' stable;
 
 create function file_storage__new_root_folder (
        --
