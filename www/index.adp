@@ -25,4 +25,4 @@ Search file names for
 <input type=text size=30 name=query>
 </form>
 
-<include src="folder-chunk" folder_id=@folder_id@ viewing_user_id=@user_id@></include>
+<include src="folder-chunk" folder_id=@folder_id@ viewing_user_id=@user_id@>
