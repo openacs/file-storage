@@ -6,7 +6,6 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     object_id:notnull
-    {mode "display"}
 }
 
 # check for write permission on the item
@@ -14,7 +13,7 @@ ad_require_permission $object_id write
 
 # Message lookup uses variable pretty_name
 
-ad_form -name simple-edit -mode $mode -form {
+ad_form -name simple-edit -form {
     object_id:key
     {name:text {label "#file-storage.Title_#"} {html {size 40} } }
     {url:text {label "#file-storage.URL#"} {html {size 50} } }

@@ -17,7 +17,7 @@ if {![exists_and_not_null folder_id]} {
     ad_script_abort
 }
 
-#set viewing_user_id [ad_conn user_id]
+set viewing_user_id [ad_conn user_id]
 
 permission::require_permission -party_id $viewing_user_id -object_id $folder_id -privilege "read"
 
@@ -140,7 +140,7 @@ db_multirow -extend { icon last_modified_pretty content_size_pretty properties_l
 	}
 	url {
 	    set properties_link "properties"
-	    set properties_url "simple-edit?[export_vars object_id]"
+	    set properties_url "simple?[export_vars object_id]"
 	    set icon "/resources/url-button.gif"
 	    set file_url ${url}
 	}
