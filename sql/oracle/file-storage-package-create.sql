@@ -321,7 +321,7 @@ as
     )
     is
     begin
-        content_item.delete(item_id => file_storage.delete_file.file_id);
+        content_item.del(item_id => file_storage.delete_file.file_id);
     end delete_file;
 
     procedure rename_file(
@@ -564,12 +564,12 @@ as
     begin
         if file_storage.delete_version.version_id = content_item.get_live_revision(file_storage.delete_version.file_id)
         then
-            content_revision.delete(file_storage.delete_version.version_id);
+            content_revision.del(file_storage.delete_version.version_id);
             content_item.set_live_revision(
                 content_item.get_latest_revision(file_storage.delete_version.file_id)
             );
         else
-            content_revision.delete(file_storage.delete_version.version_id);
+            content_revision.del(file_storage.delete_version.version_id);
         end if;
 
         -- If the live revision is null, we have deleted the last version above
@@ -648,7 +648,7 @@ as
     )
     is
     begin
-        content_folder.delete(
+        content_folder.del(
             folder_id => file_storage.delete_folder.folder_id
         );
     end delete_folder;
@@ -676,25 +676,25 @@ begin
         -- of deletion of revisions.
         if v_rec.content_type = 'file_storage_object'
         then
-            content_item.delete(v_rec.item_id);
+            content_item.del(v_rec.item_id);
         end if;
 
         -- Instead of doing an if-else, we make sure we are deleting a folder.
         if v_rec.content_type = 'content_folder'
         then
-            content_folder.delete(v_rec.item_id);
+            content_folder.del(v_rec.item_id);
         end if;
 
         -- Instead of doing an if-else, we make sure we are deleting a folder.
         if v_rec.content_type = 'content_symlink'
         then
-            content_symlink.delete(v_rec.item_id);
+            content_symlink.del(v_rec.item_id);
         end if;
 
         -- Instead of doing an if-else, we make sure we are deleting a folder.
         if v_rec.content_type = 'content_extlink'
         then
-            content_extlink.delete(v_rec.item_id);
+            content_extlink.del(v_rec.item_id);
         end if;
 
     end loop;
@@ -707,7 +707,7 @@ create or replace trigger fs_root_folder_delete_trig
 after delete on fs_root_folders
 for each row
 begin
-    content_folder.delete(:old.folder_id);
+    content_folder.del(:old.folder_id);
 end;
 /
 show errors;
