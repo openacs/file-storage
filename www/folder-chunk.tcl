@@ -30,7 +30,11 @@ set folder_name [fs::get_object_name -object_id  $folder_id]
 
 set content_size_total 0
 
-set root_folder_id [fs::get_root_folder]
+if {![exists_and_not_null root_folder_id]} {
+    set root_folder_id [fs::get_root_folder]
+}
+
+set folder_path [db_exec_plsql get_folder_path {}]
 
 db_multirow -extend { last_modified_pretty content_size_pretty } contents select_folder_contents {} {
     set last_modified_ansi [lc_time_system_to_conn $last_modified_ansi]

@@ -12,10 +12,18 @@
                    to_char(fs_objects.last_modified, 'YYYY-MM-DD HH24:MI:SS') as last_modified_ansi,
                    fs_objects.content_size,
                    fs_objects.url,
-                   content_item__get_path(fs_objects.object_id, :root_folder_id) as file_url,
                    fs_objects.sort_key,
                    fs_objects.file_upload_name,
-                   case when fs_objects.last_modified >= (now() - cast('$n_past_days days' as interval)) then 1 else 0 end as new_p,
+                   case
+                     when :folder_path is null
+                     then fs_objects.name
+                     else :folder_path || '/' || fs_objects.name
+                   end as file_url,
+                   case
+                     when fs_objects.last_modified >= (now() - cast('$n_past_days days' as interval))
+                     then 1
+                     else 0
+                   end as new_p,
                    case
                      when type = 'url'
                      then acs_permission__permission_p(fs_objects.object_id, :viewing_user_id, 'delete')
@@ -37,4 +45,13 @@
 
         </querytext>
     </fullquery>
+
+    <fullquery name="get_folder_path">
+        <querytext>
+
+            select content_item__get_path(:folder_id, :root_folder_id);
+
+        </querytext>
+    </fullquery>
+
 </queryset>
