@@ -84,4 +84,6 @@ if { [apm_package_installed_p "general-comments"] && [ad_parameter "GeneralComme
     set gc_comments ""
 }
 
+# get folder id so we can implement a back link
+set folder_id [db_string get_folder ""]
 
