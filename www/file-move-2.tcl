@@ -30,8 +30,8 @@ db_transaction {
 
 db_exec_plsql file_move "
 begin
-    content_item.move (
-    	item_id => :file_id,
+    file_storage.move_file (
+    	file_id => :file_id,
     	target_folder_id => :parent_id
     );
 end;"

@@ -6,8 +6,8 @@
 <fullquery name="file_move">      
       <querytext>
 
-    	select content_item__move (
-    		:file_id,	-- item_id
+    	select file_storage__move_file (
+    		:file_id,	-- file_id
     		:parent_id	-- target_folder_id
     		);
 
