@@ -3,14 +3,13 @@
 <queryset>
    <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
-    <fullquery name="fs::new_root_folder.new_root_folder">
+    <fullquery name="fs::after_mount.new_root_folder">
         <querytext>
-            select file_storage__new_root_folder(
-                :package_id,
-                :pretty_name,
-		:description,
-		:name
-            );
+	select file_storage__new_root_folder (
+	    :package_id,
+            :label, -- label
+	    :name -- name
+        )
         </querytext>
     </fullquery>
 

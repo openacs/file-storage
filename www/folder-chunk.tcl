@@ -17,7 +17,7 @@ if {![exists_and_not_null folder_id]} {
     ad_script_abort
 }
 
-permission::require_permission -party_id $viewing_user_id -object_id $folder_id -privilege "read"
+permission::require_permission -party_id [ad_conn user_id] -object_id $folder_id -privilege "read"
 
 if {![exists_and_not_null n_past_days]} {
     set n_past_days 99999
