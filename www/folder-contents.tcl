@@ -71,6 +71,8 @@ lappend table_def {type Type {fs_objects.type $order} {c}}
 lappend table_def {content_size Size {fs_objects.content_size $order} {<td align=\"center\">[ad_decode $type folder "$content_size item[ad_decode $content_size 1 {} s]" url {} "$content_size byte[ad_decode $content_size 1 {} s]"]</td>}}
 lappend table_def {last_modified {Last Modified} {fs_objects.last_modified $order} {<td align=\"center\">[util_AnsiDatetoPrettyDate $last_modified]</td>}}
 
+#JCD BROKEN QUERY NEEDS db_map
+
 if {$recurse_p} {
     set sql "
         select fs_objects.*,
@@ -113,4 +115,3 @@ set table [ad_table \
 set folder_name [fs::get_object_name -object_id $folder_id]
 set context [fs_context_bar_list -final Contents $folder_id]
 
-ad_return_template
