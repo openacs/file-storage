@@ -1,12 +1,15 @@
 ad_page_contract {
     page to add a new nonversioned object to the system
 
-    @author Ben Adida (ben@openforce)
+    @author Ben Adida (ben@openforce)    
+    @author arjun (arjun@openforce)
     @creation-date 01 April 2002
     @cvs-id $Id$
 } {
     folder_id:integer,notnull
     {type "fs_url"}
+    {title ""}
+    {lock_title_p 0}
 } -validate {
     valid_folder -requires {folder_id:integer} {
 	if ![fs_folder_p $folder_id] {
@@ -34,4 +37,9 @@ set context_bar [fs_context_bar_list -final "Add $pretty_name" $folder_id]
 # Should probably generate the item_id and version_id now for
 # double-click protection
 
-ad_return_template
+
+# if title isn't passed in ignore lock_title_p
+if {[empty_string_p $title]} {
+    set lock_title_p 0
+}
+

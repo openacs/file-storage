@@ -9,13 +9,19 @@
 <table border=0>
 
 <tr>
-<td align=right>Title : </td>
-<td><input type=text name=name size=40></tr>
+<td align=right> Title: </td>
+  <if @lock_title_p@ eq 0>
+    <td><input size=30 name=title value=@title@></td>
+  </if>
+  <else>
+     <td>@title@</td>
+     <input type=hidden name=title value=@title@>
+  </else>
 </tr>
 
 <tr>
 <td align=right> URL: </td>
-<td><input size=50 name=url></td>
+<td><input size=50 name=url value="http://"></td>
 </tr>
 
 <tr>

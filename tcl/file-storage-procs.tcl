@@ -333,8 +333,8 @@ namespace eval fs {
         of ns_sets, one for each row returned. The keys for each row are as
         follows:
 
-            file_id, name, live_revision, type,
-            last_modified, content_size, sort_key
+            object_id, name, live_revision, type,
+            last_modified, new_p, content_size, write_p, delete_p, admin_p
 
         @param folder_id The folder for which to retrieve contents
         @param user_id The viewer of the contents (to make sure they have

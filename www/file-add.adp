@@ -25,7 +25,13 @@
 
 <tr>
 <td align=right> Title: </td>
-<td><input size=30 name=title></td>
+  <if @lock_title_p@ eq 0>
+    <td><input size=30 name=title value=@title@></td>
+  </if>
+  <else>
+      <input type=hidden name=title value=@title@>
+      <td>@title@</td>
+  </else>
 </tr>
 
 <tr>
