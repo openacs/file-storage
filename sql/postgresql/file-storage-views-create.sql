@@ -42,6 +42,7 @@ as
     where cr_folders.folder_id = cr_items.item_id
     and cr_folders.folder_id = acs_objects.object_id;
 
+
 create view fs_files
 as
     select cr_revisions.item_id as file_id,
@@ -62,7 +63,7 @@ as
     and cr_items.content_type = 'file_storage_object'
     and cr_revisions.revision_id = acs_objects.object_id;
 
-create or replace view fs_objects
+create view fs_objects
 as
     select fs_folders.folder_id as object_id,
            0 as live_revision,
