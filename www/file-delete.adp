@@ -1,0 +1,26 @@
+<master src="fs_master">
+<property name="title">Delete @file_name@</property>
+<property name="context_bar">@context_bar@</property>
+
+<if @blocked_p@ eq "t">
+
+<p>This file has versions that you do not have permission to delete,
+so you cannot delete the file.
+
+</if>
+<else>
+
+<form method=POST action=file-delete>
+<input type=hidden name=file_id value=@file_id@>
+<input type=hidden name=confirmed_p value="t">
+
+<p>Are you sure you want to delete the file "@file_name@" and all of
+its versions?  This action cannot be reversed.
+
+<p>
+<center>
+<input type=submit value="Yes, Delete It">
+</center>
+</form>
+
+</else>
