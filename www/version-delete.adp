@@ -6,14 +6,10 @@
 <input type=hidden name=version_id value=@version_id@>
 <input type=hidden name=confirmed_p value="t">
 
-<p>Are you sure that you want to delete this version "@version_name@" of "@title@"?
-This action cannot be reversed.
+<p>#file-storage.lt_Are_you_sure_that_you#
 <p>
 <center>
-<input type=submit value="Yes, Delete It">
+<input type=submit value="#file-storage.Yes_Delete_It#">
 </center>
 
 </form>
-
-
-

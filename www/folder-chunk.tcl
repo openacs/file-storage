@@ -11,7 +11,7 @@ ad_page_contract {
 }
 
 if {![exists_and_not_null folder_id]} {
-    ad_return_complaint 1 "bad folder id $folder_id"
+    ad_return_complaint 1 [_ file-storage.lt_bad_folder_id_folder_]
     ad_script_abort
 }
 

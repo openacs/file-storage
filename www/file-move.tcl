@@ -10,7 +10,7 @@ ad_page_contract {
 } -validate {
     valid_file -requires {file_id} {
 	if ![fs_file_p $file_id] {
-	    ad_complain "The specified file is not valid."
+	    ad_complain "[_ file-storage.lt_The_specified_file_is]"
 	}
     }
 } -properties {
@@ -31,7 +31,7 @@ begin
     :1 := file_storage.get_title(:file_id);
 end;"]
 
-set context [fs_context_bar_list -final "Move" $file_id]
+set context [fs_context_bar_list -final "[_ file-storage.Move]" $file_id]
 
 ad_return_template
 

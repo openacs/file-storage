@@ -1,5 +1,5 @@
 <master>
-<property name="title">Copy</property>
+<property name="title">#file-storage.Copy#</property>
 <property name="context">@context@</property>
 
 <P>Select the folder that you would like to copy "@file_name@" to
@@ -9,5 +9,7 @@
 
 <include src="folder-list" file_id="">
 <p>
-<input type=submit value="Copy">
+<input type=submit value="#file-storage.Copy#">
 </form>
+
+

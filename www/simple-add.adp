@@ -9,7 +9,7 @@
 <table border=0>
 
 <tr>
-<td align=right> Title: </td>
+<td align=right> #file-storage.Title# </td>
   <if @lock_title_p@ eq 0>
     <td><input size=30 name=title value=@title@></td>
   </if>
@@ -20,20 +20,22 @@
 </tr>
 
 <tr>
-<td align=right> URL: </td>
+<td align=right> #file-storage.URL# </td>
 <td><input size=50 name=url value="http://"></td>
 </tr>
 
 <tr>
-<td valign=top align=right> Description: </td>
+<td valign=top align=right> #file-storage.Description# </td>
 <td colspan=2><textarea rows=5 cols=50 name=description wrap=soft></textarea></td>
 </tr>
 
 <tr>
 <td></td>
-<td><input type=submit value="Create">
+<td><input type=submit value="#file-storage.Create#">
 </td>
 </tr>
 
 </table>
 </form>
+
+

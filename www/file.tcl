@@ -10,7 +10,7 @@ ad_page_contract {
 } -validate {
     valid_file -requires {file_id} {
 	if ![fs_file_p $file_id] {
-	    ad_complain "The specified file is not valid."
+	    ad_complain "[_ file-storage.lt_The_specified_file_is]"
 	}
     }
 } -properties {
@@ -75,3 +75,4 @@ $show_versions"
 db_multirow version version_info $sql
 
 ad_return_template
+

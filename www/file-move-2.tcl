@@ -10,13 +10,13 @@ ad_page_contract {
 } -validate {
     valid_file -requires {file_id} {
 	if ![fs_file_p $file_id] {
-	    ad_complain "The specified file is not valid."
+	    ad_complain "[_ file-storage.lt_The_specified_file_is]"
 	}
     }
 
     valid_folder -requires {parent_id} {
 	if ![fs_folder_p $parent_id] {
-	    ad_complain "The specified parent folder is not valid."
+	    ad_complain "[_ file-storage.lt_The_specified_parent_]"
 	}
     }
 }
@@ -48,28 +48,11 @@ where  object_id = :file_id"
     # JS: to like quering a table that has just aborted a transaction on it. Instead, I copied
     # JS: the error reporting of file-copy-2.tcl does
 
-    ad_return_complaint 1 "We received an error from the database.  Probably
-    the folder you selected already contains a file with the same name.
+    ad_return_complaint 1 "[_ file-storage.lt_We_received_an_error_]
 
     <pre>$errmsg</pre>"
 
-    #set filename [db_string filename "
-    #select name from cr_items where item_id = :file_id"]
-
-    #if [db_string duplicate_check "
-    #select count(*)
-    #from   cr_items
-    #where  name = :filename
-    #and    parent_id = :parent_id"] {
-    #	ad_return_complaint 1 "Either there is already a file in the specified folder with the name \"$filename\" or you clicked on the button more than once.  You can <a href=\"index?folder_id=$parent_id\">return to the directory listing</a> to see if your file is there."
-    #} else {
-    #ad_return_complaint 1 "We got an error that we couldn't readily identify.  Please let the system owner know about this.
-
-    #	<pre>$errmsg</pre>"
-    #}
-    
     ad_script_abort
 }
 
 ad_returnredirect "?folder_id=$parent_id"
-

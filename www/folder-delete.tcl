@@ -11,20 +11,20 @@ ad_page_contract {
 } -validate {
     valid_folder -requires {folder_id:integer} {
 	if ![fs_folder_p $folder_id] {
-	    ad_complain "The specified folder is not valid."
+	    ad_complain "[_ file-storage.lt_The_specified_folder__1]"
 	}
     }
 } -validate {
     not_root_folder -requires {folder_id} {
 	if { $folder_id == [fs_get_root_folder] } {
-	    ad_complain "You may not delete the root folder."
+	    ad_complain "[_ file-storage.lt_You_may_not_delete_th]"
 	}
     }
 
     no_children -requires {not_root_folder} {
 	if { [db_string child_count "
 	select count(*) from cr_items where parent_id = :folder_id"] > 0 } {
-	    ad_complain "We're sorry, but at the moment you cannot delete folders unless they are already empty."
+	    ad_complain "[_ file-storage.lt_Were_sorry_but_at_the]"
 	}
     }
 } -properties {
@@ -64,6 +64,5 @@ if { [string equal $confirmed_p "t"] && [string equal $blocked_p "f"] } {
     set folder_name [db_string folder_name "
     select label from cr_folders where folder_id = :folder_id"]
 
-    set context [fs_context_bar_list -final "Delete" $folder_id]
-
+    set context [fs_context_bar_list -final "[_ file-storage.Delete]" $folder_id]
 }

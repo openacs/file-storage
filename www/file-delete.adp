@@ -4,8 +4,7 @@
 
 <if @blocked_p@ eq "t">
 
-<p>This file has versions that you do not have permission to delete,
-so you cannot delete the file.
+<p>#file-storage.lt_This_file_has_version#
 
 </if>
 <else>
@@ -14,13 +13,14 @@ so you cannot delete the file.
 <input type=hidden name=file_id value=@file_id@>
 <input type=hidden name=confirmed_p value="t">
 
-<p>Are you sure you want to delete the file "@title@" and all of
-its versions?  This action cannot be reversed.
+<p>#file-storage.lt_delete_file#
 
 <p>
 <center>
-<input type=submit value="Yes, Delete It">
+<input type=submit value="#file-storage.Yes_Delete_It#">
 </center>
 </form>
 
 </else>
+
+

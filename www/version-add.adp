@@ -8,14 +8,13 @@
 <table border=0>
 
 <tr>
-<td align=right>Version filename:</td>
+<td align=right>#file-storage.Version_filename_1#</td>
 <td><input type=file name=upload_file size=20></td>
 </tr>
 
 <tr>
 <td>&nbsp;</td>
-<td><font size=-1>Use the "Browse..." button to locate your file, 
-    then click "Open". </font></td>
+<td><font size=-1>#file-storage.lt_Use_the_Browse_button# </font></td>
 </tr>
 
 <tr>
@@ -24,13 +23,13 @@
 </tr>
 
 <tr>
-<td valign=top align=right> Version Notes: </td>
+<td valign=top align=right> #file-storage.Version_Notes_1# </td>
 <td colspan=2><textarea rows=5 cols=50 name=description wrap=physical></textarea></td>
 </tr>
 
 <tr>
 <td></td>
-<td><input type=submit value="Update">
+<td><input type=submit value="#file-storage.Update#">
 </td>
 </tr>
 

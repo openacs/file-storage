@@ -9,7 +9,7 @@ ad_page_contract {
 } -validate {
     valid_folder -requires {parent_id:integer} {
 	if ![fs_folder_p $parent_id] {
-	    ad_complain "The specified parent folder is not valid."
+	    ad_complain "[_ file-storage.lt_The_specified_parent_]"
 	}
     }
 } -properties {
@@ -23,6 +23,7 @@ ad_require_permission $parent_id write
 
 # set templating datasources
 
-set context [fs_context_bar_list -final "Create New Folder" $parent_id]
+set context [fs_context_bar_list -final "[_ file-storage.Create_New_Folder]" $parent_id]
 
 ad_return_template
+
