@@ -189,9 +189,6 @@ ad_proc -public fs::after_mount {
 } {
     Create root folder for package instance
     via tcl callback.
-
-    This sets the cr_items.name to the url of the site
-    node.
 } {
     array set sn [site_node::get -node_id $node_id]
     regsub -all {/} $sn(name)  {} name
