@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="file-storage" package_version="5.0.1" locale="hu_HU" charset="utf-8">
+<message_catalog package_key="file-storage" package_version="5.1.0a2" locale="hu_HU" charset="utf-8">
 
   <msg key="Create_a_new_folder">Új mappa készítése</msg>
   <msg key="Create_a_URL">Új URL készítése</msg>
+  <msg key="days_as_new">napban módosítottak újnak számítanak.</msg>
+  <msg key="Delete_this_folder">Mappa törlése</msg>
   <msg key="folder">mappa</msg>
+  <msg key="Folder_ID">Mappa Azonosító</msg>
   <msg key="folder_type_pretty_name">mappa</msg>
+  <msg key="index_page_navigate_up_folder">Feljebb: %up_name%</msg>
+  <msg key="items">tétel</msg>
+  <msg key="lt_Folder_folder_name_is">A(z) %folder_name% üres.</msg>
   <msg key="lt_Modify_permissions_on_1">Jogok beállítása</msg>
+  <msg key="lt_Show_files_modified_i">Az előző</msg>
+  <msg key="Name">Név</msg>
   <msg key="Rename_this_folder">Mappa átnevezése</msg>
   <msg key="Upload_a_file">File feltöltése</msg>
 </message_catalog>
