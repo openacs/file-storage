@@ -32,6 +32,8 @@ ad_require_permission $file_id read
 set user_id [ad_conn user_id]
 set context_bar [fs_context_bar_list $file_id]
 
+set show_administer_permissions_link_p [ad_parameter "ShowAdministerPermissionsLinkP"]
+
 db_1row file_info "
 select person.name(o.creation_user) as owner,
        i.name,

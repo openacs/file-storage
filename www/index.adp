@@ -4,17 +4,21 @@
 <property name="context_bar">@context_bar@</property>
 
 <table>
-<if @write_p@ eq 1>
+<if @write_p@ true>
   <tr>
     <td width="5%"><li></td>
-    <td><a href="file-add?folder_id=@folder_id@">Upload a file</a>&nbsp; &nbsp; | &nbsp; &nbsp; <a href="simple-add?folder_id=@folder_id@">Create a URL</a>
+    <td>
+      <a href="file-add?folder_id=@folder_id@">Upload a file</a>
+      &nbsp;&nbsp;|&nbsp;&nbsp;
+      <a href="simple-add?folder_id=@folder_id@">Create a URL</a>
+    </td>
   </tr>
   <tr>
     <td><li></td>
     <td><a href="folder-create?parent_id=@folder_id@">Create a new folder</a></td>
   </tr>
 </if>
-<if @admin_p@ eq 1>
+<if @admin_p@ true and @show_administer_permissions_link_p@ true>
   <tr><td colspan="2"><br></td></tr>
   <tr>
     <td><li></td>
@@ -25,7 +29,7 @@
     </td>
   </tr>
 </if>
-<if @delete_p@ eq 1 and @nonroot_folder_p@ ne 0 and @n_contents@ eq 0>
+<if @delete_p@ true and @nonroot_folder_p@ true and @n_contents@ eq 0>
   <tr><td colspan="2"><br></td></tr>
   <tr>
     <td><li></td>
@@ -38,9 +42,9 @@
   <tr>
     <td><li></td>
     <td>
-  <formtemplate id="n_past_days_form">
+<formtemplate id="n_past_days_form">
       Show files modified in the past <formwidget id="n_past_days"> days as new.
-  </formtemplate>
+</formtemplate>
     </td>
   </tr>
 </table>
