@@ -209,14 +209,17 @@ ad_proc fs_maybe_create_new_mime_type {
 
     #set pretty_mime_type ???
 
-    if { [db_string mime_type_exists "
-    select count(*) from cr_mime_types
-    where  mime_type = :mime_type"] == 0 } {
-	db_dml new_mime_type "
-	insert into cr_mime_types
-	(mime_type, file_extension)
-	values
-	(:mime_type, :extension)"
+    if { [db_string mime_type_exists {
+        select count(*)
+        from cr_mime_types
+        where mime_type = :mime_type
+    }] == 0 } {
+        db_dml new_mime_type {
+            insert into cr_mime_types
+            (mime_type, file_extension)
+            values
+            (:mime_type, :extension)
+        }
     }
 
     return $mime_type
@@ -229,7 +232,7 @@ namespace eval fs {
         {-pretty_name ""}
         {-description ""}
     } {
-        Create a root folder for a package instance
+        Create a root folder for a package instance.
 
         @param package_id Package instance associated with this root folder
 
@@ -241,7 +244,7 @@ namespace eval fs {
     ad_proc -public get_root_folder {
         {-package_id:required}
     } {
-        Get the root folder of a package instance
+        Get the root folder of a package instance.
 
         @param package_id Package instance of the root folder to retrieve
 
@@ -257,7 +260,7 @@ namespace eval fs {
         {-creation_user ""}
         {-creation_ip ""}
     } {
-        Create a new folder
+        Create a new folder.
 
         @param name Internal name of the folder, must be unique under a given
                     parent_id
@@ -283,7 +286,7 @@ namespace eval fs {
         {-name:required}
         {-parent_id:required}
     } {
-        Retrieve the folder_id of a folder given it's name and parent folder
+        Retrieve the folder_id of a folder given it's name and parent folder.
 
         @param name Internal name of the folder, must be unique under a given
                     parent_id
@@ -293,6 +296,28 @@ namespace eval fs {
                 name
     } {
         return [db_string get_folder {} -default ""]
+    }
+
+    ad_proc -public get_folder_contents {
+        {-folder_id:required}
+        {-user_id ""}
+    } {
+        Retrieve the contents of the specified folder in the form of a list
+        of ns_sets, one for each row returned. The keys for each row are as
+        follows:
+
+            file_id, name, live_revision, type,
+            last_modified, content_size, sort_key
+
+        @param folder_id The folder for which to retrieve contents
+        @param user_id The viewer of the contents (to make sure they have
+                       permission)
+    } {
+        if {[empty_string_p $user_id]} {
+            set user_id [acs_magic_object "the_public"]
+        }
+
+        return [db_list_of_ns_sets get_folder_contents {}]
     }
 
 }
