@@ -6,7 +6,7 @@
 -- @cvs-id $Id$
 --
 
-create function file_storage__get_root_folder (
+create or replace function file_storage__get_root_folder (
        --
        -- Returns the root folder corresponding to a particular
        -- package instance.
@@ -37,7 +37,7 @@ begin
 
 end;' language 'plpgsql' stable;
 
-create function file_storage__get_package_id (
+create or replace function file_storage__get_package_id (
     integer                     -- cr_items.item_id%TYPE
 ) returns integer as '          -- fs_root_folders.package_id%TYPE
 declare
@@ -63,7 +63,7 @@ begin
 
 end;' language 'plpgsql' stable;
 
-create function file_storage__new_root_folder (
+create or replace function file_storage__new_root_folder (
        --
        -- Creates a new root folder
        --
@@ -73,13 +73,15 @@ create function file_storage__new_root_folder (
        --
        integer,         -- apm_packages.package_id%TYPE
        varchar,         -- cr_folders.label%TYPE
-       varchar          -- cr_folders.description%TYPE
+       varchar,         -- cr_folders.description%TYPE
+       varchar          -- cr_items.name%TYPE
 )
 returns integer as '    --  fs_root_folders.folder_id%TYPE
 declare
         new_root_folder__package_id         alias for $1;
         new_root_folder__folder_name        alias for $2;
         new_root_folder__description        alias for $3;
+	new_root_folder__url		    alias for $4;
         v_folder_id                         fs_root_folders.folder_id%TYPE;
         v_package_name                      apm_packages.instance_name%TYPE;
         v_package_key                       apm_packages.package_key%TYPE;
@@ -107,7 +109,7 @@ begin
         end if;
 
         v_folder_id := content_folder__new (
-            v_package_key || ''_'' || new_root_folder__package_id, -- name
+            coalesce (new_root_folder__url, v_package_key || ''_'' || new_root_folder__package_id), -- name
             v_folder_name, -- label
             v_description, -- description
             null                                  -- parent_id (default)
@@ -160,7 +162,7 @@ begin
 end;' language 'plpgsql';
     
 
-create function file_storage__new_file(
+create or replace function file_storage__new_file(
        -- 
        -- Create a file in CR in preparation for actual storage
        -- Wrapper for content_item__new
@@ -175,7 +177,7 @@ create function file_storage__new_file(
        integer          -- cr_items.item_id%TYPE,
 ) returns integer as ' -- cr_items.item_id%TYPE
 declare
-        new_file__title                 alias for $1;
+        new_file__name                 alias for $1;
         new_file__folder_id             alias for $2;
         new_file__user_id               alias for $3;
         new_file__creation_ip           alias for $4;
@@ -187,7 +189,7 @@ begin
         if new_file__indb_p
         then 
             v_item_id := content_item__new (
-                        new_file__title,            -- name
+                        new_file__name,            -- name
                         new_file__folder_id,      -- parent_id
                         new_file__item_id,        -- item_id (default)
                         null,                       -- locale (default)
@@ -205,7 +207,7 @@ begin
                     );
         else
             v_item_id := content_item__new (
-                        new_file__title,            -- name
+                        new_file__name,            -- name
                         new_file__folder_id,        -- parent_id
                         new_file__item_id,          -- item_id (default)
                         null,                       -- locale (default)
@@ -232,7 +234,7 @@ begin
 end;' language 'plpgsql';
     
 
-create function file_storage__new_file(
+create or replace function file_storage__new_file(
        varchar,         -- cr_items.name%TYPE,
        integer,         -- cr_items.parent_id%TYPE,
        integer,         -- acs_objects.creation_user%TYPE,
@@ -240,7 +242,7 @@ create function file_storage__new_file(
        boolean          -- store in db? 
 ) returns integer as ' -- cr_items.item_id%TYPE
 declare
-        new_file__title                 alias for $1;
+        new_file__name                  alias for $1;
         new_file__folder_id             alias for $2;
         new_file__user_id               alias for $3;
         new_file__creation_ip           alias for $4;
@@ -248,7 +250,7 @@ declare
 begin
 
         return file_storage__new_file(
-             new_file__title,
+             new_file__name,
              new_file__folder_id,
              new_file__user_id,
              new_file__creation_ip,
@@ -259,7 +261,7 @@ begin
 end;' language 'plpgsql';
 
 
-create function file_storage__delete_file (
+create or replace function file_storage__delete_file (
        --
        -- Delete a file and all its version
        -- Wrapper to content_item__delete
@@ -275,7 +277,7 @@ begin
 end;' language 'plpgsql';
 
 
-create function file_storage__rename_file (
+create or replace function file_storage__rename_file (
        --
        -- Rename a file and all
        -- Wrapper to content_item__rename
@@ -285,19 +287,19 @@ create function file_storage__rename_file (
 ) returns integer as '
 declare
         rename_file__file_id    alias for $1;
-        rename_file__title      alias for $2;
+        rename_file__name      alias for $2;
 
 begin
 
         return content_item__rename(
                rename_file__file_id,  -- item_id
-               rename_file__title     -- name
+               rename_file__name     -- name
                );
 
 end;' language 'plpgsql';
 
 
-create function file_storage__copy_file(
+create or replace function file_storage__copy_file(
        --
        -- Copy a file, but only copy the live_revision
        --
@@ -311,7 +313,7 @@ declare
         copy_file__target_folder_id  alias for $2;
         copy_file__creation_user     alias for $3;
         copy_file__creation_ip       alias for $4;
-        v_title                      cr_items.name%TYPE;
+        v_name                      cr_items.name%TYPE;
         v_live_revision              cr_items.live_revision%TYPE;
         v_filename                   cr_revisions.title%TYPE;
         v_description                cr_revisions.description%TYPE;
@@ -332,7 +334,7 @@ begin
                      then true
                      else false
                 end)
-               into v_title,v_live_revision,v_filename,v_description,v_mime_type,v_content_length,v_indb_p
+               into v_name,v_live_revision,v_filename,v_description,v_mime_type,v_content_length,v_indb_p
         from cr_items i, cr_revisions r
         where r.item_id = i.item_id
         and   r.revision_id = i.live_revision
@@ -341,7 +343,7 @@ begin
         -- We should probably use the copy functions of CR
         -- when we optimize this function
         v_new_file_id := file_storage__new_file(
-                             v_title,                     -- title
+                             v_name,                     -- name
                              copy_file__target_folder_id, -- folder_id
                              copy_file__creation_user,    -- creation_user
                              copy_file__creation_ip,      -- creation_ip
@@ -399,7 +401,7 @@ begin
 end;' language 'plpgsql';
 
 
-create function file_storage__move_file (
+create or replace function file_storage__move_file (
        --
        -- Move a file (ans all its versions) to a different folder.
        -- Wrapper for content_item__move
@@ -427,16 +429,13 @@ begin
 end;' language 'plpgsql';
 
 
-create function file_storage__get_title (
+create or replace function file_storage__get_title (
        --
-       -- Unfortunately, title in the file-storage context refers
-       -- to the name attribute in cr_items, not the title attribute in 
-       -- cr_revisions
        integer          -- cr_items.item_id%TYPE
 ) returns varchar as ' 
 declare
   get_title__item_id                 alias for $1;  
-  v_title                            cr_items.name%TYPE;
+  v_title                            cr_revisions.title%TYPE;
   v_content_type                     cr_items.content_type%TYPE;
 begin
   
@@ -454,9 +453,10 @@ begin
          select label into v_title from cr_symlinks 
          where symlink_id = get_title__item_id;
        else
-         select name into v_title
-         from cr_items
-         where item_id = get_title__item_id;
+         select title into v_title
+         from cr_revisions, cr_items
+         where revision_id=live_revision
+	 and cr_items.item_id=get_title__item_id;
        end if;
   end if;
 
@@ -464,7 +464,7 @@ begin
 
 end;' language 'plpgsql';
 
-create function file_storage__get_parent_id (
+create or replace function file_storage__get_parent_id (
         integer --  item_id in cr_items.item_id%TYPE
      ) returns integer as ' -- cr_items.item_id%TYPE
      declare 
@@ -482,7 +482,7 @@ create function file_storage__get_parent_id (
 end;'language 'plpgsql';
 
 
-create function file_storage__get_content_type (
+create or replace function file_storage__get_content_type (
        --
        -- Wrapper for content_item__get_content_type
        integer          -- cr_items.item_id%TYPE
@@ -498,7 +498,7 @@ end;' language 'plpgsql';
 
 
 
-create function file_storage__get_folder_name (
+create or replace function file_storage__get_folder_name (
        --
        -- Wrapper for content_folder__get_label
        integer          -- cr_folders.folder_id%TYPE
@@ -513,7 +513,7 @@ begin
 end;' language 'plpgsql';  
 
 
-create function file_storage__new_version (
+create or replace function file_storage__new_version (
        --
        -- Create a new version of a file
        -- Wrapper for content_revision__new
@@ -559,14 +559,19 @@ begin
         where cr_items.item_id = new_version__item_id;
 
         perform acs_object__update_last_modified(v_folder_id,new_version__creation_user,new_version__creation_ip);
+<<<<<<< file-storage-package-create.sql
+	perform acs_object__update_last_modified(new_version__item_id,new_version__creation_user,new_version__creation_ip);
+	return v_revision_id;
+=======
 	perform acs_object__update_last_modified(new_version__item_id,new_version__creation_user,new_version__creation_ip);
 
         return v_revision_id;
+>>>>>>> 1.13
 
 end;' language 'plpgsql';
 
 
-create function file_storage__delete_version (
+create or replace function file_storage__delete_version (
        --
        -- Delete a version of a file
        --
@@ -606,7 +611,7 @@ begin
 end;' language 'plpgsql';
 
 
-create function file_storage__new_folder(
+create or replace function file_storage__new_folder(
        --
        -- Create a folder
        --
@@ -676,7 +681,7 @@ begin
 end;' language 'plpgsql';
 
 
-create function file_storage__delete_folder(
+create or replace function file_storage__delete_folder(
        --
        -- Delete a folder
        --
@@ -694,7 +699,7 @@ end;' language 'plpgsql';
 
 
 -- JS: BEFORE DELETE TRIGGER to clean up CR entries (except root folder)
-create function fs_package_items_delete_trig () returns opaque as '
+create or replace function fs_package_items_delete_trig () returns opaque as '
 declare
 
         v_rec   record;
@@ -757,7 +762,7 @@ execute procedure fs_package_items_delete_trig ();
 
 
 -- JS: AFTER DELETE TRIGGER to clean up last CR entry
-create function fs_root_folder_delete_trig () returns opaque as '
+create or replace function fs_root_folder_delete_trig () returns opaque as '
 begin
         PERFORM content_folder__delete(old.folder_id);
         return null;

@@ -56,7 +56,7 @@
                    fs_objects.name,
                    fs_objects.live_revision,
                    fs_objects.type,
-                   to_char(fs_objects.last_modified, 'Month DD YYYY HH24:MI') as last_modified,
+                   to_char(fs_objects.last_modified, 'YYYY-MM-DD HH24:MI:SS') as last_modified_ansi,
                    fs_objects.content_size,
                    fs_objects.url,
                    fs_objects.key,
@@ -148,5 +148,35 @@
             where revision_id = $live_revision
         </querytext>
     </fullquery>
+
+  
+    <fullquery name="fs::get_item_id.get_item_id">
+      <querytext>
+        select content_item__get_id ( :name, :folder_id, 'f' )
+      </querytext>
+    </fullquery>
+
+
+  <fullquery name="fs::add_file.create_item">
+    <querytext>
+      select file_storage.new_file (
+          :name,
+          :parent_id,
+	  :creation_user,
+          :creation_ip,
+          :indbp,
+          :item_id
+      )
+    </querytext>
+  </fullquery>
+
+  <fullquery name="fs::add_version.update_last_modified">
+    <querytext>
+      begin
+      acs_object.update_last_modified(:parent_id,:creation_user,:creation_ip);
+      acs_object.update_last_modified(:item_id,:creation_user,:creation_ip);
+      end;
+    </querytext>
+  </fullquery>
 
 </queryset>
