@@ -109,6 +109,8 @@ begin
 
     if NOT FOUND then
         return null;
+    else
+        return v_package_id;
     end if;
 end;' language 'plpgsql' with (iscachable);
 
