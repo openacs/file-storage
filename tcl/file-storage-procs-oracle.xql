@@ -41,7 +41,9 @@
 
     <fullquery name="fs::get_folder_contents.get_folder_contents">
         <querytext>
-            select fs_folders_and_files.file_id,
+            (select fs_folders_and_files.file_id,
+                   'f' as url_p,
+                   't' as versioned_p,
                    fs_folders_and_files.name,
                    fs_folders_and_files.live_revision,
                    fs_folders_and_files.type,
@@ -53,9 +55,25 @@
                    decode(acs_permission.permission_p(fs_folders_and_files.file_id, :user_id, 'admin'), 'f', 0, 1) as admin_p
             from fs_folders_and_files
             where fs_folders_and_files.parent_id = :folder_id
-            and 't' = acs_permission.permission_p(fs_folders_and_files.file_id, :user_id, 'read')
-            order by fs_folders_and_files.sort_key,
-                     fs_folders_and_files.name
+            and 't' = acs_permission.permission_p(fs_folders_and_files.file_id, :user_id, 'read'))
+            union
+            (select fs_simple_objects.object_id as file_id,
+            't' as url_p,
+            'f' as versioned_p,
+            fs_simple_objects.name,
+            0 as live_revision,
+            'url' as type,
+            NULL as last_modified,
+            0 as new_p,
+            0 as content_size,
+            decode(acs_permission.permission_p(fs_simple_objects.object_id, :user_id, 'write'), 'f', 0,1) as write_p,
+            decode(acs_permission.permission_p(fs_simple_objects.object_id, :user_id, 'delete'), 'f', 0, 1) as delete_p,
+            decode(acs_permission.permission_p(fs_simple_objects.object_id, :user_id, 'admin'), 'f', 0, 1) as admin_p
+            from fs_simple_objects
+            where folder_id= :folder_id
+            and 't' = acs_permission.permission_p(fs_simple_objects.object_id, :user_id, 'read'))
+
+            order by name
         </querytext>
     </fullquery>
 

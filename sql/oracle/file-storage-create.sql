@@ -43,6 +43,8 @@ create table fs_root_folders (
                                 unique
 );
 
+
+
 -- To enable site-wide search to distinguish CR items as File Storage items
 -- we create an item subtype of content_item in the ACS Object Model
 begin
@@ -55,6 +57,7 @@ begin
         id_column => 'folder_id',
         name_method => 'file_storage.get_title'
     );
+
 end;
 /
 show errors;
@@ -758,3 +761,7 @@ as
            fs_files.parent_id,
            1 as sort_key
     from fs_files;
+
+
+@file-storage-simple-create.sql
+@file-storage-simple-package-create.sql
