@@ -73,7 +73,7 @@ ad_proc fs_file_p {
     if {[string equal [db_string object_type "
     select object_type 
     from   acs_objects
-    where  object_id = :file_id" -default ""] "content_item"]} {
+    where  object_id = :file_id" -default ""] "file_storage_item"]} {
 	return 1
     } else {
 	return 0
