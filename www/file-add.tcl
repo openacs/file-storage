@@ -153,19 +153,14 @@ ad_form -extend -form {} -select_query_name {get_file} -new_data {
 	    -title $this_title \
 	    -description $description \
 	    -package_id $package_id
-	incr i
-        ns_log notice "
-DB --------------------------------------------------------------------------------
-DB DAVE debugging /var/lib/aolserver/openacs-5-1/packages/file-storage/www/file-add.tcl
-DB --------------------------------------------------------------------------------
-DB i = '${i}'
-DB number_upload_files = '${number_upload_files}'
-DB --------------------------------------------------------------------------------"
+
+        file delete $tmpfile
+        incr i
         if {$i < $number_upload_files} {
             set file_id [db_nextval "acs_object_id_seq"]
         }
     }
-    
+    file delete $upload_file.tmpfile
 } -edit_data {
 
     fs::add_version \
