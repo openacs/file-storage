@@ -721,7 +721,7 @@ as
            cr_folders.label as name,
            (select count(*)
             from cr_items ci
-            where ci.parent_id = cr_folders__folder_id) as content_size,
+            where ci.parent_id = cr_folders.folder_id) as content_size,
            (select site_node__url(site_nodes.node_id)
             from site_nodes
             where site_nodes.object_id = file_storage__get_package_id(cr_items.item_id)) as url,
