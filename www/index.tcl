@@ -28,7 +28,8 @@ ad_page_contract {
 
 # Don't allow delete if root folder
 set root_folder_p 0
-if {$folder_id == [fs_get_root_folder]} {
+set root_folder_id [fs_get_root_folder]
+if {$folder_id == $root_folder_id} {
     set root_folder_p 1
 }
 
@@ -88,7 +89,7 @@ if {[form is_valid n_past_days_form]} {
     form get_values n_past_days_form n_past_days folder_id
 }
 
-set context [fs_context_bar_list $folder_id]
+set context [fs_context_bar_list -root_folder_id $root_folder_id $folder_id]
 
 set up_url {}
 if { !${root_folder_p}} {

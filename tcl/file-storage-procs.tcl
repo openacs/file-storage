@@ -164,7 +164,10 @@ ad_proc fs_context_bar_list {
         set root_folder_id [fs_get_root_folder]
     }
 
-    if [empty_string_p $final] {
+    if {[empty_string_p $final] \
+            && !($item_id == $root_folder_id)} {
+        # don't get title for last element if we are in the
+        # root folder
 	set start_id [db_string parent_id "
 	select parent_id from cr_items where item_id = :item_id"]
 	set final [db_exec_plsql title "begin
@@ -175,9 +178,9 @@ ad_proc fs_context_bar_list {
     }
 
     set context_bar [db_list_of_lists context_bar {}]
-
-    lappend context_bar $final
-
+    if {!($item_id == $root_folder_id)} {
+        lappend context_bar $final
+    }
     return $context_bar
 }
 
