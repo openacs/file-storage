@@ -98,8 +98,8 @@ begin
         where package_id = new_root_folder__package_id;
 
         v_folder_id := content_folder__new (
-            v_package_key || ''_'' || package_id, -- name
-            v_package_name || ''Root Folder'',    -- label
+            v_package_key || ''_'' || new_root_folder__package_id, -- name
+            v_package_name || '' Root Folder'',    -- label
             ''Root folder for the file-storage system.  All other folders in file storage are subfolders of this one.'', -- description
 	    null				  -- parent_id (default)
         );
