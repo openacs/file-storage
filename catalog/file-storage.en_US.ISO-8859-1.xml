@@ -7,7 +7,7 @@
   <msg key="Add_File">Add File</msg>
   <msg key="Add_pretty_name">Add %pretty_name%</msg>
   <msg key="Author">Author</msg>
-  <msg key="back_to_folder_view">&lt;a href=&quot;%folder_view_url%&quot;&gt;Back&lt;/a&gt; to folder view</msg>
+  <msg key="back_to_folder_view">Back to folder view</msg>
   <msg key="bytes">bytes</msg>
   <msg key="Change_Name">Change Name</msg>
   <msg key="Copy">Copy</msg>
@@ -27,6 +27,7 @@
   <msg key="Edit_Folder">Edit Folder</msg>
   <msg key="Edit_URL">Edit URL</msg>
   <msg key="file">file</msg>
+  <msg key="link">link</msg>
   <msg key="file_delete_page_title">Delete %title%</msg>
   <msg key="file_edit_page_title">Rename %title%</msg>
   <msg key="file_edit_page_title_1">Edit %pretty_name%</msg>
@@ -35,6 +36,7 @@
   <msg key="folder">folder</msg>
   <msg key="folder_delete_page_title">Delete %folder_name%</msg>
   <msg key="Folder_ID">Folder ID</msg>
+  <msg key="Folder_available_via_WebDAV_at">This folder is available via WebDAV at %webdav_url%</msg> 
   <msg key="Folder_Name">Folder Name:</msg>
   <msg key="folder_type_pretty_name">folder</msg>
   <msg key="index_page_navigate_up_folder">Up to %up_name%</msg>
@@ -112,7 +114,7 @@ delete, therefore you cannot delete it.</msg>
   <msg key="Size">Size</msg>
   <msg key="Size_bytes">Size (bytes)</msg>
   <msg key="this_may_take_a_while">&lt;strong&gt;Note:&lt;/strong&gt; This may take a while, please be patient.</msg>
-  <msg key="Title">Title:</msg>
+  <msg key="Title">Title</msg>
   <msg key="Title_">Title :</msg>
   <msg key="Type">Type</msg>
   <msg key="untitled">untitled</msg>
