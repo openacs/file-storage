@@ -8,6 +8,7 @@
     <td><li></td>
     <td>
       <if @recurse_p@ true>I</if><else>#file-storage.Not_i#</else>#file-storage.lt_ncluding_items_from_s# 
+      ( 
 <if @recurse_p@ true>
       <a href="?folder_id=@folder_id@&recurse_p=0&n_past_days=@n_past_days@&orderby=@orderby@">#file-storage.exclude#</a>
 </if>
