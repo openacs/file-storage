@@ -205,11 +205,45 @@ ad_proc -public fs::after_mount {
     # root folder is associated with a site_node/package_id
     
     set label $sn(instance_name)
-    set name "file-storage_${package_id}"
-    set folder_id [db_exec_plsql new_root_folder {}]
+
+    set folder_id [fs::new_root_folder \
+		       -package_id $package_id \
+		       -pretty_name $label
+		       ]
+
     oacs_dav::register_folder -enabled_p "t" $folder_id $sn(node_id)
     
 }
+
+ad_proc -public fs::new_root_folder {
+    {-package_id ""}
+    {-pretty_name ""}
+    {-description ""}
+    {-name ""}
+} {
+    Create a root folder for a package instance.
+
+    @param package_id Package instance associated with this root folder
+
+    @return folder_id of the new root folder
+} {
+
+    if {[empty_string_p $package_id]} {
+	set package_id [ad_conn package_id]
+    }
+
+    if {[empty_string_p $pretty_name]} {
+	set pretty_name [apm_instance_name_from_id $package_id]
+    }
+
+    if {[empty_string_p $name]} {
+	set name "file-storage_${package_id}"
+    }
+
+    return [db_exec_plsql new_root_folder {}]
+
+}
+
 
 ad_proc -public fs::get_root_folder {
     {-package_id ""}

@@ -27,7 +27,8 @@ as
         --
         package_id in apm_packages.package_id%TYPE,
         folder_name in cr_folders.label%TYPE default null,
-        folder_url in cr_items.name%TYPE default null
+        folder_url in cr_items.name%TYPE default null,
+        description in cr_folders.description%TYPE default null
     ) return fs_root_folders.folder_id%TYPE;
 
     function new_file(
@@ -194,7 +195,8 @@ as
         --
         package_id in apm_packages.package_id%TYPE,
         folder_name in cr_folders.label%TYPE,
-        folder_url in cr_items.name%TYPE
+        folder_url in cr_items.name%TYPE,
+        description in cr_folders.description%TYPE default null
     ) return fs_root_folders.folder_id%TYPE
     is
         v_folder_id             fs_root_folders.folder_id%TYPE;
@@ -204,6 +206,7 @@ as
             name => file_storage.new_root_folder.folder_url,
             label => file_storage.new_root_folder.folder_name,
             context_id => file_storage.new_root_folder.package_id
+            description => file_storage.new_root_folder.description
         );
 
         insert

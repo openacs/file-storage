@@ -9,7 +9,8 @@
                 :1 := file_storage.new_root_folder(
 	 	    url => :name,
 		    package_id => :package_id,
-                    label => :label
+                    label => :pretty_name,
+		    description => :description
                 );
             end;
         </querytext>
