@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="file-storage" package_version="4.7d3" locale="fr_FR" charset="ISO-8859-1">
-
-  <msg key="folder_type_pretty_name">dossier</msg>
-  <msg key="lt_Folder_folder_name_is">Le dossier %folder_name% est vide.</msg>
-</message_catalog>
