@@ -54,6 +54,28 @@
         </querytext>
     </fullquery>
 
+    <fullquery name="fs::get_folder_objects.select_folder_contents">
+        <querytext>
+
+           select *
+           from (select cr_items.item_id as object_id,
+                   cr_items.name
+                 from cr_items
+                 where cr_items.parent_id = :folder_id
+                 union all
+                 select fs_simple_objects.object_id,
+                   fs_simple_objects.name
+                 from fs_simple_objects
+                 where fs_simple_objects.folder_id = :folder_id) contents
+           where exists (select 1
+                         from acs_object_party_privilege_map m
+                         where m.object_id = contents.object_id
+                           and m.party_id = :user_id
+                           and m.privilege = 'read')
+
+        </querytext>
+    </fullquery>
+
     <fullquery name="fs::get_folder_contents_count.select_folder_contents_count">
         <querytext>
             select count(*)

@@ -29,8 +29,8 @@ as
             from cr_items ci2
 	    where ci2.content_type <> 'content_folder'
               and ci2.tree_sortkey between ci.tree_sortkey and tree_right(ci.tree_sortkey)) as content_size,
-           cr_i.parent_id,
-           cr_i.name as key
+           ci.parent_id,
+           ci.name as key
     from cr_folders,
          cr_items ci,
          acs_objects

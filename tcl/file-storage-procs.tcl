@@ -316,6 +316,24 @@ namespace eval fs {
         return [db_string select_folder {} -default ""]
     }
 
+    ad_proc -public get_folder_objects {
+        -folder_id:required
+        -user_id:required
+    } {
+        Return a list the object_ids contained by a file storage folder.
+
+        This would be trivial if it weren't for the fact that we need to UNION ALL
+        with the gawddamned fs_simple_objects Open Force forced upon us and which
+        will be removed as soon as I (DRB) find the time to write upgrade scripts.
+
+        @param folder_id The folder for which to retrieve contents
+        @param user_id The viewer of the contents (to make sure they have
+                       permission)
+
+    } {
+        return [db_list select_folder_contents {}]
+    }
+
     ad_proc -public get_folder_contents {
         {-folder_id ""}
         {-user_id ""}
@@ -327,6 +345,8 @@ namespace eval fs {
         to clone files in dotLRN and for the somewhat brain-damaged syllabus package. 
         At minimum the permission checks returned by the code can be removed.  Most of
         the other fields as well.   Oh well ...
+
+        REMOVE WHEN SYLLABUS IS REWRITTEN TO FIND ITS FILE INTELLIGENTLY
 
         Retrieve the contents of the specified folder in the form of a list
         of ns_sets, one for each row returned. The keys for each row are as
