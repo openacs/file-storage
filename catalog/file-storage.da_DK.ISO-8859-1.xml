@@ -38,6 +38,7 @@
   <msg key="lt_delete_file">Er du sikker på at du vil slette filen &quot;%title%&quot; og alle dens revisioner? Denne handling kan ikke fortrydes.</msg>
   <msg key="lt_delete_folder">Er du sikker på at du vil slette mappen &quot;%folder_name%&quot; og alle de ting den indeholder? Denne handling kan ikke gøres om.</msg>
   <msg key="lt_Delete_this_file_incl">Slet denne fil (inklusiv alle versioner)</msg>
+  <msg key="lt_Download_an_archive_o">Download en arkivfil med indeholdet af denne mappe</msg>
   <msg key="lt_Either_there_is_alrea">Der er enten allerede en mappe med navnet &quot;%folder_name%&quot;, eller du har klikket på knappen mere end én gang. Du kan bruge Tilbage-knappen og vælge et nyt navn, eller du kan &lt;a href=&quot;%directory_url%&quot;&gt;vende tilbage til mappeoversigten&lt;/a&gt; og se, om din mappe er oprettet dér.</msg>
   <msg key="lt_Folder_folder_name_is">Mappen %folder_name% er tom</msg>
   <msg key="lt_It_appears_that_there">Der er allerede en fil med det navn i denne mappe. Måske har du klikket to gange.</msg>
@@ -78,6 +79,7 @@
   <msg key="show_all_versions">vis alle versioner</msg>
   <msg key="Size">Størrelse</msg>
   <msg key="Size_bytes">Størrelse (bytes)</msg>
+  <msg key="this_may_take_a_while">&lt;b&gt;NB&lt;/b&gt; Dette kan godt tage et stykke tid.</msg>
   <msg key="Title">Titel:</msg>
   <msg key="Title_">Titel:</msg>
   <msg key="Type">Type</msg>
