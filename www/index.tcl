@@ -4,9 +4,10 @@ ad_page_contract {
 
     @author Kevin Scaldeferri (kevin@arsdigita.com)
     @creation-date 6 Nov 2000
-    @cvs-id $Id$
+    @version $Id$
 } {
     {folder_id:integer [fs_get_root_folder]}
+    {n_past_days:integer "-1"}
 } -validate {
     valid_folder -requires {folder_id:integer} {
 	if ![fs_folder_p $folder_id] {
@@ -51,5 +52,26 @@ if {!$delete_p} {
 set package_id [ad_conn package_id]
 
 set n_contents [fs::get_folder_contents_count -folder_id $folder_id -user_id $user_id]
+
+form create n_past_days_form
+
+set options {{0 -1} {1 1} {2 2} {3 3} {7 7} {14 14} {30 30}}
+element create n_past_days_form n_past_days \
+    -label "" \
+    -datatype text \
+    -widget select \
+    -options $options \
+    -html {onChange document.n_past_days_form.submit()} \
+    -value $n_past_days
+
+element create n_past_days_form folder_id \
+    -label "Folder ID" \
+    -datatype text \
+    -widget hidden \
+    -value $folder_id
+
+if {[form is_valid n_past_days_form]} {
+    form get_values n_past_days_form n_past_days folder_id
+}
 
 ad_return_template
