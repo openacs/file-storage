@@ -31,19 +31,19 @@
 <if @contents.new_p@>(&nbsp;new&nbsp;)</if>
       </td>
       <td>
-        <small>[&nbsp;
+        <small>[
 <if @contents.write_p@ or @contents.admin_p@>
           <a href="simple-edit?object_id=@contents.object_id@">
             edit
           </a>
 </if>
 <if @contents.delete_p@ or @contents.admin_p@>
-          &nbsp;|&nbsp;
+          |
           <a href="simple-delete?folder_id=@folder_id@&object_id=@contents.object_id@">
             delete
           </a>
 </if>
-          &nbsp;]</small>
+          ]</small>
       </td>
       <td>&nbsp;</td>
       <td>@contents.type@</td>
@@ -60,11 +60,11 @@
 </if>
       </td>
       <td>
-        <small>[&nbsp;
+        <small>[
           <a href="file?file_id=@contents.object_id@">
             view details
           </a>
-        &nbsp;]</small>
+        ]</small>
       </td>
       <td>@contents.content_size@ byte<if @contents.content_size@ ne 1>s</if></td>
       <td>@contents.type@</td>
