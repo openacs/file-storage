@@ -19,6 +19,9 @@
         <requires url="acs-kernel" version="5.0.0b4"/>
 
         <callbacks>
+            <callback type="after-install"  proc="fs::install::package_install"/>
+            <callback type="after-mount"  proc="fs::after_mount"/>
+            <callback type="after-upgrade"  proc="fs::install::upgrade"/>
         </callbacks>
         <parameters>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ArchiveCommand"  default="tar -czf {out_file} {in_file}" description="Program (and program options) to use for archiving file storage objects. Use the special tags {in_file} and {out_file} (including the curly braces) to denote the locations of the input and output files on the command line."/>

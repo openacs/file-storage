@@ -8,7 +8,8 @@
             select file_storage__new_root_folder(
                 :package_id,
                 :pretty_name,
-                :description
+		:description,
+		:name
             );
         </querytext>
     </fullquery>
@@ -108,7 +109,7 @@
 
     <fullquery name="fs_context_bar_list.title">
         <querytext>
-            select file_storage__get_title(:item_id)
+            select name from cr_items where item_id=:item_id
         </querytext>
     </fullquery>
 
@@ -135,5 +136,37 @@
             where revision_id = $live_revision
         </querytext>
     </fullquery>
+
+    <fullquery name="fs::get_item_id.get_item_id">
+      <querytext>
+        select content_item__get_id ( :name, :folder_id, 'f' )
+      </querytext>
+    </fullquery>
+
+
+  <fullquery name="fs::add_file.create_item">
+    <querytext>
+      select file_storage__new_file (
+          :name,
+          :parent_id,
+	  :creation_user,
+          :creation_ip,
+          :indbp,
+          :item_id
+      )
+    </querytext>
+  </fullquery>
+
+  <fullquery name="fs::add_version.update_last_modified">
+    <querytext>
+      begin
+      perform acs_object__update_last_modified
+      (:parent_id,:creation_user,:creation_ip);
+      perform
+      acs_object__update_last_modified(:item_id,:creation_user,:creation_ip);
+      return null;
+      end;
+    </querytext>
+  </fullquery>
 
 </queryset>

@@ -38,14 +38,27 @@ select inline_0();
 drop function inline_0();
 
 \i file-storage-views-drop.sql;
-
-drop function fs_package_items_delete_trig();
 drop trigger fs_package_items_delete_trig on fs_root_folders;
+drop function fs_package_items_delete_trig();
 
-drop function fs_root_folder_delete_trig();
 drop trigger fs_root_folder_delete_trig on fs_root_folders;
+drop function fs_root_folder_delete_trig();
+
+select content_type__drop_type (
+       'file_storage_object',	 -- content_type
+       'f',			 -- drop_children_p
+       'f'			 -- drop_table_p
+);
+
+-- this content type is created incorrectly tying the file_storage_root_folders
+-- table to file_storage_object
+-- so we drop these directly
+
+drop view file_storage_root_foldersi;
+drop view file_storage_root_foldersx;
 
 drop table fs_root_folders;
+
 select drop_package('file_storage');
 
 -- Unregister the content template
@@ -57,8 +70,3 @@ select content_type__unregister_template (
 
 -- Remove subtype of content_revision so that site-wide-search
 -- can distinguish file-storage items in the search results
-select content_type__drop_type (
-       'file_storage_object',	 -- content_type
-       'f',			 -- drop_children_p
-       'f'			 -- drop_table_p
-);
