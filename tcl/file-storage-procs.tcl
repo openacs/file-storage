@@ -551,13 +551,7 @@ namespace eval fs {
                 set cr_path [cr_fs_path $storage_area_key]
                 set cr_file_name [db_string select_file_name {}]
 
-                set ifp [open "${cr_path}${cr_file_name}" r]
-                set ofp [open [file join ${path} ${file_name}] w]
-
-                ns_cpfp $ifp $ofp
-
-                close $ifp
-                close $ofp
+                file copy -- "${cr_path}${cr_file_name}" [file join ${path} ${file_name}]
             }
         }
 
