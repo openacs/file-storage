@@ -1,5 +1,5 @@
 --
--- packages/file-storage/sql/postgresql/file-storage-drop.sql
+-- file-storage/sql/postgresql/file-storage-drop.sql
 --
 -- @author Kevin Scaldeferri (kevin@arsdigita.com)
 -- @creation-date 6 Now 2000
@@ -37,9 +37,7 @@ end;' language 'plpgsql';
 select inline_0();
 drop function inline_0();
 
-drop view fs_folders_and_files;
-drop view fs_files;
-drop view fs_folders;
+\i file-storage-views-drop.sql;
 
 drop function fs_package_items_delete_trig();
 drop trigger fs_package_items_delete_trig on fs_root_folders;
@@ -56,6 +54,4 @@ select content_type__drop_type (
        'file_storage_object',	 -- content_type
        'f',			 -- drop_children_p
        'f'			 -- drop_table_p
-       );
-
-
+);

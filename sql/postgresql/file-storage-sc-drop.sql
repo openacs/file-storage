@@ -1,6 +1,6 @@
 -- Drop site-wide search using OpenFTS
 --
--- packages/file-storage/sql/postgresql/file-storage-sc-drop.sql
+-- file-storage/sql/postgresql/file-storage-sc-drop.sql
 --
 -- @author Jowell Sabino (jowellsabino@netscape.net)
 --

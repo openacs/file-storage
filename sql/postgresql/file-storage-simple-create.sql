@@ -35,12 +35,6 @@ create table fs_urls (
        url                           varchar(250) not null
 );
 
-
-create view fs_urls_full as
-select * from fs_urls, fs_simple_objects
-where url_id = object_id;
-
-
 -- stuff for non-versioned file-storage objects
 select acs_object_type__create_type (
         'fs_simple_object',
@@ -68,4 +62,3 @@ select acs_object_type__create_type (
         NULL,
         NULL
 );
-

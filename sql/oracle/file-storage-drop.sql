@@ -27,9 +27,7 @@ end;
 /
 show errors
 
-drop view fs_folders_and_files;
-drop view fs_files;
-drop view fs_folders;
+@@ file-storage-views-drop.sql
 
 drop trigger fs_package_items_delete_trig;
 drop trigger fs_root_folder_delete_trig;

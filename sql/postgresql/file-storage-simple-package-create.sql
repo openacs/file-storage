@@ -116,6 +116,3 @@ BEGIN
         return 0;
 END;
 ' language 'plpgsql';
-
-
-
