@@ -181,54 +181,6 @@ ad_proc fs_context_bar_list {
     return $context_bar
 }
 
-#
-# Make sure we don't have page crashes due to unknown MIME types
-#
-
-ad_proc fs_maybe_create_new_mime_type {
-    file_name
-} {
-    The content repository expects the MIME type to already be defined
-    when you upload content.  We use this procedure to add a new type
-    when we encounter something we haven't seen before.
-} {
-
-    set file_extension [string trimleft [file extension $file_name] "."]
-
-    if {[empty_string_p $file_extension]} {
-	return "*/*"
-    }
-
-    if {![db_0or1row select_mime_type "select mime_type
-        from cr_mime_types
-        where file_extension = :file_extension"]} {
-
-	# A mime type for this file extension does not exist
-	# in the database.  Check to see AOLServer can 
-	# generate a mime type.
-
-	set mime_type [ns_guesstype $file_name]
-	
-	# Note: If AOLServer can't determine a mime type, 
-	# ns_guesstype will return */*. We still record
-	# a mime type for this file extension.  At a later
-	# date, the mime type for the file extension may be
-	# updated and, as a result, the files with that
-	# file extension will be associated with the
-	# proper mime types.
-
-        db_dml new_mime_type {
-            insert into cr_mime_types
-            (mime_type, file_extension)
-            values
-	    (:mime_type, :file_extension)
-        }
-    }
-    return $mime_type
-}
-
-
-
 namespace eval fs {
 
     ad_proc -public new_root_folder {
@@ -553,13 +505,7 @@ namespace eval fs {
                 set cr_path [cr_fs_path $storage_area_key]
                 set cr_file_name [db_string select_file_name {}]
 
-                set ifp [open "${cr_path}${cr_file_name}" r]
-                set ofp [open [file join ${path} ${file_name}] w]
-
-                ns_cpfp $ifp $ofp
-
-                close $ifp
-                close $ofp
+                file copy -- "${cr_path}${cr_file_name}" [file join ${path} ${file_name}]
             }
         }
 

@@ -41,10 +41,7 @@ set user_id [ad_conn user_id]
 # Get the ip
 set creation_ip [ad_conn peeraddr]
 
-# The content repository is kinda stupid about mime types,
-# so we have to check if we know about this one and possibly 
-# add it.
-set mime_type [fs_maybe_create_new_mime_type $upload_file]
+set mime_type [cr_filename_to_mime_type -create $upload_file]
 
 # Get the storage type
 set indb_p [ad_parameter "StoreFilesInDatabaseP" -package_id [ad_conn package_id]]
