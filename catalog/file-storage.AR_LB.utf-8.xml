@@ -51,7 +51,7 @@
   <msg key="lt_The_folder_link_you_s"> الـ %folder_link% التي إخترت تحتوي ملفا بنفس الاسم.</msg>
   <msg key="lt_The_specified_file_is">الملف المحدّد غير صالح.</msg>
   <msg key="lt_The_specified_folder_">الحافظةُ المحدّدةُ غير موجودة.</msg>
-  <msg key="lt_The_specified_folder__1">الحافظة المحدّدة ليست صحيحة.</msg>
+  <msg key="lt_The_specified_folder__1">الحافظة المحدّدة غير صالحة.</msg>
   <msg key="lt_The_specified_parent_">الحافظةُ الأصلُ المحدّدةُ لَيستْ صحيحةَ.</msg>
   <msg key="lt_There_are_no_versions">ليس هناك إصدارات لهذا الملف المتوفرِ إليك</msg>
   <msg key="lt_This_file_has_version">هذا الملف له النسخ التي أنت ما عندك رخصة للحذف، لذا أنت لا تستطيع حذف الملف.</msg>
@@ -66,7 +66,6 @@
 وإعادة إدخال إصدار  ملف.
 </msg>
   <msg key="lt_Your_file_is_larger_t">ملفك أكبر من حجم الملف الأقصى المسموح له على هذا النظام (%number_of_bytes% بايتس)</msg>
-  <msg key="lt_Your_file_is_larger_t_1">ملفك أكبر من حجم الملف الأقصى المسموح له على هذا النظام (%max_number_of_bytes% بايتس) </msg>
   <msg key="Modified">معدل</msg>
   <msg key="Move">تحرّكْ</msg>
   <msg key="Name">إسم</msg>
@@ -94,7 +93,7 @@
   <msg key="URL">الموقع:</msg>
   <msg key="Version_filename">إصدار إسم الملف</msg>
   <msg key="Version_filename_">إصدار إسم الملف :</msg>
-  <msg key="Version_filename_1">إصدار إسم الملف: </msg>
+  <msg key="Version_filename_1">إصدار إسم الملف:</msg>
   <msg key="Version_Notes">إصدار الملاحظات</msg>
   <msg key="Version_Notes_1">إصدار الملاحظات:</msg>
   <msg key="view_details">شاهد التفاصيل</msg>

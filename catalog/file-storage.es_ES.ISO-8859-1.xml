@@ -62,7 +62,6 @@
   <msg key="lt_You_may_not_delete_th">La carpeta raíz no puede ser borrada.</msg>
   <msg key="lt_You_probably_clicked_">Es probable que haya pulsado el botón Añadir más de una vez. Compruebe que el archivo haya sido subido en la %folder_link% que deseaba, o bien utilice le botón Atrás de su navegador para volver.</msg>
   <msg key="lt_Your_file_is_larger_t">Su archivo supera el tamaño máximo permitido (%number_of_bytes% bytes)</msg>
-  <msg key="lt_Your_file_is_larger_t_1">Su archivo supera el tamaño máximo permitido (%number_of_bytes% bytes)</msg>
   <msg key="Modified">Modificado</msg>
   <msg key="Move">Mover</msg>
   <msg key="Name">Nombre</msg>
