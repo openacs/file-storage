@@ -14,7 +14,10 @@ ad_page_contract {
     {show_items:boolean 0}
 }
 
+
 set objects_to_move $object_id
+set object_id_list [join $object_id ","]
+
 set user_id [ad_conn user_id]
 
 set allowed_count 0
@@ -38,6 +41,7 @@ if {$not_allowed_count > 0} {
 }
 
 if {[info exists folder_id]} {
+
      permission::require_permission \
  	-party_id $user_id \
  	-object_id $folder_id \
@@ -49,15 +53,10 @@ if {[info exists folder_id]} {
     # but the existing file-move page checks for WRITE
       
     template::multirow foreach move_objects {
-      db_transaction {
- 	db_exec_plsql move_item {}
-      } on_error {
-         set folder_name "[_ file-storage.folder]"
-         set folder_link "<a href=\"index?folder_id=$folder_id\">$folder_name</a>"
-         ad_return_complaint 1 "[_ file-storage.lt_The_folder_link_you_s]"
-         ad_script_abort
-         }
-     }
+	db_transaction {
+	    db_exec_plsql move_item {}
+      }
+    }    
 
      ad_returnredirect $return_url
      ad_script_abort
@@ -83,12 +82,15 @@ if {[info exists folder_id]} {
                 label "\#file-storage.Choose_Destination_Folder\#"
                 link_url_col move_url
 		link_html {title "\#file-storage.Move_to_folder_title\#"}
-		display_template {<div style="text-indent: @folder_tree.level@em;">@folder_tree.label@</div>} 
+		display_template {<div style="text-indent: @folder_tree.level_num@em;">@folder_tree.label@</div>} 
             }
         }
     set root_folder_id [fs::get_root_folder]
     set object_id $objects_to_move
-    db_multirow -extend {move_url} folder_tree get_folder_tree "" {
+    db_multirow -extend {move_url level} folder_tree get_folder_tree "" {
+	# teadams 2003-08-22 - change level to level num to avoid 
+	# Oracle issue with key words.
+
 	set move_url [export_vars -base "move" { object_id:multiple folder_id return_url }]
 
 	
