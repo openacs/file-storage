@@ -12,7 +12,7 @@
 
 select define_function_args('fs_simple_object__new','object_id,object_type,fs_simple_object,folder_id,name,description,creation_date,creation_user,creation_ip,context_id');
 
-create function fs_simple_object__new(integer,varchar,integer,varchar,varchar,timestamp,integer,varchar,integer)
+create function fs_simple_object__new(integer,varchar,integer,varchar,varchar,timestamp with time zone,integer,varchar,integer)
 returns integer as '
 DECLARE
         p_object_id             alias for $1;
@@ -78,7 +78,7 @@ select define_function_args('fs_url__delete','url_id');
 
 select define_function_args('fs_url__copy','url_id;target_object_id');
 
-create function fs_url__new(integer,varchar,varchar,integer,varchar,varchar,timestamp,integer,varchar,integer)
+create function fs_url__new(integer,varchar,varchar,integer,varchar,varchar,timestamp with time zone,integer,varchar,integer)
 returns integer as '
 DECLARE
         p_url_id                alias for $1;
