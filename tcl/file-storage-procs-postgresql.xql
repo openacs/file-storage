@@ -56,7 +56,7 @@
                          fs_objects.url,
                          fs_objects.key,
                          fs_objects.sort_key,
-                         case when fs_objects.last_modified >= (now() - :n_past_days) then 1 else 0 end as new_p,
+                         case when fs_objects.last_modified >= (now() - :n_past_days::timespan) then 1 else 0 end as new_p,
                          acs_permission__permission_p(fs_objects.object_id, :user_id, 'admin') as admin_p,
                          acs_permission__permission_p(fs_objects.object_id, :user_id, 'delete') as delete_p,
                          acs_permission__permission_p(fs_objects.object_id, :user_id, 'write') as write_p
