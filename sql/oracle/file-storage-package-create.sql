@@ -462,7 +462,7 @@ as
         where cr_items.item_id = file_storage.new_version.item_id;
 
         acs_object.update_last_modified(v_folder_id,new_version.creation_user,new_version.creation_ip);
-
+        acs_object.update_last_modified(new_version.item_id,new_version.creation_user,new_version.creation_ip);
         return v_revision_id;
 
         exception when NO_DATA_FOUND then
