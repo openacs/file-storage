@@ -44,11 +44,9 @@ if {$root_folders_count > 0} {
     ad_script_abort
 }
 
-db_multirow -extend {delete_message} delete_list get_to_be_deleted "
-                       select fs.object_id as fs_object_id, fs.name,
-      acs_permission__permission_p(fs.object_id, :user_id, 'write') as delete_p
-      from fs_objects fs
-      where fs.object_id in ([template::util::tcl_to_sql_list $object_id])" {
+set object_id_list [join $object_id " ',' "]
+
+db_multirow -extend {delete_message} delete_list get_to_be_deleted {} {
 	  if {$delete_p} {
 	      set delete_message ""
 	      incr allowed_count
@@ -74,7 +72,7 @@ ad_form -extend -name delete_confirm -on_submit {
     db_transaction {
         template::multirow foreach delete_list {
             if {$delete_p} {
-		db_exec_plsql delete_item ""
+		fs::delete_file -item_id $fs_object_id -parent_id $parent_id 
 	    }
 	}
     }
@@ -85,4 +83,3 @@ ad_form -extend -name delete_confirm -on_submit {
 set title "\#file-storage.Delete\#"
 set context [list "\#file-storage.Delete\#"]
 
-   
