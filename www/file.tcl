@@ -90,7 +90,7 @@ db_multirow -unclobber -extend { last_modified_pretty content_size_pretty versio
     if {[string equal $title ""]} {
 	set title "[_ file-storage.untitled]"
     }
-    if {[string equal $version_id $live_revision]} {
+    if {![string equal $version_id $live_revision]} {
 	set version_url "view/${file_url}?[export_vars {{revision_id $version_id}}]"
     } else {
 	set version_url "view/${file_url}"
