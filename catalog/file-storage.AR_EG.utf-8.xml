@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<message_catalog package_key="file-storage" package_version="4.7d3" locale="AR_EG" charset="utf-8">
+
+  <msg key="Add_File">أضفْ ملفاً</msg>
+  <msg key="lt_Folder_folder_name_is">.فارغة %folder_name% حافظةُ </msg>
+</message_catalog>
