@@ -25,7 +25,7 @@
             <callback type="after-upgrade"  proc="fs::install::upgrade"/>
         </callbacks>
         <parameters>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ArchiveCommand"  default="tar -czf {out_file} {in_file}" description="Program (and program options) to use for archiving file storage objects. Use the special tags {in_file} and {out_file} (including the curly braces) to denote the locations of the input and output files on the command line."/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ArchiveCommand"  default="tar cf - {in_file} | gzip > {out_file}" description="Program (and program options) to use for archiving file storage objects. Use the special tags {in_file} and {out_file} (including the curly braces) to denote the locations of the input and output files on the command line."/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ArchiveExtension"  default="tgz" description="The extension that the programmer should add to the output file. This depends on the value of ArchiveCommand"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="GeneralCommentsP"  default="0" description="Allow comments to be attached to a file."/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="MaximumFileSize"  default="2000000" description="The maximum size, in bytes, of files that users are allowed to upload"/>
