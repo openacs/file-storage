@@ -44,7 +44,7 @@
 
     <fullquery name="fs::get_folder_contents.select_folder_contents">
         <querytext>
--- we use $n_past-days instead of :n_past_days becasuse he pgdriver
+-- we use $ n_past-days instead of :n_past_days becasuse he pgdriver
 -- bind variable emulation puts single-quotes around the n_past_days
 -- integer. Postgresql tries to turn '-1' into a date datatype
 -- so now()-'-1' fails but now()- -1 works fine.
