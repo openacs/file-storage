@@ -30,11 +30,11 @@
  <if @gc_comments@ not nil>
  <li>Comments on this file:
  <ul>
- @gc_comments@
+ @gc_comments;noquote@
  </ul>
  </if>
  <if @gc_link@ not nil>
-   <li>@gc_link@
+   <p><li>@gc_link;noquote@
  </if>
 </ul>
 
