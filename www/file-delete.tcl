@@ -34,8 +34,14 @@ select count(*)
 from   cr_revisions
 where  item_id = :file_id
 and    acs_permission.permission_p(revision_id,:user_id,'delete') = 'f'"] 0 f t]
+    db_1row file_name "
+    	select name as title
+    	from   cr_items
+    	where  item_id = :file_id"
+
+set delete_message "[_ file-storage.lt_delete_file]"
 ad_form -export file_id -cancel_url "file?[export_vars file_id]" -form {
-    {delete_message:text(inform) {label ""} {value "\#file-storage.lt_delete_file\#"}}
+    {delete_message:text(inform) {label $delete_message}}
     } -on_submit {	
 
 if {[string equal $blocked_p "f"] } {
@@ -53,11 +59,6 @@ if {[string equal $blocked_p "f"] } {
 }
 }
 # DAVEB TODO move this into select_query
-    db_1row file_name "
-    	select name as title
-    	from   cr_items
-    	where  item_id = :file_id"
-
     set context [fs_context_bar_list -final "[_ file-storage.Delete]" $file_id]
 # Variable title used by message lookup
 set page_title [_ file-storage.file_delete_page_title]
