@@ -158,22 +158,25 @@ db_multirow -extend { icon last_modified_pretty content_size_pretty properties_l
 	    set properties_url ""
 	    set icon "/resources/file-storage/folder.gif"
 	    set file_url "${fs_url}index?[export_vars {{folder_id $object_id}}]"
+            set download_url $file_url
 	}
 	url {
 	    set properties_link "properties"
 	    set properties_url "${fs_url}simple?[export_vars object_id]"
 	    set icon "/resources/url-button.gif"
-	    set file_url ${fs_url}${url}
+	    set file_url ${url}
+            set download_url $file_url
 	}
 	default {
 	    set properties_link [_ file-storage.properties]
 	    set properties_url "${fs_url}file?[export_vars {{file_id $object_id}}]"
 	    set icon "/resources/file-storage/file.gif"
 	    set file_url "${fs_url}view/${file_url}"
+            set download_url "download/?[export_vars {{file_id $object_id}}]"                
 	}
 
     }
-    set download_url "download/?[export_vars {{file_id $object_id}}]"    
+
 
     # We need to encode the hashes in any i18n message keys (.LRN plays this trick on some of its folders).
     # If we don't, the hashes will cause the path to be chopped off (by ns_conn url) at the leftmost hash.
