@@ -82,6 +82,15 @@
     </tr>
     </multiple>
   </table>
+  <if @content_size_total@ gt 0>
+    <p>
+      <a href="download-archive/index?object_id=@folder_id@">
+        Download an archive of the contents of this folder
+      </a>
+      <br>
+      <small><i><strong>Note:</strong> This may take a while, please be patient.</i></small>
+    </p>
+  </if>
 </if>
 <else>
   <p><blockquote><i>Folder @folder_name@ is empty</i></blockquote></p>

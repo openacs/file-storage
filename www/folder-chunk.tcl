@@ -8,6 +8,7 @@ ad_page_contract {
 } -properties {
     folder_name:onevalue
     contents:multirow
+    content_size_total:onevalue
 }
 
 if {![exists_and_not_null folder_id]} {
@@ -27,8 +28,11 @@ if {![exists_and_not_null fs_url]} {
 
 set folder_name [fs::get_object_name -object_id  $folder_id]
 
+set content_size_total 0
+
 db_multirow contents select_folder_contents {} {
     set file_upload_name [fs::remove_special_file_system_characters -string $file_upload_name]
+    incr content_size_total $content_size
 }
 
 ad_return_template
