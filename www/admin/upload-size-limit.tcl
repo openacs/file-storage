@@ -12,7 +12,7 @@ ad_page_contract {
 } 
 
 set max_size [ns_config "ns/server/[ns_info server]/module/nssock" maxinput]
-if { [string equal max_size ""] } {
+if { [string equal $max_size ""] } {
     set max_size 0
 }
 
