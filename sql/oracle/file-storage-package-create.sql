@@ -205,7 +205,7 @@ as
         v_folder_id := content_folder.new(
             name => file_storage.new_root_folder.folder_url,
             label => file_storage.new_root_folder.folder_name,
-            context_id => file_storage.new_root_folder.package_id
+            context_id => file_storage.new_root_folder.package_id,
             description => file_storage.new_root_folder.description
         );
 
