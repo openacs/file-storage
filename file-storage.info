@@ -17,7 +17,7 @@
         <provides url="file-storage" version="5.0.0b4"/>
         <requires url="acs-content-repository" version="5.0.0b4"/>
         <requires url="acs-kernel" version="5.0.0b4"/>
-
+        <requires url="oacs-dav" version="0.2d"/>
         <callbacks>
             <callback type="after-mount"  proc="fs::after_mount"/>
         </callbacks>

@@ -206,7 +206,9 @@ ad_proc -public fs::after_mount {
     
     set label $sn(instance_name)
     set name "file-storage_${package_id}"
-    return [db_exec_plsql new_root_folder {}]
+    set folder_id [db_exec_plsql new_root_folder {}]
+    oacs_dav::register_folder -enabled_p "t" $folder_id $sn(node_id)
+    
 }
 
 ad_proc -public fs::get_root_folder {
