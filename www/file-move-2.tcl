@@ -28,7 +28,7 @@ ad_require_permission $parent_id write
 
 db_transaction {
 
-db_dml file_move "
+db_exec_plsql file_move "
 begin
     content_item.move (
     	item_id => :file_id,
@@ -51,8 +51,8 @@ where  object_id = :file_id"
     select count(*)
     from   cr_items
     where  name = :filename
-    and    parent_id = :folder_id"] {
-	ad_return_complaint 1 "Either there is already a file in the specified folder with the name \"$filename\" or you clicked on the button more than once.  You can <a href=\"?folder_id=$folder_id\">return to the directory listing</a> to see if your file is there."
+    and    parent_id = :parent_id"] {
+	ad_return_complaint 1 "Either there is already a file in the specified folder with the name \"$filename\" or you clicked on the button more than once.  You can <a href=\"index?folder_id=$parent_id\">return to the directory listing</a> to see if your file is there."
     } else {
 	ad_return_complaint 1 "We got an error that we couldn't readily identify.  Please let the system owner know about this.
 
