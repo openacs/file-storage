@@ -26,7 +26,7 @@
     	from cr_items
     	where item_id != :file_id
     	connect by prior item_id = parent_id
-    	start with item_id = :file_id)"
+    	start with item_id = :file_id)
 
 
       </querytext>
