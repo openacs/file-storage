@@ -81,17 +81,17 @@
 	             else 'file?file_id=' 
                 end) || i.item_id,
            	content_item__get_title(i.item_id)
-        from   cr_items i
-        where  item_id not in (select i2.item_id
-        		       from   cr_items i2
-			       where i2.tree_sortkey like (select i3.tree_sortkey || '%'
-						           from cr_items i3
-						           where i3.item_id = 
-								file_storage__get_root_folder([ad_conn package_id]))
-			       order by i2.tree_sortkey)
-        and i.tree_sortkey like (select i4.tree_sortkey || '%'
-			         from cr_items i4
-			         where i4.item_id = :start_id)
+        from   cr_items i,cr_items j
+        where  i.item_id not in (select i2.item_id
+        		         from   cr_items i2, cr_items i3
+			         where i2.tree_sortkey = file_storage__get_root_folder([ad_conn package_id])
+				 and i3.tree_sortkey <= i2.tree_sortkey
+				 and i2.tree_sortkey like (i3.tree_sortkey || '%')
+				 order by i2.tree_sortkey
+				)
+	and i.tree_sortkey = :start_id
+	and j.tree_sortkey <= i.tree_sortkey
+	and i.tree_sortkey like (j.tree_sortkey || '%')
     	order by i.tree_sortkey desc
 
       </querytext>
