@@ -127,7 +127,7 @@
 
   <fullquery name="fs::get_parent.get_parent_id">
     <querytext>
-	select parent_id from cr_items where item_id=:item_id;
+	select parent_id from cr_items where item_id=:item_id
     </querytext>
   </fullquery>
 
