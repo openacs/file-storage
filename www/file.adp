@@ -4,7 +4,7 @@
 <property name="context_bar">@context_bar@</property>
 
 <ul>
-  <li>File Name: @name@ <if @write_p@ eq "t">(<a href="file-edit?file_id=@file_id@">edit</a>)</if>
+  <li>Title: @title@ <if @write_p@ eq "t">(<a href="file-edit?file_id=@file_id@">edit</a>)</if>
   <li>Owner: @owner@
 <p>
   <li>Actions: 
@@ -38,9 +38,9 @@
    <else>Live version of "@title@"</else></td>
  </tr>
  <tr>
-  <td>Title</td>
+  <td>Version filename</td>
   <td>Author</td>
-  <td>Size</td>
+  <td>Size (bytes)</td>
   <td>Type</td>
   <td>Modified</td>
   <td>Version Notes</td>
@@ -49,9 +49,9 @@
 
 <multiple name=version>
  <tr>
-  <td><img src="graphics/file.gif"><a href="download/@file_path@?version_id=@version.version_id@">@version.title@</a></td>
+  <td><img src="graphics/file.gif"><a href="download/@version.file_path@?version_id=@version.version_id@">@version.title@</a></td>
   <td>@version.author@</td>
-  <td>@version.content_size@ bytes</td>
+  <td align=right>@version.content_size@</td>
   <td>@version.type@</td>
   <td>@version.last_modified@</td>
   <td>@version.description@</td>

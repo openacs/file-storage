@@ -16,6 +16,7 @@ ad_page_contract {
 } -properties {
     version_id:onevalue
     version_name:onevalue
+    title:onevalue
     context_bar:onevalue
 }
 
@@ -31,58 +32,39 @@ where  revision_id = :version_id"
 if {[string equal $confirmed_p "t"]} {
     # they have confirmed that they want to delete the version
 
-    db_exec_plsql version_delete "
-    begin
+    set parent_id [db_exec_plsql delete_version "
+         begin
 
+             :1 := file_storage.delete_version(:item_id,:version_id);
 
-        if :version_id = content_item.get_live_revision(:item_id) then
-            content_revision.delete (:version_id);
-            content_item.set_live_revision(content_item.get_latest_revision(:item_id));
-        else
-            content_revision.delete (:version_id);
-        end if;
+         end;"]
 
-    end;"
+    if {$parent_id > 0} {
 
-    # JS:
-    # If the version is the last revision available, we also need to remove the
-    # item from cr_items! How come CR does not take care of this? (Note: CR merely 
-    # sets live_revision in cr_items to null).  The redirect should be to the parent 
-    # folder if there are no more revisions, so we need to get the parent folder before we
-    # actually remove the entry in cr_items (I guess this is the reason why CR does not
-    # actually delete the item even if there are no more revisions for it).
-    if [db_string deleted_last_revision "
-           select (case when live_revision is null
-                        then 1
-                        else 0
-                   end) 
-           from cr_items
-           where item_id = :item_id"] {
+	 # Delete the item if there is no more revision. We do this here only because of PostgreSQL's RI bug
+	 db_exec_plsql delete_file "
+	          begin
+	                   file_storage.delete_file(:item_id);
+	          end;"
 
-	       # Get the parent if we will be deleting the item
-	       set parent_id [db_string parent_folder "
-	                       select parent_id from cr_items where item_id = :item_id"]
+	 # Redirect to the folder, instead of the latest revision (which does not exist anymore)
+	 ad_returnredirect "index?folder_id=$parent_id"
 
-	       # Actually delete
-	       db_exec_plsql delete_item "
-	               begin
-	                      content_item.delete(:item_id);
-	               end;"
+    } else {
 
-	       # Redirect to the folder, instead of the latest revision (which does not exist anymore)
-	       ad_returnredirect "?folder_id=$parent_id"
+	 # Ok, we don't have to do anything fancy, just redirect to th last revision
+	 ad_returnredirect "file?file_id=$item_id"
 
-   } else {
-
-	       # Ok, we don't have to do anything fancy, just redirect to th last revision
-	       ad_returnredirect "file?file_id=$item_id"
-   }
+    }
 
 } else {
     # they still need to confirm
 
-    set version_name [db_string version_name "
-    select title from cr_revisions where revision_id = :version_id"]
+    db_1row version_name "
+    select i.name as title,r.title as version_name 
+    from cr_items i,cr_revisions r
+    where i.item_id = r.item_id
+    and revision_id = :version_id"
 
     set context_bar [fs_context_bar_list -final "Delete Version" $item_id]
     ad_return_template

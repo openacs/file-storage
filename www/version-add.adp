@@ -1,14 +1,14 @@
 <master src="fs_master">
-<property name="title">Upload New Version of @name@</property>
+<property name="title">Upload New Version of @title@</property>
 <property name="context_bar">@context_bar@</property>
 
 <form enctype=multipart/form-data method=POST action=version-add-2>
 <input type=hidden name=file_id value="@file_id@">
-<input type=hidden name="name" value="@name@">
+<input type=hidden name="title" value="@title@">
 <table border=0>
 
 <tr>
-<td align=right>Filename:</td>
+<td align=right>Version filename:</td>
 <td><input type=file name=upload_file size=20></td>
 </tr>
 

@@ -8,7 +8,7 @@
 
 <p>Please enter the new name for this file:
 
-<p><input type=text name="name" value="@name@" size=30>
+<p><input type=text name="title" value="@title@" size=30>
 
 <p><input type=submit value="Change Name">
 

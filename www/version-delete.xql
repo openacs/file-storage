@@ -11,33 +11,13 @@
       </querytext>
 </fullquery>
 
-<fullquery name="deleted_last_revision">      
-      <querytext>
-        
-	select (case when live_revision is null
-                     then 1
-                     else 0
-                end) 
-        from cr_items
-        where item_id = :item_id
-
-      </querytext>
-</fullquery>
-
-<fullquery name="parent_folder">      
-      <querytext>
-
-	select parent_id from cr_items where item_id = :item_id
-
-      </querytext>
-</fullquery>
- 
 <fullquery name="version_name">      
       <querytext>
       
-    	select title 
-	from cr_revisions 
-	where revision_id = :version_id
+    	select i.name as title, r.title as version_name 
+	from cr_items i, cr_revisions r
+	where i.item_id = r.item_id
+	and r.revision_id = :version_id
 
       </querytext>
 </fullquery>

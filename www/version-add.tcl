@@ -14,7 +14,7 @@ ad_page_contract {
     }
 } -properties {
     file_id:onevalue
-    name:onevalue
+    title:onevalue
     context_bar:onevalue
 }
 
@@ -25,7 +25,7 @@ ad_require_permission $file_id write
 # set templating datasources
 
 db_1row file_name "
-select title as name
+select title 
 from   cr_revisions
 where  revision_id = (select live_revision
                       from   cr_items

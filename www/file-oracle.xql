@@ -7,9 +7,8 @@
       <querytext>
       
 	select person.name(o.creation_user) as owner,
-       		i.name,
-       		r.title,
-       		content_item.get_path(i.item_id,file_storage.get_root_folder([ad_conn package_id])) as file_path,
+       		i.name as title,
+       		r.title as name,
        		acs_permission.permission_p(:file_id,:user_id,'write') as write_p,
        		acs_permission.permission_p(:file_id,:user_id,'delete') as delete_p,
        		acs_permission.permission_p(:file_id,:user_id,'admin') as admin_p
@@ -25,16 +24,19 @@
 
 	select  r.title,
        		r.revision_id as version_id,
+       		file_storage.get_path(i.item_id,file_storage.get_root_folder([ad_conn package_id]),r.revision_id) as file_path,
        		person.name(o.creation_user) as author,
        		r.mime_type as type,
        		to_char(o.last_modified,'YYYY-MM-DD HH24:MI') as last_modified,
        		r.description,
        		acs_permission.permission_p(r.revision_id,:user_id,'admin') as admin_p,
        		acs_permission.permission_p(r.revision_id,:user_id,'delete') as delete_p,
-       		dbms_lob.getlength(r.content) as content_size
-	from   acs_objects o, cr_revisions r
+       		r.content_length as content_size
+	from   acs_objects o, cr_revisions r, cr_items i
 	where  o.object_id = r.revision_id
 	and    acs_permission.permission_p(r.revision_id, :user_id, 'read') = 't'
+	and    r.item_id = i.item_id
+	and    r.item_id = :file_id
 	$show_versions
 
       </querytext>
@@ -43,15 +45,13 @@
 <partialquery name="show_all_versions">      
       <querytext>
 
-	and r.item_id = :file_id
-
       </querytext>
 </partialquery> 	
 
 <partialquery name="show_live_version">      
       <querytext>
 
-	and r.revision_id = (select live_revision from cr_items where item_id = :file_id)
+	and r.revision_id = i.live_revision
 
       </querytext>
 </partialquery> 	

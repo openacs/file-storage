@@ -4,11 +4,9 @@
 <fullquery name="file_name">      
       <querytext>
       
-	select title as name
-	from   cr_revisions
-	where  revision_id = (select live_revision
-                      	      from   cr_items
-                      	      where  item_id = :file_id)
+	select name as title
+        from   cr_items
+        where  item_id = :file_id
 
       </querytext>
 </fullquery>

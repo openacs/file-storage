@@ -7,12 +7,12 @@
       <querytext>
       
 select i.item_id as file_id,
-       r.title as name,
+       i.name as name,
        i.live_revision,
-       content_item.get_path(i.item_id,file_storage.get_root_folder(:package_id)) as path,
+       file_storage.get_path(i.item_id,file_storage.get_root_folder(:package_id),null) as path,
        r.mime_type as type,
        to_char(o.last_modified,'YYYY-MM-DD HH24:MI') as last_modified,
-       dbms_lob.getlength(r.content) as content_size,
+       r.content_length as content_size,
        1 as ordering_key
 from   cr_items i, cr_revisions r, acs_objects o
 where  i.item_id       = o.object_id
@@ -24,7 +24,7 @@ UNION
 select i.item_id as file_id,
        f.label as name,
        0,
-       content_item.get_path(f.folder_id) as path,
+       file_storage.get_path(f.folder_id,null,null) as path,
        'Folder',
        NULL,
        0,

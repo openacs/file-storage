@@ -28,7 +28,7 @@ ad_require_permission $file_id write
 
 set file_name [db_exec_plsql file_name "
 begin
-    :1 := content_item.get_title(:file_id);
+    :1 := file_storage.get_title(:file_id);
 end;"]
 
 set context_bar [fs_context_bar_list -final "Move" $file_id]

@@ -49,11 +49,7 @@ select i.item_id as file_id,
        content_item.get_path(i.item_id,file_storage.get_root_folder(:package_id)) as path,
        r.mime_type as type,
        to_char(o.last_modified,'YYYY-MM-DD HH24:MI') as last_modified,
-       -- JS: For now, we stick to port of the original version.  According to DanW, we
-       -- JS: should take care of filling up content_length.  Ideally, we want to abstract away 
-       -- JS: the calculation of content_length independent of storage_type, so eventually this
-       -- JS: will just call the content_length attribute
-       dbms_lob.getlength(r.content) as content_size,
+       r.content_length as content_size,
        1 as ordering_key
 from   cr_items i, cr_revisions r, acs_objects o
 where  i.item_id       = o.object_id

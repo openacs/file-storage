@@ -29,7 +29,7 @@ Search file names for
  <tr>
   <td bgcolor=#cccccc>Name</td>
   <td bgcolor=#cccccc>Action</td>
-  <td bgcolor=#cccccc>Size</td>
+  <td bgcolor=#cccccc>Size (bytes)</td>
   <td bgcolor=#cccccc>Type</td>
   <td bgcolor=#cccccc>Modified</td>
  </tr>
@@ -44,8 +44,8 @@ Search file names for
    <td>&nbsp;</td>
   </if><else>
    <td><img src="graphics/file.gif"><a href="file?file_id=@file.file_id@">@file.name@</a></td>
-   <td><a href="download/@file.path@">(download)</a></td>
-   <td>@file.content_size@</td>
+   <td><a href="download/@file.path@?version_id=@file.live_revision@">(download)</a></td>
+   <td align=right>@file.content_size@</td>
    <td>@file.type@</td>
    <td>@file.last_modified@</td>
   </else>

@@ -6,7 +6,7 @@
 <input type=hidden name=version_id value=@version_id@>
 <input type=hidden name=confirmed_p value="t">
 
-<p>Are you sure that you want to delete this version of "@version_name@"?
+<p>Are you sure that you want to delete this version "@version_name@" of "@title@"?
 This action cannot be reversed.
 <p>
 <center>
