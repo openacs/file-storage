@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="file-storage" package_version="5.1.0d" locale="en_US" charset="ISO-8859-1">
+<message_catalog package_key="file-storage" package_version="5.0.0b4" locale="en_US" charset="ISO-8859-1">
 
   <msg key="Action">Action</msg>
   <msg key="Actions">Actions:</msg>
@@ -58,6 +58,7 @@ This action cannot be reversed.</msg>
   <msg key="lt_Either_there_is_alrea">Either there is already a folder with the name &quot;%folder_name%&quot; or you clicked on the button more than once.  You can use the Back button to return and choose a new name, or &lt;a href=&quot;%directory_url%&quot;&gt;return to the directory listing&lt;/a&gt; to see if your folder is there.</msg>
   <msg key="lt_Folder_folder_name_is">Folder %folder_name% is empty.</msg>
   <msg key="lt_It_appears_that_there">It appears that there is already a file with that name in this folder (although possibly you clicked more than once on the submit button.)</msg>
+  <msg key="lt_Leave_blank_for_linked_documents">Leave title blank when uploading multiple interlinked documents.</msg>
   <msg key="lt_Live_version_of_title">Live version of &quot;%title%&quot;</msg>
   <msg key="lt_Modify_permissions_on">Modify permissions on this file</msg>
   <msg key="lt_Modify_permissions_on_1">Modify permissions on this folder</msg>
@@ -76,6 +77,7 @@ This action cannot be reversed.</msg>
 so you cannot delete the file.</msg>
   <msg key="lt_This_folder_contains_">This folder contains items that you do not have permission to
 delete, therefore you cannot delete it.</msg>
+  <msg key="lt_This_is_a_ZIP">This is a ZIP file containing multiple files</msg>
   <msg key="lt_Use_the_Browse_button">Use the &quot;Browse...&quot; button to locate your file, 
     then click &quot;Open&quot;.</msg>
   <msg key="lt_version_not_valid">The specified version is not valid.</msg>
@@ -91,6 +93,7 @@ delete, therefore you cannot delete it.</msg>
   <msg key="lt_Your_search_on_query__1">Your search on &quot;%query%&quot; returned the following files:</msg>
   <msg key="Modified">Modified</msg>
   <msg key="Move">Move</msg>
+  <msg key="Multiple_files">Multiple files:</msg>
   <msg key="Name">Name</msg>
   <msg key="new">new</msg>
   <msg key="New_Folder">New Folder</msg>

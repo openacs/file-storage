@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="file-storage" package_version="4.7d3" locale="ru_RU" charset="utf-8">
+<message_catalog package_key="file-storage" package_version="5.0.0b4" locale="ru_RU" charset="utf-8">
 
   <msg key="Action">Действие</msg>
   <msg key="Actions">Действия:</msg>
