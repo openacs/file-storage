@@ -92,7 +92,7 @@
         and i.tree_sortkey like (select i4.tree_sortkey || '%'
 			         from cr_items i4
 			         where i4.item_id = :start_id)
-    	order by i.tree_sortkey, i.level desc
+    	order by i.tree_sortkey desc
 
       </querytext>
 </fullquery>
