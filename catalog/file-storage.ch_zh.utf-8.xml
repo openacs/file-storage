@@ -2,15 +2,40 @@
 <message_catalog package_key="file-storage" package_version="4.7d3" locale="ch_zh" charset="utf-8">
 
   <msg key="Author">恬宀</msg>
+  <msg key="back_to_folder_view">&lt;a href=&quot;%folder_view_url%&quot;&gt;返回&lt;/a&gt;浏览文件夹</msg>
   <msg key="Copy">鹸崙</msg>
+  <msg key="days_as_new">天内更改的文件。</msg>
   <msg key="Delete_this_folder">評茅猟周斜</msg>
   <msg key="Description">傍苧 :</msg>
   <msg key="Edit">園辞</msg>
   <msg key="edit">園辞</msg>
+  <msg key="file_edit_page_title">给%title%重新命名</msg>
+  <msg key="file_page_owner_label">Owner：</msg>
   <msg key="folder">猟周斜</msg>
+  <msg key="Folder_ID">Folder ID </msg>
   <msg key="folder_type_pretty_name">猟周斜</msg>
+  <msg key="index_page_navigate_up_folder">到%up_name%</msg>
+  <msg key="lt_bad_folder_id_folder_">丢失folder id</msg>
+  <msg key="lt_Comments_on_this_file">评论此文件：</msg>
+  <msg key="lt_Delete_this_file_incl">删除此文件，包括所有版本</msg>
+  <msg key="lt_Either_there_is_alrea">已有一个名为&quot;%folder_name%&quot;的文件夹存在或多次点击按钮。用返回钮返回，选一个新名字，或&lt;a href=&quot;%directory_url%&quot;&gt;返回到目录列表&lt;/a&gt;，看文件夹是否在列表中。 </msg>
+  <msg key="lt_Modify_permissions_on">修改文件许可</msg>
+  <msg key="lt_Modify_permissions_on_1">修改该文件夹许可</msg>
+  <msg key="lt_Show_files_modified_i">显示</msg>
+  <msg key="lt_The_folder_link_you_s">选择的文件夹%folder_link%中已包含了一个同名文件。</msg>
+  <msg key="lt_This_folder_contains_">此文件夹中含有不允许你删除的项，所以不能删除。</msg>
+  <msg key="lt_We_got_an_error_that_">请通知系统owner，发现了一个不明错误。</msg>
+  <msg key="lt_We_received_an_error_">收到来自数据库的错误信息。可能选择的文件夹已包含一个同名文件。</msg>
+  <msg key="lt_Were_sorry_but_at_the">对不起，不能删除非空文件夹。</msg>
+  <msg key="lt_You_may_not_delete_th">不可删除根文件夹。</msg>
+  <msg key="lt_You_probably_clicked_">可能多次点击“增加”钮。检查文件是否已装入了文件夹%folder_link%，或用“返回”钮返回，重新进入版本文件。</msg>
+  <msg key="lt_Your_file_is_larger_t_1">文件大于系统允许的最大文件大小（(%max_number_of_bytes%字节）</msg>
+  <msg key="lt_Your_search_on_query_">&quot;%query%&quot;搜索没有结果。</msg>
+  <msg key="lt_Your_search_on_query__1">&quot;%query%&quot;搜索到下述的文件：</msg>
   <msg key="new">仟議</msg>
   <msg key="Rename_this_folder">厚兆猟周斜</msg>
+  <msg key="Size">数目</msg>
   <msg key="Title">炎籾</msg>
   <msg key="Title_">炎籾 :</msg>
+  <msg key="Version_Notes">版本信息</msg>
 </message_catalog>
