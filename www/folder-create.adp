@@ -3,20 +3,6 @@
 <property name="context">@context;noquote@</property>
 <property name="focus">folder.folder_name</property>
 
+<formtemplate id="folder-ae"></formtemplate>
 
-<form method=POST action=folder-create-2 name=folder>
-<input type=hidden name=parent_id value="@parent_id@">
-
-<table>
- <tr>
-  <td align=right>#file-storage.Folder_Name#</td>
-  <td><input type=text name=folder_name size=20></td>
- </tr>
- <tr>
-  <td>&nbsp;</td>
-  <td><input type=submit value="#file-storage.Create#"></td>
- </tr>
-</table>
-
-</form>
 
