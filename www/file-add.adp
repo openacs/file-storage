@@ -8,7 +8,7 @@
 <table border=0>
 
 <tr>
-<td align=right>Filename : </td>
+<td align=right>Version filename : </td>
 <td><input type=file name=upload_file size=20></tr>
 </tr>
 
