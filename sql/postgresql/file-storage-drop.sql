@@ -33,6 +33,12 @@ end;' language 'plpgsql';
 select inline_0();
 drop function inline_0();
 
+drop function fs_package_items_delete_trig();
+drop trigger fs_package_items_delete_trig on fs_root_folders;
+
+drop function fs_root_folder_delete_trig();
+drop trigger fs_root_folder_delete_trig on fs_root_folders;
+
 drop table fs_root_folders;
 select drop_package('file_storage');
 
