@@ -19,7 +19,7 @@
         <requires url="acs-kernel" version="5.1.0d1"/>
         <requires url="oacs-dav" version="0.2d"/>
 	<requires url="notifications" version="5.0.0b4"/>
-        <requires url="categories" version="1.0d4"/>
+        <requires url="categories" version="1.0d3"/>
 
         <callbacks>
             <callback type="after-mount"  proc="fs::after_mount"/>
