@@ -9,7 +9,8 @@ create table fs_rss_subscrs (
                                   constraint fs_rss_subscrs_pk
                                   primary key
                                   constraint fs_rss_subscrs_fk
-                                  references rss_gen_subscrs(subscr_id),
+                                  references rss_gen_subscrs(subscr_id)
+                                  on delete cascade,
     folder_id                     integer
                                   constraint fs_rss_subscrs_fldr_nn
                                   not null
