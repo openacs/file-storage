@@ -23,7 +23,7 @@
 
 	begin
 		content_item.delete(:item_id);
-	end;"
+	end;
 
       </querytext>
 </fullquery>
