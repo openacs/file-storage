@@ -11,7 +11,7 @@ ad_page_contract {
     return_url:optional
     upload_file.tmpfile:tmpfile,optional
     {title ""}
-    {lock_title_p 1}
+    {lock_title_p 0}
 
 } -properties {
     folder_id:onevalue
@@ -55,12 +55,8 @@ if {![ad_form_new_p -key file_id]} {
 } else {
     set context [fs_context_bar_list -final "[_ file-storage.Add_File]" $folder_id]
 }
-# if title isn't passed in ignore lock_title_p
-if {[empty_string_p $title]} {
-    set lock_title_p 0
-}
 
-ad_form -html { enctype multipart/form-data } -export { folder_id } -form {
+ad_form -html { enctype multipart/form-data } -export { folder_id lock_title_p } -form {
     file_id:key
     {upload_file:file {label \#file-storage.Upload_a_file\#} {html "size 30"}}
 }
@@ -73,7 +69,6 @@ if {[exists_and_not_null return_url]} {
 
 if {$lock_title_p} {
     ad_form -extend -form {
-	{title_display:text(inform) {label \#file-storage.Title\#} }
 	{title:text(hidden) {value $title}}
     }
 } else {
@@ -147,7 +142,9 @@ ad_form -extend -form {} -select_query_name {get_file} -new_data {
 		-party_id $user_id \
 		-privilege write
 	}
-	
+	if {$lock_title_p} {
+            set upload_file $this_title
+        }
 	fs::add_file \
 	    -name $upload_file \
 	    -item_id $this_file_id \
