@@ -35,6 +35,7 @@ as
         -- Create a file in CR in preparation for actual storage
         -- Wrapper for content_item.new
         --
+        item_id in cr_items.item_id%TYPE default null,
         title in cr_items.name%TYPE,
         folder_id in cr_items.parent_id%TYPE,
         creation_user in acs_objects.creation_user%TYPE,
@@ -263,6 +264,7 @@ as
         -- Create a file in CR in preparation for actual storage
         -- Wrapper for content_item.new
         --
+        item_id in cr_items.item_id%TYPE default null,
         title in cr_items.name%TYPE,
         folder_id in cr_items.parent_id%TYPE,
         creation_user in acs_objects.creation_user%TYPE,
@@ -275,6 +277,7 @@ as
         if new_file.indb_p = 't'
         then
             v_item_id := content_item.new(
+                item_id => new_file.item_id,
                 name => new_file.title,
                 parent_id => new_file.folder_id,
                 creation_user => new_file.creation_user,

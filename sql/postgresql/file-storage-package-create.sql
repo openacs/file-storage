@@ -155,11 +155,14 @@ create function file_storage__new_file(
        -- Create a file in CR in preparation for actual storage
        -- Wrapper for content_item__new
        --
+       -- DRB: I added this version to allow one to predefine item_id, among other things to
+       -- make it easier to use with ad_form
        varchar,		-- cr_items.name%TYPE,
        integer,		-- cr_items.parent_id%TYPE,
        integer,		-- acs_objects.creation_user%TYPE,
        varchar,		-- acs_objects.creation_ip%TYPE,
-       boolean		-- store in db? 
+       boolean,		-- store in db? 
+       integer          -- cr_items.item_id%TYPE,
 ) returns integer as ' -- cr_items.item_id%TYPE
 declare
 	new_file__title			alias for $1;
@@ -167,6 +170,7 @@ declare
 	new_file__user_id		alias for $3;
 	new_file__creation_ip		alias for $4;
 	new_file__indb_p		alias for $5;
+        new_file__item_id               alias for $6;
         v_item_id                       cr_items.item_id%TYPE;
 begin
 
@@ -175,7 +179,7 @@ begin
 	    select content_item__new (
                         new_file__title,	    -- name
                         new_file__folder_id,      -- parent_id
-                        null,			    -- item_id (default)
+                        new_file__item_id,	  -- item_id (default)
                         null,			    -- locale (default)
                         now(),		    -- creation_date (default)
                         new_file__user_id,        -- creation_user
@@ -194,7 +198,7 @@ begin
 	    select content_item__new (
                         new_file__title,	    -- name
                         new_file__folder_id,	    -- parent_id
-                        null,			    -- item_id (default)
+                        new_file__item_id,	    -- item_id (default)
                         null,			    -- locale (default)
                         now(),		    -- creation_date (default)
                         new_file__user_id,	    -- creation_user
@@ -216,6 +220,33 @@ begin
         select acs_object__update_last_modified(new_file__folder_id);
 
         return v_item_id;
+
+end;' language 'plpgsql';
+    
+
+create function file_storage__new_file(
+       varchar,		-- cr_items.name%TYPE,
+       integer,		-- cr_items.parent_id%TYPE,
+       integer,		-- acs_objects.creation_user%TYPE,
+       varchar,		-- acs_objects.creation_ip%TYPE,
+       boolean		-- store in db? 
+) returns integer as ' -- cr_items.item_id%TYPE
+declare
+	new_file__title			alias for $1;
+	new_file__folder_id		alias for $2;
+	new_file__user_id		alias for $3;
+	new_file__creation_ip		alias for $4;
+	new_file__indb_p		alias for $5;
+begin
+
+        return file_storage__new_file(
+             new_file__title,
+             new_file__folder_id,
+             new_file__user_id,
+             new_file__creation_ip,
+             new_file__indb_p,
+             null
+        );
 
 end;' language 'plpgsql';
 
