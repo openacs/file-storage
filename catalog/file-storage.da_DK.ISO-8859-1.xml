@@ -7,6 +7,7 @@
   <msg key="Add_File">Tilføj Fil</msg>
   <msg key="Add_pretty_name">Tilføj %pretty_name%</msg>
   <msg key="Author">Forfatter</msg>
+  <msg key="back_to_folder_view">&lt;a href=&quot;%folder_view_url%&quot;&gt;Tilbage&lt;/a&gt; til mappevisning</msg>
   <msg key="Change_Name">Ændr Navn</msg>
   <msg key="Copy">Kopier</msg>
   <msg key="Create">Lav</msg>
@@ -25,16 +26,26 @@
   <msg key="Edit_Folder">Rediger Mappe</msg>
   <msg key="Edit_URL">Redigér URL</msg>
   <msg key="file">file</msg>
+  <msg key="file_delete_page_title">Slet %title%</msg>
+  <msg key="file_edit_page_title">Omdøb %title%</msg>
+  <msg key="file_edit_page_title_1">Rediger %pretty_name%</msg>
+  <msg key="file_page_file_title_label">Titel: %title%</msg>
+  <msg key="file_page_owner_label">Ejer: %owner%</msg>
   <msg key="folder">mappe</msg>
+  <msg key="folder_delete_page_title">Slet %folder_name%</msg>
   <msg key="Folder_ID">Mappe ID</msg>
   <msg key="Folder_Name">Mappe Navn:</msg>
   <msg key="folder_type_pretty_name">folder</msg>
+  <msg key="index_page_navigate_up_folder">Op til %up_name%</msg>
   <msg key="item">objekt</msg>
   <msg key="items">objekter</msg>
   <msg key="Last_Modified">Senest Ændret</msg>
   <msg key="lt_administer_permission">administrer rettigheder</msg>
+  <msg key="lt_All_Versions_of_title">All versioner af &quot;%title%&quot;</msg>
   <msg key="lt_Are_you_sure_that_you">Er du sikker på, at du ønsker at slette denne version &quot;%version_name%&quot; af &quot;%title%&quot;? Denne handling kan ikke fortrydes.</msg>
   <msg key="lt_bad_folder_id_folder_">manglende mappe id</msg>
+  <msg key="lt_Comments_on_this_file">Kommentarer til denne fil:</msg>
+  <msg key="lt_contentscontent_size_">%contents.content_size_pretty% bytes</msg>
   <msg key="lt_delete_file">Er du sikker på at du vil slette filen &quot;%title%&quot; og alle dens revisioner? Denne handling kan ikke fortrydes.</msg>
   <msg key="lt_delete_folder">Er du sikker på at du vil slette mappen &quot;%folder_name%&quot; og alle de ting den indeholder? Denne handling kan ikke gøres om.</msg>
   <msg key="lt_Delete_this_file_incl">Slet denne fil (inklusiv alle versioner)</msg>
@@ -42,10 +53,12 @@
   <msg key="lt_Either_there_is_alrea">Der er enten allerede en mappe med navnet &quot;%folder_name%&quot;, eller du har klikket på knappen mere end én gang. Du kan bruge Tilbage-knappen og vælge et nyt navn, eller du kan &lt;a href=&quot;%directory_url%&quot;&gt;vende tilbage til mappeoversigten&lt;/a&gt; og se, om din mappe er oprettet dér.</msg>
   <msg key="lt_Folder_folder_name_is">Mappen %folder_name% er tom</msg>
   <msg key="lt_It_appears_that_there">Der er allerede en fil med det navn i denne mappe. Måske har du klikket to gange.</msg>
-  <msg key="lt_Leave_blank_for_linked_documents">Lad titel være blank hvis du uploader flere dokumenter med links imellem.</msg>
+  <msg key="lt_Live_version_of_title">Live version af &quot;%title%&quot;</msg>
   <msg key="lt_Modify_permissions_on">Ændr rettighedder for denne fil</msg>
   <msg key="lt_Modify_permissions_on_1">Rediger rettigheder på denne mappe</msg>
   <msg key="lt_Please_enter_the_new_">Skriv venligst det nye navn for denne fil:</msg>
+  <msg key="lt_Select_the_folder_tha">Vælg den mappe du vil kopiere &quot;%file_name%&quot; til</msg>
+  <msg key="lt_Select_the_folder_tha_1">Vælg den mappe du vil flytte &quot;%file_name%&quot; ind under</msg>
   <msg key="lt_Show_files_modified_i">Vis filer ændret indenfor de sidste</msg>
   <msg key="lt_show_only_live_versio">Vis kun seneste version</msg>
   <msg key="lt_The_folder_link_you_s">Den folder &quot;%folder_link%&quot; du har valgt indeholder allerede en fil med samme navn.</msg>
@@ -65,6 +78,8 @@
   <msg key="lt_You_probably_clicked_">Du har formentlig klikke på tilføj-knappen mere end en gang. Tjek hvis filen er ordentlig på %folder_link% eller brug tilbage-knappen og genindtast versionsfilen.</msg>
   <msg key="lt_Your_file_is_larger_t">Din fil er større end den maksimale filstørrelse (%number_of_bytes% bytes).</msg>
   <msg key="lt_Your_file_is_larger_t_1">Din fil er større en den maksimalt tilladte størrelse på dette system (%max_number_of_bytes% bytes)</msg>
+  <msg key="lt_Your_search_on_query_">Din søgning på &quot;%query%&quot; gav ikke nogen resultater.</msg>
+  <msg key="lt_Your_search_on_query__1">Din søgning på &quot;%query%&quot; gav følgende filer:</msg>
   <msg key="Modified">Ændret</msg>
   <msg key="Move">Flyt</msg>
   <msg key="Name">Navn</msg>
@@ -78,8 +93,10 @@
   <msg key="Search_again">Søg igen:</msg>
   <msg key="Search_Results">Søgeresultater</msg>
   <msg key="show_all_versions">vis alle versioner</msg>
+  <msg key="simple_add_page_title">Opret %pretty_name%</msg>
   <msg key="Size">Størrelse</msg>
   <msg key="Size_bytes">Størrelse (bytes)</msg>
+  <msg key="this_may_take_a_while">&lt;strong&gt;Note:&lt;/strong&gt; Det kan tage et stykke tid, så vær tålmodig.</msg>
   <msg key="Title">Titel:</msg>
   <msg key="Title_">Titel:</msg>
   <msg key="Type">Type</msg>
@@ -90,6 +107,8 @@
   <msg key="Upload_New_File">Upload Ny Fil</msg>
   <msg key="Upload_New_Version">Upload Ny Version</msg>
   <msg key="URL">URL:</msg>
+  <msg key="version_add_page_title">Upload en ny version af %title%</msg>
+  <msg key="version_delete_page_title">Slet %version_name%</msg>
   <msg key="Version_filename">Version filnavn</msg>
   <msg key="Version_filename_">Version filnavn:</msg>
   <msg key="Version_filename_1">Version filnavn:</msg>
