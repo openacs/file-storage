@@ -568,7 +568,7 @@ ad_proc -public fs::publish_versioned_object_to_file_system {
     db_1row select_object_metadata {}
 
     if {[empty_string_p $file_name]} {
-	set file_name $upload_file_name
+	set file_name $file_upload_name
     }
     set file_name [remove_special_file_system_characters -string $file_name]
 
