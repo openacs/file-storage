@@ -136,7 +136,6 @@ db_multirow -extend { icon last_modified_pretty content_size_pretty properties_l
 	append content_size_pretty " [_ file-storage.items]"
 	set pretty_type "Folder"
     } else {
-	set type [string trimleft [file extension $file_upload_name] . ]
 	if {$content_size < 1024} {
 	    set content_size_pretty "[lc_numeric $content_size] [_ file-storage.bytes]"
 	} else {
