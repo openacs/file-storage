@@ -153,6 +153,14 @@
         </querytext>
     </fullquery>
 
+    <fullquery name="fs::publish_versioned_object_to_file_system.select_file_name">
+        <querytext>
+            select content
+            from cr_revisions
+            where revision_id = :live_revision
+        </querytext>
+    </fullquery>
+
     <fullquery name="fs::get_item_id.get_item_id">
       <querytext>
         select content_item__get_id ( :name, :folder_id, 'f' )
