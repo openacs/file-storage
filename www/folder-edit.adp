@@ -1,6 +1,6 @@
 <master>
 <property name="title">#file-storage.Edit_Folder#</property>
-<property name="context">@context_bar@</property>
+<property name="context">@context_bar;noquote@</property>
 
 
 <form method=POST action=folder-edit-2>

@@ -1,7 +1,7 @@
 <master>
-<property name="title">@title@</property>
-<property name="header">@title@</property>
-<property name="context">@context@</property>
+<property name="title">@title;noquote@</property>
+<property name="header">@title;noquote@</property>
+<property name="context">@context;noquote@</property>
 
 <ul>
   <li>Title: @title@ <if @write_p@ true>(<a href="file-edit?file_id=@file_id@">#file-storage.edit#</a>)</if>

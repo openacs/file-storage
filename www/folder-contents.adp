@@ -1,7 +1,7 @@
 <master>
-<property name="title">@folder_name@</property>
-<property name="header">@folder_name@</property>
-<property name="context">@context@</property>
+<property name="title">@folder_name;noquote@</property>
+<property name="header">@folder_name;noquote@</property>
+<property name="context">@context;noquote@</property>
 
 <table>
   <tr>

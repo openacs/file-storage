@@ -1,6 +1,6 @@
 <master>
-<property name="title">Upload New Version of @title@</property>
-<property name="context">@context@</property>
+<property name="title">Upload New Version of @title;noquote@</property>
+<property name="context">@context;noquote@</property>
 
 <form enctype=multipart/form-data method=POST action=version-add-2>
 <input type=hidden name=file_id value="@file_id@">

@@ -1,6 +1,6 @@
 <master>
 <property name="title">#file-storage.Upload_New_File#</property>
-<property name="context">@context@</property>
+<property name="context">@context;noquote@</property>
 
 <form enctype=multipart/form-data method=POST action="file-add-2">
 <input type=hidden name="folder_id" value="@folder_id@">

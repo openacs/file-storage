@@ -1,6 +1,6 @@
 <master>
 <property name="title">#file-storage.Copy#</property>
-<property name="context">@context@</property>
+<property name="context">@context;noquote@</property>
 
 <P>Select the folder that you would like to copy "@file_name@" to
 
