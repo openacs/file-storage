@@ -13,3 +13,12 @@
   </else>
 </p>
   <listtemplate name="version"></listtemplate>
+<if @gc_comments@ not nil>
+ <p>#file-storage.lt_Comments_on_this_file#
+ <ul>
+ @gc_comments;noquote@
+ </ul></p>
+ </if>
+ <if @gc_link@ not nil>
+   <p>@gc_link;noquote@</p>
+ </if>

@@ -31,42 +31,25 @@ ad_proc fs::impl::fs_object::put {} {
     set item_id [oacs_dav::conn item_id]
     set root_folder_id [oacs_dav::conn folder_id]
     set uri [oacs_dav::conn uri]
+
+    if {![string equal "unlocked" [tdav::check_lock $uri]]} {
+	return [list 423]
+    }
     
     set tmp_filename [oacs_dav::conn tmpfile]
     set tmp_size [file size $tmp_filename]
-    # authenticate that user has write privilege
-ns_log notice "OACS-DAV File Storage PUT tmp_filename $tmp_filename tmp_size $tmp_size"
-    # we need to calculate parent_id from the URI
-    # it might not be the root DAV folder for the package
-    # check for folder or not
 
     set name [oacs_dav::conn item_name]
     set parent_id [oacs_dav::item_parent_folder_id $uri]
     array set sn [site_node::get -url $uri]
     set package_id $sn(package_id)
+    ns_log debug "\n ----- \n file_storage::dav::put package_id $package_id \n parent_id $parent_id \n uri $uri \n ----- \n "
     if {[empty_string_p $parent_id]} {
 	set response [list 409]
 	return $response
     }
-
-    if { ! [permission::permission_p \
-		     -object_id $parent_id \
-		     -party_id $user_id \
-		     -privilege "create"
-	      ]} {
-	return [list 401]
-    }
-
-    if {![empty_string_p $item_id]} {
-	if {![permission::permission_p \
-		  -object_id $item_id \
-		  -party_id $user_id \
-		  -privilege "write"
-	     ]} {
-	    return [list 401]
-	}
-    }
     
+    if {[empty_string_p $item_id]} {
         fs::add_file \
         -package_id $package_id \
         -name $name \
@@ -76,7 +59,23 @@ ns_log notice "OACS-DAV File Storage PUT tmp_filename $tmp_filename tmp_size $tm
 	-creation_user $user_id \
 	-creation_ip [ad_conn peeraddr] \
     
-    set response [list 201]
+	if {[file exists [tdav::get_lock_file $uri]]} {
+	    # if there is a null lock use 204
+	    set response [list 204]
+	} else {
+	    set response [list 201]
+	}
+    } else {
+	fs::add_version \
+	    -name $name\
+	    -tmp_filename $tmp_filename\
+	    -item_id $item_id \
+	    -parent_id $parent_id \
+	    -creation_user $user_id \
+	    -package_id $package_id
+	
+	set response [list 204]
+    }
 
     return $response
 
@@ -104,8 +103,7 @@ ad_proc fs::impl::fs_object::mkcol {} {
 ad_proc fs::impl::fs_object::proppatch {} {
     PROPPATCH method
 } {
-    # this is handled in tDAV for now
-    return [list 201]
+    return [oacs_dav::impl::content_revision::proppatch]
 }
 
 ad_proc fs::impl::fs_object::copy {} {

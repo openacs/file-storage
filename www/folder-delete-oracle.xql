@@ -7,7 +7,7 @@
       <querytext>
       
     begin
-        file_storage.delete_folder(:folder_id);
+        file_storage.delete_folder(:folder_id,'t');
     end;
 
       </querytext>

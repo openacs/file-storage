@@ -189,9 +189,6 @@ ad_proc -public fs::after_mount {
 } {
     Create root folder for package instance
     via tcl callback.
-
-    This sets the cr_items.name to the url of the site
-    node.
 } {
     array set sn [site_node::get -node_id $node_id]
     regsub -all {/} $sn(name)  {} name
@@ -601,7 +598,7 @@ ad_proc -public fs::get_archive_command {
     return the archive command after replacing {in_file} and {out_file} with
     their respective values.
 } {
-    set cmd [parameter::get -parameter ArchiveCommand -default "cat `find {in_file} -type f` > {out_file}"]
+    set cmd [parameter::get -parameter ArchiveCommand -default "tar cf - {in_file} | gzip > {out_file}"]
 
     regsub -all {(\W)} $in_file {\\\1} in_file
     regsub -all {\\/} $in_file {/} in_file
@@ -654,7 +651,7 @@ ad_proc -public fs::add_file {
     @return revision_id
 } {
 
-    if {[ad_parameter "StoreFilesInDatabaseP" -package_id $package_id]} {
+    if {[parameter::get -parameter "StoreFilesInDatabaseP" -package_id $package_id]} {
 	set indbp "t"
     } else {
 	set indbp "f"
@@ -711,7 +708,7 @@ ad_proc fs::add_version {
     @return revision_id
 } {
 
-    if {[ad_parameter "StoreFilesInDatabaseP" -package_id $package_id]} {
+    if {[parameter::get -parameter "StoreFilesInDatabaseP" -package_id $package_id]} {
 	set storage_type "lob"
     } else {
 	set storage_type "file"
@@ -726,6 +723,7 @@ ad_proc fs::add_version {
 			 -creation_user $creation_user \
 			 -creation_ip $creation_ip \
 			 -other_type "file_storage_object" \
+			 -image_type "file_storage_object" \
 			 -title $title \
 			 -description $description \
 			 $parent_id \
@@ -763,9 +761,11 @@ ad_proc fs::webdav_url {
     }
 
     if {[string equal "t" [oacs_dav::folder_enabled -folder_id $root_folder_id]]} {
-    
-	set url_stub [item::get_url -root_folder_id $root_folder_id $item_id]
-
+	if {[string equal $root_folder_id $item_id]} {
+	    set url_stub ""
+	} else {
+	    set url_stub [item::get_url -root_folder_id $root_folder_id $item_id]
+	}
 	set package_url [apm_package_url_from_id $package_id]
 
 	set webdav_prefix [oacs_dav::uri_prefix]

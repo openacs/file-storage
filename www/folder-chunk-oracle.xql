@@ -9,6 +9,7 @@
                    fs_objects.name,
                    fs_objects.live_revision,
                    fs_objects.type,
+	           fs_objects.pretty_type,
                    to_char(fs_objects.last_modified, 'YYYY-MM-DD HH24:MI:SS') as last_modified_ansi,
                    fs_objects.content_size,
                    fs_objects.url,
