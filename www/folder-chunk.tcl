@@ -30,7 +30,7 @@ if {![exists_and_not_null fs_url]} {
     set fs_url ""
 }
 
-set folder_name [fs::get_object_name -object_id  $folder_id]
+set folder_name [lang::util::localize [fs::get_object_name -object_id  $folder_id]]
 
 set content_size_total 0
 
@@ -123,6 +123,10 @@ db_multirow -extend { icon last_modified_pretty content_size_pretty properties_l
 	set file_url "index?[export_vars {{folder_id $object_id}}]"
     }
     
+
+    # We need to encode the hashes in any i18n message keys (.LRN plays this trick on some of its folders).
+    # If we don't, the hashes will cause the path to be chopped off (by ns_conn url) at the leftmost hash.
+    regsub -all {#} $file_url {%23} file_url
 }
 
 ad_return_template
