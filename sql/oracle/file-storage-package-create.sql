@@ -27,7 +27,8 @@ as
         --
         package_id in apm_packages.package_id%TYPE,
         folder_name in cr_folders.label%TYPE default null,
-        description in cr_folders.description%TYPE default null
+        description in cr_folders.description%TYPE default null,
+	name in cr_items.name%TYPE default null
     ) return fs_root_folders.folder_id%TYPE;
 
     function new_file(
@@ -205,7 +206,8 @@ as
         --
         package_id in apm_packages.package_id%TYPE,
         folder_name in cr_folders.label%TYPE default null,
-        description in cr_folders.description%TYPE default null
+        description in cr_folders.description%TYPE default null,
+	name in cr_items.name%TYPE default null
     ) return fs_root_folders.folder_id%TYPE
     is
         v_folder_id             fs_root_folders.folder_id%TYPE;
@@ -234,7 +236,7 @@ as
         end if;
 
         v_folder_id := content_folder.new(
-            name => v_package_key || '_' || package_id,
+            name => nvl(new_root_folder.name,v_package_key || '_' || package_id),
             label => v_folder_name,
             description => v_description
         );
