@@ -16,10 +16,10 @@
 	<tr class="even">
       </else>
       <if @contents.type@ eq "folder">
-	<td><a href="@fs_url@index?folder_id=@contents.object_id@&n_past_days=@n_past_days@"><img src="graphics/folder.gif" border=0 alt="folder"></a></td>
+	<td><a href="@fs_url@index?folder_id=@contents.object_id@&n_past_days=@n_past_days@"><img src="@fs_url@graphics/folder.gif" border=0 alt="folder"></a></td>
 	<td>
 	  <a href="@fs_url@index?folder_id=@contents.object_id@&n_past_days=@n_past_days@">@contents.name@</a>
-	  <if @contents.new_p@ and @contents.content_size@ gt 0><img src="graphics/new.gif" alt="new"></if>
+	  <if @contents.new_p@ and @contents.content_size@ gt 0><img src="@fs_url@graphics/new.gif" alt="new"></if>
 	</td>
 	<td>&nbsp;</td>
 	<td>
@@ -30,10 +30,10 @@
       </if>
       <else>
 	<if @contents.type@ eq "url">
-	  <td><a href="@fs_url@url-goto?url_id=@contents.object_id@"><img src="graphics/file.gif" alt="file" border=0></a></td>
+	  <td><a href="@fs_url@url-goto?url_id=@contents.object_id@"><img src="@fs_url@graphics/file.gif" alt="file" border=0></a></td>
 	  <td>
 	    <a href="@fs_url@url-goto?url_id=@contents.object_id@">@contents.name@</a>
-	    <if @contents.new_p@><img src="graphics/new.gif" alt="new"></if>
+	    <if @contents.new_p@><img src="@fs_url@graphics/new.gif" alt="new"></if>
 	  </td>
 	  <td>
 	    <small>
@@ -58,13 +58,13 @@
 	  <td>@contents.last_modified@</td>
 	</if>
 	<else>
-	  <td><a href="@fs_url@download/@contents.file_upload_name@?version_id=@contents.live_revision@"><img src="graphics/file.gif" alt="file" border="0"></a></td>
+	  <td><a href="@fs_url@download/@contents.file_upload_name@?version_id=@contents.live_revision@"><img src="@fs_url@graphics/file.gif" alt="file" border="0"></a></td>
 	  <td>
 	    <a href="@fs_url@download/@contents.file_upload_name@?version_id=@contents.live_revision@">
 	      @contents.name@
 	    </a>
 	    <if @contents.new_p@>
-	      <img src="graphics/new.gif" alt="new">
+	      <img src="@fs_url@graphics/new.gif" alt="new">
 	    </if>
 	  </td>
 	  <td>
