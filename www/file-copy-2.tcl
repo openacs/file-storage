@@ -35,62 +35,15 @@ set ip_address [ad_conn peeraddr]
 
 db_transaction {
 
-    db_1row item_info " 
-    select name, content_type from cr_items where item_id = :file_id"
-
-    # I'd like to use content_item.copy but the current version (4.0.1)
-    # doesn't return the new item_id.  This would be okay except that
-    # content_revision.copy doesn't set the context_id properly
-    # and we will have no way to fix it.  Also, the live revision
-    # doesn't get set.
-
-    # Post-4.0.1 revisions to the content repository add the function
-    # copy2 which does return the item_id, so ultimately a call to
-    # that function will replace all this.
-
-    set new_file_id [db_exec_plsql file_copy "
+    db_exec_plsql file_copy "
     begin
-        :1 := content_item.new (
-            parent_id => :parent_id,
-            context_id => :parent_id,
-            name => :name,
-            content_type => :content_type,
+        file_storage.copy_file(
+            item_id => :file_id
+            target_folder_id => :parent_id,
             creation_user => :user_id,
-            creation_ip => :ip_address,
-            item_subtype => 'file_storage_item' -- needed by site-wide search
-        );
-    end;"]
-
-    # We could use content_revision.copy, but we would have to 
-    # fix up the context_id by hand, so we'll just keep this
-    # for the time being.
-    set new_version_id [db_exec_plsql revision_copy "
-    begin
-        select acs_object_id_seq.nextval into :1 from dual;
-
-        insert into acs_objects 
-        (object_id, object_type, context_id, security_inherit_p,
-         creation_user, creation_ip, last_modified, modifying_user, 
-         modifying_ip)
-        (select
-         :1, object_type, :new_file_id, security_inherit_p,
-         creation_user, creation_ip, last_modified, modifying_user,
-         modifying_ip
-         from acs_objects 
-         where object_id = content_item.get_live_revision(:file_id));
-
-        insert into cr_revisions 
-        (revision_id, title, description, publish_date, mime_type,
-         nls_language, content, item_id)
-        (select
-         :1, title, description, publish_date, mime_type,
-         nls_language, content, :new_file_id
-         from cr_revisions
-         where revision_id = content_item.get_live_revision(:file_id));
-
-         content_item.set_live_revision(:1);
-
-    end;"] 
+            creation_ip => :ip_address
+            );
+    end;"
 
 } on_error {
     ad_return_complaint 1 "We received an error from the database.  Probably
