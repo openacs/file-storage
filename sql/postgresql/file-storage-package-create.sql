@@ -94,7 +94,7 @@ begin
 
         if new_root_folder__folder_name is null
         then
-            v_folder_name := v_package_name || '' Root Folder '';
+            v_folder_name := v_package_name || '' Root Folder'';
         else
             v_folder_name := new_root_folder__folder_name;
         end if;
