@@ -14,6 +14,7 @@ ad_page_contract {
     {show_items:boolean 0}
 }
 
+set objects_to_copy $object_id
 set user_id [ad_conn user_id]
 set peer_addr [ad_conn peeraddr]
 set allowed_count 0
@@ -86,6 +87,7 @@ if {[info exists folder_id]} {
             }
         }
     set root_folder_id [fs::get_root_folder]
+    set object_id $objects_to_copy
     db_multirow -extend {copy_url} folder_tree get_folder_tree "" {
 	set copy_url [export_vars -base "copy" { object_id:multiple folder_id return_url }]
 	
