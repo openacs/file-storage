@@ -3,33 +3,50 @@
 <queryset>
    <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
-<fullquery name="item_add">      
+<fullquery name="new_lob_file">      
       <querytext>
       
 	begin
-    		:1 := content_item.new (
-        		name => :filename,
-        		parent_id => :folder_id,
-        		context_id => :folder_id,
+    		:1 := file_storage.new_file (
+        		title => :title,
+        		folder_id => :folder_id,
         		creation_user => :user_id,
         		creation_ip => :creation_ip,
-			item_subtype => 'file_storage_item' -- Needed by site-wide search
+		        indb_p => 't'
    			);
 	end;
 
       </querytext>
 </fullquery>
 
- 
-<fullquery name="revision_add">      
+
+<fullquery name="new_fs_file">      
       <querytext>
       
 	begin
-    		:1 := content_revision.new (
+    		:1 := file_storage.new_file (
         		title => :title,
+        		folder_id => :folder_id,
+        		creation_user => :user_id,
+        		creation_ip => :creation_ip,
+		        indb_p => 'f'
+   			);
+
+	end;
+
+      </querytext>
+</fullquery>
+
+ 
+<fullquery name="new_version">      
+      <querytext>
+      
+	begin
+    		:1 := file_storage.new_version (
+        		filename => :filename,
         		description => :description,
         		mime_type => :mime_type,
-        		item_id => :item_id,
+        		item_id => :file_id,
         		creation_user => :user_id,
         		creation_ip => :creation_ip
     			);
@@ -40,24 +57,36 @@
 </fullquery>
 
  
-<fullquery name="content_add">      
+<fullquery name="lob_content">      
       <querytext>
       
 	update cr_revisions
 	set    content = empty_blob()
-	where  revision_id = :revision_id
+	where  revision_id = :version_id
 	returning content into :1
 
       </querytext>
 </fullquery>
 
- 
-<fullquery name="make_live">      
+<fullquery name="lob_size">      
+      <querytext>
+
+	update cr_revisions
+ 	set content_length = dbms_lob.getlength(content) 
+	where revision_id = :version_id
+
+     </querytext>
+</fullquery>
+
+
+<fullquery name="fs_content_size">      
       <querytext>
       
-begin
-    content_item.set_live_revision(:revision_id);
-end;
+	update cr_revisions
+ 	set filename = '$tmp_filename',
+	    content_length = $tmp_size
+	where revision_id = :version_id
+
       </querytext>
 </fullquery>
 

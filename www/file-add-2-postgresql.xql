@@ -3,70 +3,85 @@
 <queryset>
    <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
-<fullquery name="item_add">      
+<fullquery name="new_lob_file">      
       <querytext>
 
-    	select content_item__new (
-        	:filename,           -- name
-        	:folder_id,          -- parent_id
-		null,	             -- item_id (default)
-		null,	             -- locale (default)
-	        now(),	             -- creation_date (default)
-        	:user_id,            -- creation_user
-        	:folder_id,          -- context_id
-        	:creation_ip,        -- creation_ip
-		'file_storage_item', -- item_subtype (needed by site-wide search)
-		'content_revision',  -- content_type (default)
-		null,		     -- title (default)
-		null,		     -- description
-		'text/plain',	     -- mime_type (default)
-		null,	             -- nls_language (default)
-		null		     -- data (default)
-   		);
+    	select file_storage__new_file (
+        	:title,           	-- title
+        	:folder_id,          	-- parent_id
+        	:user_id,            	-- creation_user
+        	:creation_ip,        	-- creation_ip
+		true			-- indb_p
+		);
+
+
+      </querytext>
+</fullquery>
+
+<fullquery name="new_fs_file">      
+      <querytext>
+
+    	select file_storage__new_file (
+        	:title,           	-- title
+        	:folder_id,          	-- parent_id
+        	:user_id,            	-- creation_user
+        	:creation_ip,        	-- creation_ip
+		false			-- indb_p
+		);
 
       </querytext>
 </fullquery>
 
  
-<fullquery name="revision_add">      
+<fullquery name="new_version">      
       <querytext>
 
-    	select content_revision__new (
-        		:title,		-- title
-        		:description, 	-- description
-			now(),		-- publish_date
-        		:mime_type,	-- mime_type
-			null,		-- nls_language
-			null,		-- data (default)
-        		:item_id,	-- item_id
-			null,		-- revision_id
-			now(),		-- creation_date
-        		:user_id,	-- creation_user
-        		:creation_ip	-- creation_ip
-    			);
-
-      </querytext>
-</fullquery>
-
- 
-<fullquery name="content_add">      
-      <querytext>
-
-	update cr_revisions
- 	set lob = [set __lob_id [db_string get_lob_id "select empty_lob()"]]
-	where revision_id = :revision_id
+    	select file_storage__new_version (
+		:filename,		-- filename
+       		:description,		-- description
+       		:mime_type,		-- mime_type
+       		:file_id,		-- item_id
+       		:user_id,		-- creation_user
+       		:creation_ip		-- creation_ip
+		);
 
      </querytext>
 </fullquery>
 
- 
-<fullquery name="make_live">      
+
+<fullquery name="lob_content">      
       <querytext>
 
-    	select content_item__set_live_revision(:revision_id);
+	update cr_revisions
+ 	set lob = [set __lob_id [db_string get_lob_id "select empty_lob()"]]
+	where revision_id = :version_id
 
-      </querytext>
+     </querytext>
 </fullquery>
 
- 
+<fullquery name="lob_size">      
+      <querytext>
+
+	update cr_revisions
+ 	set content_length = lob_length(lob)
+	where revision_id = :version_id
+
+     </querytext>
+</fullquery>
+
+
+
+<fullquery name="fs_content_size">      
+      <querytext>
+
+	update cr_revisions
+ 	set content = '$tmp_filename',
+	    content_length = $tmp_size
+	where revision_id = :version_id
+
+     </querytext>
+</fullquery>
+
 </queryset>
+
+

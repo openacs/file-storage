@@ -32,7 +32,7 @@ ad_proc fs_get_folder_name {
 } {
     return [db_exec_plsql folder_name "
     begin
-        :1 := content_folder.get_label(:folder_id);
+        :1 := file_storage.get_folder_name(:folder_id);
     end;"]
 }
 
@@ -167,7 +167,7 @@ ad_proc fs_context_bar_list {
 	set start_id [db_string parent_id "
 	select parent_id from cr_items where item_id = :item_id"]
 	set final [db_exec_plsql title "begin
-	    :1 := content_item.get_title(:item_id);
+	    :1 := file_storage.get_title(:item_id);
 	end;"]
     } else {
 	set start_id $item_id
@@ -175,12 +175,12 @@ ad_proc fs_context_bar_list {
 
     set context_bar [db_list_of_lists context_bar "
     select decode(
-             content_item.get_content_type(i.item_id),
+             file_storage.get_content_type(i.item_id),
              'content_folder',
-             '?folder_id=',
+             'index?folder_id=',
              'file?file_id='
            ) || i.item_id,
-           content_item.get_title(i.item_id)
+           file_storage.get_title(i.item_id)
     from   cr_items i
     where  item_id not in (
         select i2.item_id

@@ -17,7 +17,7 @@
       </querytext>
 </fullquery>
 
-<fullquery name="version_write">      
+<fullquery name="version_write_blob">      
       <querytext>
 
 	select r.lob as content, i.storage_type
@@ -27,4 +27,28 @@
  
       </querytext>
 </fullquery> 
+
+<fullquery name="version_write_file">      
+      <querytext>
+
+	select '[cr_fs_path]' || r.content, i.storage_type
+        from   cr_revisions r, cr_items i
+	where r.item_id = i.item_id
+	and   r.revision_id = :version_id
+ 
+      </querytext>
+</fullquery> 
+
+<fullquery name="file_type">      
+      <querytext>
+
+	select mime_type,(case when lob is null then 0
+		               else 1
+		          end) as indb_p 
+	from   cr_revisions 
+	where  revision_id = :version_id
+
+      </querytext>
+</fullquery>
+
 </queryset>
