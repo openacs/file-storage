@@ -48,8 +48,6 @@ This action cannot be reversed.</msg>
   <msg key="lt_It_appears_that_there">It appears that there is already a file with that name in this folder (although possibly you clicked more than once on the submit button.)</msg>
   <msg key="lt_Modify_permissions_on">Modify permissions on this file</msg>
   <msg key="lt_Modify_permissions_on_1">Modify permissions on this folder</msg>
-  <msg key="lt_ncluding_items_from_s">ncluding items from subfolders
-      (</msg>
   <msg key="lt_Please_enter_the_new_">Please enter the new name for this file:</msg>
   <msg key="lt_Show_files_modified_i">Show files modified in the past</msg>
   <msg key="lt_show_only_live_versio">show only live version</msg>
@@ -82,7 +80,6 @@ delete, therefore you cannot delete it.</msg>
   <msg key="new">new</msg>
   <msg key="No_such_type">No such type</msg>
   <msg key="no_such_URL">no such URL</msg>
-  <msg key="Not_i">Not i</msg>
   <msg key="Note">Note:</msg>
   <msg key="Order_By">Order By</msg>
   <msg key="Recurse">Recurse?</msg>
