@@ -62,7 +62,7 @@
     <td>
       <a href="download/@version.title@?version_id=@version.version_id@"><img src="/resources/file-storage/file.gif" border="0"></a>
       <if @version.rownum@ eq 1>
-        <a href="download/@file_url@?version_id=@version.version_id@">@version.title@</a>
+        <a href="view/@file_url@">@version.title@</a>
       </if>
       <else>
         <a href="download/@version.title@?version_id=@version.version_id@">@version.title@</a>
