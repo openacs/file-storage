@@ -108,7 +108,7 @@ ad_form -extend -form {
 	-description $description \
         -package_id $package_id
     
-    ad_returnredirect "."
+    ad_returnredirect "./?[export_url_vars folder_id]"
     ad_script_abort
 } -edit_data {
 
@@ -123,7 +123,7 @@ ad_form -extend -form {
 	-description $description \
 	-package_id $package_id
 
-    ad_returnredirect "."
+    ad_returnredirect "./?[export_url_vars folder_id]"
     ad_script_abort
 }
 
