@@ -1,4 +1,4 @@
-<master src="master">
+<master>
 <property name="title">@folder_name@</property>
 <property name="header">@folder_name@</property>
 <property name="context">@context@</property>

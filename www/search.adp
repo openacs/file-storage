@@ -1,4 +1,4 @@
-<master src="master">
+<master>
 <property name="title">Search Results</property>
 <property name="context">@context@</property>
 
