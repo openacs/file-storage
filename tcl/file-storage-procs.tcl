@@ -322,7 +322,7 @@ namespace eval fs {
         remove unsafe file system characters. useful if you want to use $string
         as the name of an object to write to disk.
     } {
-        regsub -all {[<>:\"|/\\@#%&+]} $string {_} string
+        regsub -all {[<>:\"|/@#%&+\\]} $string {_} string
         return $string
     }
 
