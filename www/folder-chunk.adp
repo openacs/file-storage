@@ -21,7 +21,8 @@
 <else>
       <td><img src="graphics/file.gif"></td>
       <td><a href="file?file_id=@contents.file_id@">@contents.name@</a></td>
-      <td><a href="download/index?version_id=@contents.live_revision@">(download)</a></td>
+      <td>
+        [<small><a href="download/index?version_id=@contents.live_revision@">download</a><if @contents.delete_p@ eq 1 or @contents.admin_p@ eq 1>&nbsp;|&nbsp<a href="file-delete?file_id=@contents.file_id@">delete</a></if>]</td>
       <td>@contents.content_size@</td>
       <td>@contents.type@</td>
       <td>@contents.last_modified@</td>
