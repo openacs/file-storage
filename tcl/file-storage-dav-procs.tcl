@@ -24,25 +24,13 @@ ad_proc fs::impl::fs_object::head {} {
     return [oacs_dav::impl::content_revision::head]
 }
 
-ad_proc fs::impl::fs_object::lock {} {
-    LOCK method
-} {
-    return [oacs_dav::impl::content_revision::lock]
-}
-
-ad_proc fs::impl::fs_object::unlock {} {
-    UNLOCK method
-} {
-    return [oacs_dav::impl::content_revision::unlock]
-}
-
 ad_proc fs::impl::fs_object::put {} {
     PUT method
 } {
     set user_id [oacs_dav::conn user_id]
     set item_id [oacs_dav::conn item_id]
     set root_folder_id [oacs_dav::conn folder_id]
-    set uri [oacs_dav::conn url]
+    set uri [oacs_dav::conn uri]
     
     set tmp_filename [oacs_dav::conn tmpfile]
     set tmp_size [file size $tmp_filename]
@@ -130,6 +118,19 @@ ad_proc fs::impl::fs_object::move {} {
     MOVE method
 } {
     return [oacs_dav::impl::content_revision::move]
+}
+
+
+ad_proc fs::impl::fs_object::lock {} {
+    LOCK method
+} {
+    return [oacs_dav::impl::content_revision::lock]
+}
+
+ad_proc fs::impl::fs_object::unlock {} {
+    UNLOCK method
+} {
+    return [oacs_dav::impl::content_revision::unlock]
 }
 
 namespace eval fs::impl::dav_put_type {}

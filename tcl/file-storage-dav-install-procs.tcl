@@ -41,8 +41,6 @@ ad_proc -private fs::install::register_implementation {
         aliases {
             get fs::impl::fs_object::get
             head fs::impl::fs_object::head
-            lock fs::impl::fs_object::lock
-            unlock fs::impl::fs_object::unlock
             put fs::impl::fs_object::put
 	    propfind fs::impl::fs_object::propfind
 	    delete fs::impl::fs_object::delete
@@ -50,6 +48,8 @@ ad_proc -private fs::install::register_implementation {
 	    proppatch fs::impl::fs_object::proppatch
 	    copy fs::impl::fs_object::copy
 	    move fs::impl::fs_object::move
+            lock fs::impl::fs_object::lock
+            unlock fs::impl::fs_object::unlock
         }
 	contract_name {dav}
 	owner "file-storage"
@@ -88,7 +88,7 @@ ad_proc -private fs::install::upgrade {
 	-from_version_name $from_version_name \
 	-to_version_name $to_version_name \
 	-spec {
-	    4.6.2 4.6.4 {
+	    4.6.2 5.1.0 {
 		fs::install::package_install
 	    }
 
