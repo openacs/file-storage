@@ -46,7 +46,7 @@ select acs_object_type__create_type (
         NULL,
         'f',
         NULL,
-        NULL
+        'fs_simple_object.name'
 );
 
 -- links
