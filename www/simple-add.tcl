@@ -7,6 +7,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     folder_id:integer,notnull
+    {type "fs_url"}
     {title ""}
     {lock_title_p 0}
 } -validate {
@@ -26,7 +27,7 @@ ad_require_permission $folder_id write
 
 # set templating datasources
 
-set pretty_name [fs::simple_get_type_pretty_name -type $type]
+set pretty_name "URL"
 if {[empty_string_p $pretty_name]} {
     return -code error "[_ file-storage.No_such_type]"
 }
