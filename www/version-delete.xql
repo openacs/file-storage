@@ -14,7 +14,7 @@
 <fullquery name="deleted_last_revision">      
       <querytext>
         
-	select (case when live_revision = null
+	select (case when live_revision is null
                      then 1
                      else 0
                 end) 

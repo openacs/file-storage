@@ -52,7 +52,7 @@ if {[string equal $confirmed_p "t"]} {
     # actually remove the entry in cr_items (I guess this is the reason why CR does not
     # actually delete the item even if there are no more revisions for it).
     if [db_string deleted_last_revision "
-           select (case when live_revision = null
+           select (case when live_revision is null
                         then 1
                         else 0
                    end) 
