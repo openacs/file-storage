@@ -32,8 +32,15 @@ set content_size_total 0
 
 set root_folder_id [fs::get_root_folder]
 
-db_multirow contents select_folder_contents {} {
+db_multirow -extend { last_modified_pretty content_size_pretty } contents select_folder_contents {} {
+    set last_modified_ansi [lc_time_system_to_conn $last_modified_ansi]
+
+    set last_modified_pretty [lc_time_fmt $last_modified_ansi "%x %X"]
+
+    set content_size_pretty [lc_numeric $content_size]
+
     set file_upload_name [fs::remove_special_file_system_characters -string $file_upload_name]
+
     if { ![empty_string_p $content_size] } {
         incr content_size_total $content_size
     }
