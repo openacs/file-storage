@@ -323,6 +323,11 @@ namespace eval fs {
     } {
         WARNING: This proc is not scalable because it does too many permission checks. 
 
+        DRB: Not so true now that permissions are fast.  However it is now only used
+        to clone files in dotLRN and for the somewhat brain-damaged syllabus package. 
+        At minimum the permission checks returned by the code can be removed.  Most of
+        the other fields as well.   Oh well ...
+
         Retrieve the contents of the specified folder in the form of a list
         of ns_sets, one for each row returned. The keys for each row are as
         follows:

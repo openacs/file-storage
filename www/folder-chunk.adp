@@ -37,18 +37,18 @@
 	  </td>
 	  <td>
 	    <small>
-	      <if @contents.write_p@ or @contents.admin_p@>
+	      <if @contents.write_p@>
 		[<a href="@fs_url@simple-edit?object_id=@contents.object_id@">
 		  edit
 		</a>
 	      </if>
-	      <if @contents.delete_p@ or @contents.admin_p@>
+	      <if @contents.delete_p@>
 		|
 		<a href="@fs_url@simple-delete?folder_id=@folder_id@&object_id=@contents.object_id@">
 		  delete
 		</a>
 	      </if>
-	      <if @contents.write_p@ or @contents.delete_p@ or @contents.admin_p@>
+	      <if @contents.write_p@ or @contents.delete_p@>
 	      ]
 	      </if>
 	    </small>

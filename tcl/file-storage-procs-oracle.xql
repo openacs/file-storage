@@ -52,26 +52,28 @@
 
     <fullquery name="fs::get_folder_contents.select_folder_contents">
         <querytext>
-            select fc.*
-            from (select fs_objects.object_id,
-                         fs_objects.name,
-                         fs_objects.live_revision,
-                         fs_objects.type,
-                         to_char(fs_objects.last_modified, 'Month DD YYYY HH24:MI') as last_modified,
-                         fs_objects.content_size,
-                         fs_objects.url,
-                         fs_objects.key,
-                         fs_objects.sort_key,
-			 fs_objects.file_upload_name,
-                         case when fs_objects.last_modified >= (sysdate - :n_past_days) then 1 else 0 end as new_p,
-                         acs_permission.permission_p(fs_objects.object_id, :user_id, 'admin') as admin_p,
-                         acs_permission.permission_p(fs_objects.object_id, :user_id, 'delete') as delete_p,
-                         acs_permission.permission_p(fs_objects.object_id, :user_id, 'write') as write_p
-                  from fs_objects
-                  where fs_objects.parent_id = :folder_id) fc
-            where 't' = (select acs_permission.permission_p(fc.object_id, :user_id, 'read') from dual)
-            order by fc.sort_key,
-                     fc.name
+            select fs_objects.object_id,
+                   fs_objects.name,
+                   fs_objects.live_revision,
+                   fs_objects.type,
+                   to_char(fs_objects.last_modified, 'Month DD YYYY HH24:MI') as last_modified,
+                   fs_objects.content_size,
+                   fs_objects.url,
+                   fs_objects.key,
+                   fs_objects.sort_key,
+                   fs_objects.file_upload_name,
+                   case when fs_objects.last_modified >= (sysdate - :n_past_days) then 1 else 0 end as new_p,
+                   acs_permission.permission_p(fs_objects.object_id, :user_id, 'admin') as admin_p,
+                   acs_permission.permission_p(fs_objects.object_id, :user_id, 'delete') as delete_p,
+                   acs_permission.permission_p(fs_objects.object_id, :user_id, 'write') as write_p
+            from fs_objects
+            where fs_objects.parent_id = :folder_id
+              and exists (select 1
+                   from acs_object_party_privilege_map m
+                   where m.object_id = fs_objects.object_id
+                     and m.party_id = :user_id
+                     and m.privilege = 'read')
+            order by fs_objects.sort_key, fs_objects.name
         </querytext>
     </fullquery>
 
