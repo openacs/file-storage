@@ -7,7 +7,7 @@
   <msg key="Add_File">Aggiungi un file</msg>
   <msg key="Add_pretty_name">Aggiungi un %pretty_name%</msg>
   <msg key="Author">Autore</msg>
-  <msg key="back_to_folder_view">&lt;a href=&quot;%folder_view_url%&quot;&gt;Torna indietro&lt;/a&gt; alla visualizzazione della cartella</msg>
+  <msg key="back_to_folder_view">Torna indietro alla visualizzazione della cartella</msg>
   <msg key="Change_Name">Cambia Nome</msg>
   <msg key="Copy">Copia</msg>
   <msg key="Create">Crea</msg>
