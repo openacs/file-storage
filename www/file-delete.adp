@@ -8,17 +8,5 @@
 
 </if>
 <else>
-
-<form method=POST action=file-delete>
-<input type=hidden name=file_id value=@file_id@>
-<input type=hidden name=confirmed_p value="t">
-
-<p>#file-storage.lt_delete_file#
-
-<p>
-<center>
-<input type=submit value="#file-storage.Yes_Delete_It#">
-</center>
-</form>
-
+<formtemplate id="file-delete"></formtemplate>
 </else>

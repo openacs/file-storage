@@ -34,30 +34,30 @@ select count(*)
 from   cr_revisions
 where  item_id = :file_id
 and    acs_permission.permission_p(revision_id,:user_id,'delete') = 'f'"] 0 f t]
+ad_form -export file_id -cancel_url "file?[export_vars file_id]" -form {
+    {delete_message:text(inform) {label ""} {value "\#file-storage.lt_delete_file\#"}}
+    } -on_submit {	
 
-if {[string equal $confirmed_p "t"] && [string equal $blocked_p "f"] } {
+if {[string equal $blocked_p "f"] } {
     # they confirmed that they want to delete the file
-
     db_1row parent_id "select parent_id from cr_items where item_id = :file_id"
-
     db_exec_plsql delete_file "
     begin
         file_storage.delete_file(:file_id);
     end;"
 
+    
     ad_returnredirect "?folder_id=$parent_id"
 
     ad_script_abort
-} else {
-    # they need to confirm that they really want to delete the file
-
+}
+}
+# DAVEB TODO move this into select_query
     db_1row file_name "
     	select name as title
     	from   cr_items
     	where  item_id = :file_id"
 
     set context [fs_context_bar_list -final "[_ file-storage.Delete]" $file_id]
-}
-
 # Variable title used by message lookup
 set page_title [_ file-storage.file_delete_page_title]
