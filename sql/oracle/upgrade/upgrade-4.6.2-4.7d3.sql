@@ -31,3 +31,5 @@ begin
 end;
 /
 show errors;
+
+@ ../file-storage-package-create.sql
