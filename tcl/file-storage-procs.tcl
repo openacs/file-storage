@@ -846,7 +846,9 @@ ad_proc -public fs::do_notifications {
     }
 
     append text_version "View folder contents: $url$path1?folder_id=$folder_id \n\n"
-    set new_content $text_version
+
+    set html_version [ad_html_text_convert -from text/plain -to text/html -- $text_version]
+    append html_version "<br /><br />"
     # Do the notification for the file-storage
     
     notification::new \
@@ -854,7 +856,8 @@ ad_proc -public fs::do_notifications {
                       -short_name fs_fs_notif] \
         -object_id $folder_id \
         -notif_subject {File Storage Notification} \
-        -notif_text $new_content
+        -notif_text $text_version \
+        -notif_html $html_version
 
     # walk through all folders up to the root folder
     while {$folder_id != $root_folder} {
