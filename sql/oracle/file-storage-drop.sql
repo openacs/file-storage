@@ -33,3 +33,9 @@ drop trigger fs_root_folder_delete_trig;
 drop table fs_root_folders;
 drop package file_storage;
 
+begin
+acs_object_type.drop_type ( 
+  object_type => 'file_storage_item');
+end;
+/
+show errors

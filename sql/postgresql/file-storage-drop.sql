@@ -43,3 +43,7 @@ drop trigger fs_root_folder_delete_trig on fs_root_folders;
 drop table fs_root_folders;
 select drop_package('file_storage');
 
+select acs_object_type__drop_type ( 
+  'file_storage_item','f');
+
+
