@@ -32,10 +32,10 @@
       <querytext>
 
 	declare
-		v_object_id 	acs_object.object_id%TYPE;
+		v_object_id 	acs_objects.object_id%TYPE;
     	begin
 
-        	select acs_object_id_seq.nextval into v_object_id ;
+        	select acs_object_id_seq.nextval into v_object_id;
 
         	insert into acs_objects 
         	(object_id, object_type, context_id, security_inherit_p,
@@ -58,6 +58,7 @@
          	PERFORM content_item__set_live_revision(v_object_id);
 
 		return v_object_id;
+
 
     	end;
 
