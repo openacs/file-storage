@@ -92,7 +92,7 @@ db_transaction {
     end;"] 
 
 } on_error {
-    ad_return_complaint 1 "We recieved an error from the database.  Probably
+    ad_return_complaint 1 "We received an error from the database.  Probably
     the folder you selected already contains a file with the same name.
 
     <pre>$errmsg</pre>"
