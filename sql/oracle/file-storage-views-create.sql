@@ -20,6 +20,11 @@ as
     where fs_urls.url_id = fs_simple_objects.object_id
     and fs_simple_objects.object_id = acs_objects.object_id;
 
+-- DRB: note that content size is incorrect as it does not include
+-- URLs.  The fix for this: get rid of OF's fucked-up fs_simple_objects
+-- and use the URLs in the content repository that were so kindly
+-- implemented for us by Ars Digita in the first place ...
+
 create or replace view fs_folders
 as
     select cr_folders.folder_id,

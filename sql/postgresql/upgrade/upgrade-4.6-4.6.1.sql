@@ -1,25 +1,8 @@
---
--- file-storage/sql/postgresql/file-storage-views-create.sql
---
--- @author Kevin Scaldeferri (kevin@arsdigita.com)
--- @creation-date 6 Nov 2000
--- @cvs-id $Id$
---
+-- DRB: As if the following union view weren't unscalable enough for PG
+-- (which can't optimize them at all) the following view with its
+-- summing of content items sucks to no end.
 
-create view fs_urls_full
-as
-    select fs_urls.url_id,
-           fs_urls.url,
-           fs_simple_objects.folder_id,
-           fs_simple_objects.name,
-           fs_simple_objects.description,
-           acs_objects.*
-    from fs_urls,
-         fs_simple_objects,
-         acs_objects
-    where fs_urls.url_id = fs_simple_objects.object_id
-    and fs_simple_objects.object_id = acs_objects.object_id;
-
+drop view fs_folders;
 create view fs_folders
 as
     select cr_folders.folder_id,
@@ -29,37 +12,18 @@ as
             from cr_items ci2
 	    where ci2.content_type <> 'content_folder'
               and ci2.tree_sortkey between ci.tree_sortkey and tree_right(ci.tree_sortkey)) as content_size,
-           cr_i.parent_id,
-           cr_i.name as key
+           ci.parent_id,
+           ci.name as key
     from cr_folders,
          cr_items ci,
          acs_objects
     where cr_folders.folder_id = ci.item_id
     and cr_folders.folder_id = acs_objects.object_id;
 
+-- DRB: This used to be a plain union view requiring a sort
+-- and unique sweep.  Union all speeds it up a bit.
 
-create view fs_files
-as
-    select cr_revisions.item_id as file_id,
-           cr_revisions.revision_id as live_revision,
-           cr_revisions.mime_type as type,
-           cr_revisions.title as file_upload_name,
-           cr_revisions.content_length as content_size,
-           cr_items.name,
-           acs_objects.last_modified,
-           cr_items.parent_id,
-           cr_items.name as key
-    from cr_revisions,
-         cr_items,
-         acs_objects
-    where cr_revisions.revision_id = cr_items.live_revision
-    and cr_revisions.item_id = cr_items.item_id
-    and cr_items.content_type = 'file_storage_object'
-    and cr_revisions.revision_id = acs_objects.object_id;
-
--- DRB: Simple advice: don't use this view in PostgreSQL because, unlike in Oracle, it is
--- *never* optimized ...
-
+drop view fs_objects;
 create view fs_objects
 as
     select fs_folders.folder_id as object_id,
