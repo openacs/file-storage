@@ -22,21 +22,6 @@
 -- JS: cr_revisions and cr_items, respectively, are interchanged.
 -- JS:
 
--- To enable site-wide search to distinguish CR items as File Storage items
--- we create an item subtype of content_item in the ACS Object Model
- select acs_object_type__create_type (
-   'file_storage_item',     -- object_type
-   'File Storage Item',     -- pretty_name
-   'File Storage Items',    -- pretty_plural
-   'content_item',	    -- supertype
-   'fs_root_folders',	    -- table_name (JS: Will not do anything, but we have to insert something)
-   'folder_id',		    -- id_column  (JS: Same)
-   null,		    -- package_name (default)
-   'f',			    -- abstract_p (default)
-   null,		    -- type_extension_table (default)
-   'content_item.get_title' -- name_method
- );
-
 --
 -- We need to create a root folder in the content repository for 
 -- each instance of file storage
@@ -57,6 +42,20 @@ create table fs_root_folders (
                 constraint fs_root_folder_folder_id_un
                 unique
 );
+
+-- Create a subtype of content_revision so that site-wide-search can
+-- distinguish file-storage items (v.s. generic content repository
+-- items) in the search results
+select content_type__create_type (
+       'file_storage_object',    -- content_type
+       'content_revision',       -- supertype. We search revision content 
+                                 -- first, before item metadata
+       'File Storage Object',    -- pretty_name
+       'File Storage Objects',   -- pretty_plural
+       'fs_root_folders',        -- table_name
+       'folder_id',	         -- id_column
+       'file_storage__get_title' -- name_method
+       );
 
 create function file_storage__get_root_folder (
        --
@@ -88,7 +87,6 @@ begin
         return v_folder_id;
 
 end;' language 'plpgsql' with (iscachable);
-
 
 
 create function file_storage__new_root_folder (
@@ -127,15 +125,17 @@ begin
         (new_root_folder__package_id, v_folder_id);
 
         -- allow child items to be added
+	-- JS: Note that we need to set include_subtypes to 
+	-- JS: true since we created a new subtype.
         PERFORM content_folder__register_content_type(
 		v_folder_id,	        -- folder_id
 		''content_revision'',   -- content_types
-		''f''			-- include_subtypes (default)
+		''t''			-- include_subtypes 
 		);
         PERFORM content_folder__register_content_type(
 		v_folder_id,		-- folder_id
 		''content_folder'',	-- content_types
-		''f''			-- include_subtypes (default)
+		''t''			-- include_subtypes 
 		);
 
         -- set up default permissions
@@ -186,8 +186,8 @@ begin
 			  new_file__user_id,        -- creation_user
 			  new_file__folder_id,      -- context_id
 			  new_file__creation_ip,    -- creation_ip
-			  ''file_storage_item'',    -- item_subtype (needed by site-wide search)
-			  ''content_revision'',	    -- content_type (default)
+			  ''content_item'',         -- item_subtype (default)
+			  ''file_storage_object'',  -- content_type (needed by site-wide search)
 			  null,			    -- title (default)
 			  null,			    -- description
 			  ''text/plain'',	    -- mime_type (default)
@@ -204,8 +204,8 @@ begin
 			  new_file__user_id,	    -- creation_user
 			  new_file__folder_id,	    -- context_id
 			  new_file__creation_ip,    -- creation_ip
-			  ''file_storage_item'',    -- item_subtype (needed by site-wide search)
-			  ''content_revision'',	    -- content_type (default)
+			  ''content_item'',         -- item_subtype (default)
+			  ''file_storage_object'',  -- content_type (needed by site-wide search)
 			  null,			    -- title (default)
 			  null,			    -- description
 			  ''text/plain'',	    -- mime_type (default)
@@ -217,6 +217,7 @@ begin
 	end if;
 
 end;' language 'plpgsql';
+
 
 create function file_storage__delete_file (
        --
@@ -373,76 +374,6 @@ begin
 	       move_file__file_id,		-- item_id
 	       move_file__target_folder_id	-- target_folder_id
 	       );
-
-end;' language 'plpgsql';
-
-
-
-create function file_storage__get_path (
-       --
-       -- Get the virtual path, but replace title with name at the end
-       -- Wrapper for content_item__get_path
-       --
-       integer,		-- cr_items.item_id%TYPE
-       integer,		-- cr_items.parent_id%TYPE
-       integer		-- cr_revisions.revision_id%TYPE
-) returns varchar as '
-declare
-	get_path__item_id		alias for $1;
-	get_path__root_folder_id	alias for $2;
-	get_path__revision_id		alias for $3;
-	v_filename			cr_revisions.title%TYPE;
-	v_content_type			cr_items.content_type%TYPE;
-begin
-	
-	select content_type into v_content_type
-	from cr_items
-	where item_id = get_path__item_id;
-
-	if v_content_type = ''content_revision''
-	then
-	     select title into v_filename
-	     from cr_revisions
-	     where revision_id = get_path__revision_id;
-
-	     return content_item__get_path(
-			get_path__item_id,
-			get_path__root_folder_id
-			) || ''/../'' || v_filename;
-
-        else
-
-	     return content_item__get_path(
-			get_path__item_id,
-			get_path__root_folder_id
-			);
-
-	end if;
-
-end;' language 'plpgsql';
-
-create function file_storage__get_path (
-       --
-       -- Get path, using the live revision for revision_id
-       --
-       integer,		-- cr_items.item_id%TYPE
-       integer		-- cr_items.parent_id%TYPE
-) returns varchar as '
-declare
-	get_path__item_id		alias for $1;
-	get_path__root_folder_id	alias for $2;
-	v_live_revision			cr_items.live_revision%TYPE;
-begin
-	
-	select live_revision into v_live_revision
-	from cr_items
-	where item_id = get_path__item_id;
-
-	return file_storage__get_path(
-		   get_path__item_id,
-		   get_path__root_folder_id,
-		   v_live_revision
-		   );
 
 end;' language 'plpgsql';
 
@@ -634,15 +565,17 @@ begin
 			    );
 
 	-- register the standard content types
+	-- JS: Note that we need to set include_subtypes 
+	-- JS: to true since we created a new subtype.
 	PERFORM content_folder__register_content_type(
 			v_folder_id,		-- folder_id
 			''content_revision'',	-- content_type
-			''f'');			-- include_subtypes (default)
+			''t'');			-- include_subtypes (default)
 
 	PERFORM content_folder__register_content_type(
 			v_folder_id,		-- folder_id
 			''content_folder'',	-- content_type
-			''f''			-- include_subtypes (default)
+			''t''			-- include_subtypes (default)
 			);			
 
 	-- Give the creator admin privileges on the folder
@@ -689,14 +622,14 @@ begin
 		from cr_items c1, cr_items c2
                 where c2.item_id = old.folder_id
 		  and c1.tree_sortkey between c2.tree_sortkey and tree_right(c2.tree_sortkey)
-		  and item_id != old.folder_id
+		  and c1.item_id <> old.folder_id
                 order by c1.tree_sortkey desc
 	loop
 
 
 		-- We delete the item. On delete cascade should take care
 		-- of deletion of revisions.
-		if v_rec.content_type = ''content_revision''
+		if v_rec.content_type = ''file_storage_object''
 		then
 		    raise notice ''Deleting item_id = %'',v_rec.item_id;
 		    PERFORM content_item__delete(v_rec.item_id);
@@ -735,3 +668,6 @@ create trigger fs_root_folder_delete_trig after delete
 on fs_root_folders for each row 
 execute procedure fs_root_folder_delete_trig ();
 
+
+-- Comment out to disable site-wide search  interface
+\i file-storage-sc-create.sql
