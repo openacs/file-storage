@@ -662,8 +662,10 @@ ad_proc -public fs::add_file {
 
     if {[parameter::get -parameter "StoreFilesInDatabaseP" -package_id $package_id]} {
 	set indbp "t"
+        set storage_type "lob"
     } else {
 	set indbp "f"
+        set storage_type "file"
     }
 
     set mime_type [cr_filename_to_mime_type -create $name]
@@ -696,7 +698,8 @@ ad_proc -public fs::add_file {
 			     -creation_ip $creation_ip \
 			     -title $title \
 			     -description $description \
-			     -suppress_notify_p $do_notify_here_p
+			     -suppress_notify_p $do_notify_here_p \
+                             -storage_type $storage_type
 			]
 	
 	if {[string is true $do_notify_here_p]} {
@@ -716,18 +719,15 @@ ad_proc fs::add_version {
     {-title ""}
     {-description ""}
     {-suppress_notify_p "f"}
-    
+    {-storage_type ""}
 } {
     Create a new version of a file storage item 
     @return revision_id
 } {
-
-    if {[parameter::get -parameter "StoreFilesInDatabaseP" -package_id $package_id]} {
-	set storage_type "lob"
-    } else {
-	set storage_type "file"
+    # always use the storage type of the existing item
+    if {[string equal "" $storage_type]} {
+        set storage_type [db_string get_storage_type ""]
     }
-
     set mime_type [cr_filename_to_mime_type -create $name]
     set tmp_size [file size $tmp_filename]
     set parent_id [get_parent -item_id $item_id]

@@ -155,4 +155,11 @@
       where folder_id = :folder_id
     </querytext>
   </fullquery>
+
+
+<fullquery name="fs::add_version.get_storage_type">
+  <querytext>
+    select storage_type from cr_items where item_id=:item_id
+  </querytext>
+</fullquery>
 </queryset>
