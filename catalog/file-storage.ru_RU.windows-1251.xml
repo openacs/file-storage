@@ -24,13 +24,11 @@
   <msg key="edit">изменить</msg>
   <msg key="Edit_Folder">Переименовать папку</msg>
   <msg key="Edit_URL">Изменить URL</msg>
-  <msg key="exclude">изключать</msg>
   <msg key="file">файл</msg>
   <msg key="folder">папка</msg>
   <msg key="Folder_ID">ID папки</msg>
   <msg key="Folder_Name">Название папки:</msg>
   <msg key="folder_type_pretty_name">папка</msg>
-  <msg key="include">включать</msg>
   <msg key="item">документ</msg>
   <msg key="items">файл(ов)</msg>
   <msg key="Last_Modified">Посл. изм.</msg>
@@ -50,7 +48,6 @@
   <msg key="Move">Переместить</msg>
   <msg key="Name">Имя</msg>
   <msg key="new">новый</msg>
-  <msg key="Note">Заметка</msg>
   <msg key="Rename">Переименовать</msg>
   <msg key="Rename_this_folder">Переименовать папку</msg>
   <msg key="Save">Запись</msg>

@@ -24,13 +24,11 @@
   <msg key="edit">modifica</msg>
   <msg key="Edit_Folder">Modifica la cartella</msg>
   <msg key="Edit_URL">Modifica la URL</msg>
-  <msg key="exclude">escludi</msg>
   <msg key="file">file</msg>
   <msg key="folder">cartella</msg>
   <msg key="Folder_ID">Codice Cartella</msg>
   <msg key="Folder_Name">Nome Cartella:</msg>
   <msg key="folder_type_pretty_name">cartella</msg>
-  <msg key="include">includi</msg>
   <msg key="item">elemento</msg>
   <msg key="items">elementi</msg>
   <msg key="Last_Modified">Ultima Modifica</msg>
@@ -40,7 +38,6 @@
   <msg key="lt_delete_file">Sei sicuro di voler cancellare il file &quot;%title%&quot; e tutte le sue versioni? Questa azione non &amp;egrave; reversibile.</msg>
   <msg key="lt_delete_folder">Sei sicuro di voler cancellare la cartella &quot;%folder_name%&quot; e tutti gli elementi che contiene? Questa azione non &amp;egrave; reversibile</msg>
   <msg key="lt_Delete_this_file_incl">Cancella questo file (con tutte le versioni)</msg>
-  <msg key="lt_Download_an_archive_o">Comprimi il contenuto di questa cartella in un archivio scaricabile(formato tgz)</msg>
   <msg key="lt_Either_there_is_alrea">O &amp;egrave; gi&amp;agrave; presente una cartella con nome &quot;%folder_name%&quot; oppure hai premuto invio pi&amp;ugrave; volte. Puoi usare il tasto Back per tornare indietro e scegliere un nuovo nome, o &lt;a href=&quot;%directory_url%&quot;&gt;torna all'elenco delle directory&lt;/a&gt; per verificare se la tua cartella &amp;egrave; l&amp;igrave;. </msg>
   <msg key="lt_Folder_folder_name_is">La cartella %folder_name% &amp;egrave; vuota.</msg>
   <msg key="lt_It_appears_that_there">Sembra che ci sia gi&amp;agrave; un file con quel nome in questa cartella (&amp;egrave; tuttavia possibile che tu abbia premuto il tasto invio pi&amp;ugrave; volte).</msg>
@@ -49,7 +46,6 @@
   <msg key="lt_Please_enter_the_new_">Inserisci il nuovo nome per il file:</msg>
   <msg key="lt_Show_files_modified_i">Mostra come nuovi i files modificati negli ultimi</msg>
   <msg key="lt_show_only_live_versio">mostra solo l'ultima versione</msg>
-  <msg key="lt_Showing_files_modifie">Sono visualizzati i files modificati</msg>
   <msg key="lt_The_folder_link_you_s">La %folder_link% che hai selezionato contiene gi&amp;agrave; un file con lo stesso nome. </msg>
   <msg key="lt_The_specified_file_is">Il file specificato non &amp;egrave; valido.</msg>
   <msg key="lt_The_specified_folder_">La cartella specificata non esiste.</msg>
@@ -58,7 +54,6 @@
   <msg key="lt_There_are_no_versions">Non ci sono versioni di questo file disponibili per te</msg>
   <msg key="lt_This_file_has_version">Questo file ha versioni che non ti &amp;egrave; permesso di cancellare.</msg>
   <msg key="lt_This_folder_contains_">Questo file contiene elementi che non ti &amp;egrave; permesso di cancellare.</msg>
-  <msg key="lt_This_may_take_a_while">Potrebbe richiedere qualche istante: sii paziente. </msg>
   <msg key="lt_Use_the_Browse_button">Usa il tasto &amp;quot;Sfoglia...&amp;quot; per trovare il tuo file, poi clicca &amp;quot;Apri&amp;quot;.</msg>
   <msg key="lt_version_not_valid">La versione specificata non &amp;egrave; valida.</msg>
   <msg key="lt_We_got_an_error_that_">Si è verificato un errore che non &amp;egrave; possibile classificare in breve tempo. Per favore, avvista il gestore del sistema di questo fatto.</msg>
@@ -74,9 +69,6 @@
   <msg key="new">nuovo</msg>
   <msg key="No_such_type">Nessun tipo</msg>
   <msg key="no_such_URL">Nessuna URL</msg>
-  <msg key="Note">Nota:</msg>
-  <msg key="Order_By">Ordina per</msg>
-  <msg key="Recurse">Ricorsivo?</msg>
   <msg key="Rename">Rinomina</msg>
   <msg key="Rename_this_folder">Rinomina questa cartella</msg>
   <msg key="Save">Salva</msg>
