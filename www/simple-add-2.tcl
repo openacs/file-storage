@@ -18,9 +18,20 @@ ad_page_contract {
 
 } 
 
+set user_id [ad_conn user_id]
+
 # Check for write permission on this folder
 ad_require_permission $folder_id write
 
-content_extlink::new -url $url -label $title -description $description -parent_id $folder_id
+set item_id [content_extlink::new -url $url -label $title -description $description -parent_id $folder_id]
+
+# Analogous as for files (see file-add-2) we know the user has write permission to this folder, 
+# but they may not have admin privileges.
+# They should always be able to admin their own url (item) by default, so they can delete it, control
+# who can read it, etc.
+
+if { [string is false [permission::permission_p -party_id $user_id -object_id $folder_id -privilege admin]] } {
+    permission::grant -party_id $user_id -object_id $item_id -privilege admin
+}
 
 ad_returnredirect "?folder_id=$folder_id"
