@@ -354,7 +354,7 @@ namespace eval fs {
         }
 
         if {[empty_string_p $user_id]} {
-            set user_id [acs_magic_object "the_public"]
+            set user_id [acs_magic_object the_public]
         }
 
         return [db_list_of_ns_sets select_folder_contents {}]
