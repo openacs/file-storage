@@ -626,7 +626,7 @@ ad_proc -public fs::add_file {
     Create a new file storage item or add a new revision if
     an item with the same name and parent folder already exists
 
-    @returns revision_id
+    @return revision_id
 } {
 
     if {[ad_parameter "StoreFilesInDatabaseP" -package_id $package_id]} {
@@ -683,7 +683,7 @@ ad_proc fs::add_version {
     
 } {
     Create a new version of a file storage item 
-    @returns revision_id
+    @return revision_id
 } {
 
     if {[ad_parameter "StoreFilesInDatabaseP" -package_id $package_id]} {
