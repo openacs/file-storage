@@ -3,6 +3,13 @@
 <queryset>
    <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
+<fullquery name="get_folder">      
+      <querytext>
+	select content_item.get_parent_folder(:file_id)
+	from dual
+      </querytext>
+</fullquery>
+
 <fullquery name="file_info">      
       <querytext>
       
