@@ -56,6 +56,7 @@ This action cannot be reversed.</msg>
   <msg key="lt_delete_file">Are you sure you want to delete the file &quot;%title%&quot; and all of its versions?  This action cannot be reversed.</msg>
   <msg key="lt_delete_folder">Are you sure you want to delete the folder &quot;%folder_name%&quot; and all the items it contains?  This action cannot be reversed.</msg>
   <msg key="lt_Delete_this_file_incl">Delete this file (including all versions)</msg>
+  <msg key="lt_Do_you_want_to_delete">Do you want to delete the listed items?</msg>
   <msg key="lt_Download_an_archive_o">Download an archive of the contents of this folder</msg>
   <msg key="lt_Either_there_is_alrea">Either there is already a folder with the name &quot;%folder_name%&quot; or you clicked on the button more than once.  You can use the Back button to return and choose a new name, or &lt;a href=&quot;%directory_url%&quot;&gt;return to the directory listing&lt;/a&gt; to see if your folder is there.</msg>
   <msg key="lt_Folder_folder_name_is">Folder %folder_name% is empty.</msg>
@@ -64,6 +65,9 @@ This action cannot be reversed.</msg>
   <msg key="lt_Live_version_of_title">Live version of &quot;%title%&quot;</msg>
   <msg key="lt_Modify_permissions_on">Modify permissions on this file</msg>
   <msg key="lt_Modify_permissions_on_1">Modify permissions on this folder</msg>
+  <msg key="lt_Moving_allowed_count_">Moving %allowed_count% items.</msg>
+  <msg key="lt_No_valid_items_to_be_">No valid items to be moved.</msg>
+  <msg key="lt_not_allowed_count_ite">%not_allowed_count% items can not be moved</msg>
   <msg key="lt_Please_enter_the_new_">Please enter the new name for this file:</msg>
   <msg key="lt_Select_the_folder_tha">Select the folder that you would like to copy &quot;%file_name%&quot; to</msg>
   <msg key="lt_Select_the_folder_tha_1">Select the folder that you would like to move &quot;%file_name%&quot; under</msg>
