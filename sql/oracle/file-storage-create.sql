@@ -89,7 +89,4 @@ show errors;
 
 @ file-storage-package-create.sql
 
-@ file-storage-simple-create.sql
-@ file-storage-simple-package-create.sql
-
 @ file-storage-views-create.sql
