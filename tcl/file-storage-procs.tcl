@@ -620,14 +620,11 @@ ad_proc -public fs::add_file {
 
     if {[ad_parameter "StoreFilesInDatabaseP" -package_id $package_id]} {
 	set indbp "t"
-	set storage_type "lob"
     } else {
 	set indpb "f"
-	set storage_type "file"
     }
 
     set mime_type [cr_filename_to_mime_type -create $name]
-    set tmp_size [file size $tmp_filename]
     switch  [cr_registered_type_for_mime_type $mime_type] {
         image {
 	    set content_type "image"
@@ -646,25 +643,63 @@ ad_proc -public fs::add_file {
 	    }
 	}
 
-	set revision_id [cr_import_content \
-			     -item_id $item_id \
-			     -storage_type $storage_type \
-			     -creation_user $creation_user \
-			     -creation_ip $creation_ip \
-			     -other_type "file_storage_object" \
-			     -title $title \
-			     -description $description \
-			     $parent_id \
-			     $tmp_filename \
-			     $tmp_size \
-			     $mime_type \
-			     $name]
+
+    set revision_id [fs::add_version \
+			 -name $name \
+			 -parent_id $parent_id \
+			 -tmp_filename $tmp_filename \
+			 -package_id $package_id \
+			 -item_id $item_id \
+			 -creation_user $creation_user \
+			 -creation_ip $creation_ip \
+			 -title $title \
+			 -description $description
+		     ]
+    }
+	return $revision_id
+}
+
+ad_proc fs::add_version {
+    -name
+    -parent_id
+    -tmp_filename
+    -package_id
+    {-item_id ""}
+    {-creation_user ""}
+    {-creation_ip ""}
+    {-title ""}
+    {-description ""}
+    
+} {
+    Create a new version of a file storage item 
+    @returns revision_id
+} {
+
+    if {[ad_parameter "StoreFilesInDatabaseP" -package_id $package_id]} {
+	set storage_type "lob"
+    } else {
+	set storage_type "file"
+    }
+
+    set mime_type [cr_filename_to_mime_type -create $name]
+    set tmp_size [file size $tmp_filename]
+
+    set revision_id [cr_import_content \
+			 -item_id $item_id \
+			 -storage_type $storage_type \
+			 -creation_user $creation_user \
+			 -creation_ip $creation_ip \
+			 -other_type "file_storage_object" \
+			 -title $title \
+			 -description $description \
+			 $parent_id \
+			 $tmp_filename \
+			 $tmp_size \
+			 $mime_type \
+			 $name]
 	
 	db_dml set_live_revision ""
 	db_exec_plsql update_last_modified ""
 
-    } on_error {
-	error $errmsg
-    }
     return $revision_id
 }

@@ -454,7 +454,7 @@ begin
          select title into v_title
          from cr_revisions, cr_items
          where revision_id=live_revision
-	 and item_id=get_title__item_id;
+	 and cr_items.item_id=get_title__item_id;
        end if;
   end if;
 

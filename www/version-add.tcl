@@ -24,12 +24,7 @@ ad_require_permission $file_id write
 
 # set templating datasources
 
-db_1row file_name "
-select title 
-from   cr_revisions
-where  revision_id = (select live_revision
-                      from   cr_items
-                      where  item_id = :file_id)"
+db_1row file_title ""
 
 set context [fs_context_bar_list -final "Upload New Version" $file_id]
 

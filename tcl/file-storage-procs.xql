@@ -125,7 +125,7 @@
       </querytext>
     </fullquery>
 
-  <fullquery name="fs::add_file.set_live_revision">
+  <fullquery name="fs::add_version.set_live_revision">
     <querytext>
       update cr_items set live_revision=:revision_id
       where item_id=:item_id

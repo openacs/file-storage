@@ -23,6 +23,15 @@ ad_page_contract {
 
 ad_require_permission $file_id write
 
+ad_form -form {
+    key:item_id
+    {title:text {label "Title"} {html {size 40}}}
+    {description:text(textarea) {label "Description"} {html {rows 10 cols 50}} }
+} -select_query_name {file_info} -edit_data {
+
+}
+
+}
 db_1row file_info "
 select name as title
 from   cr_items
