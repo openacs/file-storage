@@ -61,12 +61,12 @@ if {[empty_string_p $title]} {
 
 ad_form -html { enctype multipart/form-data } -export { folder_id } -form {
     file_id:key
-    {upload_file:file {label "Upload File"} {html "size 30"}}
+    {upload_file:file {label \#file-storage.Upload_a_file\#} {html "size 30"}}
 }
 
 if {$lock_title_p} {
     ad_form -extend -form {
-	{title_display:text(inform) {label [_ file-storage.Title]} }
+	{title_display:text(inform) {label \#file-storage.Title\#} }
 	{title:text(hidden) {value $title}}
     }
 } else {
@@ -94,7 +94,7 @@ ad_form -extend -form {
 	permission::require_permission \
 	    -object_id $file_id \
 	    -party_id $user_id \
-	    -privilege $write
+	    -privilege write
     }
     
     fs::add_file \
