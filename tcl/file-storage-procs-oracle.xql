@@ -243,4 +243,17 @@
     </querytext>
   </fullquery>
 
+  <fullquery name="fs::get_folder_package_and_root.select_package_and_root">
+    <querytext>
+	select r.package_id,
+               r.folder_id as root_folder_id
+	from fs_root_folders r,
+	     (select item_id as folder_id
+              from cr_items
+              connect by prior parent_id = item_id 
+              start with item_id = :folder_id) t
+        where r.folder_id = t.folder_id
+    </querytext>
+  </fullquery>
+
 </queryset>
