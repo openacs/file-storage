@@ -7,7 +7,6 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     folder_id:integer,notnull
-    {type "fs_url"}
     {title ""}
     {lock_title_p 0}
 } -validate {
@@ -36,7 +35,6 @@ set context [fs_context_bar_list -final [_ file-storage.Add_pretty_name [list pr
 
 # Should probably generate the item_id and version_id now for
 # double-click protection
-
 
 # if title isn't passed in ignore lock_title_p
 if {[empty_string_p $title]} {

@@ -15,9 +15,9 @@ ad_page_contract {
 ad_require_permission $object_id write
 
 # edit the URL
-fs::url_edit -url_id $object_id -name $name -description $description -url $url
+content_extlink::edit -extlink_id $object_id -url $url -label $name -description $description
 
-set folder_id [db_string select_folder_id "select folder_id from fs_simple_objects where object_id= :object_id"]
+set folder_id [db_string select_folder_id {}]
 
 ad_returnredirect "?folder_id=$folder_id"
 

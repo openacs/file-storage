@@ -181,41 +181,6 @@ ad_proc fs_context_bar_list {
     return $context_bar
 }
 
-#
-# Make sure we don't have page crashes due to unknown MIME types
-#
-
-ad_proc fs_maybe_create_new_mime_type {
-    file_name
-} {
-    The content repository expects the MIME type to already be defined
-    when you upload content.  We use this procedure to add a new type
-    when we encounter something we haven't seen before.
-} {
-
-    set file_extension [string trimleft [file extension $file_name] "."]
-
-    # This case is now handled by the code below (Ben)
-    # if {[empty_string_p $file_extension]} {
-    #	return "*/*"
-    #}
-
-    if {![db_0or1row select_mime_type "select mime_type
-        from cr_mime_types
-        where file_extension = :file_extension"]} {
-
-	# Ben: we've fixed this so that all AOLserver mime types
-	# are now part of the cr_mime_types. So we just return now
-	# or leave it at that.
-
-	set mime_type "*/*"
-    }
-
-    return $mime_type
-}
-
-
-
 namespace eval fs {
 
     ad_proc -public new_root_folder {
@@ -357,10 +322,6 @@ namespace eval fs {
     } {
         Return a list the object_ids contained by a file storage folder.
 
-        This would be trivial if it weren't for the fact that we need to UNION ALL
-        with the gawddamned fs_simple_objects Open Force forced upon us and which
-        will be removed as soon as I (DRB) find the time to write upgrade scripts.
-
         @param folder_id The folder for which to retrieve contents
         @param user_id The viewer of the contents (to make sure they have
                        permission)
@@ -375,6 +336,13 @@ namespace eval fs {
         {-n_past_days "99999"}
     } {
         WARNING: This proc is not scalable because it does too many permission checks. 
+
+        DRB: Not so true now that permissions are fast.  However it is now only used
+        to clone files in dotLRN and for the somewhat brain-damaged syllabus package. 
+        At minimum the permission checks returned by the code can be removed.  Most of
+        the other fields as well.   Oh well ...
+
+        REMOVE WHEN SYLLABUS IS REWRITTEN TO FIND ITS FILE INTELLIGENTLY
 
         Retrieve the contents of the specified folder in the form of a list
         of ns_sets, one for each row returned. The keys for each row are as
@@ -449,7 +417,7 @@ namespace eval fs {
         if {[string equal folder $type]} {
             set result [publish_folder_to_file_system -folder_id $object_id -path $path -folder_name $name -user_id $user_id]
         } elseif {[string equal url $type]} {
-            set result [publish_simple_object_to_file_system -object_id $object_id -path $path -file_name $file_name]
+            set result [publish_url -object_id $object_id -path $path -file_name $file_name]
         } else {
             set result [publish_versioned_object_to_file_system -object_id $object_id -path $path]
         }
@@ -488,28 +456,8 @@ namespace eval fs {
         return $dir
     }
 
-    ad_proc -public publish_simple_object_to_file_system {
+    ad_proc -public publish_url_to_file_system {
         {-object_id:required}
-        {-path ""}
-        {-file_name:required}
-    } {
-        publish a simple object to the file system; you must implement a proc
-        named 'fs::publish_simple_<type>_to_file_system', where <type> is the
-        fs_simple_object type that you create, for each new simple file storage
-        object you create.
-    } {
-        if {[empty_string_p $path]} {
-            set path [ns_tmpnam]
-            file mkdir $path
-        }
-
-        set object [db_list_of_ns_sets select_object_info {}]
-
-        return [publish_simple_[ns_set get $object type]_to_file_system -object $object -path $path -file_name $file_name]
-    }
-
-    ad_proc -public publish_simple_url_to_file_system {
-        {-object:required}
         {-path ""}
         {-file_name ""}
     } {
@@ -520,15 +468,15 @@ namespace eval fs {
             file mkdir $path
         }
 
-        set object [lindex $object 0]
+        db_1row select_object_metadata {}
 
         if {[empty_string_p $file_name]} {
-            set file_name [ns_set get $object name]
+            set file_name $label
         }
         set file_name [remove_special_file_system_characters -string $file_name]
 
         set fp [open [file join ${path} ${file_name}] w]
-        puts $fp [ns_set get $object url]
+        puts $fp url
         close $fp
 
         return [file join ${path} ${file_name}]
@@ -555,7 +503,15 @@ namespace eval fs {
 
         switch $storage_type {
             lob {
+
                 # FIXME: db_blob_get_file is failing when i use bind variables
+
+                # DRB: you're out of luck - the driver doesn't support them and while it should
+                # be fixed it will be a long time before we'll want to require an updated
+                # driver.  I'm substituting the Tcl variable value directly in the query due to
+                # this.  It's safe because we've pulled the value ourselves from the database,
+                # don't need to worry about SQL smuggling etc.
+
                 db_blob_get_file select_object_content {} -file [file join ${path} ${file_name}]
             }
             text {

@@ -1,9 +1,10 @@
 <master>
 <property name="title">#file-storage.Create_New_Folder#</property>
 <property name="context">@context@</property>
+<property name="focus">folder.folder_name</property>
 
 
-<form method=POST action=folder-create-2>
+<form method=POST action=folder-create-2 name=folder>
 <input type=hidden name=parent_id value="@parent_id@">
 
 <table>

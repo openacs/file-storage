@@ -4,7 +4,7 @@
 
 <form method=POST action="simple-add-2">
 <input type=hidden name="folder_id" value="@folder_id@">
-<input type=hidden name="type" value="@type@">
+<input type=hidden name="type" value="url">
 
 <table border=0>
 

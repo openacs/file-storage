@@ -41,10 +41,7 @@ set user_id [ad_conn user_id]
 # Get the ip
 set creation_ip [ad_conn peeraddr]
 
-# The content repository is kinda stupid about mime types,
-# so we have to check if we know about this one and possibly 
-# add it.
-set mime_type [fs_maybe_create_new_mime_type $upload_file]
+set mime_type [cr_filename_to_mime_type -create $upload_file]
 
 # Get the storage type
 set indb_p [ad_parameter "StoreFilesInDatabaseP" -package_id [ad_conn package_id]]
@@ -82,6 +79,13 @@ db_transaction {
 
     }
 
+    # We know the user has write permission to this folder, but they may not have admin privileges.
+    # They should always be able to admin their own file by default, so they can delete it, control
+    # who can read it, etc.
+
+    if { [string is false [permission::permission_p -party_id $user_id -object_id $folder_id -privilege admin]] } {
+        permission::grant -party_id $user_id -object_id $file_id -privilege admin
+    }
 
 } on_error {
 

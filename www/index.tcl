@@ -79,4 +79,10 @@ if {[form is_valid n_past_days_form]} {
 
 set context [fs_context_bar_list $folder_id]
 
+set up_url {}
+if { [llength $context] > 1 } {
+    set up_url [lindex [lindex $context end-1] 0]
+    set up_name [lindex [lindex $context end-1] 1]
+}
+
 ad_return_template
