@@ -207,8 +207,9 @@
   <fullquery name="fs::delete_file.delete_file">      
       <querytext>
 	
+	
 	begin
-		file_storage.delete_file(
+	   :1 := file_storage.delete_file(
 			:item_id
 			);
 	end;
@@ -216,12 +217,12 @@
       </querytext>
   </fullquery>
 
-  <fullquery name="fs::delete_file.delete_file">      
+  <fullquery name="fs::delete_folder.delete_folder">      
       <querytext>
-		file_storage.delete_folder (
-			:folder_id,
-                        :cascade_p
-			)
+
+	begin
+	        file_storage.delete_folder(:folder_id, :cascade_p );
+	end;
       </querytext>
   </fullquery>
   

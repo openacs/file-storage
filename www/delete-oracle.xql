@@ -15,7 +15,7 @@
 
  <fullquery name="get_to_be_deleted">    
    <querytext>
-	select fs.object_id as fs_object_id, fs.name, fs.parent_id,
+	select fs.object_id as fs_object_id, fs.name, fs.type, fs.parent_id,
       	acs_permission.permission_p(fs.object_id, :user_id, 'write') as delete_p
       	from fs_objects fs
       	where fs.object_id in ('$object_id_list')
