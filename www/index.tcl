@@ -16,12 +16,16 @@ ad_page_contract {
 } -properties {
     folder_name:onevalue
     folder_id:onevalue
+    nonroot_folder_p:onevalue
     file:multirow
     write_p:onevalue
     admin_p:onevalue
     delete_p:onevalue
     context_bar:onevalue
 }
+
+# Don't allow delete if root folder
+set nonroot_folder_p [expr $folder_id - [fs_get_root_folder]]
 
 # check the user has permission to read this folder
 ad_require_permission $folder_id read
@@ -42,6 +46,7 @@ set admin_p [ad_permission_p $folder_id admin]
 set delete_p [ad_permission_p $folder_id delete]
 
 set package_id [ad_conn package_id]
+
 db_multirow file file_select "
 select i.item_id as file_id,
        r.title as name,
