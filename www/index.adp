@@ -39,7 +39,7 @@
 
         <if @up_url@ not nil>
           &nbsp;|&nbsp;
-          <a href="@up_url@">Up to @up_name@</a>
+          <a href="@up_url@">#file-storage.index_page_navigate_up_folder#</a>
         </if>
   
       </td>
@@ -50,3 +50,4 @@
 
 
 <include src="folder-chunk" folder_id=@folder_id;noquote@ viewing_user_id=@user_id;noquote@ n_past_days=@n_past_days;noquote@>
+

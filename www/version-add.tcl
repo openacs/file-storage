@@ -33,4 +33,7 @@ where  revision_id = (select live_revision
 
 set context [fs_context_bar_list -final "[_ file-storage.Upload_New_Version]" $file_id]
 
+# Message lookup uses variable title
+set page_title [_ file-storage.version_add_page_title]
+
 ad_return_template

@@ -3,10 +3,10 @@
 <property name="context">@context;noquote@</property>
 
 <if @results:rowcount@ eq 0>
-<p>Your search on "@query@" did not return any results.
+<p>#file-storage.lt_Your_search_on_query_#
 </if>
 <else>
-<p>Your search on "@query@" returned the following files:
+<p>#file-storage.lt_Your_search_on_query__1#
 
 <ul>
 <multiple name="results">
@@ -19,6 +19,7 @@
 #file-storage.Search_again#
 <input type=text size=30 name=query>
 </form>
+
 
 
 

@@ -75,3 +75,5 @@ if { [apm_package_installed_p "general-comments"] && [ad_parameter "GeneralComme
 
 # get folder id so we can implement a back link
 set folder_id [db_string get_folder ""]
+
+set folder_view_url "index?folder_id=$folder_id"

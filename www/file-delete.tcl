@@ -58,3 +58,6 @@ if {[string equal $confirmed_p "t"] && [string equal $blocked_p "f"] } {
 
     set context [fs_context_bar_list -final "[_ file-storage.Delete]" $file_id]
 }
+
+# Variable title used by message lookup
+set page_title [_ file-storage.file_delete_page_title]
