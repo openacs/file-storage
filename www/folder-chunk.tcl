@@ -84,7 +84,7 @@ set elements [list icon \
 		       display_template {<a href="@contents.download_url@"><img src="@contents.icon@"  border=0 alt="#file-storage.@contents.pretty_type@#" /></a>}] \
 		  name \
 		  [list label [_ file-storage.Name] \
-		       display_template {<a href="@contents.file_url@">@contents.name@</a><br/><if @contents.name@ ne @contents.file_upload_name@><span style="color: \#999;">@contents.file_upload_name@</span></if>} \
+		       display_template {<a href="@contents.file_url@">@contents.name@</a><br/><if @contents.name@ ne @contents.title@><span style="color: \#999;">@contents.title@</span></if>} \
 		       orderby_desc {fs_objects.name desc} \
 		       orderby_asc {fs_objects.name asc}] \
 		  content_size_pretty \

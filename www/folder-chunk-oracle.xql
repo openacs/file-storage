@@ -15,6 +15,7 @@
                    fs_objects.url,
                    fs_objects.sort_key,
                    fs_objects.file_upload_name,
+                   fs_objects.title,
                    case
                      when :folder_path is null
                      then fs_objects.file_upload_name
