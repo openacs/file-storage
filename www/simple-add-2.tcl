@@ -21,7 +21,6 @@ ad_page_contract {
 # Check for write permission on this folder
 ad_require_permission $folder_id write
 
-# Create the URL (for now)
-set url_id [fs::url_new -url $url -name $title -description $description -folder_id $folder_id]
+content_extlink::new -url $url -label $title -description $description -parent_id $folder_id
 
 ad_returnredirect "?folder_id=$folder_id"

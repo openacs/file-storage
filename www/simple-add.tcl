@@ -7,7 +7,6 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     folder_id:integer,notnull
-    {type "fs_url"}
     {title ""}
     {lock_title_p 0}
 } -validate {
@@ -27,16 +26,12 @@ ad_require_permission $folder_id write
 
 # set templating datasources
 
-set pretty_name [fs::simple_get_type_pretty_name -type $type]
-if {[empty_string_p $pretty_name]} {
-    return -code error "No such type"
-}
+set pretty_name "URL"
 
 set context [fs_context_bar_list -final "Add $pretty_name" $folder_id]
 
 # Should probably generate the item_id and version_id now for
 # double-click protection
-
 
 # if title isn't passed in ignore lock_title_p
 if {[empty_string_p $title]} {

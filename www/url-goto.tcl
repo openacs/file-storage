@@ -8,14 +8,11 @@ ad_page_contract {
     url_id:notnull
 } 
 
-# Check for write permission on this folder
+# Check for read permission on this url
 ad_require_permission $url_id read
 
-# Check the URL
-set url [db_string select_url "select url from fs_urls where url_id= :url_id" -default ""]
-
-if {![empty_string_p $url]} {
-    ad_returnredirect $url
-} else {
+if { ![db_0or1row select_url {}] } {
     return -code error "no such URL"
 }
+
+ad_returnredirect $url

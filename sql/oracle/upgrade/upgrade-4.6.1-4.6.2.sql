@@ -1,10 +1,48 @@
---
--- packages/file-storage/sql/oracle/file-storage-views-create.sql
---
--- @author yon (yon@openforce.net)
--- @creation-date 2002-04-03
--- @version $Id$
---
+-- Move old fs_simple_objects URLs to the content repository, where they
+-- belong.
+
+declare
+  new_url_id     cr_extlinks.extlink_id%TYPE;
+begin
+
+    for fs_url in (select * from fs_urls_full)
+    loop
+
+      if content_folder.is_registered(fs_url.folder_id, 'content_extlink') = 'f' then
+        content_folder.register_content_type(fs_url.folder_id, 'content_extlink');
+      end if;
+
+      new_url_id := content_extlink.new (
+                      url => fs_url.url,
+                      label => fs_url.name,
+                      description => fs_url.description,
+                      parent_id => fs_url.folder_id,
+                      extlink_id => null,
+                      creation_date => fs_url.creation_date,
+                      creation_user => fs_url.creation_user,
+                      creation_ip => fs_url.creation_ip
+                    );  
+
+      update acs_objects
+      set last_modified = fs_url.last_modified,
+        modifying_user = fs_url.modifying_user,
+        modifying_ip = fs_url.modifying_ip
+      where object_id = fs_url.object_id;
+
+      update acs_permissions
+      set object_id = new_url_id
+      where object_id = fs_url.object_id;
+
+      acs_object.delete(fs_url.object_id);
+
+    end loop;
+
+end;
+/
+show errors;
+
+drop table fs_urls;
+drop table fs_simple_objects;
 
 create or replace view fs_urls_full
 as
@@ -19,43 +57,6 @@ as
          acs_objects
     where cr_extlinks.extlink_id = cr_items.item_id
     and cr_items.item_id = acs_objects.object_id;
-
-create or replace view fs_folders
-as
-    select cr_folders.folder_id,
-           cr_folders.label as name,
-           acs_objects.last_modified,
-            (select count(*)
-             from cr_items ci
-	     where ci.content_type <> 'content_folder'
-	     connect by prior ci.item_id = ci.parent_id
-	     start with ci.item_id = cr_folders.folder_id) as content_size,
-           cr_items.parent_id,
-           cr_items.name as key
-    from cr_folders,
-         cr_items,
-         acs_objects
-    where cr_folders.folder_id = cr_items.item_id
-    and cr_folders.folder_id = acs_objects.object_id;
-
-create or replace view fs_files
-as
-    select cr_revisions.item_id as file_id,
-           cr_revisions.revision_id as live_revision,
-           cr_revisions.mime_type as type,
-	   cr_revisions.title as file_upload_name,
-           cr_revisions.content_length as content_size,
-           cr_items.name,
-           acs_objects.last_modified,
-           cr_items.parent_id,
-           cr_items.name as key
-    from cr_revisions,
-         cr_items,
-         acs_objects
-    where cr_revisions.revision_id = cr_items.live_revision
-    and cr_revisions.item_id = cr_items.item_id
-    and cr_items.content_type = 'file_storage_object'
-    and cr_revisions.revision_id = acs_objects.object_id;
 
 create or replace view fs_objects
 as

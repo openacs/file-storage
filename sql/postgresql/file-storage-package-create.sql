@@ -131,6 +131,11 @@ begin
                 ''content_folder'',     -- content_types
                 ''t''                   -- include_subtypes 
                 );
+        PERFORM content_folder__register_content_type(
+                v_folder_id,            -- folder_id
+                ''content_extlink'',     -- content_types
+                ''t''                   -- include_subtypes 
+                );
 
         -- set up default permissions
         PERFORM acs_permission__grant_permission (
@@ -636,6 +641,12 @@ begin
                         ''content_folder'',     -- content_type
                         ''t''                   -- include_subtypes (default)
                         );                      
+
+        PERFORM content_folder__register_content_type(
+                v_folder_id,            -- folder_id
+                ''content_extlink'',     -- content_types
+                ''t''                   -- include_subtypes 
+                );
 
         -- Give the creator admin privileges on the folder
         PERFORM acs_permission__grant_permission (
