@@ -54,79 +54,27 @@ db_transaction {
     # create the new item
     if {$indb_p} {
 
-	set file_id [db_exec_plsql new_lob_file "
-	begin
-    		:1 := file_storage.new_file (
-        		title => :title,
-        		folder_id => :folder_id,
-        		creation_user => :user_id,
-        		creation_ip => :creation_ip,
-		        indb_p => 't'
-   			);
+	set file_id [db_exec_plsql new_lob_file {}]
 
-        end;"]
+	set version_id [db_exec_plsql new_version {}]
 
-	set version_id [db_exec_plsql new_version "
-	begin
-    		:1 := file_storage.new_version (
-        		filename => :filename,
-        		description => :description,
-        		mime_type => :mime_type,
-        		item_id => :file_id,
-        		creation_user => :user_id,
-        		creation_ip => :creation_ip
-    			);
-        end;"]
-
-	db_dml lob_content "
-	update cr_revisions
-	set    content = empty_lob()
-	where  revision_id = :version_id
-	returning content into :1" -blob_files [list ${upload_file.tmpfile}]
+	db_dml lob_content {} -blob_files [list ${upload_file.tmpfile}]
 
 
 	# Unfortunately, we can only calculate the file size after the lob is uploaded 
-	db_dml lob_size "
-	update cr_revisions
- 	set content_length = dbms_lob.getlength(content) 
-	where revision_id = :version_id"
+	db_dml lob_size {}
 
     } else {
 
-	set file_id [db_exec_plsql new_fs_file "
-	begin
-    		:1 := file_storage.new_file (
-        		title => :title,
-        		folder_id => :folder_id,
-        		creation_user => :user_id,
-        		creation_ip => :creation_ip,
-		        indb_p => 'f'
-   			);
-	end;"]
+	set file_id [db_exec_plsql new_fs_file {}]
 
 
-	set version_id [db_exec_plsql new_version "
-	begin
-
-    		:1 := file_storage.new_version (
-        		filename => :filename,
-        		description => :description,
-        		mime_type => :mime_type,
-        		item_id => :file_id,
-        		creation_user => :user_id,
-        		creation_ip => :creation_ip
-    			);
-
-        end;"]
+	set version_id [db_exec_plsql new_version {}]
 
 	set tmp_filename [cr_create_content_file $file_id $version_id ${upload_file.tmpfile}]
 	set tmp_size [cr_file_size $tmp_filename]
 
-	db_dml fs_content_size "
-	update cr_revisions
-	set content = '$tmp_filename',
-            content_length = $tmp_size
-	where  revision_id = :version_id"
+	db_dml fs_content_size {}
 
     }
 

@@ -20,7 +20,7 @@ if {![exists_and_not_null viewing_user_id]} {
 }
 
 if {![exists_and_not_null n_past_days]} {
-    set n_past_days -1
+    set n_past_days 99999
 }
 
 set folder_name [fs::get_object_name -object_id  $folder_id]
