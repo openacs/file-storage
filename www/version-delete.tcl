@@ -57,9 +57,10 @@ ad_form -export version_id -cancel_url "file?[export_vars {{file_id $item_id}}]"
 	                   file_storage.delete_file(:item_id);
 	          end;"
 
+ 	 fs::do_notifications -folder_id $parent_id -filename $version_name -file_id $item_id -action "delete_file"
+
 	 # Redirect to the folder, instead of the latest revision (which does not exist anymore)
 	 ad_returnredirect "index?folder_id=$parent_id"
-
          ad_script_abort
 
     } else {

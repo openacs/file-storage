@@ -52,7 +52,8 @@ if {[string equal $blocked_p "f"] } {
         file_storage.delete_file(:file_id);
     end;"
 
-    
+    fs::do_notifications -folder_id $parent_id -filename $title -file_id $file_id -action "delete_file"
+
     ad_returnredirect "?folder_id=$parent_id"
 
     ad_script_abort

@@ -153,8 +153,7 @@ if { $unpack_p && ![empty_string_p $unzip_binary] } {
 
     }
     
-    ad_returnredirect "./?[export_url_vars folder_id]"
-    ad_script_abort
+    fs::do_notifications -folder_id $folder_id -filename $title -file_id $file_id -action "new_file"
 
 } -edit_data {
 
@@ -169,8 +168,13 @@ if { $unpack_p && ![empty_string_p $unzip_binary] } {
 	-description $description \
 	-package_id $package_id
 
+    fs::do_notifications -folder_id $folder_id -filename $title -file_id $file_id -action "new_version"
+
+} -after_submit {
+
     ad_returnredirect "./?[export_url_vars folder_id]"
     ad_script_abort
+
 }
 
 # if title isn't passed in ignore lock_title_p
