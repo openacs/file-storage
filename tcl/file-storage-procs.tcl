@@ -242,6 +242,7 @@ ad_proc -public fs::new_folder {
     {-parent_id:required}
     {-creation_user ""}
     {-creation_ip ""}
+    {-description ""}
 } {
     Create a new folder.
 
@@ -251,7 +252,7 @@ ad_proc -public fs::new_folder {
     @param parent_id Where we create this folder
     @param creation_user Who created this folder
     @param creation_ip What is the ip address of the creation_user
-
+    @param description of the folder. Not used in the current FS UI but might be used elsewhere.
     @return folder_id of the newly created folder
 } {
     if {[empty_string_p $creation_user]} {
@@ -261,8 +262,9 @@ ad_proc -public fs::new_folder {
     if {[empty_string_p $creation_ip]} {
 	set creation_ip [ns_conn peeraddr]
     }
-
-    return [db_exec_plsql new_folder {}]
+    set folder_id [db_exec_plsql new_folder {}]
+    fs::set_folder_description -folder_id $folder_id -description $description
+    return $folder_id
 }
 
 ad_proc -public fs::rename_folder {
@@ -272,6 +274,15 @@ ad_proc -public fs::rename_folder {
     rename the given folder
 } {
     db_exec_plsql rename_folder {}
+}
+
+ad_proc -public fs::set_folder_description {
+    {-folder_id:required}
+    {-description ""}
+} {
+    sets the description for the given folder in cr_folders. Perhaps this shoudl be a CR proc?
+} {
+    db_dml set_folder_description { *SQL* }
 }
 
 ad_proc -public fs::object_p {

@@ -131,4 +131,11 @@
       where item_id=:item_id
     </querytext>
   </fullquery>
+
+  <fullquery name="fs::set_folder_description.set_folder_description">
+    <querytext>
+      update cr_folders set description=:description
+      where folder_id = :folder_id
+    </querytext>
+  </fullquery>
 </queryset>
