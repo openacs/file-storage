@@ -128,12 +128,16 @@ if {$format eq "list"} {
     set actions {}
 } 
 
+set return_url [export_vars -base "index" {folder_id}]
+set vars_to_export [list return_url]
+
 template::list::create \
     -name contents \
     -multirow contents \
     -key object_id \
     -actions $actions \
     -bulk_actions $bulk_actions \
+    -bulk_action_export_vars $vars_to_export \
     -selected_format $format \
     -formats {
         table {

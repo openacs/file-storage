@@ -47,27 +47,30 @@ set context [fs_context_bar_list -final "[_ file-storage.Delete]" $folder_id]
     
 set delete_message "[_ file-storage.delete_folder_and_children]"
 set delete_label "[_ file-storage.Yes_Delete]"
-ad_form -name folder-delete -export folder_id -form {
-    {delete_message:text(inform) {label ""} {value $delete_message}}
-    {submit:text(submit) {label $delete_label}}
-} -on_request {
 
-} -on_submit {
-    if {[string equal $blocked_p "f"] } {
-	# they have confirmed that they want to delete the folder
+set edit_buttons [list [list $delete_label ok]]
 
-	db_1row parent_id "
-    select parent_id from cr_items where item_id = :folder_id"
+ad_form -name "folder-delete" \
+    -edit_buttons $edit_buttons \
+    -cancel_url [export_vars -base "index" {folder_id}] \
+    -form {
+	{delete_message:text(inform) {label ""} {value $delete_message}}
+    } -on_request {
 
-	db_exec_plsql folder_delete ""
-
-    }
-
+    } -on_submit {
+	if {[string equal $blocked_p "f"] } {
+	    # they have confirmed that they want to delete the folder
+	    
+	    db_1row parent_id "select parent_id from cr_items where item_id = :folder_id"
+    	    
+	    db_exec_plsql folder_delete ""
+	}
+	
 	ad_returnredirect "index?folder_id=$parent_id"
-
 	ad_script_abort
-
-}
+    } \
+    -export {folder_id}
+   
 
 if { [string equal $confirmed_p "t"] && [string equal $blocked_p "f"] } {
     # they have confirmed that they want to delete the folder
@@ -78,7 +81,6 @@ if { [string equal $confirmed_p "t"] && [string equal $blocked_p "f"] } {
     db_exec_plsql folder_delete ""
 
     ad_returnredirect "index?folder_id=$parent_id"
-
     ad_script_abort
 
 } else {
