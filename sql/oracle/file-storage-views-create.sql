@@ -85,7 +85,7 @@ as
       cr_extlinks.url,
       cr_items.parent_id,
       cr_items.name as key,
-      cr_mime_types.label as pretty_type
+      cr_mime_types.label as pretty_type,
       case
         when cr_items.content_type = 'content_folder' then 0
         else 1
