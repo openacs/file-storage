@@ -49,4 +49,12 @@
         </querytext>
     </fullquery>
 
+    <fullquery name="fs::get_folder_contents_count.get_folder_contents_count">
+        <querytext>
+            select count(*)
+            from cr_items
+            where cr_items.parent_id = :folder_id
+        </querytext>
+    </fullquery>
+
 </queryset>
