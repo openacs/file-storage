@@ -29,7 +29,7 @@
     </td>
   </tr>
 </if>
-<if @delete_p@ true and @nonroot_folder_p@ true and @n_contents@ eq 0>
+<if @delete_p@ true and @root_folder_p@ false and @n_contents@ eq 0>
   <tr><td colspan="2"><br></td></tr>
   <tr>
     <td><li></td>
