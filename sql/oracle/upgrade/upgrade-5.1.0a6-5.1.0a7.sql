@@ -34,6 +34,7 @@ declare
         v_count integer;
         v_prev_parent_id integer;
         v_prev_title cr_items.name%TYPE;
+	v_test integer;
 begin
         v_count := 1;
         v_prev_parent_id := 0;
@@ -42,10 +43,12 @@ begin
 	for v_item_row in fs_item_cur
 	loop
 
-	   update cr_revisions set title=v_item_row.name
+ 	   update cr_revisions set title=v_item_row.name
 		where revision_id=v_item_row.revision_id;
 
-	if (select 1 from cr_items where name=v_item_row.title and parent_id = v_item_row.parent_id) then
+	v_test := 0;
+	select count(*) into v_test from cr_items where name=v_item_row.title and parent_id = v_item_row.parent_id;
+	if v_test > 0 then
 
              --Name collision: change file.ext to file.n.ext
 
