@@ -81,7 +81,7 @@ begin
             where package_id = get_root_folder__package_id;
         else
             -- must be a new instance.  Gotta create a new root folder
-            v_folder_id := file_storage__new_root_folder(get_root_folder__package_id);
+            v_folder_id := file_storage__new_root_folder(get_root_folder__package_id, null, null);
         end if;
 
         return v_folder_id;
@@ -109,6 +109,8 @@ begin
 
     if NOT FOUND then
         return null;
+    else
+        return v_package_id;
     end if;
 end;' language 'plpgsql' with (iscachable);
 
