@@ -47,7 +47,7 @@
         Download an archive of the contents of this folder
       </a>
       <br>
-      <i><strong>Note:</strong> This may take a while, so please be patient.</i>
+      <small><i><strong>Note:</strong> This may take a while, please be patient.</i></small>
     </td>
   </tr>
 </if>

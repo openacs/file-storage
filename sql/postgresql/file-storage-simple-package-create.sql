@@ -69,6 +69,8 @@ select define_function_args('fs_url__new','url_id,object_type;fs_url,url,folder_
 
 select define_function_args('fs_url__delete','url_id');
 
+select define_function_args('fs_url__copy','url_id;target_object_id');
+
 
 create function fs_url__new(integer,varchar,varchar,integer,varchar,varchar,timestamp,integer,varchar,integer)
 returns integer as '
@@ -116,5 +118,60 @@ BEGIN
         PERFORM fs_simple_object__delete(p_url_id);
 
         return 0;
+END;
+' language 'plpgsql';
+
+
+create function fs_url__copy(integer,integer)
+returns integer as '
+DECLARE
+        p_url_id                alias for $1;
+        p_target_folder_id      alias for $2;
+        v_new_url_id            integer;
+        v_url                   varchar;
+        v_name                  varchar;
+        v_description           varchar;
+        v_creation_user         integer;
+        v_creation_ip           varchar;
+BEGIN
+        select url
+        into v_url
+        from fs_urls
+        where url_id = p_url_id;
+
+        select name
+        into v_name
+        from fs_simple_objects
+        where object_id = p_url_id;
+
+        select description
+        into v_description
+        from fs_simple_objects
+        where object_id = p_url_id;
+
+        select creation_user
+        into v_creation_user
+        from acs_objects
+        where object_id = p_url_id;
+
+        select creation_ip
+        into v_creation_ip
+        from acs_objects
+        where object_id = p_url_id;
+
+        v_new_url_id:= fs_url__new (
+            NULL,
+            ''fs_url'',
+            v_url,
+            p_target_folder_id,
+            v_name,
+            v_description,
+            NULL,
+            v_creation_user,
+            v_creation_ip,
+            p_target_folder_id
+        );
+           
+        return v_new_url_id;
 END;
 ' language 'plpgsql';

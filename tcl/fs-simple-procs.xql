@@ -26,4 +26,12 @@ where url_id= :url_id
 </querytext>
 </fullquery>
 
+<fullquery name="fs::simple_p.simple_check">      
+<querytext>
+select case when count(*) = 0 then 0 else 1 end
+from fs_simple_objects
+where object_id = :object_id
+</querytext>
+</fullquery>
+
 </queryset>
