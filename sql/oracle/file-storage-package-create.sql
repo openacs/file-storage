@@ -296,7 +296,7 @@ as
             );
         end if;
 
-        content_item.update_last_modified(file_storage.new_file.folder_id);
+        acs_object.update_last_modified(file_storage.new_file.folder_id);
 
         return v_item_id;
     end new_file;
@@ -391,7 +391,7 @@ as
             content_length = v_content_length
         where revision_id = v_new_version_id;
 
-        content_item.update_last_modified(file_storage.copy_file.target_folder_id);
+        acs_object.update_last_modified(file_storage.copy_file.target_folder_id);
 
         return v_new_version_id;
     end copy_file;
@@ -410,7 +410,7 @@ as
             target_folder_id => file_storage.move_file.target_folder_id
         );
 
-        content_item.update_last_modified(file_storage.move_file.target_folder_id);
+        acs_object.update_last_modified(file_storage.move_file.target_folder_id);
 
     end;
 
@@ -448,7 +448,7 @@ as
         from cr_items
         where cr_items.item_id = file_storage.new_version.item_id;
 
-        content_item.update_last_modified(v_folder_id);
+        acs_object.update_last_modified(v_folder_id);
 
         return v_revision_id;
 

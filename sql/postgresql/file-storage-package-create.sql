@@ -213,7 +213,7 @@ begin
 
 	end if;
 
-        select content_item__update_last_modified(new_file__folder_id);
+        select acs_object__update_last_modified(new_file__folder_id);
 
         return v_item_id;
 
@@ -353,7 +353,7 @@ begin
 
 	end if;
 
-        select content_item__update_last_modified(copy_file__target_folder_id);
+        select acs_object__update_last_modified(copy_file__target_folder_id);
 
 	return v_new_version_id;
 
@@ -378,7 +378,7 @@ begin
 	       move_file__target_folder_id	-- target_folder_id
 	       );
 
-        select content_item__update_last_modified(move_file__target_folder_id);
+        select acs_object__update_last_modified(move_file__target_folder_id);
 
         return 0;
 end;' language 'plpgsql';
@@ -499,7 +499,7 @@ begin
         from cr_items
         where cr_items.item_id = new_version__item_id;
 
-        select content_item__update_last_modified(v_folder_id);
+        select acs_object__update_last_modified(v_folder_id);
 
 	return v_revision_id;
 
