@@ -15,7 +15,7 @@
   
   <fullquery name="delete_item">
     <querytext>
-      select content_item.delete(:object_id)
+      select content_item.delete(:fs_object_id)
     </querytext>
   </fullquery>
   
