@@ -569,5 +569,22 @@ namespace eval fs {
         return [parameter::get -parameter ArchiveExtension -default "txt"]
     }
 
+    ad_proc get_type_icon {
+	type
+    } {
+	returns the filename of the icon to be used to represent the particular type
+    } {
+
+	switch $type {
+	    "application/pdf"       { return "pdf.gif" }
+	    "application/msword"    { return "msword.gif" }
+	    "application/vnd.ms-excel" { return "msexcel.gif" }
+	    "url"                   { return "url.gif" }
+	    "folder"                { return "folder.png" }
+	}
+
+	return "file.png"
+    }
+
 }
 
