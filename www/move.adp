@@ -3,14 +3,13 @@
   <property name="context">@context@</property>
  <if @allowed_count@ gt 0>
   <if @allowed_count@ eq @total_count@>
-    Moving @allowed_count@ items.
-  </if><else>@not_allowed_count@ items can not be moved</else>
+    #file-storage.lt_Moving_allowed_count_#
+  </if><else>#file-storage.lt_not_allowed_count_ite#</else>
   
  <if @show_items@ eq 1>
   <listtemplate name="move_objects"></listtemplate>
  </if>
 
-  <p>#file-storage.lt_Select_the_folder_tha_1#</p>
   <listtemplate name="folder_tree"></listtemplate>
  </if>
-  <else>No valid items to be moved.</else>
+  <else>#file-storage.lt_No_valid_items_to_be_#</else>

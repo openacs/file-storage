@@ -24,7 +24,7 @@ db_multirow -extend {move_message} move_objects get_move_objects "" {
 	set move_message ""
 	incr allowed_count
     } else {
-	set move_message "Not Allowed"
+	set move_message [_ file_storage.Not_Allowed]
 	incr not_allowed_count
     }
   
@@ -60,7 +60,7 @@ if {[info exists folder_id]} {
 	-name move_objects \
 	-multirow move_objects \
 	-elements {
-	    name {label "Files to be moved"}
+	    name {label \#file-storage.Files_to_be_moved\#}
 	    move_message {}
 	}
     
@@ -69,12 +69,12 @@ if {[info exists folder_id]} {
         -pass_properties { item_id redirect_to_folder return_url } \
         -multirow folder_tree \
         -key folder_id \
-	-no_data "No valid destination folders exist" \
+	-no_data [_ file-storage.No_valid_destination_folders_exist] \
         -elements {
             label {
-                label "Choose Destination Folder"
+                label "\#file-storage.Choose_Destination_Folder\#"
                 link_url_col move_url
-		link_html {title "Move to @folder_tree.label@"}
+		link_html {title "\#file-storage.Move_to_folder_title\#"}
 		display_template {<div style="text-indent: @folder_tree.level@em;">@folder_tree.label@</div>} 
             }
         }
@@ -84,10 +84,7 @@ if {[info exists folder_id]} {
 	
     }
 
-    set title "Move"
-
 }
 
-set context [list "Move Items"]
-set title "Move Items"
-set file_name "FIX ME"
+set context [list "\#file-storage.Move\#"]
+set title "\#file-storage.Move\#"
