@@ -3,11 +3,6 @@ set package_id [ad_conn package_id]
 
 if ![empty_string_p $file_id] {
     set children_clause [db_map children_clause]
-    #"and item_id not in (select item_id
-    #from cr_items
-    #where item_id != :file_id
-    #connect by prior item_id = parent_id
-    #start with item_id = :file_id)"
 } else {
     set children_clause ""
 }
@@ -27,4 +22,3 @@ set sql "
  start with item_id = file_storage.get_root_folder(:package_id)
 "
 db_multirow folder folder $sql
-

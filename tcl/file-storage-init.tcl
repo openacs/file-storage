@@ -29,3 +29,4 @@ ad_proc file_storage_post_instantiation {
     # We should probably just define this function here, and remove from the fs namespace
     return [fs::new_root_folder -package_id $package_id]
 }
+

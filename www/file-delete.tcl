@@ -10,7 +10,7 @@ ad_page_contract {
 } -validate {
     valid_file -requires {file_id} {
 	if ![fs_file_p $file_id] {
-	    ad_complain "The specified file is not valid."
+	    ad_complain "[_ file-storage.lt_The_specified_file_is]"
 	}
     }
 } -properties {
@@ -56,6 +56,5 @@ if {[string equal $confirmed_p "t"] && [string equal $blocked_p "f"] } {
     	from   cr_items
     	where  item_id = :file_id"
 
-    set context [fs_context_bar_list -final "Delete" $file_id]
-
+    set context [fs_context_bar_list -final "[_ file-storage.Delete]" $file_id]
 }

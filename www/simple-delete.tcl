@@ -16,3 +16,4 @@ ad_require_permission $object_id delete
 fs::simple_delete -object_id $object_id
 
 ad_returnredirect "./?folder_id=$folder_id"
+

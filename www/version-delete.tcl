@@ -10,7 +10,7 @@ ad_page_contract {
 } -validate {
     valid_version -requires {version_id} {
 	if ![fs_version_p $version_id] {
-	    ad_complain "The specified version is not valid."
+	    ad_complain [_ file-storage.lt_version_not_valid]
 	}
     }
 } -properties {
@@ -69,5 +69,5 @@ if {[string equal $confirmed_p "t"]} {
     where i.item_id = r.item_id
     and revision_id = :version_id"
 
-    set context [fs_context_bar_list -final "Delete Version" $item_id]
+    set context [fs_context_bar_list -final [_ file-storage.Delete_Version] $item_id]
 }

@@ -13,7 +13,7 @@ ad_page_contract {
 } -validate {
     valid_file -requires {file_id} {
 	if ![fs_file_p $file_id] {
-	    ad_complain "The specified file is not valid."
+	    ad_complain "[_ file-storage.lt_The_specified_file_is]"
 	}
     }
 
@@ -21,7 +21,8 @@ ad_page_contract {
 	set n_bytes [file size ${upload_file.tmpfile}]
 	set max_bytes [ad_parameter "MaximumFileSize"]
 	if { $n_bytes > $max_bytes } {
-	    ad_complain "Your file is larger than the maximum file size allowed on this system ([util_commify_number $max_bytes] bytes)"
+            set number_of_bytes "[util_commify_number $max_bytes]"
+	    ad_complain [_ [ad_conn locale] file-storage.lt_Your_file_is_larger_t] "" [list number_of_bytes $number_of_bytes]]
 	}
     }
 }

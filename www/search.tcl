@@ -13,7 +13,7 @@ ad_page_contract {
 }
 
 set user_id [ad_conn user_id]
-set context "Search"
+set context [_ file-storage.Search]
 
 # Bash the query to lowercase
 

@@ -9,7 +9,7 @@ ad_page_contract {
 } -validate {
     valid_folder -requires {parent_id:integer} {
 	if ![fs_folder_p $folder_id] {
-	    ad_complain "The specified folder does not exist."
+	    ad_complain "[_ file-storage.lt_The_specified_folder_]"
 	}
     }
 } -properties {
@@ -21,7 +21,7 @@ ad_require_permission $folder_id admin
 
 # set templating datasources
 
-set context_bar [fs_context_bar_list -final "Edit" $folder_id]
+set context_bar [fs_context_bar_list -final "[_ file-storage.Edit]" $folder_id]
 
 set folder_name [fs_get_folder_name $folder_id]
 

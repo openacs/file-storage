@@ -41,19 +41,19 @@ element create n_past_days_form n_past_days \
     -value $n_past_days
 
 element create n_past_days_form folder_id \
-    -label "Folder ID" \
+    -label "[_ file-storage.Folder_ID]" \
     -datatype text \
     -widget hidden \
     -value $folder_id
 
 element create n_past_days_form recurse_p \
-    -label "RecurseP" \
+    -label "[_ file-storage.Recurse]" \
     -datatype text \
     -widget hidden \
     -value $recurse_p
 
 element create n_past_days_form orderby \
-    -label "Order By" \
+    -label "[_ file-storage.Order_By]" \
     -datatype text \
     -widget hidden \
     -value $orderby
@@ -105,7 +105,7 @@ if {$recurse_p} {
 
 set table [ad_table \
     -Torderby $orderby \
-    -Tmissing_text "<blockquote><i>Folder [fs::get_object_name -object_id $folder_id] is empty.</i></blockquote>" \
+    -Tmissing_text "<blockquote><i>[_ [ad_conn locale] file-storage.lt_Folder_folder_name_is] "" [list folder_name [fs::get_object_name -object_id $folder_id]]]</i></blockquote>" \
     -Ttable_extra_html {width="95%"} \
     select_folder_contents \
     $sql \
@@ -114,4 +114,3 @@ set table [ad_table \
 
 set folder_name [fs::get_object_name -object_id $folder_id]
 set context [fs_context_bar_list -final Contents $folder_id]
-

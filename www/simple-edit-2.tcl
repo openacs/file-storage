@@ -20,3 +20,4 @@ fs::url_edit -url_id $object_id -name $name -description $description -url $url
 set folder_id [db_string select_folder_id "select folder_id from fs_simple_objects where object_id= :object_id"]
 
 ad_returnredirect "?folder_id=$folder_id"
+

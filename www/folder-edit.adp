@@ -1,5 +1,5 @@
 <master>
-<property name="title">Edit Folder</property>
+<property name="title">#file-storage.Edit_Folder#</property>
 <property name="context">@context_bar@</property>
 
 
@@ -8,13 +8,14 @@
 
 <table>
  <tr>
-  <td align=right>Folder Name:</td>
+  <td align=right>#file-storage.Folder_Name#</td>
   <td><input type=text name=folder_name value="@folder_name@" size=20></td>
  </tr>
  <tr>
   <td>&nbsp;</td>
-  <td><input type=submit value="Save"></td>
+  <td><input type=submit value="#file-storage.Save#"></td>
  </tr>
 </table>
 
 </form>
+

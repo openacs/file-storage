@@ -11,7 +11,7 @@ ad_page_contract {
 } -validate {
     valid_folder -requires {folder_id:integer} {
 	if {![fs_folder_p $folder_id]} {
-	    ad_complain "The specified folder is not valid."
+	    ad_complain "[_ file-storage.lt_The_specified_folder__1]"
 	}
     }
 } -properties {
@@ -68,7 +68,7 @@ element create n_past_days_form n_past_days \
     -value $n_past_days
 
 element create n_past_days_form folder_id \
-    -label "Folder ID" \
+    -label "[_ file-storage.Folder_ID]" \
     -datatype text \
     -widget hidden \
     -value $folder_id

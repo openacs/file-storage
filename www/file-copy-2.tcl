@@ -10,13 +10,13 @@ ad_page_contract {
 } -validate {
     valid_file -requires {file_id} {
 	if ![fs_file_p $file_id] {
-	    ad_complain "The specified file is not valid."
+	    ad_complain "[_ file-storage.lt_The_specified_file_is]"
 	}
     }
 
     valid_folder -requires {parent_id} {
 	if ![fs_folder_p $parent_id] {
-	    ad_complain "The specified parent folder is not valid."
+	    ad_complain "[_ file-storage.lt_The_specified_parent_]"
 	}
     }
 }
@@ -47,7 +47,9 @@ db_transaction {
 
 } on_error {
 
-    ad_return_complaint 1 "The <a href=\"index?folder_id=$parent_id\">folder</a> you selected already contains a file with the same name. " 
+    set folder_name "[_ file-storage.folder]"
+    set folder_link "<a href=\"index?folder_id=$parent_id\">$folder_name</a>"
+    ad_return_complaint 1 "[_ file-storage.lt_The_folder_link_you_s]"
 
 #    <pre>$errmsg</pre>
 

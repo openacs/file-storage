@@ -4,8 +4,7 @@
 
 <if @blocked_p@ eq "t">
 
-<p>This folder contains items that you do not have permission to
-delete, therefore you cannot delete it.
+<p>#file-storage.lt_This_folder_contains_#
 
 </if>
 <else>
@@ -14,14 +13,14 @@ delete, therefore you cannot delete it.
 <input type=hidden name=folder_id value=@folder_id@>
 <input type=hidden name=confirmed_p value="t">
 
-<p>Are you sure you want to delete the folder "@folder_name@" and all
-the items it contains?  This action cannot be reversed.
+<p>#file-storage.lt_delete_folder#
 
 <p>
 <center>
-<input type=submit value="Yes, Delete It">
+<input type=submit value="#file-storage.Yes_Delete_It#">
 </center>
 
 </form>
 
 </else>
+

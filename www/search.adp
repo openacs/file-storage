@@ -1,5 +1,5 @@
 <master>
-<property name="title">Search Results</property>
+<property name="title">#file-storage.Search_Results#</property>
 <property name="context">@context@</property>
 
 <if @results:rowcount@ eq 0>
@@ -16,7 +16,9 @@
 </else>
 
 <form method=POST action=search>
-Search again:
+#file-storage.Search_again#
 <input type=text size=30 name=query>
 </form>
+
+
 

@@ -10,7 +10,7 @@ ad_page_contract {
 } -validate {
     valid_folder -requires {parent_id:integer} {
 	if ![fs_folder_p $parent_id] {
-	    ad_complain "The specified parent folder is not valid."
+	    ad_complain "[_ file-storage.lt_The_specified_parent_]"
 	}
     }
 }
@@ -46,25 +46,10 @@ end;"]
 
 } on_error {
 
-    # most likely a duplicate name or a double click
-
-    #if [db_string duplicate_check "
-    #select count(*)
-    #from   cr_items
-    #where  name = :name
-    #and    parent_id = :parent_id"] {
-    
-    ad_return_complaint 1 "Either there is already a folder with the name \"$folder_name\" or you clicked on the button more than once.  You can use the Back button to return and choose a new name, or <a href=\"index?folder_id=$parent_id\">return to the directory listing</a> to see if your folder is there."
-    #} else {
-#	ad_return_complaint 1 "We got an error that we couldn't readily identify.  Please let the system owner know about this.
-#
-#	<pre>$errmsg</pre>"
-#    }
+    ad_return_complaint 1 [_ [ad_conn locale] file-storage.lt_Either_there_is_alrea] "" [list folder_name $folder_name directory_url "index?folder_id=$parent_id"]]
     
      ad_script_abort
 }
 
 
 ad_returnredirect "?folder_id=$folder_id"
-
-

@@ -10,7 +10,7 @@ ad_page_contract {
 } -validate {
     valid_file -requires {file_id} {
 	if ![fs_file_p $file_id] {
-	    ad_complain "The specified file is not valid."
+	    ad_complain "[_ file-storage.lt_The_specified_file_is]"
 	}
     }
 }
@@ -32,9 +32,9 @@ end;"} errmsg] {
     from   cr_items
     where  name = :name
     and    parent_id = content_item.get_parent_folder(:file_id)"] {
-	ad_return_complaint 1 "It appears that there is already a file with that name in this folder (although possibly you clicked more than once on the submit button.)"
+	ad_return_complaint 1 "[_ file-storage.lt_It_appears_that_there]"
     } else {
-	ad_return_complaint 1 "We got an error that we couldn't readily identify.  Please let the system owner know about this.
+	ad_return_complaint 1 "[_ file-storage.lt_We_got_an_error_that_]
 
 	<pre>$errmsg</pre>"
     }

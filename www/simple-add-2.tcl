@@ -12,7 +12,7 @@ ad_page_contract {
 } -validate {
     valid_folder -requires {folder_id:integer} {
 	if ![fs_folder_p $folder_id] {
-	    ad_complain "The specified parent folder is not valid."
+	    ad_complain "[_ file-storage.lt_The_specified_parent_]"
 	}
     }
 
@@ -25,3 +25,4 @@ ad_require_permission $folder_id write
 set url_id [fs::url_new -url $url -name $title -description $description -folder_id $folder_id]
 
 ad_returnredirect "?folder_id=$folder_id"
+

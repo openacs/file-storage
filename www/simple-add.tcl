@@ -13,7 +13,7 @@ ad_page_contract {
 } -validate {
     valid_folder -requires {folder_id:integer} {
 	if ![fs_folder_p $folder_id] {
-	    ad_complain "The specified parent folder is not valid."
+	    ad_complain "[_ file-storage.lt_The_specified_parent_]"
 	}
     }
 } -properties {
@@ -29,10 +29,10 @@ ad_require_permission $folder_id write
 
 set pretty_name [fs::simple_get_type_pretty_name -type $type]
 if {[empty_string_p $pretty_name]} {
-    return -code error "No such type"
+    return -code error "[_ file-storage.No_such_type]"
 }
 
-set context [fs_context_bar_list -final "Add $pretty_name" $folder_id]
+set context [fs_context_bar_list -final [_ [ad_conn locale] file-storage.Add_pretty_name "" [list pretty_name $pretty_name]]" $folder_id]
 
 # Should probably generate the item_id and version_id now for
 # double-click protection

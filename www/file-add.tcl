@@ -11,7 +11,7 @@ ad_page_contract {
 } -validate {
     valid_folder -requires {folder_id:integer} {
 	if ![fs_folder_p $folder_id] {
-	    ad_complain "The specified parent folder is not valid."
+	    ad_complain "[_ file-storage.lt_The_specified_parent_]"
 	}
     }
 } -properties {
@@ -27,7 +27,7 @@ ad_require_permission $folder_id write
 
 # set templating datasources
 
-set context [fs_context_bar_list -final "Add File" $folder_id]
+set context [fs_context_bar_list -final "[_ file-storage.Add_File]" $folder_id]
 
 # Should probably generate the item_id and version_id now for
 # double-click protection
@@ -36,4 +36,3 @@ set context [fs_context_bar_list -final "Add File" $folder_id]
 if {[empty_string_p $title]} {
     set lock_title_p 0
 }
-

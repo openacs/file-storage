@@ -9,7 +9,7 @@ ad_page_contract {
 } -validate {
     valid_file -requires {file_id} {
 	if ![fs_file_p $file_id] {
-	    ad_complain "The specified file is not valid."
+	    ad_complain "[_ file-storage.lt_The_specified_file_is]"
 	}
     }
 } -properties {
@@ -31,6 +31,6 @@ where  revision_id = (select live_revision
                       from   cr_items
                       where  item_id = :file_id)"
 
-set context [fs_context_bar_list -final "Upload New Version" $file_id]
+set context [fs_context_bar_list -final "[_ file-storage.Upload_New_Version]" $file_id]
 
 ad_return_template

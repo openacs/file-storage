@@ -17,5 +17,6 @@ set url [db_string select_url "select url from fs_urls where url_id= :url_id" -d
 if {![empty_string_p $url]} {
     ad_returnredirect $url
 } else {
-    return -code error "no such URL"
+    return -code error [_ file-storage.no_such_URL]
 }
+

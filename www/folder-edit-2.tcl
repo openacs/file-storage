@@ -10,7 +10,7 @@ ad_page_contract {
 } -validate {
     valid_folder -requires {folder_id:integer} {
 	if ![fs_folder_p $folder_id] {
-	    ad_complain "The specified folder does not exist."
+	    ad_complain "[_ file-storage.lt_The_specified_folder_]"
 	}
     }
 }
@@ -32,5 +32,3 @@ set creation_ip [ad_conn peeraddr]
 db_exec_plsql folder_rename {}
 
 ad_returnredirect "?folder_id=$folder_id"
-
-
