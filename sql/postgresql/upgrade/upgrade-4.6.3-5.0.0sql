@@ -35,7 +35,7 @@ end;' language 'plpgsql';
 select inline_0();
 drop function inline_0();
 
-create function file_storage__new_version (
+create or replace function file_storage__new_version (
        --
        -- Create a new version of a file
        -- Wrapper for content_revision__new
