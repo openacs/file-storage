@@ -38,6 +38,7 @@
   <msg key="lt_delete_file">Tem a certeza de que quer eliminar o ficheiro &quot;%title%&quot; e todas as suas versões? Esta acção não é reversível.</msg>
   <msg key="lt_delete_folder">Tem a certeza de que quer eliminar a pasta &quot;%folder_name%&quot; e todo o seu conteúdo? Esta acção não é reversível.</msg>
   <msg key="lt_Delete_this_file_incl">Eliminar este ficheiro (incluindo todas as versões)</msg>
+  <msg key="lt_Download_an_archive_o">Fazer o download dum arquivo de todo o conteúdo desta pasta</msg>
   <msg key="lt_Either_there_is_alrea">Já existe uma pasta com o nome &quot;%folder_name%&quot; ou clicou no botão mais do que uma vez. Pode utilizar o botão de Retroceder e escolher um novo nome, ou &lt;a href=&quot;%directory_url%&quot;&gt;retornar á lista dos directórios&lt;/a&gt; para ver se a pasta se encontra lá. </msg>
   <msg key="lt_Folder_folder_name_is">A pasta %folder_name% está vazia.</msg>
   <msg key="lt_It_appears_that_there">Parece que já existe um ficheiro com esse nome nesta pasta (embora possivelmente tenha clicado mais do que uma vez no botão de submissão.)</msg>

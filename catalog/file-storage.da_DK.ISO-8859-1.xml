@@ -35,11 +35,10 @@
   <msg key="lt_administer_permission">administrer rettigheder</msg>
   <msg key="lt_Are_you_sure_that_you">Er du sikker på, at du ønsker at slette denne version &quot;%version_name%&quot; af &quot;%title%&quot;? Denne handling kan ikke fortrydes.</msg>
   <msg key="lt_bad_folder_id_folder_">manglende mappe id</msg>
-  <msg key="lt_contentscontent_size_">%contents.content_size_pretty% bytes</msg>
   <msg key="lt_delete_file">Er du sikker på at du vil slette filen &quot;%title%&quot; og alle dens revisioner? Denne handling kan ikke fortrydes.</msg>
   <msg key="lt_delete_folder">Er du sikker på at du vil slette mappen &quot;%folder_name%&quot; og alle de ting den indeholder? Denne handling kan ikke gøres om.</msg>
   <msg key="lt_Delete_this_file_incl">Slet denne fil (inklusiv alle versioner)</msg>
-  <msg key="lt_Download_an_archive_o">Download en arkivfil med indeholdet af denne mappe</msg>
+  <msg key="lt_Download_an_archive_o">Download et arkiv med indholdet af denne mappe.</msg>
   <msg key="lt_Either_there_is_alrea">Der er enten allerede en mappe med navnet &quot;%folder_name%&quot;, eller du har klikket på knappen mere end én gang. Du kan bruge Tilbage-knappen og vælge et nyt navn, eller du kan &lt;a href=&quot;%directory_url%&quot;&gt;vende tilbage til mappeoversigten&lt;/a&gt; og se, om din mappe er oprettet dér.</msg>
   <msg key="lt_Folder_folder_name_is">Mappen %folder_name% er tom</msg>
   <msg key="lt_It_appears_that_there">Der er allerede en fil med det navn i denne mappe. Måske har du klikket to gange.</msg>
@@ -68,7 +67,7 @@
   <msg key="Modified">Ændret</msg>
   <msg key="Move">Flyt</msg>
   <msg key="Name">Navn</msg>
-  <msg key="new">[&lt;b&gt;Ny&lt;/b&gt;]</msg>
+  <msg key="new">ny</msg>
   <msg key="No_such_type">Ingen sådan type</msg>
   <msg key="no_such_URL">URL'en var ikke gyldig</msg>
   <msg key="Rename">Omdøb</msg>
@@ -80,7 +79,6 @@
   <msg key="show_all_versions">vis alle versioner</msg>
   <msg key="Size">Størrelse</msg>
   <msg key="Size_bytes">Størrelse (bytes)</msg>
-  <msg key="this_may_take_a_while">&lt;b&gt;NB&lt;/b&gt; Dette kan godt tage et stykke tid.</msg>
   <msg key="Title">Titel:</msg>
   <msg key="Title_">Titel:</msg>
   <msg key="Type">Type</msg>
@@ -96,6 +94,6 @@
   <msg key="Version_filename_1">Version filnavn:</msg>
   <msg key="Version_Notes">Versionsnoter</msg>
   <msg key="Version_Notes_1">Versionsnoter:</msg>
-  <msg key="view_details">Vis detajler</msg>
+  <msg key="view_details">vis detajler</msg>
   <msg key="Yes_Delete_It">Ja, Slet Den</msg>
 </message_catalog>

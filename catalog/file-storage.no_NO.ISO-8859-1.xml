@@ -38,6 +38,7 @@
   <msg key="lt_delete_file">Er du sikker på at di vil slette filen &quot;%title%&quot; og alle versjonene av den? Denne ordren kan ikke omgjøres.</msg>
   <msg key="lt_delete_folder">Er du sikker på at di vil slette mappen &quot;%folder_name%&quot; og alle innleggene den inneholder? Denne ordren kan ikke omgjøres.</msg>
   <msg key="lt_Delete_this_file_incl">Slett denne filen (med alle versjoner)</msg>
+  <msg key="lt_Download_an_archive_o">Last ned et arkiv av innholdet i denne mappen</msg>
   <msg key="lt_Either_there_is_alrea">Enten er det allerede en mappe som heter &quot;%folder_name%&quot; eller så har du klikket på knappen mer enn en gang. Du kan bruke Tilbake-knappen for å gå tilbake og velge et nytt navn eller &lt;a href=&quot;%directory_url%&quot;&gt;gå tilbake til innkoldlisten&lt;/a&gt; for å se om mappen din er der.</msg>
   <msg key="lt_Folder_folder_name_is">Mappen %folder_name% er tom. </msg>
   <msg key="lt_It_appears_that_there">Det virker som om det allerede er en fil med dette navnet i denne mappen (eller kanskje har du klikket mer enn en gang på send-knappen.)</msg>

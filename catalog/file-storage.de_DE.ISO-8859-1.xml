@@ -40,6 +40,7 @@
   <msg key="lt_delete_file">Wollen Sie die Datei &quot;%title%&quot; mit allen Versionen unwiderruflich löschen?</msg>
   <msg key="lt_delete_folder">Wollen Sie den Ordner &quot;%folder_name%&quot; und seinen gesamten Inhalt unwiderruflich löschen?</msg>
   <msg key="lt_Delete_this_file_incl">Diese Datei mit allen Versionen löschen </msg>
+  <msg key="lt_Download_an_archive_o">Den Inhalt dieses Ordners als komprimierte Datei herunterladen</msg>
   <msg key="lt_Either_there_is_alrea">Entweder gibt es den Ordner &quot;%folder_name%&quot; schon oder Sie haben mehrfach auf die Schaltfläche geklickt-
 Sie können mit Schaltfläche &quot;Zurück&quot; zurückkehren und einen anderen Namen wählen, oder &lt;a href=&quot;%directory_url%&quot;&gt;zur Verzeichnis-Liste zurückkehren&lt;/a&gt; um nachzuschauen ob der Ordner dort ist.</msg>
   <msg key="lt_Folder_folder_name_is">Der Ordner %folder_name% ist leer.</msg>

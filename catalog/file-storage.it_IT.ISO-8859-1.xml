@@ -38,6 +38,7 @@
   <msg key="lt_delete_file">Sei sicuro di voler cancellare il file &quot;%title%&quot; e tutte le sue versioni? Questa azione non &amp;egrave; reversibile.</msg>
   <msg key="lt_delete_folder">Sei sicuro di voler cancellare la cartella &quot;%folder_name%&quot; e tutti gli elementi che contiene? Questa azione non &amp;egrave; reversibile</msg>
   <msg key="lt_Delete_this_file_incl">Cancella questo file (con tutte le versioni)</msg>
+  <msg key="lt_Download_an_archive_o">Comprimi il contenuto di questa cartella in un archivio scaricabile(formato tgz)</msg>
   <msg key="lt_Either_there_is_alrea">O &amp;egrave; gi&amp;agrave; presente una cartella con nome &quot;%folder_name%&quot; oppure hai premuto invio pi&amp;ugrave; volte. Puoi usare il tasto Back per tornare indietro e scegliere un nuovo nome, o &lt;a href=&quot;%directory_url%&quot;&gt;torna all'elenco delle directory&lt;/a&gt; per verificare se la tua cartella &amp;egrave; l&amp;igrave;. </msg>
   <msg key="lt_Folder_folder_name_is">La cartella %folder_name% &amp;egrave; vuota.</msg>
   <msg key="lt_It_appears_that_there">Sembra che ci sia gi&amp;agrave; un file con quel nome in questa cartella (&amp;egrave; tuttavia possibile che tu abbia premuto il tasto invio pi&amp;ugrave; volte).</msg>
