@@ -33,3 +33,6 @@ if {$dav_installed_p} {
     set dav_enabled_p 0
 }
 
+db_multirow fs_folders file_storage_folders ""
+
+ad_return_template
