@@ -112,12 +112,12 @@
     <fullquery name="fs_context_bar_list.context_bar">
         <querytext>
             select (case when file_storage__get_content_type(i.item_id) = 'content_folder'
-                         then 'index?folder_id='
-                         else 'file?file_id='
+                         then :folder_url || '?folder_id='
+                         else :file_url || '?file_id='
                     end) || i.item_id,
                    file_storage__get_title(i.item_id)
             from (select tree_ancestor_keys(cr_items_get_tree_sortkey(:start_id)) as tree_sortkey) parents,
-                 (select tree_sortkey from cr_items where item_id = file_storage__get_root_folder([ad_conn package_id])) root,
+                 (select tree_sortkey from cr_items where item_id = :root_folder_id) root,
                  cr_items i
             where i.tree_sortkey = parents.tree_sortkey
             and i.tree_sortkey > root.tree_sortkey
