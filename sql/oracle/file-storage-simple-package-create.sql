@@ -60,7 +60,7 @@ as
         (object_id, folder_id, name, description) values
         (v_object_id, folder_id, name, description);
 
-        content_item.update_last_modified(fs_simple_object.new.folder_id);
+        acs_object.update_last_modified(fs_simple_object.new.folder_id);
 
         return v_object_id;
     end new;
