@@ -4,7 +4,7 @@
       <td>&nbsp;</td>
       <td>Name</td>
       <td>Action</td>
-      <td>Size</td>
+      <td align="center">Size</td>
       <td>Type</td>
       <td>Last Modified</td>
     </tr>
