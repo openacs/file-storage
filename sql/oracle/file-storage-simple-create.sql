@@ -44,7 +44,8 @@ begin
         pretty_name => 'File Storage Simple Object',
         pretty_plural => 'File Storage Simple Objects',
         table_name => 'fs_simple_objects',
-        id_column => 'object_id'
+        id_column => 'object_id',
+        name_method => 'fs_simple_object.name'
     );
 
     -- links

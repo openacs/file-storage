@@ -10,11 +10,7 @@
 -- @cvs-id $Id$
 --
 
-
 select define_function_args('fs_simple_object__new','object_id,object_type;fs_simple_object,folder_id,name,description,creation_date,creation_user,creation_ip,context_id');
-
-select define_function_args('fs_simple_object__delete','object_id');
-
 
 create function fs_simple_object__new(integer,varchar,integer,varchar,varchar,timestamp,integer,varchar,integer)
 returns integer as '
@@ -42,15 +38,15 @@ BEGIN
         insert into fs_simple_objects
         (object_id, folder_id, name, description) values
         (v_object_id, p_folder_id, p_name, p_description);
-         
+
         acs_object__update_last_modified(p_folder_id);
 
         return v_object_id;
-     
+
 END;
 ' language 'plpgsql';
 
-
+select define_function_args('fs_simple_object__delete','object_id');
 
 create function fs_simple_object__delete(integer)
 returns integer as '
@@ -63,14 +59,24 @@ BEGIN
 END;
 ' language 'plpgsql';
 
+select define_function_args('fs_simple_object__name', 'object_id');
 
+create function fs_simple_object__name(integer)
+returns integer as '
+declare
+    p_object_id                     alias from $1;
+begin
+    return name
+    from fs_simple_objects
+    where object_id = p_object_id;
+end;
+' language 'plpgsql';
 
 select define_function_args('fs_url__new','url_id,object_type;fs_url,url,folder_id,name,description,creation_date,creation_user,creation_ip,context_id');
 
 select define_function_args('fs_url__delete','url_id');
 
 select define_function_args('fs_url__copy','url_id;target_object_id');
-
 
 create function fs_url__new(integer,varchar,varchar,integer,varchar,varchar,timestamp,integer,varchar,integer)
 returns integer as '
@@ -98,7 +104,7 @@ BEGIN
             p_creation_ip,
             p_context_id
         );
-           
+
         insert into fs_urls
         (url_id, url) values
         (v_url_id, p_url);
@@ -171,7 +177,7 @@ BEGIN
             v_creation_ip,
             p_target_folder_id
         );
-           
+
         return v_new_url_id;
 END;
 ' language 'plpgsql';
