@@ -43,7 +43,7 @@
     <fullquery name="fs::rename_folder.rename_folder">
         <querytext>
             begin
-                content_folder.rename(
+                content_folder.edit_name(
                     folder_id => :folder_id,
                     label => :name
                 );

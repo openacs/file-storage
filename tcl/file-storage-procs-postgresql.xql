@@ -34,7 +34,7 @@
 
     <fullquery name="fs::rename_folder.rename_folder">
         <querytext>
-            select content_folder__rename(
+            select content_folder__edit_name(
                 :folder_id,
                 null,
                 :name,
