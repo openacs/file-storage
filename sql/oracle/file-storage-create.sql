@@ -71,6 +71,10 @@ as
         package_id in apm_packages.package_id%TYPE
     ) return fs_root_folders.folder_id%TYPE;
 
+    function get_package_id(
+        item_id in cr_items.item_id%TYPE
+    ) return fs_root_folders.package_id%TYPE;
+
     function new_root_folder(
         --
         -- Creates a new root folder
@@ -219,6 +223,27 @@ as
 
         return v_folder_id;
     end get_root_folder;
+
+    function get_package_id(
+        item_id in cr_items.item_id%TYPE
+    ) return fs_root_folders.package_id%TYPE
+    is
+        v_package_id            fs_root_folders.package_id%TYPE;
+    begin
+        select fs_root_folders.package_id
+        into v_package_id
+        from fs_root_folders,
+             (select cr_items.item_id
+              from cr_items
+              connect by prior cr_items.parent_id = cr_items.item_id
+              start with cr_items.item_id = get_package_id.item_id) this
+        where fs_root_folders.folder_id = this.item_id;
+
+        return v_package_id;
+
+    exception when NO_DATA_FOUND then
+        return null;
+    end get_package_id;
 
     function new_root_folder(
         --
