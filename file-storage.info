@@ -7,27 +7,29 @@
     <initial-install-p>f</initial-install-p>
     <singleton-p>f</singleton-p>
     
-    <version name="4.6.2" url="http://www.openacs.org/repository/download/apm/file-storage-4.6.2.apm">
-        <owner url="mailto:jowellsabino@netscape.net">Jowell S. Sabino</owner>
+    <version name="4.6.4" url="http://www.openacs.org/repository/download/apm/file-storage-4.6.4.apm">
+        <owner url="mailto:dave@thedesignexperience.org">Dave Bauer</owner>
         <summary>This application allows users to collaboratively maintain documents on the web server	</summary>
-        <release-date>2002-10-27</release-date>
+        <release-date>2003-11-09</release-date>
         <vendor url="http://www.openacs.org/">OpenACS</vendor>
         <description format="text/plain">Now allows storage of files on the filesystem or database.</description>
 
-        <provides url="file-storage" version="4.6.2"/>
+        <provides url="file-storage" version="4.6.4"/>
         <requires url="acs-content-repository" version="4.6.5"/>
         <requires url="acs-kernel" version="4.6.2"/>
 
-            <!-- No files -->
         <callbacks>
+            <callback type="after-install"  proc="fs::install::package_install"/>
+            <callback type="after-mount"  proc="fs::after_mount"/>
+            <callback type="after-upgrade"  proc="fs::install::upgrade"/>
         </callbacks>
         <parameters>
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="StoreFilesInDatabaseP"  default="1" description="Flag to determine the storage type. A flag of 1 (true) will store the files in the database. If 0 (false) files are stored in the filesystem. ***This parameter should only be changed at package instance creation.***"/>
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="GeneralCommentsP"  default="0" description="Allow comments to be attached to a file."/>
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="MaximumFileSize"  default="2000000" description="The maximum size, in bytes, of files that users are allowed to upload"/>
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="ShowAdministerPermissionsLinkP"  default="1" description="Whether or not to show a link to administer permissions on the file storage object."/>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ArchiveCommand"  default="tar -czf {out_file} {in_file}" description="Program (and program options) to use for archiving file storage objects. Use the special tags {in_file} and {out_file} (including the curly braces) to denote the locations of the input and output files on the command line."/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ArchiveExtension"  default="tgz" description="The extension that the programmer should add to the output file. This depends on the value of ArchiveCommand"/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ArchiveCommand"  default="tar -czf {out_file} {in_file}" description="Program (and program options) to use for archiving file storage objects. Use the special tags {in_file} and {out_file} (including the curly braces) to denote the locations of the input and output files on the command line."/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="ShowAdministerPermissionsLinkP"  default="1" description="Whether or not to show a link to administer permissions on the file storage object."/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="MaximumFileSize"  default="2000000" description="The maximum size, in bytes, of files that users are allowed to upload"/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="GeneralCommentsP"  default="0" description="Allow comments to be attached to a file."/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="StoreFilesInDatabaseP"  default="1" description="Flag to determine the storage type. A flag of 1 (true) will store the files in the database. If 0 (false) files are stored in the filesystem. ***This parameter should only be changed at package instance creation.***"/>
         </parameters>
 
     </version>
