@@ -45,6 +45,17 @@ where  o.object_id = :file_id
 and    i.item_id   = o.object_id
 and    r.revision_id = i.live_revision"
 
+# We use the new db_map here
+if {[string equal $show_all_versions_p "t"]} {
+#    append sql "
+#and r.item_id = :file_id"
+    set show_versions [db_map show_all_versions]
+} else {
+#    append sql "
+#and r.revision_id = (select live_revision from cr_items where item_id = :file_id)"
+    set show_versions [db_map show_live_version]
+}
+
 set sql "
 select r.title,
        r.revision_id as version_id,
@@ -54,19 +65,12 @@ select r.title,
        r.description,
        acs_permission.permission_p(r.revision_id,:user_id,'admin') as admin_p,
        acs_permission.permission_p(r.revision_id,:user_id,'delete') as delete_p,
-       dbms_lob.getlength(r.content) as content_size
+       -- dbms_lob.getlength(r.content) as content_size
+       r.content_length as content_size
 from   acs_objects o, cr_revisions r
 where  o.object_id = r.revision_id
-and    acs_permission.permission_p(r.revision_id, :user_id, 'read') = 't'"
-
-
-if {[string equal $show_all_versions_p "t"]} {
-    append sql "
-and r.item_id = :file_id"
-} else {
-    append sql "
-and r.revision_id = (select live_revision from cr_items where item_id = :file_id)"
-}
+and    acs_permission.permission_p(r.revision_id, :user_id, 'read') = 't'
+$show_versions"
 
 db_multirow version version_info $sql
 
