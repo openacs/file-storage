@@ -7,15 +7,26 @@ begin
         impl_id := acs_sc_impl.new (
                       'NotificationType',
                       'fs_fs_notif_type',
-                      'file_storage'
+                      'file_storage',
+		      'file_storage'
                    );
 	
 	v_foo := acs_sc_impl.new_alias (
                     'NotificationType',
                     'fs_fs_notif_type',
                     'GetURL',
+		    'fs::notification::get_url',
                     'TCL'
                  );
+
+	v_foo := acs_sc_impl.new_alias (
+                    'NotificationType',
+                    'fs_fs_notif_type',
+                    'ProcessReply',
+                    'fs::notification::process_reply',
+                    'TCL'
+        );	
+
 
         acs_sc_binding.new (
                     contract_name => 'NotificationType',

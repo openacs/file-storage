@@ -46,7 +46,7 @@ as
 	   cr_revisions.title as file_upload_name,
            cr_revisions.content_length as content_size,
            cr_items.name,
-           acs_objects.last_modified,
+           cr_revisions.publish_date as last_modified,
            cr_items.parent_id,
            cr_items.name as key
     from cr_revisions,
@@ -78,11 +78,15 @@ as
       case
         when cr_items.content_type = 'content_folder' then cr_folders.label
         when cr_items.content_type = 'content_extlink' then cr_extlinks.label
-        else cr_items.name
+        else nvl(cr_revisions.filename,cr_items.name)
       end as name,
       cr_items.name as file_upload_name,
       cr_revisions.title,
-      acs_objects.last_modified,
+        case
+        when cr_items.content_type = 'content_folder'
+        then acs_objects.last_modified
+        else cr_revisions.publish_date
+        end as last_modified,
       cr_extlinks.url,
       cr_items.parent_id,
       cr_items.name as key,
@@ -97,3 +101,5 @@ as
       and cr_items.item_id = acs_objects.object_id
       and cr_items.live_revision = cr_revisions.revision_id(+)
       and cr_revisions.mime_type = cr_mime_types.mime_type(+);
+
+

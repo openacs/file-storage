@@ -93,3 +93,6 @@ show errors;
 @ file-storage-views-create.sql
 
 @ file-storage-notifications-create.sql
+
+@ file-storage-rss-create.sql
+

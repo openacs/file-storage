@@ -1,5 +1,3 @@
-# 
-
 ad_library {
     
     Procedures for DAV service contract implementations
@@ -53,6 +51,7 @@ ad_proc fs::impl::fs_object::put {} {
         fs::add_file \
         -package_id $package_id \
         -name $name \
+        -title $name \
 	-item_id $item_id \
 	-parent_id $parent_id \
 	-tmp_filename $tmp_filename \
@@ -68,9 +67,9 @@ ad_proc fs::impl::fs_object::put {} {
     } else {
 	fs::add_version \
 	    -name $name\
+            -title $name \
 	    -tmp_filename $tmp_filename\
 	    -item_id $item_id \
-	    -parent_id $parent_id \
 	    -creation_user $user_id \
 	    -package_id $package_id
 	
@@ -95,9 +94,32 @@ ad_proc fs::impl::fs_object::delete {} {
 
 ad_proc fs::impl::fs_object::mkcol {} {
     MKCOL method
-    not valid for resource
 } {
-    return [list 409]
+    set uri [oacs_dav::conn uri]
+    set user_id [oacs_dav::conn user_id]
+    set peer_addr [oacs_dav::conn peeraddr]
+    set item_id [oacs_dav::conn item_id]
+    set fname [oacs_dav::conn item_name]
+    set parent_id [oacs_dav::item_parent_folder_id $uri]
+    if {[empty_string_p $parent_id]} {
+	return [list 409]
+    }
+    if { ![empty_string_p $item_id]} {
+	return [list 405]
+    }
+
+    if { [catch {
+	fs::new_folder \
+	    -name $fname \
+	    -pretty_name $fname \
+	    -parent_id $parent_id \
+	    -creation_user $user_id \
+	    -creation_ip $peer_addr \
+    } ]} {
+	return [list 500]
+    }
+
+    return [list 201]
 }
 
 ad_proc fs::impl::fs_object::proppatch {} {
@@ -138,3 +160,12 @@ ad_proc fs::impl::dav_put_type::get_type {} {
 } {
     return "file_storage_object"
 }
+
+namespace eval fs::impl::dav_mkcol_type {}
+
+ad_proc fs::impl::dav_mkcol_type::get_type {} {
+
+} {
+    return "file_storage_object"
+}
+

@@ -14,6 +14,9 @@ ad_page_contract {
     {show_items:boolean 0}
 }
 
+set objects_to_copy $object_id
+set object_id_list [join $object_id ","]
+
 set user_id [ad_conn user_id]
 set peer_addr [ad_conn peeraddr]
 set allowed_count 0
@@ -50,13 +53,8 @@ if {[info exists folder_id]} {
     template::multirow foreach copy_objects {
       db_transaction {
  	db_exec_plsql copy_item {}
-      } on_error {
-         set folder_name "[_ file-storage.folder]"
-         set folder_link "<a href=\"index?folder_id=$folder_id\">$folder_name</a>"
-         ad_return_complaint 1 "[_ file-storage.lt_The_folder_link_you_s]"
-         ad_script_abort
-         }
      }
+    }
 
      ad_returnredirect $return_url
      ad_script_abort
@@ -82,10 +80,11 @@ if {[info exists folder_id]} {
                 label "\#file-storage.Choose_Destination_Folder\#"
                 link_url_col copy_url
 		link_html {title "\#file-storage.Copy_to_folder_title\#"}
-		display_template {<div style="text-indent: @folder_tree.level@em;">@folder_tree.label@</div>} 
+		display_template {<div style="text-indent: @folder_tree.level_num@em;">@folder_tree.label@</div>} 
             }
         }
     set root_folder_id [fs::get_root_folder]
+    set object_id $objects_to_copy
     db_multirow -extend {copy_url} folder_tree get_folder_tree "" {
 	set copy_url [export_vars -base "copy" { object_id:multiple folder_id return_url }]
 	

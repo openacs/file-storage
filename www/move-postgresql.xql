@@ -35,7 +35,7 @@
   <fullquery name="get_folder_tree">
     <querytext>
       select
-      cf.folder_id, cf.label, tree_level(ci1.tree_sortkey) as level
+      cf.folder_id, cf.label, tree_level(ci1.tree_sortkey) as level_num
       from cr_folders cf, cr_items ci1, cr_items ci2
       where
       ci1.tree_sortkey between ci2.tree_sortkey and

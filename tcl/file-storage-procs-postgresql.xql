@@ -48,6 +48,7 @@
 
             select fs_objects.object_id,
                    fs_objects.name,
+                   fs_objects.title,
                    fs_objects.live_revision,
                    fs_objects.type,
                    to_char(fs_objects.last_modified, 'YYYY-MM-DD HH24:MI:SS') as last_modified_ansi,
@@ -56,6 +57,7 @@
                    fs_objects.key,
                    fs_objects.sort_key,
                    fs_objects.file_upload_name,
+                   fs_objects.title,
                    case when fs_objects.last_modified >= (now() - interval '$n_past_days days') then 1 else 0 end as new_p,
                    acs_permission__permission_p(fs_objects.object_id, :user_id, 'admin') as admin_p,
                    acs_permission__permission_p(fs_objects.object_id, :user_id, 'delete') as delete_p,
@@ -132,7 +134,7 @@
     <fullquery name="fs::do_notifications.get_owner_name">
         <querytext>
 	  select person__name(o.creation_user) as owner from
-          acs_objects o where o.object_id = :file_id
+          acs_objects o where o.object_id = :item_id
         </querytext>
     </fullquery>
 
@@ -150,6 +152,14 @@
             select lob
             from cr_revisions
             where revision_id = $live_revision
+        </querytext>
+    </fullquery>
+
+    <fullquery name="fs::publish_versioned_object_to_file_system.select_file_name">
+        <querytext>
+            select content
+            from cr_revisions
+            where revision_id = :live_revision
         </querytext>
     </fullquery>
 
@@ -173,6 +183,34 @@
     </querytext>
   </fullquery>
 
+  <fullquery name="fs::delete_version.delete_version">      
+      <querytext>
+
+	select file_storage__delete_version(
+			:item_id,
+			:version_id
+			);
+      </querytext>
+  </fullquery>
+
+   <fullquery name="fs::delete_file.delete_file">      
+      <querytext>
+
+	select file_storage__delete_file(
+			:item_id
+			);
+      </querytext>
+  </fullquery>
+
+  <fullquery name="fs::delete_folder.delete_folder">
+     <querytext>
+        select file_storage__delete_folder (
+                       :folder_id,
+                       :cascade_p
+                       )
+     </querytext>
+  </fullquery>
+  
   <fullquery name="fs::add_version.update_last_modified">
     <querytext>
       begin
@@ -182,6 +220,22 @@
       acs_object__update_last_modified(:item_id,:creation_user,:creation_ip);
       return null;
       end;
+    </querytext>
+  </fullquery>
+
+  <fullquery name="fs::get_folder_package_and_root.select_package_and_root">
+    <querytext>
+      select r.package_id,
+             r.folder_id as root_folder_id
+      from fs_root_folders r,
+           (select parent.item_id as folder_id
+            from cr_items parent,
+                 cr_items children
+            where children.item_id = :folder_id
+              and children.tree_sortkey
+                between parent.tree_sortkey
+                and tree_right(parent.tree_sortkey)) t
+      where r.folder_id = t.folder_id
     </querytext>
   </fullquery>
 

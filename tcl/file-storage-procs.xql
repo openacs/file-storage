@@ -109,14 +109,6 @@
         </querytext>
     </fullquery>
 
-    <fullquery name="fs::publish_versioned_object_to_file_system.select_file_name">
-        <querytext>
-            select content
-            from cr_revisions
-            where revision_id = :live_revision
-        </querytext>
-    </fullquery>
-
     <fullquery name="fs::add_file.item_exists">
       <querytext>
           select count(*) from cr_items
@@ -125,6 +117,12 @@
       </querytext>
     </fullquery>
 
+  <fullquery name="fs::get_parent.get_parent_id">
+    <querytext>
+	select parent_id from cr_items where item_id=:item_id
+    </querytext>
+  </fullquery>
+
   <fullquery name="fs::add_version.set_live_revision">
     <querytext>
       update cr_items set live_revision=:revision_id
@@ -132,10 +130,28 @@
     </querytext>
   </fullquery>
 
+<fullquery name="fs::delete_file.version_name">      
+      <querytext>
+      
+    	select i.name as title, r.title as version_name 
+	from cr_items i, cr_revisions r
+	where i.item_id = r.item_id
+	and r.revision_id = :version_id
+
+      </querytext>
+</fullquery>
+
   <fullquery name="fs::set_folder_description.set_folder_description">
     <querytext>
       update cr_folders set description=:description
       where folder_id = :folder_id
     </querytext>
   </fullquery>
+
+
+<fullquery name="fs::add_version.get_storage_type">
+  <querytext>
+    select storage_type from cr_items where item_id=:item_id
+  </querytext>
+</fullquery>
 </queryset>
