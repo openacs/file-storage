@@ -10,10 +10,10 @@
     </tr>
 <multiple name="contents">
 <if @contents.rownum@ odd>
-    <tr class="oddrow">
+    <tr class="odd">
 </if>
 <else>
-    <tr class="evenrow">
+    <tr class="even">
 </else>
 <if @contents.type@ eq "folder">
       <td><a href="@fs_url@index?folder_id=@contents.object_id@&n_past_days=@n_past_days@"><img src="graphics/folder.gif" border=0 alt="#file-storage.folder#"></a></td>
