@@ -358,6 +358,27 @@ begin
 end;' language 'plpgsql';
 
 
+create function file_storage__move_file (
+       --
+       -- Move a file (ans all its versions) to a different folder.
+       -- Wrapper for content_item__move
+       -- 
+       integer,		-- cr_folders.folder_id%TYPE,
+       integer		-- cr_folders.folder_id%TYPE
+) returns integer as '	-- 0 for success 
+declare
+	move_file__file_id		alias for $1;
+	move_file__target_folder_id	alias for $2;
+begin
+
+	return content_item__move(
+	       move_file__file_id,		-- item_id
+	       move_file__target_folder_id	-- target_folder_id
+	       );
+
+end;' language 'plpgsql';
+
+
 
 create function file_storage__get_path (
        --
@@ -581,6 +602,78 @@ begin
 
 end;' language 'plpgsql';
 
+
+create function file_storage__new_folder(
+       --
+       -- Create a folder
+       --
+       varchar,		-- cr_items.name%TYPE,
+       varchar,		-- cr_folders.label%TYPE,
+       integer,		-- cr_items.parent_id%TYPE,
+       integer,		-- acs_objects.creation_user%TYPE,       
+       varchar		-- acs_objects.creation_ip%TYPE       
+) returns integer as '	-- cr_folders.folder_id%TYPE
+declare
+	new_folder__name	      alias for $1;
+	new_folder__folder_name	      alias for $2;
+	new_folder__parent_id	      alias for $3;
+	new_folder__creation_user     alias for $4;
+	new_folder__creation_ip	      alias for $5;
+	v_folder_id		      cr_folders.folder_id%TYPE;
+begin
+
+	-- Create a new folder
+	v_folder_id := content_folder__new (
+			    new_folder__name,		-- name
+			    new_folder__folder_name,	-- label
+			    null,			-- description
+			    new_folder__parent_id,	-- parent_id
+			    null,			-- context_id (default)
+			    null,			-- folder_id (default)
+			    now(),			-- creation_date
+			    new_folder__creation_user,	-- creation_user
+			    new_folder__creation_ip	-- creation_ip
+			    );
+
+	-- register the standard content types
+	PERFORM content_folder__register_content_type(
+			v_folder_id,		-- folder_id
+			''content_revision'',	-- content_type
+			''f'');			-- include_subtypes (default)
+
+	PERFORM content_folder__register_content_type(
+			v_folder_id,		-- folder_id
+			''content_folder'',	-- content_type
+			''f''			-- include_subtypes (default)
+			);			
+
+	-- Give the creator admin privileges on the folder
+	PERFORM acs_permission__grant_permission (
+		     v_folder_id,	         -- object_id
+		     new_folder__creation_user,  -- grantee_id
+		     ''admin''			 -- privilege
+		     );
+
+	return v_folder_id;
+
+end;' language 'plpgsql';
+
+
+create function file_storage__delete_folder(
+       --
+       -- Delete a folder
+       --
+       integer		-- cr_folders.folder_id%TYPE
+) returns integer as '	-- 0 for success
+declare
+	delete_folder__folder_id	alias for $1; 
+begin
+
+	return content_folder__delete(
+		    delete_folder__folder_id  -- folder_id
+		    );
+
+end;' language 'plpgsql';
 
 
 -- JS: BEFORE DELETE TRIGGER to clean up CR entries (except root folder)

@@ -119,6 +119,14 @@ as
        creation_ip	in acs_objects.creation_ip%TYPE
     ) return cr_revisions.revision_id%TYPE;
 
+    procedure move_file(
+       --
+       -- Move a file, and all its versions, to a new folder
+       --
+       file_id		in cr_items.item_id%TYPE,
+       target_folder_id	in cr_items.parent_id%TYPE
+    );
+
     function get_path (
        --
        -- Get the virtual path, but replace title with name at the end
@@ -172,6 +180,25 @@ as
        file_id		in cr_items.item_id%TYPE,
        version_id	in cr_revisions.revision_id%TYPE
     ) return cr_items.parent_id%TYPE;
+
+
+    function new_folder(
+       --
+       -- Create a folder
+       --
+       name		in cr_items.name%TYPE,
+       folder_name	in cr_folders.label%TYPE,
+       parent_id	cr_items.parent_id%TYPE,
+       creation_user	in acs_objects.creation_user%TYPE,       
+       creation_ip	in acs_objects.creation_ip%TYPE       
+    ) return cr_folders.folder_id%TYPE;
+
+    procedure delete_folder(
+       --
+       -- Delete a folder
+       --
+       folder_id	in cr_folders.folder_id%TYPE
+    );
 
 end file_storage;
 /
@@ -403,6 +430,24 @@ as
     end copy_file;
 
 
+    procedure move_file (
+       --
+       -- Move a file, and all its versions, to a new folder
+       --
+       file_id		in cr_items.item_id%TYPE,
+       target_folder_id	in cr_items.parent_id%TYPE
+    ) 
+    is
+    begin
+
+	content_item.move(
+		item_id => file_storage.move_file.file_id,
+		target_folder_id => file_storage.move_file.target_folder_id
+		);
+
+    end; 
+
+
     function new_version (
        --
        -- Create a new version of a file
@@ -592,6 +637,69 @@ as
 	return v_parent_id;
 
     end delete_version;
+
+
+    function new_folder(
+       --
+       -- Create a folder
+       --
+       name		in cr_items.name%TYPE,
+       folder_name	in cr_folders.label%TYPE,
+       parent_id	cr_items.parent_id%TYPE,
+       creation_user	in acs_objects.creation_user%TYPE,       
+       creation_ip	in acs_objects.creation_ip%TYPE       
+    ) return cr_folders.folder_id%TYPE
+    is 
+	v_folder_id		      cr_folders.folder_id%TYPE;
+    begin
+
+	-- Create a new folder
+	v_folder_id := content_folder.new (
+			    name => file_storage.new_folder.name,
+			    label => file_storage.new_folder.folder_name,
+			    parent_id => file_storage.new_folder.parent_id,
+			    creation_user => file_storage.new_folder.creation_user,	
+			    creation_ip => file_storage.new_folder.creation_ip	
+			    );
+
+	-- register the standard content types
+	content_folder.register_content_type(
+			v_folder_id,		-- folder_id
+			'content_revision'	-- content_type
+			);			
+
+	content_folder.register_content_type(
+			v_folder_id,		-- folder_id
+			'content_folder'	-- content_type
+			);			
+
+	-- Give the creator admin privileges on the folder
+	acs_permission.grant_permission (
+		     v_folder_id,	                     -- object_id
+		     file_storage.new_folder.creation_user,  -- grantee_id
+		     'admin'			             -- privilege
+		     );
+
+    return v_folder_id;
+
+    end new_folder;
+
+
+    procedure delete_folder(
+       --
+       -- Delete a folder
+       --
+       folder_id	in cr_folders.folder_id%TYPE
+    )
+    is 
+    begin
+
+	content_folder.delete(
+		    folder_id => file_storage.delete_folder.folder_id
+		    );
+
+    end delete_folder;
+
 
 end file_storage;
 /
