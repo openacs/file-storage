@@ -62,16 +62,16 @@ set actions [list]
 # for now, invite users to upload, and then they will be asked to
 # login if they are not.
 
-lappend actions "\#file-storage.Upload_File\#" ${fs_url}file-add?[export_vars folder_id] "Upload a file in this folder" "Add Link" ${fs_url}simple-add?[export_vars folder_id] "Add a link to a web page" "\#file-storage.New_Folder\#" ${fs_url}folder-create?[export_vars {{parent_id $folder_id}}] "\#file-storage.Create_a_new_folder\#"
+lappend actions "\#file-storage.Add_File\#" ${fs_url}file-add?[export_vars folder_id] "Upload a file in this folder" "\#file-storage.Create_a_URL\#" ${fs_url}simple-add?[export_vars folder_id] "Add a link to a web page" "\#file-storage.New_Folder\#" ${fs_url}folder-create?[export_vars {{parent_id $folder_id}}] "\#file-storage.Create_a_new_folder\#"
 
 
 if {$delete_p} {
-    lappend actions "Delete Folder" ${fs_url}folder-delete?[export_vars folder_id] "Delete folder"
+    lappend actions "\#file-storage.Delete_this_folder\#" ${fs_url}folder-delete?[export_vars folder_id] "\#file-storage.Delete_this_folder\#"
 }
 if {$admin_p} {
     set return_url [ad_conn url]
-    lappend actions "Rename Folder" "${fs_url}folder-edit?folder_id=$folder_id" "Change the name of this folder"
-    lappend actions "Folder Permissions" "/permissions/one?[export_vars -override {{object_id $folder_id}} {return_url}]" "Change the permissions of this folder"
+    lappend actions "\#file-storage.Edit_Folder\#" "${fs_url}folder-edit?folder_id=$folder_id" "\#file-storage.Rename_this_folder\#"
+    lappend actions "\#file-storage.lt_Modify_permissions_on_1\#" "/permissions/one?[export_vars -override {{object_id $folder_id}} {return_url}]" "\#file-storage.lt_Modify_permissions_on_1\#"
 }
 
 #set n_past_filter_values [list [list "Yesterday" 1] [list [_ file-storage.last_week] 7] [list [_ file-storage.last_month] 30]]
