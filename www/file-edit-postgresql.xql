@@ -6,7 +6,7 @@
 <fullquery name="file_info">      
       <querytext>
       
-	select content_item__get_title(:file_id) as title,name
+	select name as title
 	from   cr_items
 	where  item_id = :file_id
 

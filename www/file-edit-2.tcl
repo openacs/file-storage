@@ -6,7 +6,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     file_id:integer,notnull
-    name:notnull
+    title:notnull
 } -validate {
     valid_file -requires {file_id} {
 	if ![fs_file_p $file_id] {
@@ -19,11 +19,11 @@ ad_page_contract {
 
 ad_require_permission $file_id write
 
-if [catch {db_exec_plsql rename "
+if [catch {db_exec_plsql rename_file "
 begin
     content_item.rename (
         item_id => :file_id,
-        name => :name
+        name => :title
     );
 end;"} errmsg] {
 

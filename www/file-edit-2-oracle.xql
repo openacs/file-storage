@@ -3,13 +3,13 @@
 <queryset>
    <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
-<fullquery name="rename">      
+<fullquery name="rename_file">      
       <querytext>
       
 	begin
-    		content_item.rename (
-        		item_id => :file_id,
-        		name => :name
+    		file_storage.rename_file (
+        		file_id => :file_id,
+        		title => :title
     			);
 	end;
 
@@ -22,7 +22,7 @@
       
     	select count(*)
     	from   cr_items
-    	where  name = :name
+    	where  name = :title
     	and    parent_id = content_item.get_parent_folder(:file_id)
 
       </querytext>

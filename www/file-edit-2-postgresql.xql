@@ -3,12 +3,12 @@
 <queryset>
    <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
-<fullquery name="rename">      
+<fullquery name="rename_file">      
       <querytext>
 
-    	select content_item__rename (
-        	:file_id, -- item_id
-        	:name	  -- name
+    	select file_storage__rename_file (
+        	:file_id, -- file_id
+        	:title	  -- title
     		);
 
       </querytext>
@@ -20,7 +20,7 @@
       
     	select count(*)
     	from   cr_items
-    	where  name = :name
+    	where  name = :title
     	and    parent_id = content_item__get_parent_folder(:file_id)
 
       </querytext>

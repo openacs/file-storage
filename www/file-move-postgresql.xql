@@ -6,7 +6,7 @@
 <fullquery name="file_name">      
       <querytext>
  
-	select content_item__get_title(:file_id);
+	select file_storage__get_title(:file_id);
 
       </querytext>
 </fullquery>

@@ -14,25 +14,15 @@
       </querytext>
 </fullquery>
 
-<fullquery name="file_delete">      
+<fullquery name="delete_file">      
       <querytext>
 
 	begin
-        	content_item.delete(:file_id);
+        	file_storage.delete_file(:file_id);
 	end;
 
       </querytext>
 </fullquery>
  
-<fullquery name="file_name">      
-      <querytext>
-      
-    	select title as file_name 
-    	from   cr_revisions 
-    	where  revision_id = content_item.get_live_revision(:file_id)
-
-      </querytext>
-</fullquery>
-
  
 </queryset>

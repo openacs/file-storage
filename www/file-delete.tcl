@@ -40,9 +40,9 @@ if {[string equal $confirmed_p "t"] && [string equal $blocked_p "f"] } {
 
     db_1row parent_id "select parent_id from cr_items where item_id = :file_id"
 
-    db_exec_plsql file_delete "
+    db_exec_plsql delete_file "
     begin
-        content_item.delete(:file_id);
+        file_storage.delete_file(:file_id);
     end;"
 
     ad_returnredirect "?folder_id=$parent_id"
@@ -51,9 +51,9 @@ if {[string equal $confirmed_p "t"] && [string equal $blocked_p "f"] } {
     # they need to confirm that they really want to delete the file
 
     db_1row file_name "
-    select title as file_name 
-    from   cr_revisions 
-    where  revision_id = content_item.get_live_revision(:file_id)"
+    	select name as title
+    	from   cr_items
+    	where  item_id = :file_id"
 
     set context_bar [fs_context_bar_list -final "Delete" $file_id]
 

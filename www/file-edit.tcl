@@ -14,7 +14,6 @@ ad_page_contract {
     }
 } -properties {
     file_id:onevalue
-    name:onevalue
     context_bar:onevalue
     title:onevalue
 }
@@ -25,8 +24,7 @@ ad_page_contract {
 ad_require_permission $file_id write
 
 db_1row file_info "
-select content_item.get_title(:file_id) as title,
-       name
+select name as title
 from   cr_items
 where  item_id = :file_id"
 

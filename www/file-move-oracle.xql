@@ -7,7 +7,7 @@
       <querytext>
       
 	begin
-    		:1 := content_item.get_title(:file_id);
+    		:1 := file_storage.get_title(:file_id);
 	end;
 
       </querytext>
