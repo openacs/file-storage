@@ -37,6 +37,10 @@ end;' language 'plpgsql';
 select inline_0();
 drop function inline_0();
 
+drop view fs_folders_and_files;
+drop view fs_files;
+drop view fs_folders;
+
 drop function fs_package_items_delete_trig();
 drop trigger fs_package_items_delete_trig on fs_root_folders;
 
