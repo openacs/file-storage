@@ -59,47 +59,32 @@ ad_form -html { enctype multipart/form-data } -export { folder_id } -form {
     {title:text,optional {label "Title"} {html "size 30"}}
     {description:text(textarea),optional {label "Description"} {html "rows 5 cols 35"}}
 } -new_data {
-
-    if {[ad_parameter "StoreFilesInDatabaseP" -package_id [ad_conn package_id]]} {
-	set indbp "t"
-	set storage_type "lob"
-    } else {
-	set indpb "f"
-	set storage_type "file"
-    }
-    set creation_ip [ad_conn peeraddr]
-    set name [template::util::file::get_property filename $upload_file] 
-    set tmp_filename [template::util::file::get_property tmp_filename $upload_file]
-    set tmp_size [file size $tmp_filename]
-    set mime_type [cr_filename_to_mime_type -create $name]
-
+    set name [template::util::file::get_property filename $upload_file]
+    set package_id [ad_conn package_id]
     set existing_item_id [fs::get_item_id -name $name -folder_id $folder_id]
     if {![empty_string_p $existing_item_id]} {
 	# file with the same name already exists
 	# in this folder, create a new revision
 	set item_id $existing_item_id
-    } else {
-	db_exec_plsql create_item ""
+	permission::require_permission \
+	    -object_id $item_id \
+	    -party_id $user_id \
+	    -privilege $write
     }
-
-    set revision_id [cr_import_content \
+    
+    fs::add_file \
+	-name [template::util::file::get_property filename $upload_file] \
 	-item_id $item_id \
-	-storage_type $storage_type \
+	-parent_id $folder_id \
+	-tmp_filename [template::util::file::get_property tmp_filename $upload_file] \
 	-creation_user $user_id \
-	-creation_ip $creation_ip \
-	-other_type "file_storage_object" \
+	-creation_ip [ad_conn peeraddr] \
 	-title $title \
 	-description $description \
-	$folder_id \
-	$tmp_filename \
-	$tmp_size \
-	$mime_type \
-			 $name]
+        -package_id $package_id
     
-    db_dml set_live_revision ""
-    db_exec_plsql update_last_modified ""
-    permission::grant -party_id $user_id -object_id $item_id -privilege admin
     ad_returnredirect "."
+    ad_script_abort
 }
 
 ad_return_template
