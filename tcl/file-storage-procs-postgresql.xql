@@ -143,4 +143,30 @@
       </querytext>
     </fullquery>
 
+
+  <fullquery name="fs::add_file.create_item">
+    <querytext>
+      select file_storage__new_file (
+          :name,
+          :parent_id,
+	  :creation_user,
+          :creation_ip,
+          :indbp,
+          :item_id
+      )
+    </querytext>
+  </fullquery>
+
+  <fullquery name="fs::add_file.update_last_modified">
+    <querytext>
+      begin
+      perform acs_object__update_last_modified
+      (:parent_id,:creation_user,:creation_ip);
+      perform
+      acs_object__update_last_modified(:item_id,:creation_user,:creation_ip);
+      return null;
+      end;
+    </querytext>
+  </fullquery>
+
 </queryset>

@@ -599,3 +599,61 @@ ad_proc -public fs::get_item_id {
     }
     return [db_exec_plsql get_item_id ""]
 }
+
+ad_proc -public fs::add_file {
+    -name
+    -parent_id
+    -tmp_filename
+    -package_id
+    {-item_id ""}
+    {-creation_user ""}
+    {-creation_ip ""}
+    {-title ""}
+    {-description ""}
+} {
+    Create a new file storage item or add a new revision if
+    an item with the same name and parent folder already exists
+
+    @returns revision_id
+} {
+
+    if {[ad_parameter "StoreFilesInDatabaseP" -package_id $package_id]} {
+	set indbp "t"
+	set storage_type "lob"
+    } else {
+	set indpb "f"
+	set storage_type "file"
+    }
+
+    set mime_type [cr_filename_to_mime_type -create $name]
+    set tmp_size [file size $tmp_filename]
+    db_transaction {
+	if {[empty_string_p $item_id] || ![db_string item_exists ""]} {
+	    set item_id [db_exec_plsql create_item ""]
+	}
+
+	set revision_id [cr_import_content \
+			     -item_id $item_id \
+			     -storage_type $storage_type \
+			     -creation_user $creation_user \
+			     -creation_ip $creation_ip \
+			     -other_type "file_storage_object" \
+			     -title $title \
+			     -description $description \
+			     $parent_id \
+			     $tmp_filename \
+			     $tmp_size \
+			     $mime_type \
+			     $name]
+	
+	db_dml set_live_revision ""
+	db_exec_plsql update_last_modified ""
+
+	if {![empty_string_p $creation_user]} {
+	    permission::grant -party_id $creation_user -object_id $item_id -privilege admin
+	}
+    } on_error {
+	error $errmsg
+    }
+    return $revision_id
+}
