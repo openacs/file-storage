@@ -27,7 +27,7 @@ as
         --
         package_id in apm_packages.package_id%TYPE,
         folder_name in cr_folders.label%TYPE default null,
-        description in cr_folders.description%TYPE default null
+        folder_url in cr_items.name%TYPE default null
     ) return fs_root_folders.folder_id%TYPE;
 
     function new_file(
@@ -157,22 +157,11 @@ as
     ) return fs_root_folders.folder_id%TYPE
     is
         v_folder_id             fs_root_folders.folder_id%TYPE;
-        v_count                 integer;
     begin
-        select count(*)
-        into v_count
+        select folder_id
+        into v_folder_id
         from fs_root_folders
         where package_id = get_root_folder.package_id;
-
-        if v_count > 0 then
-            select folder_id
-            into v_folder_id
-            from fs_root_folders
-            where package_id = get_root_folder.package_id;
-        else
-            -- must be a new instance.  Gotta create a new root folder
-            v_folder_id := new_root_folder(package_id);
-        end if;
 
         return v_folder_id;
     end get_root_folder;
@@ -204,39 +193,17 @@ as
         -- code automatically when a new package instance is created.
         --
         package_id in apm_packages.package_id%TYPE,
-        folder_name in cr_folders.label%TYPE default null,
-        description in cr_folders.description%TYPE default null
+        folder_name in cr_folders.label%TYPE,
+        folder_url in cr_items.name%TYPE
     ) return fs_root_folders.folder_id%TYPE
     is
         v_folder_id             fs_root_folders.folder_id%TYPE;
-        v_package_name          apm_packages.instance_name%TYPE;
-        v_package_key           apm_packages.package_key%TYPE;
-        v_folder_name           cr_folders.label%TYPE;
-        v_description           cr_folders.description%TYPE;
     begin
-        select instance_name, package_key
-        into v_package_name, v_package_key
-        from apm_packages
-        where package_id = new_root_folder.package_id;
-
-        if new_root_folder.folder_name is null
-        then
-            v_folder_name := v_package_name || ' Root Folder';
-        else
-            v_folder_name := folder_name;
-        end if;
-
-        if new_root_folder.description is null
-        then
-            v_description := 'Root folder for the file-storage system. All other folders in file storage are subfolders of this one.';
-        else
-            v_description := description;
-        end if;
 
         v_folder_id := content_folder.new(
-            name => v_package_key || '_' || package_id,
-            label => v_folder_name,
-            description => v_description
+            name => file_storage.new_root_folder.folder_url,
+            label => file_storage.new_root_folder.folder_name,
+            context_id => file_storage.new_root_folder.package_id
         );
 
         insert
@@ -250,19 +217,6 @@ as
         content_folder.register_content_type(v_folder_id,'content_folder','t');
         content_folder.register_content_type(v_folder_id,'content_extlink','t');
         content_folder.register_content_type(v_folder_id,'content_symlink','t');
-
-        -- set up default permissions
-        acs_permission.grant_permission(
-            object_id => v_folder_id,
-            grantee_id => acs.magic_object_id('the_public'),
-            privilege => 'read'
-        );
-
-        acs_permission.grant_permission(
-            object_id => v_folder_id,
-            grantee_id => acs.magic_object_id('registered_users'),
-            privilege => 'write'
-        );
 
         return v_folder_id;
     end new_root_folder;

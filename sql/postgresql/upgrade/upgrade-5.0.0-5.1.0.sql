@@ -13,19 +13,11 @@ declare
         v_folder_id                  fs_root_folders.folder_id%TYPE;
         v_count                      integer;
 begin
-
-        select count(*) into v_count 
+        select folder_id into v_folder_id 
         from fs_root_folders
         where package_id = get_root_folder__package_id;
 
-        if v_count > 0 then
-            select folder_id into v_folder_id 
-            from fs_root_folders
-            where package_id = get_root_folder__package_id;
-        else
-            -- must be a new instance.  Gotta create a new root folder
-            v_folder_id := file_storage__new_root_folder(get_root_folder__package_id, null, null);
-        end if;
+	v_folder_id := file_storage__new_root_folder(get_root_folder__package_id, null, null);
 
         return v_folder_id;
 
@@ -57,104 +49,7 @@ begin
 
 end;' language 'plpgsql' with (iscachable);
 
-create or replace function file_storage__new_root_folder (
-       --
-       -- Creates a new root folder
-       --
-       -- 
-       -- A hackish function to get around the fact that we can not run
-       -- code automatically when a new package instance is created.
-       --
-       integer,         -- apm_packages.package_id%TYPE
-       varchar,         -- cr_folders.label%TYPE
-       varchar,         -- cr_folders.description%TYPE
-       varchar          -- cr_items.name%TYPE
-)
-returns integer as '    --  fs_root_folders.folder_id%TYPE
-declare
-        new_root_folder__package_id         alias for $1;
-        new_root_folder__folder_name        alias for $2;
-        new_root_folder__description        alias for $3;
-	new_root_folder__url		    alias for $4;
-        v_folder_id                         fs_root_folders.folder_id%TYPE;
-        v_package_name                      apm_packages.instance_name%TYPE;
-        v_package_key                       apm_packages.package_key%TYPE;
-        v_folder_name                       cr_folders.label%TYPE;
-        v_description                       cr_folders.description%TYPE;
-begin
-
-        select instance_name, package_key 
-        into v_package_name, v_package_key
-        from apm_packages
-        where package_id = new_root_folder__package_id;
-
-        if new_root_folder__folder_name is null
-        then
-            v_folder_name := v_package_name || '' Root Folder '';
-        else
-            v_folder_name := new_root_folder__folder_name;
-        end if;
-
-        if new_root_folder__description is null
-        then
-            v_description := ''Root folder for the file-storage system.  All other folders in file storage are subfolders of this one.'';
-        else
-            v_description := new_root_folder__description;
-        end if;
-
-        v_folder_id := content_folder__new (
-            coalesce (new_root_folder__url, v_package_key || ''_'' || new_root_folder__package_id), -- name
-            v_folder_name, -- label
-            v_description, -- description
-            null                                  -- parent_id (default)
-        );
-
-        insert into fs_root_folders 
-        (package_id, folder_id)
-        values 
-        (new_root_folder__package_id, v_folder_id);
-
-        -- allow child items to be added
-        -- JS: Note that we need to set include_subtypes to 
-        -- JS: true since we created a new subtype.
-        PERFORM content_folder__register_content_type(
-                v_folder_id,            -- folder_id
-                ''content_revision'',   -- content_types
-                ''t''                   -- include_subtypes 
-                );
-        PERFORM content_folder__register_content_type(
-                v_folder_id,            -- folder_id
-                ''content_folder'',     -- content_types
-                ''t''                   -- include_subtypes 
-                );
-        PERFORM content_folder__register_content_type(
-                v_folder_id,            -- folder_id
-                ''content_symlink'',    -- content_types
-                ''t''                   -- include_subtypes 
-                );
-        PERFORM content_folder__register_content_type(
-                v_folder_id,            -- folder_id
-                ''content_extlink'',    -- content_types
-                ''t''                   -- include_subtypes 
-                );
-
-        -- set up default permissions
-        PERFORM acs_permission__grant_permission (
-                v_folder_id,                          -- object_id
-                acs__magic_object_id(''the_public''), -- grantee_id 
-                ''read''                              -- privilege
-                );
-
-        PERFORM acs_permission__grant_permission (
-                v_folder_id,                                -- object_id 
-                acs__magic_object_id(''registered_users''), -- grantee_id
-                ''write''                                   -- privilege
-                );
-
-        return v_folder_id;
-
-end;' language 'plpgsql';
-    
+drop function file_storage__new_root_folder (integer);
 
 create or replace function file_storage__new_file(
        -- 

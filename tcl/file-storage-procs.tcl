@@ -204,29 +204,8 @@ ad_proc -public fs::after_mount {
     # this isn't a problem in resolving URLs because we know which
     # root folder is associated with a site_node/package_id
     
-    set name "file-storage-${package_id}"
-    fs::new_root_folder \
-	-package_id $package_id \
-	-pretty_name $sn(instance_name) \
-	-name $name
-}
-
-ad_proc -public fs::new_root_folder {
-    {-package_id ""}
-    {-pretty_name ""}
-    {-name ""}
-    {-description ""}
-} {
-    Create a root folder for a package instance.
-
-    @param package_id Package instance associated with this root folder
-
-    @return folder_id of the new root folder
-} {
-    if {[empty_string_p $package_id]} {
-	set package_id [ad_conn package_id]
-    }
-
+    set label $sn(instance_name)
+    set name "file-storage_${package_id}"
     return [db_exec_plsql new_root_folder {}]
 }
 

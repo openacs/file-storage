@@ -32,13 +32,15 @@ if {$folder_id == [fs_get_root_folder]} {
     set root_folder_p 1
 }
 
-# check the user has permission to read this folder
-ad_require_permission $folder_id read
-
 # set templating datasources
 set folder_name [fs_get_folder_name $folder_id]
 
 set user_id [ad_conn user_id]
+#permission::require_permission \
+    -party_id $user_id \
+    -object_id $folder_id \
+    -privilege "read"
+
 set write_p [ad_permission_p $folder_id write]
 set admin_p [ad_permission_p $folder_id admin]
 

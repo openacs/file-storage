@@ -3,13 +3,13 @@
 <queryset>
    <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
-    <fullquery name="fs::new_root_folder.new_root_folder">
+    <fullquery name="fs::after_mount.new_root_folder">
         <querytext>
             begin
                 :1 := file_storage.new_root_folder(
-                    package_id => :package_id,
-                    folder_name => :pretty_name,
-                    description => :description
+	 	    url => :name,
+		    package_id => :package_id,
+                    label => :label
                 );
             end;
         </querytext>
