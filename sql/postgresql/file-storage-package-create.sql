@@ -696,6 +696,8 @@ begin
                 order by c1.tree_sortkey desc
         loop
 
+                -- DRB: Why can''t we just use object delete here?
+
 
                 -- We delete the item. On delete cascade should take care
                 -- of deletion of revisions.
@@ -712,7 +714,19 @@ begin
                     PERFORM content_folder__delete(v_rec.item_id);
                 end if;
 
-                -- We may have to delete other items here, e.g., symlinks (future feature)
+                -- Instead of doing an if-else, we make sure we are deleting a folder.
+                if v_rec.content_type = ''content_symlink''
+                then
+                    raise notice ''Deleting symlink_id = %'',v_rec.item_id;
+                    PERFORM content_symlink__delete(v_rec.item_id);
+                end if;
+
+                -- Instead of doing an if-else, we make sure we are deleting a folder.
+                if v_rec.content_type = ''content_extlink''
+                then
+                    raise notice ''Deleting folder_id = %'',v_rec.item_id;
+                    PERFORM content_extlink__delete(v_rec.item_id);
+                end if;
 
         end loop;
 

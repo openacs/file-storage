@@ -3,16 +3,31 @@
 
 create or replace function inline_0() returns integer as '
 declare
+  root           record;
+  folder         record;
   fs_url         record;
   new_url_id     cr_extlinks.extlink_id%TYPE;
 begin
 
-    for fs_url in select * from fs_urls_full
+    for root in select tree_sortkey
+                from fs_root_folders, cr_items
+                where fs_root_folders.folder_id = cr_items.item_id
     loop
 
-      if not content_folder__is_registered(fs_url.folder_id, ''content_extlink'', ''t'') then
-        perform content_folder__register_content_type(fs_url.folder_id, ''content_extlink'', ''t'');
-      end if;
+      for folder in select folder_id
+                    from cr_folders, cr_items
+                    where cr_items.tree_sortkey between root.tree_sortkey and tree_right(root.tree_sortkey)
+                      and cr_folders.folder_id = cr_items.item_id
+      loop
+        if not content_folder__is_registered(folder.folder_id, ''content_extlink'', ''t'') then
+          perform content_folder__register_content_type(folder.folder_id, ''content_extlink'', ''t'');
+        end if;
+      end loop;
+
+    end loop;
+
+    for fs_url in select * from fs_urls_full
+    loop
 
       new_url_id := content_extlink__new (
                       null,
@@ -102,3 +117,69 @@ as
       left join cr_folders on (cr_items.item_id = cr_folders.folder_id)
       left join cr_revisions on (cr_items.live_revision = cr_revisions.revision_id)
       join acs_objects on (cr_items.item_id = acs_objects.object_id);
+
+-- JS: BEFORE DELETE TRIGGER to clean up CR entries (except root folder)
+drop function fs_package_items_delete_trig ();
+create function fs_package_items_delete_trig () returns opaque as '
+declare
+
+        v_rec   record;
+begin
+
+        for v_rec in
+        
+                -- We want to delete all cr_items entries, starting from the leaves all
+                --  the way up the root folder (old.folder_id).
+                select c1.item_id, c1.content_type
+                from cr_items c1, cr_items c2
+                where c2.item_id = old.folder_id
+                  and c1.tree_sortkey between c2.tree_sortkey and tree_right(c2.tree_sortkey)
+                  and c1.item_id <> old.folder_id
+                order by c1.tree_sortkey desc
+        loop
+
+                -- DRB: Why can't we just use object delete here?
+
+
+                -- We delete the item. On delete cascade should take care
+                -- of deletion of revisions.
+                if v_rec.content_type = ''file_storage_object''
+                then
+                    raise notice ''Deleting item_id = %'',v_rec.item_id;
+                    PERFORM content_item__delete(v_rec.item_id);
+                end if;
+
+                -- Instead of doing an if-else, we make sure we are deleting a folder.
+                if v_rec.content_type = ''content_folder''
+                then
+                    raise notice ''Deleting folder_id = %'',v_rec.item_id;
+                    PERFORM content_folder__delete(v_rec.item_id);
+                end if;
+
+                -- Instead of doing an if-else, we make sure we are deleting a folder.
+                if v_rec.content_type = ''content_symlink''
+                then
+                    raise notice ''Deleting symlink_id = %'',v_rec.item_id;
+                    PERFORM content_symlink__delete(v_rec.item_id);
+                end if;
+
+                -- Instead of doing an if-else, we make sure we are deleting a folder.
+                if v_rec.content_type = ''content_extlink''
+                then
+                    raise notice ''Deleting folder_id = %'',v_rec.item_id;
+                    PERFORM content_extlink__delete(v_rec.item_id);
+                end if;
+
+        end loop;
+
+        -- We need to return something for the trigger to be activated
+        return old;
+
+end;' language 'plpgsql';
+
+drop trigger fs_package_items_delete_trig on fs_root_folders;
+create trigger fs_package_items_delete_trig before delete
+on fs_root_folders for each row 
+execute procedure fs_package_items_delete_trig ();
+
+
