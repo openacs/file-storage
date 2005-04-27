@@ -33,7 +33,7 @@ ad_page_contract {
 ad_require_permission $folder_id delete
 
 # Check if there are child items they don't have permission to delete
-# (Irrelevant at this point because they can't delete folders with 
+# (Irrelevant at this point because they can't delete folders with
 # contents at all.)
 set blocked_p [ad_decode [children_have_permission_p $folder_id delete] 0 t f]
 
@@ -46,7 +46,7 @@ set child_count [db_string child_count ""]
 set context [fs_context_bar_list -final "[_ file-storage.Delete]" $folder_id]
     
 set delete_message "[_ file-storage.delete_folder_and_children]"
-set delete_label "[_ file-storage.Yes_Delete]"
+set delete_label "[_ acs-kernel.common_OK]"
 
 set edit_buttons [list [list $delete_label ok]]
 
