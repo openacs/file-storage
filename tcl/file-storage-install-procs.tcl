@@ -211,7 +211,7 @@ ad_proc -public -callback pm::project_new -impl file_storage {
 	set root_folder_id [fs::get_root_folder -package_id $fs_package_id]
 
 	set folder_id [fs::new_folder \
-			   -name $root_folder_id \
+			   -name $project_id \
 			   -pretty_name $pm_name \
 			   -parent_id $root_folder_id \
 			   -no_callback]
