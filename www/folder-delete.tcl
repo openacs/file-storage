@@ -61,6 +61,7 @@ ad_form -name "folder-delete" \
 	if {[string equal $blocked_p "f"] } {
 	    # they have confirmed that they want to delete the folder
 	    
+	    callback fs::folder_delete -package_id [ad_conn package_id] -folder_id $folder_id
 	    db_1row parent_id "select parent_id from cr_items where item_id = :folder_id"
     	    
 	    db_exec_plsql folder_delete ""

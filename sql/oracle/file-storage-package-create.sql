@@ -556,14 +556,18 @@ as
     ) return cr_folders.folder_id%TYPE
     is
         v_folder_id             cr_folders.folder_id%TYPE;
+        v_package_id            acs_objects.package_id%TYPE;
     begin
+        v_package_id := file_storage.get_package_id(parent_id);
+
         -- Create a new folder
         v_folder_id := content_folder.new(
             name => file_storage.new_folder.name,
             label => file_storage.new_folder.folder_name,
             parent_id => file_storage.new_folder.parent_id,
             creation_user => file_storage.new_folder.creation_user,
-            creation_ip => file_storage.new_folder.creation_ip
+            creation_ip => file_storage.new_folder.creation_ip,
+            package_id => v_package_id
         );
 
         -- register the standard content types

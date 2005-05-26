@@ -272,6 +272,7 @@ ad_proc -public fs::new_folder {
     {-creation_user ""}
     {-creation_ip ""}
     {-description ""}
+    -no_callback:boolean
 } {
     Create a new folder.
 
@@ -293,16 +294,24 @@ ad_proc -public fs::new_folder {
     }
     set folder_id [db_exec_plsql new_folder {}]
     fs::set_folder_description -folder_id $folder_id -description $description
+
+    if {!$no_callback_p} {
+	callback fs::folder_new -package_id [ad_conn package_id] -folder_id $folder_id
+    }
     return $folder_id
 }
 
 ad_proc -public fs::rename_folder {
     {-folder_id:required}
     {-name:required}
+    -no_callback:boolean
 } {
     rename the given folder
 } {
     db_exec_plsql rename_folder {}
+    if {!$no_callback_p} {
+	callback fs::folder_edit -package_id [ad_conn package_id] -folder_id $folder_id
+    }
 }
 
 ad_proc -public fs::set_folder_description {
@@ -655,6 +664,7 @@ ad_proc -public fs::add_file {
     {-creation_ip ""}
     {-title ""}
     {-description ""}
+    -no_callback:boolean
 } {
     Create a new file storage item or add a new revision if
     an item with the same name and parent folder already exists
@@ -707,6 +717,10 @@ ad_proc -public fs::add_file {
 	if {[string is true $do_notify_here_p]} {
 	    fs::do_notifications -folder_id $parent_id -filename $title -item_id $revision_id -action "new_file" -package_id $package_id
 	}
+
+	if {!$no_callback_p} {
+	    callback fs::file_new -package_id [ad_conn package_id] -file_id $item_id
+	}
     }
     return $revision_id
 }
@@ -722,6 +736,7 @@ ad_proc fs::add_version {
     {-description ""}
     {-suppress_notify_p "f"}
     {-storage_type ""}
+    -no_callback:boolean
 } {
     Create a new version of a file storage item 
     @return revision_id
@@ -762,15 +777,24 @@ ad_proc fs::add_version {
         fs::rss::build_feeds $parent_id
     }
 
+    if {!$no_callback_p} {
+	callback fs::file_edit -package_id [ad_conn package_id] -file_id $item_id
+    }
+
     return $revision_id
 }
 
 ad_proc fs::delete_file {
     -item_id
     {-parent_id ""}
+    -no_callback:boolean
 } {
     Deletes a file and all its revisions
 } {
+    if {!$no_callback_p} {
+	callback fs::file_delete -package_id [ad_conn package_id] -file_id $item_id
+    }
+
     set version_name [get_object_name -object_id $item_id]
     db_exec_plsql delete_file ""
 
@@ -785,9 +809,14 @@ ad_proc fs::delete_folder {
     -folder_id
     {-cascade_p "t"}
     {-parent_id ""}
+    -no_callback:boolean
 } {
     Deletes a folder and all contents
 } {
+    if {!$no_callback_p} {
+	callback fs::folder_delete -package_id [ad_conn package_id] -folder_id $folder_id
+    }
+
     set version_name [get_object_name -object_id $folder_id]
     db_exec_plsql delete_folder ""
 

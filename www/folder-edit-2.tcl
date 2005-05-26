@@ -30,5 +30,6 @@ set creation_ip [ad_conn peeraddr]
 #regsub -all { +} [string tolower $folder_name] {_} name
 
 db_exec_plsql folder_rename {}
+callback fs::folder_edit -package_id [ad_conn package_id] -folder_id $folder_id
 
 ad_returnredirect "?folder_id=$folder_id"

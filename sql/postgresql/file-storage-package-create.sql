@@ -582,7 +582,9 @@ declare
         new_folder__creation_user     alias for $4;
         new_folder__creation_ip       alias for $5;
         v_folder_id                   cr_folders.folder_id%TYPE;
+        v_package_id                  acs_objects.package_id%TYPE;
 begin
+        v_package_id := file_storage__get_package_id(new_folder__parent_id);
 
         -- Create a new folder
         v_folder_id := content_folder__new (
@@ -594,7 +596,8 @@ begin
                             null,                       -- folder_id (default)
                             now(),                      -- creation_date
                             new_folder__creation_user,  -- creation_user
-                            new_folder__creation_ip     -- creation_ip
+                            new_folder__creation_ip,    -- creation_ip
+                            v_package_id                -- package_id
                             );
 
         -- register the standard content types
