@@ -202,6 +202,7 @@ ad_proc -public -callback fs::file_delete {
 ad_proc -public -callback pm::project_new -impl file_storage {
     {-package_id:required}
     {-project_id:required}
+    {-data:required}
 } {
     create a new folder for each new project
 } {
