@@ -272,6 +272,7 @@ ad_proc -public fs::new_folder {
     {-creation_user ""}
     {-creation_ip ""}
     {-description ""}
+    -no_callback:boolean
 } {
     Create a new folder.
 
@@ -282,6 +283,7 @@ ad_proc -public fs::new_folder {
     @param creation_user Who created this folder
     @param creation_ip What is the ip address of the creation_user
     @param description of the folder. Not used in the current FS UI but might be used elsewhere.
+    @param no_callback defines if the callback should be called. Defaults to yes
     @return folder_id of the newly created folder
 } {
     if {[empty_string_p $creation_user]} {
@@ -293,6 +295,9 @@ ad_proc -public fs::new_folder {
     }
     set folder_id [db_exec_plsql new_folder {}]
     fs::set_folder_description -folder_id $folder_id -description $description
+    if {!$no_callback_p} {
+	callback fs::folder_new -package_id [ad_conn package_id] -folder_id $folder_id
+    }
     return $folder_id
 }
 
@@ -655,6 +660,7 @@ ad_proc -public fs::add_file {
     {-creation_ip ""}
     {-title ""}
     {-description ""}
+    -no_callback:boolean
 } {
     Create a new file storage item or add a new revision if
     an item with the same name and parent folder already exists
@@ -706,6 +712,10 @@ ad_proc -public fs::add_file {
 	
 	if {[string is true $do_notify_here_p]} {
 	    fs::do_notifications -folder_id $parent_id -filename $title -item_id $revision_id -action "new_file" -package_id $package_id
+	}
+
+	if {!$no_callback_p} {
+	    callback fs::file_new -package_id $package_id -file_id $item_id
 	}
     }
     return $revision_id
