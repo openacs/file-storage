@@ -118,8 +118,15 @@ set elements [list type [list label [_ file-storage.Type] \
 		       link_url_col new_version_url]
 	      ]
 
+set return_url [export_vars -base "index" {folder_id}]
+set vars_to_export [list return_url]
+
 if {$allow_bulk_actions} {
     set bulk_actions [list "Move" "move" "Move Checked Items to Another Folder" "Copy" "copy" "Copy Checked Items to Another Folder" "Delete" "delete" "Delete Checked Items"]
+    callback fs::folder_chunk::add_bulk_actions \
+	-bulk_variable "bulk_actions" \
+	-folder_id $folder_id \
+	-var_export_list "vars_to_export"
 } else {
     set bulk_actions ""
 }
@@ -128,8 +135,6 @@ if {$format eq "list"} {
     set actions {}
 } 
 
-set return_url [export_vars -base "index" {folder_id}]
-set vars_to_export [list return_url]
 
 template::list::create \
     -name contents \
