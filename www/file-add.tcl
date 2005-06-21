@@ -69,11 +69,11 @@ if {[exists_and_not_null return_url]} {
 
 if {$lock_title_p} {
     ad_form -extend -form {
-	{title:text(hidden) {value $title}}
+	{title:text(inform) {value $title}}
     }
 } else {
     ad_form -extend -form {
-	{title:text,optional {label \#file-storage.Title\#} {html {size 30}} }
+	{title:text,optional {label \#file-storage.Title\#} {html {size 30}} {value $title} }
     }
 }
 
