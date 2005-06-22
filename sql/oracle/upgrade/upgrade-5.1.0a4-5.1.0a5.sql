@@ -1,30 +1,30 @@
+
 declare
         impl_id integer;
         v_foo   integer;
 begin
         -- the notification type impl
         impl_id := acs_sc_impl.new (
-                      'NotificationType',
-                      'fs_fs_notif_type',
-                      'file_storage',
-		      'file_storage'
+                      impl_contract_name => 'NotificationType',
+                      impl_name => 'fs_fs_notif_type',
+                      impl_owner_name => 'file_storage'
                    );
 	
-	v_foo := acs_sc_impl.new_alias (
-                    'NotificationType',
-                    'fs_fs_notif_type',
-                    'GetURL',
-		    'fs::notification::get_url',
-                    'TCL'
+	v_foo := acs_sc_impl_alias.new (
+                    impl_contract_name => 'NotificationType',
+                    impl_name => 'fs_fs_notif_type',
+                    impl_operation_name => 'GetURL',
+                    impl_alias => 'fs::notification::get_url',
+                    impl_pl => 'TCL'
                  );
 
-	v_foo := acs_sc_impl.new_alias (
-                    'NotificationType',
-                    'fs_fs_notif_type',
-                    'ProcessReply',
-                    'fs::notification::process_reply',
-                    'TCL'
-        );	
+	v_foo := acs_sc_impl_alias.new (
+                    impl_contract_name => 'NotificationType',
+                    impl_name => 'fs_fs_notif_type',
+                    impl_operation_name => 'ProcessReply',
+                    impl_alias => 'fs::notification::process_reply',
+                    impl_pl => 'TCL'
+                 );
 
 
         acs_sc_binding.new (
