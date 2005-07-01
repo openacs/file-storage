@@ -15,6 +15,5 @@
 <p>@notification_chunk;noquote@</p>
 
 <if @webdav_url@ not nil>
-    <% regsub -all {/\$} $webdav_url {/\\$} webdav_url %>  
     <p>#file-storage.Folder_available_via_WebDAV_at#</p>
 </if>
