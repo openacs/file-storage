@@ -677,13 +677,13 @@ ad_proc -public fs::add_file {
     }
 
     set mime_type [cr_filename_to_mime_type -create -- $name]
-    switch  [cr_registered_type_for_mime_type $mime_type] {
-        image {
-	    set content_type "image"
-	}
-	default {
-	    set content_type "file_storage_object"
-	}
+    # we have to do this here because we create the object before
+    # calling cr_import_content
+    
+    if {[db_string image_type_p "" -default 0]} {
+        set content_type image
+    } else {
+        set content_type file_storage_object
     }
 
     db_transaction {
