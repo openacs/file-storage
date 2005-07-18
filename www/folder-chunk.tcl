@@ -85,7 +85,7 @@ if {$admin_p} {
 
 set elements [list icon \
 		  [list label "" \
-		       display_template {<a href="@contents.download_url@"><img src="@contents.icon@"  border=0 alt="#file-storage.@contents.pretty_type@#" /></a>}] \
+		       display_template {<a class="file-type-icon" href="@contents.download_url@"><img src="@contents.icon@"  border=0 alt="#file-storage.@contents.pretty_type@#" /></a>}] \
 		  name \
 		  [list label [_ file-storage.Name] \
                        display_template {<a href="@contents.file_url@"><if @contents.title@ nil>@contents.name@</a></if><else>@contents.title@</a><br/><if @contents.name@ ne @contents.title@><span style="color: \#999;">@contents.name@</span></if></else>} \
