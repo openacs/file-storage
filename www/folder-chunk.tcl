@@ -73,6 +73,13 @@ lappend actions "\#file-storage.Add_File\#" ${fs_url}file-add?[export_vars folde
 
 set expose_rss_p [parameter::get -parameter ExposeRssP -default 0]
 
+set target_window_name [parameter::get -parameter DownloadTargetWindowName -default ""]
+if { [string equal $target_window_name ""] } {
+    set target_attr ""
+} else {
+    set target_attr "target=\"$target_window_name\""
+}
+
 if {$delete_p} {
     lappend actions "\#file-storage.Delete_this_folder\#" ${fs_url}folder-delete?[export_vars folder_id] "\#file-storage.Delete_this_folder\#"
 }
@@ -87,12 +94,12 @@ if {$admin_p} {
 
 #set n_past_filter_values [list [list "Yesterday" 1] [list [_ file-storage.last_week] 7] [list [_ file-storage.last_month] 30]]
 set elements [list type [list label [_ file-storage.Type] \
-                             display_template {<a class="file-type-icon" href="@contents.download_url@"><img src="@contents.icon@"  border=0 alt="#file-storage.@contents.pretty_type@#" /></a>@contents.pretty_type@} \
+                             display_template {<a @target_attr@ class="file-type-icon" href="@contents.download_url@"><img src="@contents.icon@"  border=0 alt="#file-storage.@contents.pretty_type@#" /></a>@contents.pretty_type@} \
 			    orderby_desc {(sort_key =  0),pretty_type  desc} \
 			    orderby_asc {sort_key, pretty_type asc}] \
                   name \
 		  [list label [_ file-storage.Name] \
-                       display_template {<a href="@contents.file_url@"><if @contents.title@ nil>@contents.name@</a></if><else>@contents.title@</a><br/><if @contents.name@ ne @contents.title@><span style="color: \#999;">@contents.name@</span></if></else>} \
+                       display_template {<a @target_attr@ href="@contents.file_url@"><if @contents.title@ nil>@contents.name@</a></if><else>@contents.title@</a><br/><if @contents.name@ ne @contents.title@><span style="color: \#999;">@contents.name@</span></if></else>} \
 		       orderby_desc {fs_objects.name desc} \
 		       orderby_asc {fs_objects.name asc}] \
  		  short_name \
@@ -157,6 +164,7 @@ template::list::create \
             }
         }
     } \
+    -pass_properties [list target_attr] \
     -filters {
 	folder_id {hide_p 1}
     } \
