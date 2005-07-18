@@ -87,7 +87,7 @@ if {$admin_p} {
 
 #set n_past_filter_values [list [list "Yesterday" 1] [list [_ file-storage.last_week] 7] [list [_ file-storage.last_month] 30]]
 set elements [list type [list label [_ file-storage.Type] \
-                             display_template {<a href="@contents.download_url@"><img src="@contents.icon@"  border=0 alt="#file-storage.@contents.pretty_type@#" /></a>@contents.pretty_type@} \
+                             display_template {<a class="file-type-icon" href="@contents.download_url@"><img src="@contents.icon@"  border=0 alt="#file-storage.@contents.pretty_type@#" /></a>@contents.pretty_type@} \
 			    orderby_desc {(sort_key =  0),pretty_type  desc} \
 			    orderby_asc {sort_key, pretty_type asc}] \
                   name \
