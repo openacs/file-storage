@@ -24,3 +24,20 @@ ad_proc -public -callback fs::file_new {
     {-file_id:required}
 } {
 }
+
+ad_proc -public -callback datamanager::move_folder -impl datamanager {
+     -object_id:required
+     -selected_community:required
+} {
+    Move a folder to another class or community
+} {
+
+#get the working package
+db_1row get_working_package {}
+set root_folder_id [fs::get_root_folder -package_id $package_id]
+    
+#update forums_forums table    
+db_dml update_cr_items {}
+db_dml update_acs_objects {}
+}
+
