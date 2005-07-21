@@ -653,13 +653,14 @@ ad_proc -public fs::get_item_id {
 ad_proc -public fs::add_file {
     -name
     -parent_id
-    -tmp_filename
     -package_id
     {-item_id ""}
     {-creation_user ""}
     {-creation_ip ""}
     {-title ""}
     {-description ""}
+    {-tmp_filename ""}
+    {-mime_type ""}
     -no_callback:boolean
 } {
     Create a new file storage item or add a new revision if
@@ -675,8 +676,9 @@ ad_proc -public fs::add_file {
 	set indbp "f"
         set storage_type "file"
     }
-
-    set mime_type [cr_filename_to_mime_type -create -- $name]
+    if {[string equal "" $mime_type]} {
+        set mime_type [cr_filename_to_mime_type -create -- $name]
+    }
     # we have to do this here because we create the object before
     # calling cr_import_content
     
@@ -696,7 +698,6 @@ ad_proc -public fs::add_file {
 	} else {
 	    set do_notify_here_p "f"
 	}
-	
 	set revision_id [fs::add_version \
 			     -name $name \
 			     -tmp_filename $tmp_filename \
@@ -707,7 +708,8 @@ ad_proc -public fs::add_file {
 			     -title $title \
 			     -description $description \
 			     -suppress_notify_p $do_notify_here_p \
-                             -storage_type $storage_type
+                             -storage_type $storage_type \
+                             -mime_type $mime_type
 			]
 	
 	if {[string is true $do_notify_here_p]} {
@@ -732,6 +734,7 @@ ad_proc fs::add_version {
     {-description ""}
     {-suppress_notify_p "f"}
     {-storage_type ""}
+    {-mime_type ""}
 } {
     Create a new version of a file storage item 
     @return revision_id
@@ -740,7 +743,10 @@ ad_proc fs::add_version {
     if {[string equal "" $storage_type]} {
         set storage_type [db_string get_storage_type ""]
     }
-    set mime_type [cr_filename_to_mime_type -create -- $name]
+    if {[string equal "" $mime_type]} {
+        set mime_type [cr_filename_to_mime_type -create -- $name]
+    }
+
     set tmp_size [file size $tmp_filename]
     set parent_id [get_parent -item_id $item_id]
     set revision_id [cr_import_content \
