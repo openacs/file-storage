@@ -10,6 +10,7 @@ ad_page_contract {
     upload_file:trim,optional
     return_url:optional
     upload_file.tmpfile:tmpfile,optional
+    content_body:optional
     {title ""}
     {lock_title_p 0}
 
@@ -61,6 +62,36 @@ ad_form -html { enctype multipart/form-data } -export { folder_id lock_title_p }
     {upload_file:file {label \#file-storage.Upload_a_file\#} {html "size 30"}}
 }
 
+if {[parameter::get -parameter AllowTextEdit -default 0]} {
+    if {[ad_form_new_p -key file_id]} { 
+            
+        # To allow the creation of files
+        ad_form -extend -form {
+            {content_body:richtext(richtext),optional 
+                {label "Create a file"} 
+                {html "rows 20 cols 70" } 
+                {htmlarea_p 1}
+            }
+        }
+    } else {
+        # To make content editable
+        set revision_id [content::item::get_live_revision -item_id $file_id]
+        set mime_type [db_string get_mime_type "select mime_type from cr_revisions where revision_id = :revision_id"]
+        if { [string equal $mime_type "text/html"] } {
+            ad_form -extend -form {
+                {edit_content:richtext(richtext),optional 
+                    {label "Content"} 
+                    {html "rows 20 cols 70" } 
+                    {htmlarea_p 1}
+                }
+                {mime_type:text(hidden) 
+                    {value $mime_type}
+                }
+            }
+        }
+    }
+}
+
 if {[exists_and_not_null return_url]} {
     ad_form -extend -form {
 	{return_url:text(hidden) {value $return_url}}
@@ -69,11 +100,11 @@ if {[exists_and_not_null return_url]} {
 
 if {$lock_title_p} {
     ad_form -extend -form {
-	{title:text(inform) {value $title}}
+	{title:text(hidden) {value $title}}
     }
 } else {
     ad_form -extend -form {
-	{title:text,optional {label \#file-storage.Title\#} {html {size 30}} {value $title} }
+	{title:text,optional {label \#file-storage.Title\#} {html {size 30}} }
     }
 }
 
@@ -117,6 +148,23 @@ ad_form -extend -form {} -select_query_name {get_file} -new_data {
 	set upload_files [list [template::util::file::get_property filename $upload_file]]
 	set upload_tmpfiles [list [template::util::file::get_property tmp_filename $upload_file]]
     }
+    set mime_type ""
+    if { [empty_string_p [lindex $upload_files 0]]} {
+        if {[empty_string_p [template::util::richtext::get_property html_value $content_body]] } {
+            ad_return_complaint 1 "You have to upload a file or create a new one"
+            ad_script_abort
+        }
+        # create a tmp file to import from user entered HTML
+        set content_body [template::util::richtext::get_property html_value $content_body]
+        set mime_type text/html
+        set tmp_filename [ns_tmpnam]
+        set fd [open $tmp_filename w] 
+        puts $fd $content_body
+        close $fd
+        set upload_files [list $title]
+        set upload_tmpfiles [list $tmp_filename]
+    } 
+    ns_log notice "file_add mime_type='${mime_type}'"	    
     set i 0
     set number_upload_files [llength $upload_files]
     foreach upload_file $upload_files tmpfile $upload_tmpfiles {
@@ -152,7 +200,8 @@ ad_form -extend -form {} -select_query_name {get_file} -new_data {
 	    -creation_ip [ad_conn peeraddr] \
 	    -title $this_title \
 	    -description $description \
-	    -package_id $package_id
+	    -package_id $package_id \
+            -mime_type $mime_type
 
         file delete $tmpfile
         incr i
@@ -172,6 +221,7 @@ ad_form -extend -form {} -select_query_name {get_file} -new_data {
 	-title $title \
 	-description $description \
 	-package_id $package_id \
+        -mime_type $mime_type
 	
 } -after_submit {
 

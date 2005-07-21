@@ -7,40 +7,43 @@
     <initial-install-p>f</initial-install-p>
     <singleton-p>f</singleton-p>
     
-    <version name="5.2.0d3" url="http://openacs.org/repository/download/apm/file-storage-5.2.0d3.apm">
+    <version name="5.2.0d4" url="http://openacs.org/repository/download/apm/file-storage-5.2.0d4.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Collaborative document storage</summary>
         <release-date>2004-07-21</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/plain">Provides a versioned document store with storage in the filesystem or database (depending on configuration).  Documents and folders can be permissioned and folders downloaded.</description>
+        <maturity>0</maturity>
 
-        <provides url="file-storage" version="5.2.0d3"/>
+        <provides url="file-storage" version="5.2.0d4"/>
         <requires url="acs-content-repository" version="5.1.0d1"/>
         <requires url="acs-kernel" version="5.1.0d1"/>
-        <requires url="oacs-dav" version="1.0b2"/>
-	<requires url="notifications" version="5.0.0b4"/>
         <requires url="categories" version="1.0d3"/>
+        <requires url="notifications" version="5.0.0b4"/>
+        <requires url="oacs-dav" version="1.0b2"/>
         <requires url="rss-support" version="0.3d3"/>
 
         <callbacks>
-            <callback type="after-mount"  proc="fs::after_mount"/>
-            <callback type="before-unmount"  proc="fs::before_unmount"/>
-            <callback type="after-instantiate"  proc="fs::install::after_instantiate"/>
-            <callback type="before-uninstantiate"  proc="fs::install::before_uninstantiate"/>
             <callback type="after-install"  proc="fs::install::package_install"/>
+            <callback type="after-instantiate"  proc="fs::install::after_instantiate"/>
+            <callback type="after-mount"  proc="fs::after_mount"/>
             <callback type="after-upgrade"  proc="fs::install::upgrade"/>
+            <callback type="before-uninstantiate"  proc="fs::install::before_uninstantiate"/>
+            <callback type="before-unmount"  proc="fs::before_unmount"/>
         </callbacks>
         <parameters>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ArchiveCommand"  default="tar cf - {in_file} | gzip > {out_file}" description="Program (and program options) to use for archiving file storage objects. Use the special tags {in_file} and {out_file} (including the curly braces) to denote the locations of the input and output files on the command line."/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="AllowTextEdit"  default="0" description="Allow users to edit the content of text based files in their browser."/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ArchiveCommand"  default="tar cf - {in_file} | gzip &gt; {out_file}" description="Program (and program options) to use for archiving file storage objects. Use the special tags {in_file} and {out_file} (including the curly braces) to denote the locations of the input and output files on the command line."/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ArchiveExtension"  default="tgz" description="The extension that the programmer should add to the output file. This depends on the value of ArchiveCommand"/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="DownloadTargetWindowName"  description="Many modern Web browsers will attempt to open documents directly in the browser if they can.  To disable this &quot;plugin mode&quot; behavior and cause downloads to open in a new window, set this value to &quot;_blank&quot; or any non-empty string.  Setting this value to the empty string (default) will leave it to the browser program to decide."/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="ExposeRssP"  default="0" description="Should we offer navigation to set up RSS feeds for folders?"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="GeneralCommentsP"  default="0" description="Allow comments to be attached to a file."/>
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="UseWebDavP"  default="0" description="Flag to determine if WebDav is active.  A flag of 1 (true) means WebDav is active and we will show WebDav links"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="MaximumFileSize"  default="20000000" description="The maximum size, in bytes, of files that users are allowed to upload.  Should not be set larger than the systemwide AOLServer parameter maxinput."/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="ShowAdministerPermissionsLinkP"  default="1" description="Whether or not to show a link to administer permissions on the file storage object."/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="StoreFilesInDatabaseP"  default="0" description="Flag to determine the storage type. A flag of 1 (true) will store the files in the database. If 0 (false) files are stored in the filesystem. ***This parameter should only be changed at package instance creation.***"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="UnzipBinary"  default="unzip" description="The path and name of the unzip binary to unpack zip files containing multiple files."/>
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="ExposeRssP"  default="0" description="Should we offer navigation to set up RSS feeds for folders?"/>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="DownloadTargetWindowName"  default="" description="Many modern Web browsers will attempt to open documents directly in the browser if they can.  To disable this &quot;plugin mode&quot; behavior and cause downloads to open in a new window, set this value to &quot;_blank&quot; or any non-empty string.  Setting this value to the empty string (default) will leave it to the browser program to decide."/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="UseWebDavP"  default="0" description="Flag to determine if WebDav is active.  A flag of 1 (true) means WebDav is active and we will show WebDav links"/>
         </parameters>
+
     </version>
 </package>
