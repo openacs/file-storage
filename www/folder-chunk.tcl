@@ -129,7 +129,7 @@ set return_url [export_vars -base "index" {folder_id}]
 set vars_to_export [list return_url]
 
 if {$allow_bulk_actions} {
-    set bulk_actions [list "Move" "move" "Move Checked Items to Another Folder" "Copy" "copy" "Copy Checked Items to Another Folder" "Delete" "delete" "Delete Checked Items"]
+    set bulk_actions [list "[_ file-storage.Move]" "move" "[_ file-storage.lt_Move_Checked_Items_to]" "[_ file-storage.Copy]" "copy" "[_ file-storage.lt_Copy_Checked_Items_to]" "[_ file-storage.Delete]" "delete" "[_ file-storage.Delete_Checked_Items]"]
     callback fs::folder_chunk::add_bulk_actions \
 	-bulk_variable "bulk_actions" \
 	-folder_id $folder_id \
