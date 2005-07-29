@@ -714,10 +714,9 @@ ad_proc -public fs::add_file {
 	
 	if {[string is true $do_notify_here_p]} {
 	    fs::do_notifications -folder_id $parent_id -filename $title -item_id $revision_id -action "new_file" -package_id $package_id
-	}
-
-	if {!$no_callback_p} {
-	    callback fs::file_new -package_id $package_id -file_id $item_id
+	    if {!$no_callback_p} {
+		callback fs::file_new -package_id $package_id -file_id $item_id
+	    }
 	}
     }
     return $revision_id
@@ -735,6 +734,7 @@ ad_proc fs::add_version {
     {-suppress_notify_p "f"}
     {-storage_type ""}
     {-mime_type ""}
+    -no_callback:boolean
 } {
     Create a new version of a file storage item 
     @return revision_id
@@ -776,6 +776,10 @@ ad_proc fs::add_version {
     set db_package_id [lindex $folder_info 0]
     if { [parameter::get -package_id $db_package_id -parameter ExposeRssP -default 0] } {
         fs::rss::build_feeds $parent_id
+    }
+
+    if {!$no_callback_p} {
+	callback fs::file_revision_new -package_id $package_id -file_id $item_id
     }
 
     return $revision_id

@@ -25,6 +25,12 @@ ad_proc -public -callback fs::file_new {
 } {
 }
 
+ad_proc -public -callback fs::file_revision_new {
+    {-package_id:required}
+    {-file_id:required}
+} {
+}
+
 ad_proc -public -callback datamanager::move_folder -impl datamanager {
      -object_id:required
      -selected_community:required
