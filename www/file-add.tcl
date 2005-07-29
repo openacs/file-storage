@@ -13,6 +13,7 @@ ad_page_contract {
     content_body:optional
     {title ""}
     {lock_title_p 0}
+    {name ""}
 
 } -properties {
     folder_id:onevalue
@@ -57,7 +58,7 @@ if {![ad_form_new_p -key file_id]} {
     set context [fs_context_bar_list -final "[_ file-storage.Add_File]" $folder_id]
 }
 
-ad_form -html { enctype multipart/form-data } -export { folder_id lock_title_p } -form {
+ad_form -html { enctype multipart/form-data } -export { folder_id lock_title_p name } -form {
     file_id:key
     {upload_file:file {label \#file-storage.Upload_a_file\#} {html "size 30"}}
 }
@@ -163,13 +164,14 @@ ad_form -extend -form {} -select_query_name {get_file} -new_data {
         close $fd
         set upload_files [list $title]
         set upload_tmpfiles [list $tmp_filename]
-    } 
+    }
     ns_log notice "file_add mime_type='${mime_type}'"	    
     set i 0
     set number_upload_files [llength $upload_files]
     foreach upload_file $upload_files tmpfile $upload_tmpfiles {
 	set this_file_id $file_id
 	set this_title $title
+	set mime_type [cr_filename_to_mime_type -create -- $upload_file]
 	# upload a new file
 	# if the user choose upload from the folder view
 	# and the file with the same name already exists
@@ -179,6 +181,10 @@ ad_form -extend -form {} -select_query_name {get_file} -new_data {
 	    set this_title $upload_file
 	}
 	
+	if {![empty_string_p $name]} {
+	    set upload_file $name
+	}
+
 	set existing_item_id [fs::get_item_id -name $upload_file -folder_id $folder_id]
 	
 	if {![empty_string_p $existing_item_id]} {
@@ -212,16 +218,20 @@ ad_form -extend -form {} -select_query_name {get_file} -new_data {
     file delete $upload_file.tmpfile
 } -edit_data {
 
+    set filemame [template::util::file::get_property filename $upload_file]
+    if {[string equal $this_title ""]} {
+	set this_title $filename
+    }
+	
     fs::add_version \
-	-name [template::util::file::get_property filename $upload_file] \
+	-name $filename \
 	-tmp_filename [template::util::file::get_property tmp_filename $upload_file] \
         -item_id $file_id \
 	-creation_user $user_id \
 	-creation_ip [ad_conn peeraddr] \
 	-title $title \
 	-description $description \
-	-package_id $package_id \
-        -mime_type $mime_type
+	-package_id $package_id
 	
 } -after_submit {
 
