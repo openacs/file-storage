@@ -722,6 +722,162 @@ ad_proc -public fs::add_file {
     return $revision_id
 }
 
+ad_proc -public fs::add_created_file {
+    {-name ""}
+    -parent_id
+    -package_id
+    {-item_id ""}
+    {-mime_type ""}
+    {-creation_user ""}
+    {-creation_ip ""}
+    {-title ""}
+    {-description ""}
+    {-content_body ""}
+} {
+    Create a new file storage item or add a new revision if
+    an item with the same name and parent folder already exists
+
+    @return revision_id
+} {
+    if {[parameter::get -parameter "StoreFilesInDatabaseP" -package_id $package_id]} {
+	set indbp "t"
+        set storage_type "lob"
+    } else {
+	set indbp "f"
+        set storage_type "file"
+    }
+    if {![string equal "" $item_id]} {
+        set storage_type [db_string get_storage_type "select storage_type from cr_items where item_id=:item_id"]
+    }
+    if {[empty_string_p $mime_type] } {
+	set mime_type "text/html"
+    }
+    if { [empty_string_p $name] } {
+	set name $title
+    }
+
+    set content_type "file_storage_object"
+
+    db_transaction {
+	if {[empty_string_p $item_id] || ![db_string item_exists ""]} {
+	    set item_id [db_exec_plsql create_item ""]
+	    if {![empty_string_p $creation_user]} {
+		permission::grant -party_id $creation_user -object_id $item_id -privilege admin
+	    }
+	    set do_notify_here_p "t"
+	} else {
+	    set do_notify_here_p "f"
+	}
+	
+        set revision_id [fs::add_created_version \
+            -name $title \
+            -item_id $item_id \
+            -creation_user $creation_user \
+            -creation_ip [ad_conn peeradd] \
+            -title $title \
+            -description $description \
+            -package_id $package_id \
+            -content_body $content_body \
+            -mime_type $mime_type \
+            -storage_type $storage_type]
+
+	
+	if {[string is true $do_notify_here_p]} {
+	    fs::do_notifications -folder_id $parent_id -filename $title -item_id $revision_id -action "new_file" -package_id $package_id
+	}
+    }
+    return $revision_id
+}
+
+ad_proc fs::add_created_version {
+    -name
+    -content_body
+    -mime_type
+    -item_id
+    {-creation_user ""}
+    {-creation_ip ""}
+    {-title ""}
+    {-description ""}
+    {-suppress_notify_p "f" }
+    {-storage_type ""}
+    {-package_id ""}
+    {-storage_type ""}
+} {
+    Create a new version of a file storage item using the content passed in content_body
+    @return revision_id
+} {
+    if {[empty_string_p $package_id]} {
+	set package_id [ad_conn package_id]
+    }
+    if {[empty_string_p $storage_type]} {
+	set storage_type [db_string get_storage_type ""]
+    }
+    if {[empty_string_p $creation_user]} {
+	set creation_user [ad_conn user_id]
+    }
+    if {[empty_string_p $creation_ip]} {
+	set creation_ip [ns_conn peeraddr]
+    }
+    set parent_id [get_parent -item_id $item_id]
+    if {[string equal "" $storage_type]} {
+        set storage_type [db_string get_storage_type "select storage_type from cr_items where item_id=:item_id"]    
+    }
+    switch -- $storage_type {
+        file {
+            set revision_id [db_exec_plsql new_file_revision { }]
+
+            set cr_file [cr_create_content_file_from_string $item_id $revision_id $content_body]
+
+            # get the size
+            set file_size [cr_file_size $cr_file]
+
+            # update the file path in the CR and the size on cr_revisions
+            db_dml update_revision { }
+        }
+        lob {
+            # if someone stored file storage content in the database
+            # we need to use lob. the only want ot get a lob into the
+            # database if to pass it as a file
+            set revision_id [cr_import_content \
+             -item_id $item_id \
+			 -storage_type  \
+			 -creation_user $creation_user \
+			 -creation_ip $creation_ip \
+			 -other_type "file_storage_object" \
+			 -image_type "file_storage_object" \
+			 -title $title \
+			 -description $description \
+			 $parent_id \
+			 $tmp_filename \
+			 $tmp_size \
+			 $mime_type \
+			 $name]
+                db_dml set_lob_content "" -blobs [list $content_body]
+                db_dml set_lob_size ""
+        }
+        text {
+            set revision_id [db_exec_plsql new_text_revision {}]
+        }
+    }
+
+    db_dml set_live_revision ""
+    db_exec_plsql update_last_modified ""
+
+    if {[string is false $suppress_notify_p]} {
+	fs::do_notifications -folder_id $parent_id -filename $title -item_id $revision_id -action "new_version" -package_id $package_id
+    }
+
+    #It's safe to rebuild RSS repeatedly, assuming it's not too expensive.
+    set folder_info [fs::get_folder_package_and_root $parent_id]
+    set db_package_id [lindex $folder_info 0]
+    if { [parameter::get -package_id $db_package_id -parameter ExposeRssP -default 0] } {
+        fs::rss::build_feeds $parent_id
+    }
+
+    return $revision_id
+}
+
+
 ad_proc fs::add_version {
     -name
     -tmp_filename
@@ -896,10 +1052,11 @@ ad_proc -public fs::do_notifications {
     @param action The kind of operation. One of: new_file, new_version, new_url, delete_file, delete_url
                   delete_folder
 } {
+    set package_and_root [fs::get_folder_package_and_root $folder_id]
+    set root_folder [lindex $package_and_root 1]
     if {[string equal "" $package_id]} {
-        set package_id [ad_conn package_id]
+	set package_id [lindex $package_and_root 0]
     }
-    set root_folder [fs_get_root_folder -package_id $package_id]
 
     if {[string equal $action "new_file"]} {
         set action_type "[_ file-storage.New_File_Uploaded]"
