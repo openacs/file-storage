@@ -256,4 +256,110 @@
     </querytext>
   </fullquery>
 
+  <fullquery name="fs::add_created_version.new_file_revision">
+    <querytext>
+	select content_revision__new (
+	      :title,    	-- title
+              :description,	-- description
+	      now(),		-- publish_date
+	      :mime_type, 	-- mime_type
+	      null,		-- ns_language
+	      :content_body,	-- text
+	      :item_id,		-- item_id
+	      null,
+	      now(),		-- creation_date
+	      :creation_user, 	-- creation_user
+	      :creation_ip,	-- creation_ip
+	      null,	
+	      :package_id	-- package_id
+	)
+    </querytext>
+  </fullquery>
+
+  <fullquery name="fs::add_created_version.new_text_revision">
+    <querytext>
+	select content_revision__new (
+	      :title,    	-- title
+              :description,	-- description
+	      now(),		-- publish_date
+	      :mime_type, 	-- mime_type
+	      null,		-- ns_language
+	      :content_body,	-- text
+	      :item_id,		-- item_id
+	      null,
+	      now(),		-- creation_date
+	      :creation_user, 	-- creation_user
+	      :creation_ip,	-- creation_ip
+	      null,	
+	      :package_id	-- package_id
+	)
+    </querytext>
+  </fullquery>
+
+  <fullquery name="fs::add_created_version.new_lob_revision">
+    <querytext>
+         select content_revision__new (
+            /* title         => */ :title,
+            /* description   => */ :description,
+            /* publish_date  => */ current_timestamp,
+            /* mime_type     => */ :mime_type,
+            /* nls_language  => */ null,
+            /* data          => */ null,
+            /* item_id       => */ :item_id,
+            /* revision_id   => */ :revision_id,
+            /* creation_date => */ current_timestamp,
+            /* creation_user => */ :creation_user,
+            /* creation_ip   => */ :creation_ip,
+            /* package_id    => */ :package_id
+    )
+    </querytext>
+  </fullquery>
+
+<fullquery name="fs::add_created_version.set_lob_content">      
+      <querytext>
+
+      update cr_revisions
+      set mime_type = :mime_type,
+         lob = [set __lob_id [db_string get_lob_id "select empty_lob()"]]
+      where revision_id = :revision_id
+         
+      </querytext>
+</fullquery>
+ 
+<fullquery name="fs::add_created_version.set_lob_size">      
+      <querytext>
+
+         update cr_revisions
+         set content_length = lob_length(lob)
+         where revision_id = :revision_id
+
+      </querytext>
+</fullquery>
+
+
+  <fullquery name="fs::add_created_version.update_last_modified">
+    <querytext>
+      begin
+      perform acs_object__update_last_modified
+      (:parent_id,:creation_user,:creation_ip);
+      perform
+      acs_object__update_last_modified(:item_id,:creation_user,:creation_ip);
+      return null;
+      end;
+    </querytext>
+  </fullquery>
+
+  <fullquery name="fs::add_created_file.create_item">
+    <querytext>
+      select file_storage__new_file (
+          :name,
+          :parent_id,
+	  :creation_user,
+          :creation_ip,
+          :indbp,
+          :item_id
+      )
+    </querytext>
+  </fullquery>
+
 </queryset>
