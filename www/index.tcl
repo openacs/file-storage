@@ -102,6 +102,8 @@ if { !${root_folder_p}} {
     }
 }
 
+set up_name [lang::util::localize $up_name]
+
 set use_webdav_p  [ad_parameter "UseWebDavP"]
 
 if { $use_webdav_p == 1} { 
