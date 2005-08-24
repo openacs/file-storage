@@ -59,7 +59,7 @@ if {![exists_and_not_null root_folder_id]} {
 }
 
 if {![string equal $root_folder_id $folder_id]} {
-    set folder_path [db_exec_plsql get_folder_path {}]
+    set folder_path "[db_exec_plsql get_folder_path {}]\\"
 } else {
     set folder_path ""
 }
@@ -72,6 +72,7 @@ set actions [list]
 lappend actions "\#file-storage.Add_File\#" ${fs_url}file-add?[export_vars folder_id] "Upload a file in this folder" "\#file-storage.Create_a_URL\#" ${fs_url}simple-add?[export_vars folder_id] "Add a link to a web page" "\#file-storage.New_Folder\#" ${fs_url}folder-create?[export_vars {{parent_id $folder_id}}] "\#file-storage.Create_a_new_folder\#"
 
 set expose_rss_p [parameter::get -parameter ExposeRssP -default 0]
+set like_filesystem_p [parameter::get -parameter BehaveLikeFilesystemP -default 1]
 
 set target_window_name [parameter::get -parameter DownloadTargetWindowName -default ""]
 if { [string equal $target_window_name ""] } {
@@ -227,8 +228,13 @@ db_multirow -extend {label icon last_modified_pretty content_size_pretty propert
 	    set new_version_link [_ acs-kernel.common_New]
 	    set new_version_url "${fs_url}file-add?[export_vars {{file_id $object_id}}]"
 	    set icon "/resources/file-storage/file.gif"
-	    set file_url "${fs_url}view/${file_url}"
-            set download_url "${fs_url}download/$name?[export_vars {{file_id $object_id}}]"                
+	    if {$like_filesystem_p} {
+		set file_url "${fs_url}view/${folder_path}${title}"
+		set download_url "${fs_url}download/$title?[export_vars {{file_id $object_id}}]"                
+	    } else {
+		set file_url "${fs_url}view/${folder_path}${file_upload_name}"
+		set download_url "${fs_url}download/$name?[export_vars {{file_id $object_id}}]"                
+	    }
 	}
 
     }

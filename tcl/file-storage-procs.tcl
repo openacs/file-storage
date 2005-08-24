@@ -1213,9 +1213,22 @@ ad_proc -public fs::get_object_info {
         set revision_id [item::get_live_revision $file_id]
     }
 
-    db_1row file_info {} -column_array file_object_info
+    db_1row file_info {
+	select r.item_id as file_id, r.revision_id,
+	       r.mime_type, r.title, r.description,
+	       r.content_length as content_size,
+	       i.name, o.last_modified, i.parent_id,
+	       i.storage_type, i.storage_area_key
+	from cr_revisions r, cr_items i, acs_objects o
+	where r.revision_id = :revision_id
+	and r.item_id = i.item_id
+	and i.item_id = :file_id
+	and i.content_type = 'file_storage_object'
+	and r.revision_id = o.object_id
+    } -column_array file_object_info
 
-    set content [db_exec_plsql get_content {}]
+    set content [db_exec_plsql get_content {
+    }]
 
     if {[string equal $file_object_info(storage_type) file]} {
         set filename [cr_fs_path $file_object_info(storage_area_key)]
