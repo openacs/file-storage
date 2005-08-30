@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="file-storage" package_version="5.2.0d4" locale="de_DE" charset="ISO-8859-1">
+<message_catalog package_key="file-storage" package_version="5.2.0d6" locale="de_DE" charset="ISO-8859-1">
 
   <msg key="_Copy">Datei</msg>
   <msg key="_Delete">Datei</msg>
@@ -13,6 +13,7 @@
   <msg key="Add_pretty_name">%pretty_name% hinzufügen</msg>
   <msg key="Author">Autor</msg>
   <msg key="back_to_folder_view">Zurück zur Verzeichnisübersicht</msg>
+  <msg key="back_to_project">Zurück zum Projekt</msg>
   <msg key="bytes">Bytes</msg>
   <msg key="Change_Name">Umbenennen</msg>
   <msg key="Change_upload_limit">Veränderung des Upload Limits</msg>
