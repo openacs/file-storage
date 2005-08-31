@@ -228,11 +228,10 @@ db_multirow -extend {label icon last_modified_pretty content_size_pretty propert
 	    set new_version_link [_ acs-kernel.common_New]
 	    set new_version_url "${fs_url}file-add?[export_vars {{file_id $object_id}}]"
 	    set icon "/resources/file-storage/file.gif"
+	    set file_url "${fs_url}view/${file_url}"
 	    if {$like_filesystem_p} {
-		set file_url "${fs_url}view/${folder_path}${title}"
 		set download_url "${fs_url}download/$title?[export_vars {{file_id $object_id}}]"                
 	    } else {
-		set file_url "${fs_url}view/${folder_path}${file_upload_name}"
 		set download_url "${fs_url}download/$name?[export_vars {{file_id $object_id}}]"                
 	    }
 	}
