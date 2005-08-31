@@ -123,9 +123,8 @@ if { !${root_folder_p}} {
 	set up_url [lindex [lindex $context end-1] 0]
 	set up_name [lindex [lindex $context end-1] 1]
     }
+    set up_name [lang::util::localize $up_name]
 }
-
-set up_name [lang::util::localize $up_name]
 
 set use_webdav_p  [ad_parameter "UseWebDavP"]
 
