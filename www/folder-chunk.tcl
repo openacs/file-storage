@@ -69,7 +69,9 @@ set actions [list]
 # for now, invite users to upload, and then they will be asked to
 # login if they are not.
 
-lappend actions "\#file-storage.Add_File\#" ${fs_url}file-add?[export_vars folder_id] "Upload a file in this folder" "\#file-storage.Create_a_URL\#" ${fs_url}simple-add?[export_vars folder_id] "Add a link to a web page" "\#file-storage.New_Folder\#" ${fs_url}folder-create?[export_vars {{parent_id $folder_id}}] "\#file-storage.Create_a_new_folder\#"
+if {$write_p} {
+    lappend actions "\#file-storage.Add_File\#" ${fs_url}file-add?[export_vars folder_id] "Upload a file in this folder" "\#file-storage.Create_a_URL\#" ${fs_url}simple-add?[export_vars folder_id] "Add a link to a web page" "\#file-storage.New_Folder\#" ${fs_url}folder-create?[export_vars {{parent_id $folder_id}}] "\#file-storage.Create_a_new_folder\#"
+}
 
 set expose_rss_p [parameter::get -parameter ExposeRssP -default 0]
 set like_filesystem_p [parameter::get -parameter BehaveLikeFilesystemP -default 1]
