@@ -186,7 +186,7 @@ db_multirow -extend {label icon last_modified_pretty content_size_pretty propert
     if {[string equal $type "folder"]} {
         set content_size_pretty [lc_numeric $content_size]
 	append content_size_pretty "&nbsp;[_ file-storage.items]"
-	set pretty_type "Folder"
+	set pretty_type "#file-storage.Folder#"
     } else {
 	if {$content_size < 1024} {
 	    set content_size_pretty "[lc_numeric $content_size]&nbsp;[_ file-storage.bytes]"

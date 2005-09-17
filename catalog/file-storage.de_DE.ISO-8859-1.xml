@@ -47,7 +47,7 @@
   <msg key="file_edit_page_title_1">%pretty_name% bearbeiten</msg>
   <msg key="file_page_file_title_label">Name: &quot;%title%&quot;</msg>
   <msg key="file_page_owner_label">Besitzer: %owner%</msg>
-  <msg key="Folder">Dateien</msg>
+  <msg key="Folder">Ordner</msg>
   <msg key="folder">Ordner</msg>
   <msg key="Folder_available_via_WebDAV_at">Dieser Ordner ist via WebDAV verfügbar unter %webdav_url%</msg>
   <msg key="folder_delete_page_title">&quot;%folder_name%&quot; löschen</msg>
