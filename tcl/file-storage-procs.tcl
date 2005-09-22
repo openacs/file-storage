@@ -935,7 +935,7 @@ ad_proc fs::add_version {
     }
 
     if {!$no_callback_p} {
-	callback fs::file_revision_new -package_id $package_id -file_id $item_id
+	callback fs::file_revision_new -package_id $package_id -file_id $item_id -parent_id $parent_id
     }
 
     return $revision_id
