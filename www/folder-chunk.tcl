@@ -50,12 +50,12 @@ set folder_name [lang::util::localize [fs::get_object_name -object_id  $folder_i
 
 set content_size_total 0
 
-if {![exists_and_not_null format]} {
-    set format table
-}
-
+#AG: We're an include file, and we may be included from outside file-storage.
+#So we need to query for the package_id rather than getting it from ad_conn.
+set package_and_root [fs::get_folder_package_and_root $folder_id]
+set package_id [lindex $package_and_root 0]
 if {![exists_and_not_null root_folder_id]} {
-    set root_folder_id [fs::get_root_folder]
+    set root_folder_id [lindex $package_and_root 1]
 }
 
 if {![string equal $root_folder_id $folder_id]} {
@@ -69,14 +69,12 @@ set actions [list]
 # for now, invite users to upload, and then they will be asked to
 # login if they are not.
 
-if {$write_p} {
-    lappend actions "\#file-storage.Add_File\#" ${fs_url}file-add?[export_vars folder_id] "Upload a file in this folder" "\#file-storage.Create_a_URL\#" ${fs_url}simple-add?[export_vars folder_id] "Add a link to a web page" "\#file-storage.New_Folder\#" ${fs_url}folder-create?[export_vars {{parent_id $folder_id}}] "\#file-storage.Create_a_new_folder\#"
-}
+lappend actions "\#file-storage.Add_File\#" ${fs_url}file-add?[export_vars folder_id] "Upload a file in this folder" "\#file-storage.Create_a_URL\#" ${fs_url}simple-add?[export_vars folder_id] "Add a link to a web page" "\#file-storage.New_Folder\#" ${fs_url}folder-create?[export_vars {{parent_id $folder_id}}] "\#file-storage.Create_a_new_folder\#"
 
-set expose_rss_p [parameter::get -parameter ExposeRssP -default 0]
+set expose_rss_p [parameter::get -parameter ExposeRssP -package_id $package_id -default 0]
 set like_filesystem_p [parameter::get -parameter BehaveLikeFilesystemP -default 1]
 
-set target_window_name [parameter::get -parameter DownloadTargetWindowName -default ""]
+set target_window_name [parameter::get -parameter DownloadTargetWindowName -package_id $package_id -default ""]
 if { [string equal $target_window_name ""] } {
     set target_attr ""
 } else {
@@ -145,7 +143,6 @@ if {$format eq "list"} {
     set actions {}
 } 
 
-
 template::list::create \
     -name contents \
     -multirow contents \
@@ -182,7 +179,7 @@ if {[string equal $orderby ""]} {
 db_multirow -extend {label icon last_modified_pretty content_size_pretty properties_link properties_url download_url new_version_link new_version_url} contents select_folder_contents {} {
     set last_modified_ansi [lc_time_system_to_conn $last_modified_ansi]
     
-    set last_modified_pretty [lc_time_fmt $last_modified_ansi "%x "]
+    set last_modified_pretty [lc_time_fmt $last_modified_ansi "%x %X"]
     if {[string equal $type "folder"]} {
         set content_size_pretty [lc_numeric $content_size]
 	append content_size_pretty "&nbsp;[_ file-storage.items]"
@@ -252,6 +249,10 @@ if { $expose_rss_p } {
 
 if {$format eq "list"} {
     set content_size_total 0
+}
+
+if { $expose_rss_p } {
+    db_multirow feeds select_subscrs {}
 }
 
 ad_return_template

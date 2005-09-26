@@ -226,7 +226,7 @@ ad_form -extend -form {} -select_query_name {get_file} -new_data {
     fs::add_version \
 	-name $filename \
 	-tmp_filename [template::util::file::get_property tmp_filename $upload_file] \
-    -item_id $file_id \
+        -item_id $file_id \
 	-creation_user $user_id \
 	-creation_ip [ad_conn peeraddr] \
 	-title $this_title \
