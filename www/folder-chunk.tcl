@@ -50,6 +50,10 @@ set folder_name [lang::util::localize [fs::get_object_name -object_id  $folder_i
 
 set content_size_total 0
 
+if {![exists_and_not_null format]} {
+    set format table
+}
+
 #AG: We're an include file, and we may be included from outside file-storage.
 #So we need to query for the package_id rather than getting it from ad_conn.
 set package_and_root [fs::get_folder_package_and_root $folder_id]
