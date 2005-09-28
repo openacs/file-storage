@@ -7,7 +7,7 @@
     <initial-install-p>f</initial-install-p>
     <singleton-p>f</singleton-p>
     
-    <version name="5.2.0d6" url="http://openacs.org/repository/download/apm/file-storage-5.2.0d6.apm">
+    <version name="5.2.0d7" url="http://openacs.org/repository/download/apm/file-storage-5.2.0d7.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Collaborative document storage</summary>
         <release-date>2004-07-21</release-date>
@@ -15,7 +15,7 @@
         <description format="text/plain">Provides a versioned document store with storage in the filesystem or database (depending on configuration).  Documents and folders can be permissioned and folders downloaded.</description>
         <maturity>0</maturity>
 
-        <provides url="file-storage" version="5.2.0d6"/>
+        <provides url="file-storage" version="5.2.0d7"/>
         <requires url="acs-content-repository" version="5.1.0d1"/>
         <requires url="acs-kernel" version="5.1.0d1"/>
         <requires url="categories" version="1.0d3"/>
