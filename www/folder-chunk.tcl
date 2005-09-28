@@ -99,7 +99,7 @@ if {$admin_p} {
 
 #set n_past_filter_values [list [list "Yesterday" 1] [list [_ file-storage.last_week] 7] [list [_ file-storage.last_month] 30]]
 set elements [list type [list label [_ file-storage.Type] \
-                             display_template {<a @target_attr@ class="file-type-icon" href="@contents.download_url@"><img src="@contents.icon@"  border=0 alt="#file-storage.@contents.pretty_type@#" /></a>@contents.pretty_type@} \
+                             display_template {<img src="@contents.icon@"  border=0 alt="#file-storage.@contents.pretty_type@#" />@contents.pretty_type@} \
 			    orderby_desc {(sort_key =  0),pretty_type  desc} \
 			    orderby_asc {sort_key, pretty_type asc}] \
                   name \
@@ -127,7 +127,10 @@ set elements [list type [list label [_ file-storage.Type] \
 		       link_url_col properties_url] \
                   new_version_link \
 		  [list label "" \
-		       link_url_col new_version_url]
+		       link_url_col new_version_url] \
+                  download_link \
+		  [list label "" \
+		       link_url_col download_url]
 	      ]
 
 set return_url [export_vars -base "index" {folder_id}]
@@ -180,7 +183,7 @@ if {[string equal $orderby ""]} {
     set orderby " order by fs_objects.sort_key, fs_objects.name asc"
 }
 
-db_multirow -extend {label icon last_modified_pretty content_size_pretty properties_link properties_url download_url new_version_link new_version_url} contents select_folder_contents {} {
+db_multirow -extend {label icon last_modified_pretty content_size_pretty properties_link properties_url download_link download_url new_version_link new_version_url} contents select_folder_contents {} {
     set last_modified_ansi [lc_time_system_to_conn $last_modified_ansi]
     
     set last_modified_pretty [lc_time_fmt $last_modified_ansi "%x %X"]
@@ -214,7 +217,8 @@ db_multirow -extend {label icon last_modified_pretty content_size_pretty propert
 	    set new_version_url {}
 	    set icon "/resources/file-storage/folder.gif"
 	    set file_url "${fs_url}index?[export_vars {{folder_id $object_id}}]"
-            set download_url $file_url
+	    set download_link [_ file-storage.Download]
+            set download_url "${fs_url}download-archive/index?[export_vars {object_id}]"
 	}
 	url {
 	    set properties_link [_ file-storage.properties]
@@ -223,7 +227,9 @@ db_multirow -extend {label icon last_modified_pretty content_size_pretty propert
 	    set new_version_url "${fs_url}file-add?[export_vars {{file_id $object_id}}]"
 	    set icon "/resources/acs-subsite/url-button.gif"
 	    set file_url ${url}
-            set download_url $file_url
+            set download_url {}
+	    set download_link {}
+	    
 	}
 	default {
 	    set properties_link [_ file-storage.properties]
@@ -232,6 +238,7 @@ db_multirow -extend {label icon last_modified_pretty content_size_pretty propert
 	    set new_version_url "${fs_url}file-add?[export_vars {{file_id $object_id}}]"
 	    set icon "/resources/file-storage/file.gif"
 	    set file_url "${fs_url}view/${file_url}"
+	    set download_link [_ file-storage.Download]
 	    if {$like_filesystem_p} {
 		set download_url "${fs_url}download/$title?[export_vars {{file_id $object_id}}]"                
 	    } else {
