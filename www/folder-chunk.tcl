@@ -73,7 +73,7 @@ set actions [list]
 # for now, invite users to upload, and then they will be asked to
 # login if they are not.
 
-lappend actions "\#file-storage.Add_File\#" ${fs_url}file-add?[export_vars folder_id] "Upload a file in this folder" "\#file-storage.Create_a_URL\#" ${fs_url}simple-add?[export_vars folder_id] "Add a link to a web page" "\#file-storage.New_Folder\#" ${fs_url}folder-create?[export_vars {{parent_id $folder_id}}] "\#file-storage.Create_a_new_folder\#"
+lappend actions "#file-storage.Add_File#" ${fs_url}file-add?[export_vars folder_id] "[_ file-storage.lt_Upload_a_file_in_this]" "#file-storage.Create_a_URL#" ${fs_url}simple-add?[export_vars folder_id] "[_ file-storage.lt_Add_a_link_to_a_web_p]" "#file-storage.New_Folder#" ${fs_url}folder-create?[export_vars {{parent_id $folder_id}}] "#file-storage.Create_a_new_folder#" "[_ file-storage.lt_Upload_compressed_fol]" ${fs_url}folder-zip-add?[export_vars folder_id] "[_ file-storage.lt_Upload_a_compressed_f]"
 
 set expose_rss_p [parameter::get -parameter ExposeRssP -package_id $package_id -default 0]
 set like_filesystem_p [parameter::get -parameter BehaveLikeFilesystemP -default 1]
@@ -86,12 +86,12 @@ if { [string equal $target_window_name ""] } {
 }
 
 if {$delete_p} {
-    lappend actions "\#file-storage.Delete_this_folder\#" ${fs_url}folder-delete?[export_vars folder_id] "\#file-storage.Delete_this_folder\#"
+    lappend actions "#file-storage.Delete_this_folder#" ${fs_url}folder-delete?[export_vars folder_id] "#file-storage.Delete_this_folder#"
 }
 if {$admin_p} {
     set return_url [ad_conn url]
-    lappend actions "\#file-storage.Edit_Folder\#" "${fs_url}folder-edit?folder_id=$folder_id" "\#file-storage.Rename_this_folder\#"
-    lappend actions "\#file-storage.lt_Modify_permissions_on_1\#" "${fs_url}permissions?[export_vars -override {{object_id $folder_id}} {return_url}]" "\#file-storage.lt_Modify_permissions_on_1\#"
+    lappend actions "#file-storage.Edit_Folder#" "${fs_url}folder-edit?folder_id=$folder_id" "#file-storage.Rename_this_folder#"
+    lappend actions "#file-storage.lt_Modify_permissions_on_1#" "${fs_url}permissions?[export_vars -override {{object_id $folder_id}} {return_url}]" "#file-storage.lt_Modify_permissions_on_1#"
     if { $expose_rss_p } {
 	lappend actions "Configure RSS" "${fs_url}admin/rss-subscrs?folder_id=$folder_id" "Configure RSS"
     }
