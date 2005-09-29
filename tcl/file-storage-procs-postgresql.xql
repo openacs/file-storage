@@ -178,7 +178,8 @@
 	  :creation_user,
           :creation_ip,
           :indbp,
-          :item_id
+          :item_id,
+          :package_id
       )
     </querytext>
   </fullquery>

@@ -1096,6 +1096,24 @@ ad_proc -public fs::get_folder_package_and_root folder_id {
     return [list $package_id $root_folder_id]
 }
 
+ad_proc -public fs::get_file_package_id {
+    -file_id
+} {
+    Returns the package_id for a passed-in file_id. This is useful when
+    using symlinks to files whose real root_folder_id is not the root_folder_id
+    of the package the user is in.
+    
+    @author Stan Kaufman (skaufman@epimetrics.com)
+    @creation-date 2005-09-07
+    
+    @param file_id
+
+    @return package_id
+    
+} {
+    return [db_string select_package_id {}]
+}
+
 namespace eval fs::notification {}
 
 ad_proc -public fs::notification::get_url {

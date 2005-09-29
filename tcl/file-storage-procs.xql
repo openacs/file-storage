@@ -148,10 +148,18 @@
     </querytext>
   </fullquery>
 
-
 <fullquery name="fs::add_version.get_storage_type">
   <querytext>
     select storage_type from cr_items where item_id=:item_id
   </querytext>
 </fullquery>
+
+  <fullquery name="fs::get_file_package_id.select_package_id">
+    <querytext>
+      select package__id
+      from acs_objects
+      where object_id = :file_id
+    </querytext>
+  </fullquery>
+
 </queryset>
