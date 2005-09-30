@@ -84,7 +84,8 @@ begin
 	    null, --folder_id
 	    null, --creation_date
 	    null, --creation_user
-	    null --creation_ip
+	    null, --creation_ip
+            new_root_folder__package_id --package_id
 	);
 
         insert into fs_root_folders 
@@ -133,7 +134,8 @@ create or replace function file_storage__new_file(
        integer,         -- acs_objects.creation_user%TYPE,
        varchar,         -- acs_objects.creation_ip%TYPE,
        boolean,         -- store in db? 
-       integer          -- cr_items.item_id%TYPE,
+       integer,           -- cr_items.item_id%TYPE,
+       integer        -- apm_packages.package_id%TYPE
 ) returns integer as ' -- cr_items.item_id%TYPE
 declare
         new_file__name                 alias for $1;
@@ -142,6 +144,7 @@ declare
         new_file__creation_ip           alias for $4;
         new_file__indb_p                alias for $5;
         new_file__item_id               alias for $6;
+        new_file__package_id            alias for $7;
         v_item_id                       integer;
 begin
 
@@ -162,7 +165,8 @@ begin
                         null,                       -- description
                         ''text/plain'',     -- mime_type (default)
                         null,                       -- nls_language (default)
-                        null                        -- data (default)
+                        null,                       -- data (default)
+                        new_file__package_id        -- package_id
                     );
         else
             v_item_id := content_item__new (
@@ -181,7 +185,8 @@ begin
                         ''text/plain'',     -- mime_type (default)
                         null,                       -- nls_language (default)
                         null,                       -- text (default)
-                        ''file''                    -- storage_type
+                        ''file'',                   -- storage_type
+                        new_file__package_id        -- package_id
                     );
 
         end if;
@@ -198,7 +203,8 @@ create or replace function file_storage__new_file(
        integer,         -- cr_items.parent_id%TYPE,
        integer,         -- acs_objects.creation_user%TYPE,
        varchar,         -- acs_objects.creation_ip%TYPE,
-       boolean          -- store in db? 
+       boolean,          -- store in db? 
+       integer        -- apm_packages.package_id%TYPE       
 ) returns integer as ' -- cr_items.item_id%TYPE
 declare
         new_file__name                  alias for $1;
@@ -206,15 +212,16 @@ declare
         new_file__user_id               alias for $3;
         new_file__creation_ip           alias for $4;
         new_file__indb_p                alias for $5;
+        new_file__package_id            alias for $6;
 begin
-
         return file_storage__new_file(
-             new_file__name,
-             new_file__folder_id,
-             new_file__user_id,
-             new_file__creation_ip,
-             new_file__indb_p,
-             null
+             new_file__name,            -- name
+             new_file__folder_id,       -- parent_id
+             new_file__user_id,         -- creation_user
+             new_file__creation_ip,     -- creation_ip
+             new_file__indb_p,          -- storage_type
+             null,                      -- item_id
+             new_file__package_id       -- pacakge_id
         );
 
 end;' language 'plpgsql';
@@ -284,6 +291,7 @@ declare
         v_new_file_id                cr_items.item_id%TYPE;
         v_new_version_id                     cr_revisions.revision_id%TYPE;
         v_indb_p                     boolean;
+        v_package_id                 apm_packages.package_id%TYPE;
 begin
 
         -- We copy only the title from the file being copied, and attributes of the
@@ -299,6 +307,8 @@ begin
         and   r.revision_id = i.live_revision
         and   i.item_id = copy_file__file_id;
 
+        select package_id into v_package_id from acs_objects where object_id = copy_file__file_id;
+
         -- We should probably use the copy functions of CR
         -- when we optimize this function
         v_new_file_id := file_storage__new_file(
@@ -306,7 +316,8 @@ begin
                              copy_file__target_folder_id, -- folder_id
                              copy_file__creation_user,    -- creation_user
                              copy_file__creation_ip,      -- creation_ip
-                             v_indb_p                     -- indb_p
+                             v_indb_p,                    -- indb_p
+                             v_package_id                 -- package_id
                              );
 
         v_new_version_id := file_storage__new_version (
