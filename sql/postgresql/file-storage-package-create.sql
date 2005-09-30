@@ -291,6 +291,7 @@ declare
         v_new_file_id                cr_items.item_id%TYPE;
         v_new_version_id                     cr_revisions.revision_id%TYPE;
         v_indb_p                     boolean;
+        v_package_id                 apm_packages.package_id%TYPE;
 begin
 
         -- We copy only the title from the file being copied, and attributes of the
@@ -306,6 +307,8 @@ begin
         and   r.revision_id = i.live_revision
         and   i.item_id = copy_file__file_id;
 
+        select package_id into v_package_id from acs_objects where object_id = copy_file__file_id;
+
         -- We should probably use the copy functions of CR
         -- when we optimize this function
         v_new_file_id := file_storage__new_file(
@@ -313,7 +316,8 @@ begin
                              copy_file__target_folder_id, -- folder_id
                              copy_file__creation_user,    -- creation_user
                              copy_file__creation_ip,      -- creation_ip
-                             v_indb_p                     -- indb_p
+                             v_indb_p,                    -- indb_p
+                             v_package_id                 -- package_id
                              );
 
         v_new_version_id := file_storage__new_version (
