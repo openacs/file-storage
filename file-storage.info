@@ -10,7 +10,7 @@
     <version name="5.2.0d7" url="http://openacs.org/repository/download/apm/file-storage-5.2.0d7.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Collaborative document storage</summary>
-        <release-date>2004-07-21</release-date>
+        <release-date>2005-09-30</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/plain">Provides a versioned document store with storage in the filesystem or database (depending on configuration).  Documents and folders can be permissioned and folders downloaded.</description>
         <maturity>0</maturity>
@@ -24,18 +24,18 @@
         <requires url="rss-support" version="0.3d3"/>
 
         <callbacks>
-            <callback type="after-install"  proc="fs::install::package_install"/>
-            <callback type="after-instantiate"  proc="fs::install::after_instantiate"/>
-            <callback type="after-mount"  proc="fs::after_mount"/>
-            <callback type="after-upgrade"  proc="fs::install::upgrade"/>
-            <callback type="before-uninstantiate"  proc="fs::install::before_uninstantiate"/>
             <callback type="before-unmount"  proc="fs::before_unmount"/>
+            <callback type="after-mount"  proc="fs::after_mount"/>
+            <callback type="after-install"  proc="fs::install::package_install"/>
+            <callback type="before-uninstantiate"  proc="fs::install::before_uninstantiate"/>
+            <callback type="after-upgrade"  proc="fs::install::upgrade"/>
+            <callback type="after-instantiate"  proc="fs::install::after_instantiate"/>
         </callbacks>
         <parameters>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="AllowTextEdit"  default="0" description="Allow users to edit the content of text based files in their browser."/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ArchiveCommand"  default="tar cf - {in_file} | gzip &gt; {out_file}" description="Program (and program options) to use for archiving file storage objects. Use the special tags {in_file} and {out_file} (including the curly braces) to denote the locations of the input and output files on the command line."/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ArchiveExtension"  default="tgz" description="The extension that the programmer should add to the output file. This depends on the value of ArchiveCommand"/>
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1" name="BehaveLikeFilesystemP"  default="1" description="Switch to use file-title for download instead of original filename"/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="BehaveLikeFilesystemP"  default="1" description="Switch to use file-title for download instead of original filename"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="DownloadTargetWindowName"  description="Many modern Web browsers will attempt to open documents directly in the browser if they can.  To disable this &quot;plugin mode&quot; behavior and cause downloads to open in a new window, set this value to &quot;_blank&quot; or any non-empty string.  Setting this value to the empty string (default) will leave it to the browser program to decide."/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="ExposeRssP"  default="0" description="Should we offer navigation to set up RSS feeds for folders?"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="GeneralCommentsP"  default="0" description="Allow comments to be attached to a file."/>
@@ -45,5 +45,6 @@
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="UnzipBinary"  default="unzip" description="The path and name of the unzip binary to unpack zip files containing multiple files."/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="UseWebDavP"  default="0" description="Flag to determine if WebDav is active.  A flag of 1 (true) means WebDav is active and we will show WebDav links"/>
         </parameters>
+
     </version>
 </package>
