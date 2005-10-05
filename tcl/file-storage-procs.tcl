@@ -296,7 +296,8 @@ ad_proc -public fs::new_folder {
     fs::set_folder_description -folder_id $folder_id -description $description
 
     if {!$no_callback_p} {
-	callback fs::folder_new -package_id [ad_conn package_id] -folder_id $folder_id
+# FIXME This callback doesn't work because sometimes is called without a connection and [ad_conn package_id] breaks
+#	callback fs::folder_new -package_id [ad_conn package_id] -folder_id $folder_id
     }
     return $folder_id
 }
@@ -310,7 +311,8 @@ ad_proc -public fs::rename_folder {
 } {
     db_exec_plsql rename_folder {}
     if {!$no_callback_p} {
-	callback fs::folder_edit -package_id [ad_conn package_id] -folder_id $folder_id
+# FIXME This callback doesn't work because sometimes is called without a connection and [ad_conn package_id] breaks
+#	callback fs::folder_edit -package_id [ad_conn package_id] -folder_id $folder_id
     }
 }
 
@@ -719,7 +721,8 @@ ad_proc -public fs::add_file {
 	}
 
 	if {!$no_callback_p} {
-	    callback fs::file_new -package_id [ad_conn package_id] -file_id $item_id
+# FIXME This callback doesn't work because sometimes is called without a connection and [ad_conn package_id] breaks
+#	    callback fs::file_new -package_id [ad_conn package_id] -file_id $item_id
 	}
     }
     return $revision_id
@@ -778,7 +781,8 @@ ad_proc fs::add_version {
     }
 
     if {!$no_callback_p} {
-	callback fs::file_edit -package_id [ad_conn package_id] -file_id $item_id
+# FIXME This callback doesn't work because sometimes is called without a connection and [ad_conn package_id] breaks
+#	callback fs::file_edit -package_id [ad_conn package_id] -file_id $item_id
     }
 
     return $revision_id
@@ -792,7 +796,8 @@ ad_proc fs::delete_file {
     Deletes a file and all its revisions
 } {
     if {!$no_callback_p} {
-	callback fs::file_delete -package_id [ad_conn package_id] -file_id $item_id
+# FIXME This callback doesn't work because sometimes is called without a connection and [ad_conn package_id] breaks
+#	callback fs::file_delete -package_id [ad_conn package_id] -file_id $item_id
     }
 
     set version_name [get_object_name -object_id $item_id]
@@ -814,7 +819,8 @@ ad_proc fs::delete_folder {
     Deletes a folder and all contents
 } {
     if {!$no_callback_p} {
-	callback fs::folder_delete -package_id [ad_conn package_id] -folder_id $folder_id
+# FIXME This callback doesn't work because sometimes is called without a connection and [ad_conn package_id] breaks
+#	callback fs::folder_delete -package_id [ad_conn package_id] -folder_id $folder_id
     }
 
     set version_name [get_object_name -object_id $folder_id]
