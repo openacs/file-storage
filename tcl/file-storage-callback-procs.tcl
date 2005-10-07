@@ -30,8 +30,7 @@ ad_proc -public -callback fs::file_revision_new {
     {-file_id:required}
     {-parent_id:required}
 } {
-    Callback to be executed when a new revision of a file is uploaded
-} -
+}
 
 ad_proc -public -callback datamanager::move_folder -impl datamanager {
      -object_id:required
