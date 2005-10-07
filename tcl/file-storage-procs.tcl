@@ -1099,25 +1099,25 @@ ad_proc -public fs::do_notifications {
     
     # Set email message body - "text only" for now
     set text_version ""
-    append text_version "[_ file-storage.lt_Notification_for_File]"
+    append text_version "[_ file-storage.lt_Notification_for_File]\n"
     set folder_name [fs_get_folder_name $folder_id]
-    append text_version "[_ file-storage.lt_File-Storage_folder_f]"
+    append text_version "[_ file-storage.lt_File-Storage_folder_f]\n"
 
     if {[string equal $action "new_version"]} {
-        append text_version "[_ file-storage.lt_New_Version_Uploaded_]"
+        append text_version "[_ file-storage.lt_New_Version_Uploaded_]\n"
     } else {
-        append text_version "[_ file-storage.lt_Name_of_the_action_ty]"
+        append text_version "[_ file-storage.lt_Name_of_the_action_ty]\n"
     }
     if {[info exists owner]} {
-        append text_version "[_ file-storage.Uploaded_by_ownern]"
+        append text_version "[_ file-storage.Uploaded_by_ownern]\n"
     }
     if {[info exists description]} {
-        append text_version "[_ file-storage.lt_Version_Notes_descrip]" 
+        append text_version "[_ file-storage.lt_Version_Notes_descrip]\n" 
     }
 
     set url_version "$url$path1?folder_id=$folder_id"
-    append text_version "[_ file-storage.lt_View_folder_contents_]"
-
+    append text_version "[_ file-storage.lt_View_folder_contents_]\n"
+    
     set html_version [ad_html_text_convert -from text/plain -to text/html -- $text_version]
     append html_version "<br /><br />"
     # Do the notification for the file-storage
