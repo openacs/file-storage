@@ -155,12 +155,17 @@ ad_proc -private ::install::xml::action::file-storage-folder { node } {
 } {
     set name [apm_required_attribute_value $node name]
     set pretty_name [apm_required_attribute_value $node pretty-name]
+    set id [apm_attribute_value -default "" $node id]
 
     set package_id [install::xml::object_id::package $node]
 
     set root [fs::get_root_folder -package_id $package_id]
 
-    fs::new_folder -name $name -pretty_name $pretty_name -parent_id $root -creation_user [ad_conn user_id] -creation_ip 127.0.0.1
+    set folder_id [fs::new_folder -name $name -pretty_name $pretty_name -parent_id $root -creation_user [ad_conn user_id] -creation_ip 127.0.0.1]
+
+    if {![string equal $id ""]} {
+      set ::install::xml::ids($id) $folder_id
+    }
 }
 
 ad_proc -public -callback fs::folder_new {
