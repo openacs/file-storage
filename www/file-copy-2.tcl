@@ -33,6 +33,7 @@ set ip_address [ad_conn peeraddr]
 # Question - do we copy revisions or not?
 # Current Answer - we copy the live revision only
 
+
 db_transaction {
 
     db_exec_plsql file_copy "
