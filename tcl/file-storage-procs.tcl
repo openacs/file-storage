@@ -947,16 +947,25 @@ ad_proc fs::add_version {
 ad_proc fs::delete_file {
     -item_id
     {-parent_id ""}
+    -no_callback:boolean
 } {
     Deletes a file and all its revisions
 } {
     set version_name [get_object_name -object_id $item_id]
-    db_exec_plsql delete_file ""
 
     if {[empty_string_p $parent_id]} {
 	set parent_id [get_parent -item_id $item_id]
     }
     
+    set folder_info [fs::get_folder_package_and_root $parent_id]
+    set package_id [lindex $folder_info 0]
+
+    if {!$no_callback_p} {
+	callback fs::file_delete -package_id $package_id -file_id $item_id
+    }
+
+    db_exec_plsql delete_file ""
+
     fs::do_notifications -folder_id $parent_id -filename $version_name -item_id $item_id -action "delete_file"
 }
 

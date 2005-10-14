@@ -19,6 +19,12 @@ ad_proc -public -callback fs::folder_chunk::add_bulk_actions {
 } {
 }
 
+ad_proc -public -callback fs::file_delete {
+    {-package_id:required}
+    {-file_id:required}
+} {
+}
+
 ad_proc -public -callback fs::file_new {
     {-package_id:required}
     {-file_id:required}
