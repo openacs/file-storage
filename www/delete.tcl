@@ -80,7 +80,6 @@ ad_form -extend -name delete_confirm -on_submit {
 
 	    }
 	}
-	xxxx
     }
     ad_returnredirect $return_url
     ad_script_abort
