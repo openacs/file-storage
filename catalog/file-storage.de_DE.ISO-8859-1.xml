@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="file-storage" package_version="5.2.0d6" locale="de_DE" charset="ISO-8859-1">
+<message_catalog package_key="file-storage" package_version="5.2.0d8" locale="de_DE" charset="ISO-8859-1">
 
   <msg key="_Copy">Datei</msg>
   <msg key="_Delete">Datei</msg>
@@ -36,6 +36,7 @@
   <msg key="Delete_this_folder">Diesen Ordner löschen</msg>
   <msg key="Delete_Version">Version löschen</msg>
   <msg key="Description">Kommentar:</msg>
+  <msg key="Download">Herunterladen</msg>
   <msg key="Edit">Bearbeiten</msg>
   <msg key="edit">Umbenennen</msg>
   <msg key="Edit_Folder">Ordner bearbeiten</msg>
@@ -63,6 +64,7 @@
   <msg key="last_month">Letzter Monat</msg>
   <msg key="last_week">Letzte Woche</msg>
   <msg key="link">Link</msg>
+  <msg key="lt_Add_a_link_to_a_web_p">Einen Link auf eine Internetseite in diesem Ordner anlegen</msg>
   <msg key="lt_administer_permission">Zugriffsberechtigungen verwalten</msg>
   <msg key="lt_All_Versions_of_title">Alle Versionen von &quot;%title%&quot;</msg>
   <msg key="lt_Are_you_sure_that_you">Wollen Sie die Version &quot;%version_name%&quot; von &quot;%title%&quot; unwiderruflich löschen?</msg>
@@ -106,6 +108,9 @@
   <msg key="lt_This_file_has_version">Sie können diese Datei nicht löschen, da Sie für mindestens eine ihrer Versionen nicht die erforderliche Berechtigung haben.</msg>
   <msg key="lt_This_folder_contains_">Sie können diesen Ordner nicht löschen, da Sie für mindesten einen seiner Inhalte nicht die erforderliche Berechtigung haben. </msg>
   <msg key="lt_This_is_a_ZIP">Es handelt sich um eine ZIP-Datei mit mehreren Dokumenten</msg>
+  <msg key="lt_Upload_a_compressed_f">Einen komprimierten Ordner ablegen, der in seinem ursprünglichen Zustand entpackt wird.</msg>
+  <msg key="lt_Upload_a_file_in_this">Eine Datei in diesem Ordner ablegen</msg>
+  <msg key="lt_Upload_compressed_fol">Einen komprimierten Ordner hochladen</msg>
   <msg key="lt_Use_the_Browse_button">Klicken Sie auf 'Durchsuchen...', wählen Sie die gewünschte Datei aus und klicken Sie auf 'Öffnen'.</msg>
   <msg key="lt_version_not_valid">Die angegebene Version ist ungültig.</msg>
   <msg key="lt_Version_Notes_descrip">Versionsnotizen: %description%</msg>
