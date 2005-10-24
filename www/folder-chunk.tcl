@@ -89,9 +89,8 @@ if {$delete_p} {
     lappend actions "#file-storage.Delete_this_folder#" ${fs_url}folder-delete?[export_vars folder_id] "#file-storage.Delete_this_folder#"
 }
 if {$admin_p} {
-    set return_url [ad_conn url]
     lappend actions "#file-storage.Edit_Folder#" "${fs_url}folder-edit?folder_id=$folder_id" "#file-storage.Rename_this_folder#"
-    lappend actions "#file-storage.lt_Modify_permissions_on_1#" "${fs_url}permissions?[export_vars -override {{object_id $folder_id}} {return_url}]" "#file-storage.lt_Modify_permissions_on_1#"
+    lappend actions "#file-storage.lt_Modify_permissions_on_1#" "${fs_url}permissions?[export_vars -override {{object_id $folder_id}} {{return_url "[ad_conn url]"}}]" "#file-storage.lt_Modify_permissions_on_1#"
     if { $expose_rss_p } {
 	lappend actions "Configure RSS" "${fs_url}admin/rss-subscrs?folder_id=$folder_id" "Configure RSS"
     }
@@ -133,7 +132,9 @@ set elements [list type [list label [_ file-storage.Type] \
 		       link_url_col download_url]
 	      ]
 
-set return_url [export_vars -base "index" {folder_id}]
+if {![exists_and_not_null return_url]} {
+    set return_url [export_vars -base "index" {folder_id}]
+}
 set vars_to_export [list return_url]
 
 if {$allow_bulk_actions} {
@@ -145,6 +146,7 @@ if {$allow_bulk_actions} {
 } else {
     set bulk_actions ""
 }
+
 
 if {$format eq "list"} { 
     set actions {}

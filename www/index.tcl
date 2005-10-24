@@ -9,6 +9,7 @@ ad_page_contract {
     {folder_id:integer [fs_get_root_folder]}
     {n_past_days:integer "99999"}
     {orderby:optional}
+    {return_url ""}
 } -validate {
     valid_folder -requires {folder_id:integer} {
 	if {![fs_folder_p $folder_id]} {
@@ -114,6 +115,11 @@ if {[exists_and_not_null project_item_id]} {
     }
 }
 
+# Check if the user has permissions. If not, don't care
+if {![empty_string_p $project_item_id] && ![permission::permission_p -object_id $project_item_id -privilege "read"]} {
+    set project_url {}
+}
+
 set up_url {}
 if { !${root_folder_p}} {
     if {[llength $context] == 1} {
@@ -136,5 +142,6 @@ if { $use_webdav_p == 1} {
 # FIXME make this a parameter!
 
 set allow_bulk_actions 1
+
 
 ad_return_template

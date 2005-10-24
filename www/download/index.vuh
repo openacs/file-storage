@@ -21,4 +21,5 @@ set user_id [ad_conn user_id]
 
 ad_require_permission $version_id "read"
 
-cr_write_content -revision_id $version_id
+# cr_write_content -revision_id $version_id
+cr_write_content -item_id $file_id
