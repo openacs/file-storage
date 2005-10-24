@@ -73,6 +73,7 @@ set actions [list]
 # for now, invite users to upload, and then they will be asked to
 # login if they are not.
 
+
 lappend actions "#file-storage.Add_File#" ${fs_url}file-add?[export_vars folder_id] "[_ file-storage.lt_Upload_a_file_in_this]" "#file-storage.Create_a_URL#" ${fs_url}simple-add?[export_vars folder_id] "[_ file-storage.lt_Add_a_link_to_a_web_p]" "#file-storage.New_Folder#" ${fs_url}folder-create?[export_vars {{parent_id $folder_id}}] "#file-storage.Create_a_new_folder#" "[_ file-storage.lt_Upload_compressed_fol]" ${fs_url}folder-zip-add?[export_vars folder_id] "[_ file-storage.lt_Upload_a_compressed_f]"
 
 set expose_rss_p [parameter::get -parameter ExposeRssP -package_id $package_id -default 0]
@@ -138,7 +139,7 @@ if {![exists_and_not_null return_url]} {
 set vars_to_export [list return_url]
 
 if {$allow_bulk_actions} {
-    set bulk_actions [list "[_ file-storage.Move]" "move" "[_ file-storage.lt_Move_Checked_Items_to]" "[_ file-storage.Copy]" "copy" "[_ file-storage.lt_Copy_Checked_Items_to]" "[_ file-storage.Delete]" "delete" "[_ file-storage.Delete_Checked_Items]"]
+    set bulk_actions [list "[_ file-storage.Move]" "${fs_url}move" "[_ file-storage.lt_Move_Checked_Items_to]" "[_ file-storage.Copy]" "${fs_url}copy" "[_ file-storage.lt_Copy_Checked_Items_to]" "[_ file-storage.Delete]" "${fs_url}delete" "[_ file-storage.Delete_Checked_Items]"]
     callback fs::folder_chunk::add_bulk_actions \
 	-bulk_variable "bulk_actions" \
 	-folder_id $folder_id \
