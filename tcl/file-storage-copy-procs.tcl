@@ -9,15 +9,34 @@ ad_proc fs_folder_copy {
     {-old_folder_id:required}
     {-new_parent_id:required}
     {-also_subfolders_p "t"}
-    {-also_files_p "t"}    
+    {-also_files_p "t"}   
+    {-mode: "both"}
 } {
     Copy a folder and its subfolders and files, if selected.
 } {
-#get the data
+
+    switch $mode {
+        "empty" { 
+            set also_subfolders_p "f"
+            set also_files_p "f"
+        }
+        "files" { 
+            set also_subfolders_p "f"
+            set also_files_p "t"
+        }
+        "subfolders" { 
+            set also_subfolders_p "t"
+            set also_files_p "f"
+        }
+        "both" { 
+            set also_subfolders_p "t"
+            set also_files_p "t"
+        }
+    }
+#get data
     db_1row get_folder_data {}
 
-#create the copy of the folder
-
+#create forders  copy 
 	set new_folder_id [fs::new_folder -name $pretty_name\
     -pretty_name $name -parent_id $new_parent_id -creation_user $creation_user -creation_ip $creation_ip  -description $description]
 
