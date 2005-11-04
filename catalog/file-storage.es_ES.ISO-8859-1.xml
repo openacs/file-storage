@@ -81,9 +81,9 @@
   <msg key="lt_Modify_permissions_on">Modificar permisos de este archivo</msg>
   <msg key="lt_Modify_permissions_on_1">Modificar permisos de esta carpeta</msg>
   <msg key="lt_Moving_allowed_count_">Moviendo %allowed_count% archivos.</msg>
-  <msg key="lt_Name_of_the_action_ty">Nombre de %action_type%: %file_name%</msg>
+  <msg key="lt_Name_of_the_action_ty">Nombre de %action_type%: %filename%</msg>
   <msg key="lt_New_version_of_file_u">Nueva versión del archivo cargada</msg>
-  <msg key="lt_New_Version_Uploaded_">Nueva Versión cargada para el archivo: %file_name%</msg>
+  <msg key="lt_New_Version_Uploaded_">Nueva Versión cargada para el archivo: %filename%</msg>
   <msg key="lt_No_valid_items_to_be_">No existen archivos válidos para mover.</msg>
   <msg key="lt_not_allowed_count_ite">%not_allowed_count% archivos no pueden ser movidos</msg>
   <msg key="lt_Notification_for_File">Notificación para: File-Storage: %action_type%</msg>
