@@ -50,8 +50,10 @@ db_1row get_working_package {}
 set root_folder_id [fs::get_root_folder -package_id $package_id]
     
 #update forums_forums table    
-db_dml update_cr_items {}
-db_dml update_acs_objects {}
+    db_transaction {
+        db_dml update_cr_items {}
+        db_dml update_acs_objects {}
+    }
 }
 
 ad_proc -public -callback datamanager::delete_folder -impl datamanager {
@@ -63,10 +65,11 @@ ad_proc -public -callback datamanager::delete_folder -impl datamanager {
 #get the trash_id
 set trash_id [datamanager::get_trash_id]
 
-    
-#update forums_forums table    
-db_dml del_update_cr_items {}
-db_dml del_update_acs_objects {}
+    db_transaction {
+        #update forums_forums table
+        db_dml del_update_cr_items {}
+        db_dml del_update_acs_objects {}
+    }
 }
 
 
@@ -74,13 +77,15 @@ db_dml del_update_acs_objects {}
 ad_proc -public -callback datamanager::copy_folder -impl datamanager {
      -object_id:required
      -selected_community:required
+     {-mode: "both"}
 } {
     Copy a folder to another class or community
 } {
 #get the destiny's root folder
     set parent_id [dotlrn_fs::get_community_root_folder -community_id $selected_community]
+    set new_folder_id [fs_folder_copy -old_folder_id $object_id -new_parent_id $parent_id -mode $mode]
 
-    fs_folder_copy -old_folder_id $object_id -new_parent_id $parent_id
+    return $new_folder_id
     
 }
 
