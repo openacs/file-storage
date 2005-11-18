@@ -57,11 +57,7 @@ ad_proc fs_folder_copy {
             set user_id [lindex [lindex $file_list $i] 1]
             set ip_address [lindex [lindex $file_list $i] 2]
 
-            ns_log Notice "file_id: $file_id"
-            ns_log Notice "parent_id: $new_folder_id"
-            ns_log Notice "user_id: $user_id"
-            ns_log Notice "ip_address: $ip_address"
-                
+
 #            db_transaction {
 #
                 db_exec_plsql file_copy "
@@ -73,24 +69,13 @@ ad_proc fs_folder_copy {
                         creation_ip => :ip_address
                         );
                 end;"
-
-#            } on_error {
-
-#                set folder_name "[_ file-storage.folder]"
-#                set folder_link "<a href=\"index?folder_id=$parent_id\">$folder_name</a>"
-#                ad_return_complaint 1 "[_ file-storage.lt_The_folder_link_you_s]"
-
-##    <pre>$errmsg</pre>
-
-#                ad_script_abort
-#            }
         }
     }
 
     
 #while there are more subfolders...
     if {$also_subfolders_p=="t"} {
-        
+
         set subfolders_list [db_list get_subfolders_list {}]
         set subfolders_number [llength $subfolders_list]
 
@@ -102,8 +87,8 @@ ad_proc fs_folder_copy {
         }
     }
 
-    
+    return $new_folder_id
+    }
+
+
 }
-
-
-
