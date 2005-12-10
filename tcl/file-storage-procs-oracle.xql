@@ -271,4 +271,12 @@
     </querytext>
   </fullquery>
 
+    <fullquery name="fs::get_object_prettyname.select_object_prettyname">
+        <querytext>
+            select nvl(title,name) as prettyname
+            from fs_objects
+            where object_id = :object_id
+        </querytext>
+    </fullquery>
+
 </queryset>
