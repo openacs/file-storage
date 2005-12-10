@@ -335,6 +335,14 @@ ad_proc -public fs::get_object_name {
     return [db_string select_object_name {} -default $object_id]
 }
 
+ad_proc -public fs::get_object_prettyname {
+    {-object_id:required}
+} {
+    Select a pretty name for this object. If title is empty, returns name.
+} {
+    return [db_string select_object_prettyname {} -default $object_id]
+}
+
 ad_proc -public fs::get_file_system_safe_object_name {
     {-object_id:required}
 } {
