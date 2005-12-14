@@ -10,6 +10,7 @@ ad_page_contract {
     folder_name:onevalue
     contents:multirow
     content_size_total:onevalue
+    page_num
 }
 
 if {![exists_and_not_null folder_id]} {
@@ -177,6 +178,7 @@ template::list::create \
     -pass_properties [list target_attr] \
     -filters {
 	folder_id {hide_p 1}
+	page_num
     } \
     -elements $elements
 
