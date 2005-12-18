@@ -1156,7 +1156,8 @@ ad_proc -public fs::do_notifications {
                           -short_name fs_fs_notif] \
             -object_id $parent_id \
             -notif_subject "[_ file-storage.lt_File_Storage_Notifica]" \
-            -notif_text $new_content
+            -notif_text $new_content \
+	    -notif_html $html_version
         set folder_id $parent_id
     }
 }
