@@ -32,81 +32,84 @@ if {$show_all_p} {
 set object_list_where ""
 
 set viewing_user_id [ad_conn user_id]
-
-permission::require_permission -party_id $viewing_user_id -object_id $folder_id -privilege "read"
-
-set folder_name [lang::util::localize [fs::get_object_name -object_id  $folder_id]]
-
-foreach { package_id root_folder_id } [fs::get_folder_package_and_root $folder_id] break
-
-set fs_url [site_node::get_url_from_object_id -object_id $package_id]
-if {![string equal $root_folder_id $folder_id] && [string equal "/view/" $base_url]} {
-    set folder_path [db_exec_plsql get_folder_path {}]
+ns_log notice "DAVEB106 requiring read on '${folder_id}' for '${viewing_user_id}'"
+set permission_p [permission::permission_p -party_id $viewing_user_id -object_id $folder_id -privilege "read"]
+if {!$permission_p} {
+    ad_return_template
 } else {
-    set folder_path ""
-}
+    set folder_name [lang::util::localize [fs::get_object_name -object_id  $folder_id]]
 
-if {[llength $object_list]} {
-    set object_list_where " and fs_objects.object_id in ([join $object_list ", "])"
-}
+    foreach { package_id root_folder_id } [fs::get_folder_package_and_root $folder_id] break
 
-db_multirow -extend { edit_url icon last_modified_pretty content_size_pretty properties_link properties_url download_url target_tag } contents select_folder_contents {} {
-    set last_modified_ansi [lc_time_system_to_conn $last_modified_ansi]
-    
-    set last_modified_pretty [lc_time_fmt $last_modified_ansi "%x %X"]
-#    if {![empty_string_p $description]} {
-#	set description " - $description"
-#    }
-    
-    if {[string equal $type "folder"]} {
-        set content_size_pretty [lc_numeric $content_size]
-	append content_size_pretty " [_ file-storage.items]"
-	set pretty_type "Folder"
+    set fs_url [site_node::get_url_from_object_id -object_id $package_id]
+    if {![string equal $root_folder_id $folder_id] && [string equal "/view/" $base_url]} {
+	set folder_path [db_exec_plsql get_folder_path {}]
     } else {
-	if {$content_size < 1024} {
-	    set content_size_pretty "[lc_numeric $content_size] [_ file-storage.bytes]"
+	set folder_path ""
+    }
+
+    if {[llength $object_list]} {
+	set object_list_where " and fs_objects.object_id in ([join $object_list ", "])"
+    }
+
+    db_multirow -extend { edit_url icon last_modified_pretty content_size_pretty properties_link properties_url download_url target_tag } contents select_folder_contents {} {
+	set last_modified_ansi [lc_time_system_to_conn $last_modified_ansi]
+	
+	set last_modified_pretty [lc_time_fmt $last_modified_ansi "%x %X"]
+	#    if {![empty_string_p $description]} {
+	#	set description " - $description"
+	#    }
+	
+	if {[string equal $type "folder"]} {
+	    set content_size_pretty [lc_numeric $content_size]
+	    append content_size_pretty " [_ file-storage.items]"
+	    set pretty_type "Folder"
 	} else {
-	    set content_size_pretty "[lc_numeric [expr $content_size / 1024 ]] [_ file-storage.kb]"
+	    if {$content_size < 1024} {
+		set content_size_pretty "[lc_numeric $content_size] [_ file-storage.bytes]"
+	    } else {
+		set content_size_pretty "[lc_numeric [expr $content_size / 1024 ]] [_ file-storage.kb]"
+	    }
+
 	}
 
+	set file_upload_name [fs::remove_special_file_system_characters -string $file_upload_name]
+
+	set name [lang::util::localize $name]
+
+	if {![info exists download_base_url] } {
+	    set download_base_url ""
+	}
+	switch -- $type {
+	    folder {
+		set properties_link ""
+		set properties_url ""
+		set icon ""
+		set file_url ""
+		set download_url ""
+	    }
+	    url {
+		set properties_link "properties"
+		set properties_url "${fs_url}simple?[export_vars {object_id return_url}]"
+		set icon "/resources/acs-subsite/url-button.gif"
+		set file_url ${url}
+		set download_url $file_url
+	    }
+	    default {
+
+		set properties_link [_ file-storage.properties]
+		set properties_url "${fs_url}file?[export_vars {{file_id $object_id} return_url}]"
+		set icon "/resources/file-storage/file.gif"
+		set file_url "${base_url}${file_url}"
+		set download_url "${fs_url}download/?[export_vars {{file_id $object_id}}]"                
+	    }
+	}
+
+
+	# We need to encode the hashes in any i18n message keys (.LRN plays this trick on some of its folders).
+	# If we don't, the hashes will cause the path to be chopped off (by ns_conn url) at the leftmost hash.
+	regsub -all {\#} $file_url {%23} file_url
     }
 
-    set file_upload_name [fs::remove_special_file_system_characters -string $file_upload_name]
-
-    set name [lang::util::localize $name]
-
-    if {![info exists download_base_url] } {
-	set download_base_url ""
-    }
-    switch -- $type {
-	folder {
-	    set properties_link ""
-	    set properties_url ""
-	    set icon ""
-	    set file_url ""
-	    set download_url ""
-	}
-	url {
-	    set properties_link "properties"
-	    set properties_url "${fs_url}simple?[export_vars {object_id return_url}]"
-	    set icon "/resources/acs-subsite/url-button.gif"
-	    set file_url ${url}
-            set download_url $file_url
-	}
-	default {
-
-	    set properties_link [_ file-storage.properties]
-	    set properties_url "${fs_url}file?[export_vars {{file_id $object_id} return_url}]"
-	    set icon "/resources/file-storage/file.gif"
-	    set file_url "${base_url}${file_url}"
-            set download_url "${fs_url}download/?[export_vars {{file_id $object_id}}]"                
-	}
-    }
-
-
-    # We need to encode the hashes in any i18n message keys (.LRN plays this trick on some of its folders).
-    # If we don't, the hashes will cause the path to be chopped off (by ns_conn url) at the leftmost hash.
-    regsub -all {#} $file_url {%23} file_url
+    ad_return_template
 }
-
-ad_return_template
