@@ -7,6 +7,8 @@
 -- @cvs-id $Id$
 --
 
+drop view fs_objects;
+
 create or replace view fs_objects
 as
     select cr_items.item_id as object_id,
