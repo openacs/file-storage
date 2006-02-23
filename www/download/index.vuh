@@ -11,10 +11,18 @@ ad_page_contract {
 } {
     file_id:integer,optional
     version_id:integer,optional
+} -validate {
+    either_one {
+	if { ! [info exists file_id] && ! [info exists version_id] } {
+	    ad_complain "Either file_id or version_id must exist"
+	}
+    }
 }
 
 if {![exists_and_not_null version_id]} {
-	set version_id [item::get_live_revision $file_id]
+    set version_id [item::get_live_revision $file_id]
+} elseif {![exists_and_not_null file_id]} {
+    set file_id [content::revision::item_id -revision_id $version_id]
 }
 
 set user_id [ad_conn user_id]
