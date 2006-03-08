@@ -577,14 +577,21 @@ ad_proc -public fs::publish_versioned_object_to_file_system {
     db_1row select_object_metadata {}
 
     # After upgrade change title and filename...
-    set file_name $title
-    if {[empty_string_p $file_name]} {
-        if {![info exists upload_file_name]} {
+    set like_filesystem_p [parameter::get -parameter BehaveLikeFilesystemP -default 1]
+
+    if { $like_filesystem_p } {
+	set file_name $title
+	if {[empty_string_p $file_name]} {
+	    if {![info exists upload_file_name]} {
 		set file_name "unnamedfile"
-    	} else {
-	set file_name $file_upload_name
+	    } else {
+		set file_name $file_upload_name
+	    }
 	}
+    } else {
+	set file_name $file_upload_name
     }
+
     set file_name [remove_special_file_system_characters -string $file_name]
 
     switch $storage_type {
