@@ -29,7 +29,7 @@ set file_id [::content::item::get_id -item_path $the_url \
 # as though it's been passed by reference.   This requires that the redirect treat the
 # path as an absolute path within the filesystem.
 
-if {[parameter::get -parameter BehaveLikeFilesystemP -default 0]} {
+if {[parameter::get -parameter BehaveLikeFilesystemP -default 0] || [catch {set init_p [content::init the_url the_root $content_root $template_root public $revision_id $content_type]}] || !$init_p } {
     
     # Make sure we are not dealing with an upgraded file and there exists a file with the title
     if { [string equal "" $file_id] } {
@@ -69,18 +69,7 @@ if {[parameter::get -parameter BehaveLikeFilesystemP -default 0]} {
 
 } else {
     
-    if { [content::init the_url the_root $content_root $template_root public $revision_id $content_type] } {
+    set file "$the_root/$the_url"
+    rp_internal_redirect -absolute_path $file
 
-	set file "$the_root/$the_url"
-	rp_internal_redirect -absolute_path $file
-    } else {
-	# ns_returnnotfound
-	set page "[ad_header {Content Item Not Found}]"
-	append page "<h3>Content Item Not Found</h3>"
-	append page "The requested item is not available for viewing.  "
-	append page "The item is either not available on this server or it is not in a publishable state  "
-	append page "Unpublished items can be viewed via the CMS interface if the CMS package is installed.<br>"
-	append page "[ad_footer]"
-	doc_return 404 text/html $page
-    }
 }
