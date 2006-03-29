@@ -1,3 +1,4 @@
+
 --
 -- packages/file-storage/sql/file-storage-package-create.sql
 --
@@ -621,60 +622,5 @@ as
     end delete_folder;
 
 end file_storage;
-/
-show errors;
-
--- JS: BEFORE DELETE TRIGGER to clean up CR
-create or replace trigger fs_package_items_delete_trig
-before delete on fs_root_folders
-for each row
-declare
-    cursor v_cursor is
-        select item_id,content_type
-        from cr_items
-        where item_id != :old.folder_id
-        connect by parent_id = prior item_id
-        start with item_id = :old.folder_id
-        order by level desc;
-begin
-    for v_rec in v_cursor
-    loop
-        -- We delete the item. On delete cascade should take care
-        -- of deletion of revisions.
-        if v_rec.content_type = 'file_storage_object'
-        then
-            content_item.del(v_rec.item_id);
-        end if;
-
-        -- Instead of doing an if-else, we make sure we are deleting a folder.
-        if v_rec.content_type = 'content_folder'
-        then
-            content_folder.del(v_rec.item_id);
-        end if;
-
-        -- Instead of doing an if-else, we make sure we are deleting a folder.
-        if v_rec.content_type = 'content_symlink'
-        then
-            content_symlink.del(v_rec.item_id);
-        end if;
-
-        -- Instead of doing an if-else, we make sure we are deleting a folder.
-        if v_rec.content_type = 'content_extlink'
-        then
-            content_extlink.del(v_rec.item_id);
-        end if;
-
-    end loop;
-end;
-/
-show errors;
-
--- JS: AFTER DELETE TRIGGER to clean up last entry in CR
-create or replace trigger fs_root_folder_delete_trig
-after delete on fs_root_folders
-for each row
-begin
-    content_folder.del(:old.folder_id);
-end;
 /
 show errors;
