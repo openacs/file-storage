@@ -39,7 +39,9 @@ if {!$permission_p} {
 } else {
     set folder_name [lang::util::localize [fs::get_object_name -object_id  $folder_id]]
 
-    foreach { package_id root_folder_id } [fs::get_folder_package_and_root $folder_id] break
+if {![info exists permission_p] || ! $permission_p eq 0} {
+    permission::require_permission -party_id $viewing_user_id -object_id $folder_id -privilege "read"
+}
 
     set fs_url [site_node::get_url_from_object_id -object_id $package_id]
     if {![string equal $root_folder_id $folder_id] && [string equal "/view/" $base_url]} {
