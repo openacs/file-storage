@@ -34,11 +34,7 @@
 --                   fs_objects.html_description
             from fs_objects
             where fs_objects.parent_id = :folder_id
-              and exists (select 1
-                   from acs_object_party_privilege_map m
-                   where m.object_id = fs_objects.object_id
-                     and m.party_id = :viewing_user_id
-                     and m.privilege = 'read')
+	$permission_clause
 --              and fs_objects.approved_p = 't'
 --             and ((fs_objects.active_date_start is null) or (current_timestamp >= fs_objects.active_date_start))
 --            and ((fs_objects.active_date_end is null) or (current_timestamp <= fs_objects.active_date_end))
