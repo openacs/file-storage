@@ -32,17 +32,22 @@ if {$show_all_p} {
 set object_list_where ""
 
 set viewing_user_id [ad_conn user_id]
-ns_log notice "DAVEB106 requiring read on '${folder_id}' for '${viewing_user_id}'"
-set permission_p [permission::permission_p -party_id $viewing_user_id -object_id $folder_id -privilege "read"]
-if {!$permission_p} {
-    ad_return_template
+set permission_clause " and exists (select 1
+                   from acs_object_party_privilege_map m
+                   where m.object_id = fs_objects.object_id
+                     and m.party_id = :viewing_user_id
+                     and m.privilege = 'read')"
+if {[info exists permission_check] && $permission_check eq 0 } {
+    set permission_p 1
+    set permission_clause ""
 } else {
-    set folder_name [lang::util::localize [fs::get_object_name -object_id  $folder_id]]
-
-if {![info exists permission_p] || ! $permission_p eq 0} {
-    permission::require_permission -party_id $viewing_user_id -object_id $folder_id -privilege "read"
+    set permission_p [permission::permission_p -party_id $viewing_user_id -object_id $folder_id -privilege "read"]
 }
 
+
+set folder_name [lang::util::localize [fs::get_object_name -object_id  $folder_id]]
+
+foreach { package_id root_folder_id } [fs::get_folder_package_and_root $folder_id] break
     set fs_url [site_node::get_url_from_object_id -object_id $package_id]
     if {![string equal $root_folder_id $folder_id] && [string equal "/view/" $base_url]} {
 	set folder_path [db_exec_plsql get_folder_path {}]
@@ -114,4 +119,3 @@ if {![info exists permission_p] || ! $permission_p eq 0} {
     }
 
     ad_return_template
-}
