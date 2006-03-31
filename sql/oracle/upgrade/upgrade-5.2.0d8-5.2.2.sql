@@ -624,3 +624,19 @@ as
 end file_storage;
 /
 show errors;
+
+
+create or replace view fs_urls_full
+as
+    select cr_extlinks.extlink_id as url_id,
+           cr_extlinks.url,
+           cr_items.parent_id as folder_id,
+           cr_extlinks.label as name,
+           cr_extlinks.description,
+           acs_objects.*
+    from cr_extlinks,
+         cr_items,
+         acs_objects
+    where cr_extlinks.extlink_id = cr_items.item_id
+    and cr_items.item_id = acs_objects.object_id;
+
