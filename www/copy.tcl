@@ -10,6 +10,7 @@ ad_page_contract {
     object_id:notnull,integer,multiple
     folder_id:integer,optional
     {return_url ""}
+    {root_folder_id ""}
     {redirect_to_folder:boolean 0}
     {show_items:boolean 0}
 }
@@ -21,6 +22,7 @@ set user_id [ad_conn user_id]
 set peer_addr [ad_conn peeraddr]
 set allowed_count 0
 set not_allowed_count 0
+set package_id [ad_conn package_id]
 
 db_multirow -extend {copy_message} copy_objects get_copy_objects "" {
     if {$copy_p} {
@@ -53,7 +55,15 @@ if {[info exists folder_id]} {
     template::multirow foreach copy_objects {
         db_transaction {
             if {![string equal $type "folder"] } {
-                db_exec_plsql copy_item {}
+                set file_rev_id [db_exec_plsql copy_item {}]
+		set file_id [content::revision::item_id -revision_id $file_rev_id]
+		set object_rev_id [content::item::get_best_revision -item_id $object_id]
+
+		set object_path "[cr_fs_path][cr_create_content_file_path $object_id $object_rev_id]"
+		set file_path [cr_create_content_file_path $file_id $file_rev_id]
+		cr_create_content_file $file_id $file_rev_id $object_path
+
+		callback fs::file_revision_new -package_id $package_id -file_id $file_id -parent_id $folder_id
             } else {
                 db_exec_plsql copy_folder {}
             }
@@ -87,7 +97,10 @@ if {[info exists folder_id]} {
 		display_template {<div style="text-indent: @folder_tree.level_num@em;">@folder_tree.label@</div>} 
             }
         }
-    set root_folder_id [fs::get_root_folder]
+
+    if {[empty_string_p $root_folder_id]} {
+	set root_folder_id [fs::get_root_folder]
+    }
     set object_id $objects_to_copy
     db_multirow -extend {copy_url} folder_tree get_folder_tree "" {
 	set copy_url [export_vars -base "copy" { object_id:multiple folder_id return_url }]

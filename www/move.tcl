@@ -10,6 +10,7 @@ ad_page_contract {
     object_id:notnull,integer,multiple
     folder_id:integer,optional
     {return_url ""}
+    {root_folder_id ""}
     {redirect_to_folder:boolean 0}
     {show_items:boolean 0}
 }
@@ -85,7 +86,10 @@ if {[info exists folder_id]} {
 		display_template {<div style="text-indent: @folder_tree.level_num@em;">@folder_tree.label@</div>} 
             }
         }
-    set root_folder_id [fs::get_root_folder]
+
+    if {[empty_string_p $root_folder_id]} {
+	set root_folder_id [fs::get_root_folder]
+    }
     set object_id $objects_to_move
     db_multirow -extend {move_url level} folder_tree get_folder_tree "" {
 	# teadams 2003-08-22 - change level to level num to avoid 

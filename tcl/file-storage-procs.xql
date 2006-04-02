@@ -117,6 +117,14 @@
       </querytext>
     </fullquery>
 
+    <fullquery name="fs::add_file.get_old_item">
+      <querytext>
+          select item_id from cr_items
+          where name=:name
+          and parent_id=:parent_id
+      </querytext>
+    </fullquery>
+
   <fullquery name="fs::get_parent.get_parent_id">
     <querytext>
 	select parent_id from cr_items where item_id=:item_id
