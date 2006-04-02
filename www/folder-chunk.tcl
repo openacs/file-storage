@@ -149,7 +149,6 @@ if {$allow_bulk_actions} {
     set bulk_actions ""
 }
 
-
 if {$format eq "list"} { 
     set actions {}
 } 
@@ -246,6 +245,7 @@ db_multirow -extend {label icon last_modified_pretty content_size_pretty propert
 	    set download_link [_ file-storage.Download]
 	    if {$like_filesystem_p} {
 		set download_url "${fs_url}download/$title?[export_vars {{file_id $object_id}}]"                
+		set file_url $download_url
 	    } else {
 		set download_url "${fs_url}download/$name?[export_vars {{file_id $object_id}}]"                
 	    }

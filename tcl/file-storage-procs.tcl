@@ -714,21 +714,40 @@ ad_proc -public fs::add_file {
 	    }
 	    set do_notify_here_p "t"
 	} else {
+	    # th: fixed to set old item_id if item already exists and no new item needed to be created
+	    db_1row get_old_item ""
 	    set do_notify_here_p "f"
 	}
-	set revision_id [fs::add_version \
-			     -name $name \
-			     -tmp_filename $tmp_filename \
-			     -package_id $package_id \
-			     -item_id $item_id \
-			     -creation_user $creation_user \
-			     -creation_ip $creation_ip \
-			     -title $title \
-			     -description $description \
-			     -suppress_notify_p $do_notify_here_p \
-                             -storage_type $storage_type \
-                             -mime_type $mime_type
-			]
+	if {$no_callback_p} {
+	    set revision_id [fs::add_version \
+				 -name $name \
+				 -tmp_filename $tmp_filename \
+				 -package_id $package_id \
+				 -item_id $item_id \
+				 -creation_user $creation_user \
+				 -creation_ip $creation_ip \
+				 -title $title \
+				 -description $description \
+				 -suppress_notify_p $do_notify_here_p \
+				 -storage_type $storage_type \
+				 -mime_type $mime_type \
+				 -no_callback
+			    ]
+	} else {
+	    set revision_id [fs::add_version \
+				 -name $name \
+				 -tmp_filename $tmp_filename \
+				 -package_id $package_id \
+				 -item_id $item_id \
+				 -creation_user $creation_user \
+				 -creation_ip $creation_ip \
+				 -title $title \
+				 -description $description \
+				 -suppress_notify_p $do_notify_here_p \
+				 -storage_type $storage_type \
+				 -mime_type $mime_type
+			    ]
+	}
 	
 	if {[string is true $do_notify_here_p]} {
 	    fs::do_notifications -folder_id $parent_id -filename $title -item_id $revision_id -action "new_file" -package_id $package_id
@@ -836,7 +855,7 @@ ad_proc fs::add_created_version {
     if {[empty_string_p $creation_ip]} {
 	set creation_ip [ns_conn peeraddr]
     }
-    set parent_id [get_parent -item_id $item_id]
+    set parent_id [fs::get_parent -item_id $item_id]
     if {[string equal "" $storage_type]} {
         set storage_type [db_string get_storage_type "select storage_type from cr_items where item_id=:item_id"]    
     }
@@ -922,7 +941,7 @@ ad_proc fs::add_version {
     }
 
     set tmp_size [file size $tmp_filename]
-    set parent_id [get_parent -item_id $item_id]
+    set parent_id [fs::get_parent -item_id $item_id]
     set revision_id [cr_import_content \
 			 -item_id $item_id \
 			 -storage_type $storage_type \
@@ -969,7 +988,7 @@ ad_proc fs::delete_file {
     set version_name [get_object_name -object_id $item_id]
 
     if {[empty_string_p $parent_id]} {
-	set parent_id [get_parent -item_id $item_id]
+	set parent_id [fs::get_parent -item_id $item_id]
     }
     
     set folder_info [fs::get_folder_package_and_root $parent_id]
@@ -995,7 +1014,7 @@ ad_proc fs::delete_folder {
     db_exec_plsql delete_folder ""
 
     if {[empty_string_p $parent_id]} {
-	set parent_id [get_parent -item_id $folder_id]
+	set parent_id [fs::get_parent -item_id $folder_id]
     }
     
     fs::do_notifications -folder_id $parent_id -filename $version_name -item_id $folder_id -action "delete_folder"
