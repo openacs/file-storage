@@ -15,6 +15,7 @@
                    fs_objects.content_size,
                    fs_objects.url,
                    fs_objects.sort_key,
+                   -fs_objects.sort_key as sort_key_desc,
                    fs_objects.file_upload_name,
                    fs_objects.title,
                    case
