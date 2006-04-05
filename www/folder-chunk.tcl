@@ -101,8 +101,8 @@ if {$admin_p} {
 #set n_past_filter_values [list [list "Yesterday" 1] [list [_ file-storage.last_week] 7] [list [_ file-storage.last_month] 30]]
 set elements [list type [list label [_ file-storage.Type] \
                              display_template {<img src="@contents.icon@"  border=0 alt="#file-storage.@contents.pretty_type@#" />@contents.pretty_type@} \
-			    orderby_desc {(sort_key =  0),pretty_type  desc} \
-			    orderby_asc {sort_key, pretty_type asc}] \
+			    orderby_desc {sort_key_desc,fs_objects.pretty_type desc} \
+			    orderby_asc {fs_objects.sort_key, fs_objects.pretty_type asc}] \
                   name \
 		  [list label [_ file-storage.Name] \
                        display_template {<a @target_attr@ href="@contents.file_url@"><if @contents.title@ nil>@contents.name@</a></if><else>@contents.title@</a><br/><if @contents.name@ ne @contents.title@><span style="color: \#999;">@contents.name@</span></if></else>} \
