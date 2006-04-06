@@ -13,8 +13,8 @@ ad_page_contract {
     {root_folder_id ""}
     {redirect_to_folder:boolean 0}
     {show_items:boolean 0}
+} -errors {object_id:,notnull,integer,multiple {Please select at least one item to move.}
 }
-
 
 set objects_to_move $object_id
 set object_id_list [join $object_id ","]
@@ -52,14 +52,20 @@ if {[info exists folder_id]} {
     # check for WRTIE permission on each object to be moved
     # DaveB: I think it should be DELETE instead of WRITE
     # but the existing file-move page checks for WRITE
-      
+     set error_items [list]
     template::multirow foreach move_objects {
 	db_transaction {
 	    db_exec_plsql move_item {}
-      }
+	} on_error {
+	    lappend error_items $name
+	}
     }    
-
-     ad_returnredirect $return_url
+     if {[llength $error_items]} {
+	 set message "There was a problem moving the following items: [join $error_items ", "]"
+     } else {
+	 set message "Selected items moved"
+     }
+     ad_returnredirect -message $message $return_url
      ad_script_abort
 
  } else {

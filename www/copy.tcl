@@ -13,6 +13,7 @@ ad_page_contract {
     {root_folder_id ""}
     {redirect_to_folder:boolean 0}
     {show_items:boolean 0}
+} -errors {object_id:,notnull,integer,multiple {Please select at least one item to copy.}
 }
 
 set objects_to_copy $object_id
@@ -51,26 +52,25 @@ if {[info exists folder_id]} {
     # check for WRTIE permission on each object to be copyd
     # DaveB: I think it should be DELETE instead of WRITE
     # but the existing file-copy page checks for WRITE
-      
+     set error_items [list]      
     template::multirow foreach copy_objects {
         db_transaction {
             if {![string equal $type "folder"] } {
                 set file_rev_id [db_exec_plsql copy_item {}]
-		set file_id [content::revision::item_id -revision_id $file_rev_id]
-		set object_rev_id [content::item::get_best_revision -item_id $object_id]
-
-		set object_path "[cr_fs_path][cr_create_content_file_path $object_id $object_rev_id]"
-		set file_path [cr_create_content_file_path $file_id $file_rev_id]
-		cr_create_content_file $file_id $file_rev_id $object_path
-
 		callback fs::file_revision_new -package_id $package_id -file_id $file_id -parent_id $folder_id
             } else {
                 db_exec_plsql copy_folder {}
             }
-        }
+        } on_error {
+	    lappend error_items $name
+	}
     }
-
-     ad_returnredirect $return_url
+     if {[llength $error_items]} {
+	 set message "There was a problem copying the following items: [join $error_items ", "]"
+     } else {
+	 set message "Selected items copied."
+     }
+     ad_returnredirect -message $message $return_url
      ad_script_abort
 
  } else {
