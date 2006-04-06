@@ -126,7 +126,7 @@ ad_form -extend -form {} -select_query_name {get_file} -new_data {
     set unpack_p [template::util::is_true $unpack_p]
     set unzip_binary [string trim [parameter::get -parameter UnzipBinary]]
 
-    if { $unpack_p && ![empty_string_p $unzip_binary] } {
+    if { $unpack_p && ![empty_string_p $unzip_binary] && [file extension [template::util::file::get_property filename $upload_file]] eq ".zip"  } {
 	
 	set path [ns_tmpnam]
 	file mkdir $path
@@ -151,7 +151,7 @@ ad_form -extend -form {} -select_query_name {get_file} -new_data {
     }
     set mime_type ""
     if { [empty_string_p [lindex $upload_files 0]]} {
-        if {[empty_string_p [template::util::richtext::get_property html_value $content_body]] } {
+        if {[parameter::get -parameter AllowTextEdit -default 0] && [empty_string_p [template::util::richtext::get_property html_value $content_body]] } {
             ad_return_complaint 1 "You have to upload a file or create a new one"
             ad_script_abort
         }
