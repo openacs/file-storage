@@ -33,7 +33,6 @@
         </callbacks>
         <parameters>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="AllowTextEdit"  default="0" description="Allow users to edit the content of text based files in their browser."/>
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="AllowTextEdit"  default="0" description="Allow users to edit the content of text based files in their browser."/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ArchiveCommand"  default="tar cf - {in_file} | gzip &gt; {out_file}" description="Program (and program options) to use for archiving file storage objects. Use the special tags {in_file} and {out_file} (including the curly braces) to denote the locations of the input and output files on the command line."/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ArchiveExtension"  default="tgz" description="The extension that the programmer should add to the output file. This depends on the value of ArchiveCommand"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="BehaveLikeFilesystemP"  default="0" description="Switch to use file-title for download instead of original filename"/>
