@@ -20,6 +20,7 @@ ad_page_contract {
 	}
     }
 }
+ns_log Notice "Huh? right script ..."
 
 # check for read permission on the file and write permission on the
 # target folder

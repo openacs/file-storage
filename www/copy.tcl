@@ -15,6 +15,7 @@ ad_page_contract {
     {show_items:boolean 0}
 } -errors {object_id:,notnull,integer,multiple {Please select at least one item to copy.}
 }
+ns_log Notice "Huh? right script..."
 
 set objects_to_copy $object_id
 set object_id_list [join $object_id ","]
@@ -57,7 +58,7 @@ if {[info exists folder_id]} {
         db_transaction {
             if {![string equal $type "folder"] } {
                 set file_rev_id [db_exec_plsql copy_item {}]
-		callback fs::file_revision_new -package_id $package_id -file_id $file_id -parent_id $folder_id
+		callback fs::file_revision_new -package_id $package_id -file_id $object_id -parent_id $folder_id
             } else {
                 db_exec_plsql copy_folder {}
             }
