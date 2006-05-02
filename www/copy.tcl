@@ -58,7 +58,8 @@ if {[info exists folder_id]} {
         db_transaction {
             if {![string equal $type "folder"] } {
                 set file_rev_id [db_exec_plsql copy_item {}]
-		callback fs::file_revision_new -package_id $package_id -file_id $object_id -parent_id $folder_id
+		set file_id [content::revision::item_id -revision_id $file_rev_id]
+		callback fs::file_revision_new -package_id $package_id -file_id $file_id -parent_id $folder_id
             } else {
                 db_exec_plsql copy_folder {}
             }

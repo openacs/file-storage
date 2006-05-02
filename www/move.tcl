@@ -20,6 +20,9 @@ set objects_to_move $object_id
 set object_id_list [join $object_id ","]
 
 set user_id [ad_conn user_id]
+set peer_addr [ad_conn peeraddr]
+set package_id [ad_conn package_id]
+set copy_and_delete_p [parameter::get -parameter MoveByCopyDeleteP -package_id $package_id -default 0]
 
 set allowed_count 0
 set not_allowed_count 0
@@ -54,10 +57,29 @@ if {[info exists folder_id]} {
     # but the existing file-move page checks for WRITE
      set error_items [list]
     template::multirow foreach move_objects {
-	db_transaction {
-	    db_exec_plsql move_item {}
-	} on_error {
-	    lappend error_items $name
+	if {$copy_and_delete_p} {
+	    # copy and delete file to move it
+	    db_transaction {
+		if {![string equal $type "folder"] } {
+		    set file_rev_id [db_exec_plsql copy_item {}]
+		    set file_id [content::revision::item_id -revision_id $file_rev_id]
+		    callback fs::file_revision_new -package_id $package_id -file_id $file_id -parent_id $folder_id
+		    fs::delete_file -item_id $object_id -parent_id $parent_id
+		} else {
+		    db_exec_plsql copy_folder {}
+		    fs::delete_folder -folder_id $object_id -parent_id $parent_id
+		}
+		db_exec_plsql move_item {}
+	    } on_error {
+		lappend error_items $name
+	    }
+	} else {
+	    # execute move command
+	    db_transaction {
+		db_exec_plsql move_item {}
+	    } on_error {
+		lappend error_items $name
+	    }
 	}
     }    
      if {[llength $error_items]} {
