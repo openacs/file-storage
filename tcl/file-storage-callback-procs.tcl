@@ -25,6 +25,15 @@ ad_proc -public -callback fs::file_delete {
 } {
 }
 
+# this can be used to check for confirmation before upload to folder
+ad_proc -public -callback fs::before_file_new {
+    {-package_id:required}
+    {-folder_id:required}
+    {-cancel_url:required}
+    {-return_url:required}
+} {
+}
+
 ad_proc -public -callback fs::file_new {
     {-package_id:required}
     {-file_id:required}

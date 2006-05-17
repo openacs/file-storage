@@ -97,13 +97,13 @@ if {[info exists folder_id]} {
 	set root_folder_id [fs::get_root_folder]
     }
     set object_id $objects_to_move
+    set cancel_url "[ad_conn url]?[ad_conn query]"
     db_multirow -extend {move_url level} folder_tree get_folder_tree "" {
 	# teadams 2003-08-22 - change level to level num to avoid 
 	# Oracle issue with key words.
 
-	set move_url [export_vars -base "move" { object_id:multiple folder_id return_url }]
-
-	
+	set target_url [export_vars -base "[ad_conn package_url]move" { object_id:multiple folder_id return_url }]
+	set move_url [export_vars -base "file-upload-confirm" {folder_id cancel_url {return_url $target_url}}]
     }
 
 }

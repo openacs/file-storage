@@ -103,9 +103,10 @@ if {[info exists folder_id]} {
 	set root_folder_id [fs::get_root_folder]
     }
     set object_id $objects_to_copy
+    set cancel_url "[ad_conn url]?[ad_conn query]"
     db_multirow -extend {copy_url} folder_tree get_folder_tree "" {
-	set copy_url [export_vars -base "copy" { object_id:multiple folder_id return_url }]
-	
+	set target_url [export_vars -base "[ad_conn package_url]copy" { object_id:multiple folder_id return_url }]
+	set copy_url [export_vars -base "file-upload-confirm" {folder_id cancel_url {return_url $target_url}}]
     }
 
 }
