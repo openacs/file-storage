@@ -111,7 +111,6 @@ if {$lock_title_p} {
 
 ad_form -extend -form {
     {description:text(textarea),optional {label \#file-storage.Description\#} {html "rows 5 cols 35"}}
-    
 }
 
 if {[ad_form_new_p -key file_id]} { 
