@@ -84,5 +84,98 @@ hurz
     return "${url_stub}download/index?version_id=$revision_id"
 }
 
+ ad_proc -callback application-track::getApplicationName -impl file_storage {} { 
+        callback implementation 
+    } {
+        return "file_storage"		
+    }    
 
+    ad_proc -callback application-track::getGeneralInfo -impl file_storage {} { 
+        callback implementation 
+    } {
+    
+	db_1row my_query {
+		SELECT count(1) as result
+                FROM fs_files f,dotlrn_communities_full com,acs_objects o, acs_objects o2
+		WHERE f.file_id = o.object_id
+        	      and com.community_id=:comm_id
+		      and o.package_id= o2.object_id
+		      and o2.context_id=com.package_id
+		}
+			
+	
+	return "$result"
+    } 
+
+
+    ad_proc -callback application-track::getSpecificInfo -impl file_storage {} { 
+        callback implementation 
+    } {
+   	
+	upvar $query_name my_query	
+	upvar $elements_name my_elements
+	
+
+	set my_query {
+	
+	SELECT f.name as name, f.file_id, f.type as type, f.content_size as size,
+              fo.name as folder_name,
+		       to_char(f.last_modified, 'YYYY-MM-DD HH24:MI:SS') as last_modified,
+		       to_char(o.creation_date, 'YYYY-MM-DD HH24:MI:SS') as creation_date,
+		       (select site_node__url(site_nodes.node_id)
+                       from site_nodes, acs_objects
+                       where site_nodes.object_id = file_storage__get_package_id(f.parent_id) and acs_objects.object_id = f.file_id) as url,
+                       com.community_id as class_id
+                FROM fs_files f,fs_folders fo,dotlrn_communities_full com,acs_objects o, acs_objects o2
+		WHERE f.file_id = o.object_id
+        		and com.community_id=:class_instance_id
+		      and o.package_id= o2.object_id
+		      and o2.context_id=com.package_id 
+		      and fo.folder_id = f.parent_id
+		      
+		      
+		 
+		      }
+	      
+      		      
+	set my_elements {
+    		name {
+	            label "Name"
+                    display_col name                    
+	 	    html {align center}	 	    
+	 	              
+	        }
+	        type {
+	            label "Type"
+	            display_col type 	              	              
+	 	    html {align center}	 	    
+	 	                 
+	        }
+	        folder {
+	            label "Folder"
+	            display_col folder_name 	              	              
+	 	    html {align center}	 	
+	        }
+	        size {
+	            label "Size (bytes)"
+	            display_col size
+	 	    html {align center}	 	         
+	 	          
+	        }
+	        last_modification_date {
+	            label "Last_Modification_Date"
+	            display_col last_modified 
+	 	    html {align center}	 	      
+	 	}
+	        post_date {
+	            label "Post_Date"
+	            display_col creation_date
+	 	    html {align center}    
+	 	         
+	        }	                  
+	        
+	}
+	
+	
+    }      
 
