@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="file-storage" package_version="5.2.0d8" locale="en_US" charset="ISO-8859-1">
+<message_catalog package_key="file-storage" package_version="5.2.2" locale="en_US" charset="ISO-8859-1">
 
-  <msg key="_Copy">File</msg>
-  <msg key="_Delete">File</msg>
-  <msg key="_Move">File</msg>
-  <msg key="_Rename">File</msg>
   <msg key="_Upload">Revision</msg>
   <msg key="Action">Action</msg>
   <msg key="Actions">Actions:</msg>
@@ -165,7 +161,7 @@ delete, therefore you cannot delete it.</msg>
   <msg key="Upload_a_file">Upload a file</msg>
   <msg key="Upload_a_new_version">Upload a new version</msg>
   <msg key="Upload_Limit">Upload Limit (bytes)</msg>
-  <msg key="Upload_limit_error">Upload limit must be no more than</msg>
+  <msg key="Upload_limit_error">The upload limit can not be set to be larger than</msg>
   <msg key="Upload_limit_error_2">bytes. Increase the upload limit in your AOLserver's Tcl configuration file.</msg>
   <msg key="Upload_New_File">Upload New File</msg>
   <msg key="Upload_New_Version">Upload New Version</msg>
