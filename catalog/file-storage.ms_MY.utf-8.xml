@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="file-storage" package_version="5.1.0a10" locale="ms_MY" charset="utf-8">
+<message_catalog package_key="file-storage" package_version="5.2.2" locale="ms_MY" charset="utf-8">
 
   <msg key="Action">Tindakan</msg>
   <msg key="Actions">Tindakan-tindakan:</msg>
@@ -101,6 +101,7 @@
   <msg key="New_Folder">Folder Baru</msg>
   <msg key="No_such_type">Tiada sebarang jenis</msg>
   <msg key="no_such_URL">tiada sebarang URL</msg>
+  <msg key="PDF">PDF</msg>
   <msg key="Permissions">Kebenaran-kebenaran</msg>
   <msg key="properties">sifat-sifat</msg>
   <msg key="Rename">Namakan Semula</msg>

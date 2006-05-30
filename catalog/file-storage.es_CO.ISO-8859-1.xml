@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="file-storage" package_version="5.1.0a10" locale="es_CO" charset="ISO-8859-1">
+<message_catalog package_key="file-storage" package_version="5.2.2" locale="es_CO" charset="ISO-8859-1">
 
-  <msg key="_Copy">Archivo</msg>
-  <msg key="_Delete">Archivo</msg>
-  <msg key="_Move">Archivo</msg>
-  <msg key="_Rename">Archivo</msg>
   <msg key="_Upload">Revisión</msg>
   <msg key="Action">Opción</msg>
   <msg key="Actions">Opciones:</msg>

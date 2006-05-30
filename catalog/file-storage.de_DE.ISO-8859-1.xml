@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="file-storage" package_version="5.2.0d8" locale="de_DE" charset="ISO-8859-1">
+<message_catalog package_key="file-storage" package_version="5.2.2" locale="de_DE" charset="ISO-8859-1">
 
-  <msg key="_Copy">Datei</msg>
-  <msg key="_Delete">Datei</msg>
-  <msg key="_Move">Datei</msg>
-  <msg key="_Rename">datei</msg>
   <msg key="_Upload">Änderung</msg>
   <msg key="Action">Aktion</msg>
   <msg key="Actions">Aktionen:</msg>
@@ -16,9 +12,9 @@
   <msg key="back_to_project">Zurück zum Projekt</msg>
   <msg key="bytes">Bytes</msg>
   <msg key="Change_Name">Umbenennen</msg>
-  <msg key="Change_upload_limit">Veränderung des Upload Limits</msg>
+  <msg key="Change_upload_limit">Veränderung des Dateilimits</msg>
   <msg key="Choose_Destination_Folder">Wählen Sie ein Zielverzeichnis aus</msg>
-  <msg key="Configure_File_Upload_Limit">Konfigurieren des Datei Uploads Limits</msg>
+  <msg key="Configure_File_Upload_Limit">Konfigurieren des Dateilimits</msg>
   <msg key="Copy">Kopieren</msg>
   <msg key="Copy_File">Datei kopieren</msg>
   <msg key="Create">Erstellen</msg>
@@ -78,8 +74,8 @@
   <msg key="lt_Do_you_want_to_delete">Möchten Sie die aufgeführten Elemente löschen?</msg>
   <msg key="lt_Download_an_archive_o">Den Inhalt dieses Ordners als komprimierte Datei herunterladen</msg>
   <msg key="lt_Either_there_is_alrea">Es ist bereits ein Ordner mit dem Namen &quot;%folder_name%&quot; vorhanden. Möglicherweise haben Sie mehrmals auf die Schaltfläche geklickt. Gehen Sie entweder mit Hilfe des Browsers zurück und geben Sie einen neuen Namen ein oder gehen Sie &lt;a href=&quot;%directory_url%&quot;&gt;zurück zur Ordnerübersicht&lt;/a&gt;.</msg>
-  <msg key="lt_File-Storage_folder_f">Dateispeicher Verzeichnis: %folder_name%</msg>
-  <msg key="lt_File_Storage_Notifica">Dateispeicher Benachrichtigung</msg>
+  <msg key="lt_File-Storage_folder_f">Dateiordner: %folder_name%</msg>
+  <msg key="lt_File_Storage_Notifica">Benachrichtigung über Dateien</msg>
   <msg key="lt_Folder_folder_name_is">Der Ordner &quot;%folder_name%&quot; ist leer.</msg>
   <msg key="lt_It_appears_that_there">Es ist bereits eine Datei mit diesem Namen im Ordner vorhanden. Möglicherweise haben Sie mehrmals auf die Schaltfläche 'Hochladen' geklickt.</msg>
   <msg key="lt_Leave_blank_for_linked_documents">Feld freilassen, falls mehrere verknüpfte Dokumente hochgeladen werden</msg>
@@ -89,11 +85,11 @@
   <msg key="lt_Move_Checked_Items_to">Markierte Elemente in ein anderes Verzeichnis verschieben </msg>
   <msg key="lt_Moving_allowed_count_">%allowed_count% Elemente werden verschoben.</msg>
   <msg key="lt_Name_of_the_action_ty">Name der %action_type%: %filename%</msg>
-  <msg key="lt_New_version_of_file_u">Neue Version der Datei upgeloaded</msg>
-  <msg key="lt_New_Version_Uploaded_">Neue Version der Datei %filename% upgeloadet</msg>
+  <msg key="lt_New_version_of_file_u">Neue Dateiversion ist hochgeladen</msg>
+  <msg key="lt_New_Version_Uploaded_">Neue Version dieser Datei ist hochgeladen: %filename%</msg>
   <msg key="lt_No_valid_items_to_be_">Es gibt keine Elemente, die verschoben werden dürften.</msg>
   <msg key="lt_not_allowed_count_ite">%not_allowed_count% Elemente können nicht verschoben werden.</msg>
-  <msg key="lt_Notification_for_File">Benachrichtigung für: File-Storage: %action_type%</msg>
+  <msg key="lt_Notification_for_File">Benachrichtigung über Dateien: %action_type%</msg>
   <msg key="lt_Please_enter_the_new_">Bitte geben Sie einen neuen Namen für diese Datei ein:</msg>
   <msg key="lt_Select_the_folder_tha">Wählen Sie den Ordner aus, in den Sie &quot;%file_name%&quot; kopieren wollen.</msg>
   <msg key="lt_Select_the_folder_tha_1">Wählen Sie den Ordner aus, in den Sie &quot;%file_name%&quot; verschieben wollen.</msg>
@@ -131,9 +127,9 @@
   <msg key="Multiple_files">Mehrere Dokumente:</msg>
   <msg key="Name">Name</msg>
   <msg key="new">Neu</msg>
-  <msg key="New_File_Uploaded">Neue Datei upgeloadet</msg>
+  <msg key="New_File_Uploaded">Neue Datei ist hochgeladen</msg>
   <msg key="New_Folder">Neuen Ordner erstellen</msg>
-  <msg key="New_URL_Uploaded">Neue URL upgeloadet</msg>
+  <msg key="New_URL_Uploaded">Neue URL ist hochgeladen</msg>
   <msg key="No_such_type">Typ nicht vorhanden</msg>
   <msg key="no_such_URL">URL nicht gefunden</msg>
   <msg key="PDF">PDF</msg>
@@ -160,13 +156,13 @@
   <msg key="Upload">Hochladen</msg>
   <msg key="Upload_a_file">Neue Datei hochladen</msg>
   <msg key="Upload_a_new_version">Neue Version hochladen</msg>
-  <msg key="Upload_Limit">Upload Limit (Bytes)</msg>
-  <msg key="Upload_limit_error">Das Upload Limit muss größer sein als</msg>
-  <msg key="Upload_limit_error_2">Bytes. Bitte erhöhen Sie das Upload Limit in der Tcl Konfigurations Datei Ihres AOLserver.</msg>
+  <msg key="Upload_Limit">Größenbeschränkung (Bytes)</msg>
+  <msg key="Upload_limit_error">Die Dateigrößenbeschränkung darf nicht höher liegen als</msg>
+  <msg key="Upload_limit_error_2">Bytes. Bitte erhöhen Sie die Größenbeschränkung in der Tcl Konfigurations Datei Ihres AOLserver.</msg>
   <msg key="Upload_New_File">Neue Datei hochladen</msg>
   <msg key="Upload_New_Version">Neue Version hochladen</msg>
-  <msg key="Upload_Revision">Neue Version uploaden</msg>
-  <msg key="Uploaded_by_ownern">Upgeloaded von: %owner%</msg>
+  <msg key="Upload_Revision">Neue Version hochladen</msg>
+  <msg key="Uploaded_by_ownern">Hochgeladen von: %owner%</msg>
   <msg key="URL">URL:</msg>
   <msg key="URL_deleted">URL gelöscht</msg>
   <msg key="version_add_page_title">Neue Version von &quot;%title%&quot; hochladen</msg>
