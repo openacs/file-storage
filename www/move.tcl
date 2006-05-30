@@ -16,6 +16,10 @@ ad_page_contract {
 } -errors {object_id:,notnull,integer,multiple {Please select at least one item to move.}
 }
 
+set peer_addr [ad_conn peeraddr]  
+set package_id [ad_conn package_id]  
+set copy_and_delete_p [parameter::get -parameter MoveByCopyDeleteP -package_id $package_id -default 0]
+
 set objects_to_move $object_id
 set object_id_list [join $object_id ","]
 
@@ -54,12 +58,31 @@ if {[info exists folder_id]} {
     # but the existing file-move page checks for WRITE
      set error_items [list]
     template::multirow foreach move_objects {
-	db_transaction {
-	    db_exec_plsql move_item {}
-	} on_error {
-	    lappend error_items $name
-	}
-    }    
+	if {$copy_and_delete_p} {  
+             # copy and delete file to move it
+	    db_transaction {
+		if {![string equal $type "folder"] } {  
+		    set file_rev_id [db_exec_plsql copy_item {}]  
+		    set file_id [content::revision::item_id -revision_id $file_rev_id]  
+		    callback fs::file_revision_new -package_id $package_id -file_id $file_id -parent_id $folder_id  
+		    fs::delete_file -item_id $object_id -parent_id $parent_id  
+		} else {  
+		    db_exec_plsql copy_folder {}  
+		    fs::delete_folder -folder_id $object_id -parent_id $parent_id  
+		}
+	    } on_error {
+		lappend error_items $name
+	    }
+	} else {
+	    # execute move command  
+	    db_transaction {  
+		db_exec_plsql move_item {}
+	    } on_error {
+		lappend error_items $name
+	    }
+	}    
+    }
+     
      if {[llength $error_items]} {
 	 set message "There was a problem moving the following items: [join $error_items ", "]"
      } else {
@@ -103,7 +126,8 @@ if {[info exists folder_id]} {
 	# Oracle issue with key words.
 
 	set target_url [export_vars -base "[ad_conn package_url]move" { object_id:multiple folder_id return_url }]
-	set move_url [export_vars -base "file-upload-confirm" {folder_id cancel_url {return_url $target_url}}]
+#	set move_url [export_vars -base "file-upload-confirm" {folder_id cancel_url {return_url $target_url}}]
+	set move_url $target_url
     }
 
 }
