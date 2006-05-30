@@ -22,7 +22,7 @@ set context [list $title]
 set upload_limit [parameter::get -parameter "MaximumFileSize"]
 
 ad_form -name upload_limit_size -export folder_id -form {
-    {new_size:integer(text) {label "#file-storage.Upload_Limit# $max_size"} {value $upload_limit} {html { maxlength 8}}}
+    {new_size:integer(text) {label "#file-storage.Upload_Limit# $max_size"} {value $upload_limit} {html { maxlength 10}}}
     {return_url:text(hidden) {value $return_url}}
     {submit:text(submit) {label "[_ file-storage.Change_upload_limit]"}}
 } -validate {
