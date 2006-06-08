@@ -20,6 +20,7 @@ ad_page_contract {
     context:onevalue
     title:onevalue
     lock_title_p:onevalue
+    instructions:onevalue
 } -validate {
     file_id_or_folder_id {
 	if {[exists_and_not_null file_id] && ![exists_and_not_null folder_id]} {
@@ -187,13 +188,22 @@ ad_form -extend -form {} -select_query_name {get_file} -new_data {
 	set existing_item_id [fs::get_item_id -name $upload_file -folder_id $folder_id]
 	
 	if {![empty_string_p $existing_item_id]} {
-	    # file with the same name already exists
-	    # in this folder, create a new revision
-	    set this_file_id $existing_item_id
-	    permission::require_permission \
-		-object_id $this_file_id \
-		-party_id $user_id \
-		-privilege write
+	    # file with the same name already exists in this folder
+            if { [ad_parameter "BehaveLikeFilesystemP" -package_id [ad_conn package_id]] } {
+                # create a new revision -- in effect, replace the existing file
+                set this_file_id $existing_item_id
+                permission::require_permission \
+                    -object_id $this_file_id \
+                    -party_id $user_id \
+                    -privilege write
+            } else {
+                # create a new file by altering the filename of the
+                # uploaded new file (append "-1" to filename)
+                set extension [file extension $upload_file]
+                set root [string trimright $upload_file $extension]
+                append new_name $root "-$this_file_id" $extension
+                set upload_file $new_name
+            }
 	}
 
 	fs::add_file \
@@ -246,6 +256,12 @@ ad_form -extend -form {} -select_query_name {get_file} -new_data {
 # if title isn't passed in ignore lock_title_p
 if {[empty_string_p $title]} {
     set lock_title_p 0
+}
+
+if { [ad_parameter "BehaveLikeFilesystemP" -package_id [ad_conn package_id]] } {
+    set instructions "[_ file-storage.Add_Dup_As_Revision]"
+} else {
+    set instructions "[_ file-storage.Add_Dup_As_New_File]"
 }
 
 set unpack_available_p [expr ![empty_string_p [string trim [parameter::get -parameter UnzipBinary]]]]
