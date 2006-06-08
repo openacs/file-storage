@@ -21,6 +21,8 @@
   </script>
 </if>
 
-
+<p>
+  @instructions;noquote@
+</p>
 
 <formtemplate id="file-add"></formtemplate>
