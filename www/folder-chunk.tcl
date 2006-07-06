@@ -237,6 +237,35 @@ db_multirow -extend {label icon last_modified_pretty content_size_pretty propert
 	    set download_link {}
 	    
 	}
+	symlink {
+	    set properties_link [_ file-storage.properties]
+	    set object_id [content::symlink::resolve -item_id $object_id]
+	    db_1row file_info {select * from fs_objects where object_id = :object_id}
+	    if {[string equal $type "folder"]} {
+		set content_size_pretty [lc_numeric $content_size]
+		append content_size_pretty "&nbsp;[_ file-storage.items]"
+		set pretty_type "#file-storage.Folder#"
+	    } else {
+		if {$content_size < 1024} {
+		    set content_size_pretty "[lc_numeric $content_size]&nbsp;[_ file-storage.bytes]"
+		} else {
+		    set content_size_pretty "[lc_numeric [expr $content_size / 1024 ]]&nbsp;[_ file-storage.kb]"
+		}
+		
+	    }
+	    set properties_url "${fs_url}file?[export_vars {{file_id $object_id}}]"
+	    set new_version_link [_ acs-kernel.common_New]
+	    set new_version_url "${fs_url}file-add?[export_vars {{file_id $object_id}}]"
+	    set icon "/resources/file-storage/file.gif"
+	    set file_url "${fs_url}view/${file_url}"
+	    set download_link [_ file-storage.Download]
+	    if {$like_filesystem_p} {
+		set download_url "${fs_url}download/$title?[export_vars {{file_id $object_id}}]"                
+		set file_url $download_url
+	    } else {
+		set download_url "${fs_url}download/$name?[export_vars {{file_id $object_id}}]"                
+	    }
+	}
 	default {
 	    set properties_link [_ file-storage.properties]
 	    set properties_url "${fs_url}file?[export_vars {{file_id $object_id}}]"

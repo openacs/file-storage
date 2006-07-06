@@ -63,13 +63,14 @@ as
       case
         when cr_items.content_type = 'content_folder' then 'folder'
         when cr_items.content_type = 'content_extlink' then 'url'
+	when cr_items.content_type = 'content_symlink' then 'symlink'
         else cr_revisions.mime_type
       end as type,
       case
         when cr_items.content_type = 'content_folder'
         then (select count(*)
               from cr_items ci2
-              where ci2.content_type in ('content_extlink','file_storage_object')
+              where ci2.content_type in ('content_extlink','file_storage_object','content_symlink')
                 and ci2.tree_sortkey between cr_items.tree_sortkey and tree_right(cr_items.tree_sortkey))
         else cr_revisions.content_length
       end as content_size,
