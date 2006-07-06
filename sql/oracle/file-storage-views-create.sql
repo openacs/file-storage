@@ -64,13 +64,14 @@ as
       case
         when cr_items.content_type = 'content_folder' then 'folder'
         when cr_items.content_type = 'content_extlink' then 'url'
+	when cr_items.content_type = 'content_symlink' then 'symlink'
         else cr_revisions.mime_type
       end as type,
       case
         when cr_items.content_type = 'content_folder'
         then (select count(*)
               from cr_items ci
-              where (ci.content_type = 'content_extlink' or ci.content_type = 'file_storage_object')
+              where (ci.content_type = 'content_extlink' or ci.content_type = 'file_storage_object' or ci.content_type = 'content_symlink')
               connect by prior ci.item_id = ci.parent_id
               start with ci.item_id = cr_folders.folder_id)
         else cr_revisions.content_length
