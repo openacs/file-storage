@@ -70,7 +70,7 @@ as
         when cr_items.content_type = 'content_folder'
         then (select count(*)
               from cr_items ci2
-              where ci2.content_type in ('content_extlink','file_storage_object','content_symlink')
+              where ci2.content_type <> 'content_folder'
                 and ci2.tree_sortkey between cr_items.tree_sortkey and tree_right(cr_items.tree_sortkey))
         else cr_revisions.content_length
       end as content_size,
