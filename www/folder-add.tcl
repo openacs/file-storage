@@ -24,6 +24,11 @@ ad_page_contract {
 }
 
 set user_id [ad_conn user_id]
+
+if {![acs_user::site_wide_admin_p]} {
+    ad_returnredirect "./?[export_url_vars folder_id]"
+}
+
 set package_id [ad_conn package_id]
 # check for write permission on the folder or item
 
