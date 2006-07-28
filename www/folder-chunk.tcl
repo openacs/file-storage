@@ -93,6 +93,7 @@ if {$delete_p} {
     lappend actions "#file-storage.Delete_this_folder#" ${fs_url}folder-delete?[export_vars folder_id] "#file-storage.Delete_this_folder#"
 }
 if {$admin_p} {
+    lappend actions "#file-storage.Folder_Add#" "${fs_url}folder-add?folder_id=$folder_id" "#file-storage.Add_folder_from_fs#"
     lappend actions "#file-storage.Edit_Folder#" "${fs_url}folder-edit?folder_id=$folder_id" "#file-storage.Rename_this_folder#"
     lappend actions "#file-storage.lt_Modify_permissions_on_1#" "${fs_url}permissions?[export_vars -override {{object_id $folder_id}} {{return_url "[ad_conn url]"}}]" "#file-storage.lt_Modify_permissions_on_1#"
     if { $expose_rss_p } {
