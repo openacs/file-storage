@@ -63,6 +63,7 @@ as
       case
         when cr_items.content_type = 'content_folder' then 'folder'
         when cr_items.content_type = 'content_extlink' then 'url'
+	when cr_items.content_type = 'content_symlink' then 'symlink'
         else cr_revisions.mime_type
       end as type,
       case

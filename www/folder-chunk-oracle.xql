@@ -14,6 +14,7 @@
                    fs_objects.content_size,
                    fs_objects.url,
                    fs_objects.sort_key,
+                   -fs_objects.sort_key as sort_key_desc,
                    fs_objects.file_upload_name,
                    fs_objects.title,
                    case
@@ -33,7 +34,7 @@
                    where m.object_id = fs_objects.object_id
                      and m.party_id = :viewing_user_id
                      and m.privilege = 'read')
-            order by fs_objects.sort_key, fs_objects.name
+            $orderby
 
         </querytext>
     </fullquery>

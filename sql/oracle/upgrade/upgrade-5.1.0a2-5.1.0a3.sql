@@ -450,9 +450,10 @@ as
                 from cr_symlinks
                 where symlink_id = get_title.item_id;
             else
-                select name into v_title
-                from cr_items
-                where item_id = get_title.item_id;
+		select crr.title into v_title
+		from cr_revisions crr, cr_items cri
+		where crr.revision_id=cri.live_revision
+		and cri.item_id=get_title.item_id;
             end if;
         end if;
 

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="file-storage" package_version="5.1.0a10" locale="ca_ES" charset="ISO-8859-1">
+<message_catalog package_key="file-storage" package_version="5.2.2" locale="ca_ES" charset="ISO-8859-1">
 
+  <msg key="_Upload">Revisió</msg>
   <msg key="Action">Acció</msg>
   <msg key="Actions">Accions: </msg>
   <msg key="Actions_1">Accions</msg>
@@ -10,7 +11,11 @@
   <msg key="back_to_folder_view">Tornar a la vista de la carpeta </msg>
   <msg key="bytes">bytes</msg>
   <msg key="Change_Name">Canviar el nom </msg>
+  <msg key="Change_upload_limit">Canviar el límit de càrrega</msg>
+  <msg key="Choose_Destination_Folder">Triar una carpeta de destí</msg>
+  <msg key="Configure_File_Upload_Limit">Configurar el límit de càrrega d'arxius</msg>
   <msg key="Copy">Copiar</msg>
+  <msg key="Copy_File">Copiar arxiu</msg>
   <msg key="Create">Crear</msg>
   <msg key="Create_a_new_folder">Crear una carpeta nova</msg>
   <msg key="Create_a_URL">Crear una URL</msg>
@@ -19,6 +24,7 @@
   <msg key="days_as_new">dies com a nou.</msg>
   <msg key="Delete">Eliminar</msg>
   <msg key="delete">eliminar</msg>
+  <msg key="Delete_File">Eliminar arxiu</msg>
   <msg key="delete_folder_and_children">Açò eliminarà els arxius i carpetes %folder_name% i %child_count%. Voleu continuar? </msg>
   <msg key="Delete_this_folder">Eliminar aquesta carpeta </msg>
   <msg key="Delete_Version">Eliminar la versió </msg>
@@ -29,13 +35,16 @@
   <msg key="Edit_URL">Editar URL</msg>
   <msg key="file">arxiu</msg>
   <msg key="file_delete_page_title">Eliminar %title%</msg>
+  <msg key="File_deleted">Arxiu eliminat</msg>
   <msg key="file_edit_page_title">Canviar el nom a %title%</msg>
   <msg key="file_edit_page_title_1">Editar %pretty_name%</msg>
   <msg key="file_page_file_title_label">Títol: %title%</msg>
   <msg key="file_page_owner_label">Propietari: %owner%</msg>
+  <msg key="Folder">Carpeta</msg>
   <msg key="folder">carpeta</msg>
   <msg key="Folder_available_via_WebDAV_at">Aquesta carpeta està disponible mitjançant WebDAV en %webdav_url% </msg>
   <msg key="folder_delete_page_title">Eliminar %folder_name%</msg>
+  <msg key="Folder_deleted">Carpeta eliminada</msg>
   <msg key="Folder_ID">Identificador de carpeta</msg>
   <msg key="Folder_Name">Nom de la carpeta:</msg>
   <msg key="folder_type_pretty_name">carpeta</msg>
@@ -59,6 +68,8 @@
   <msg key="lt_Do_you_want_to_delete">Voleu eliminar els arxius inclosos en la llista?</msg>
   <msg key="lt_Download_an_archive_o">Descarregar un arxiu amb els continguts d'aquesta carpeta </msg>
   <msg key="lt_Either_there_is_alrea">O ja hi ha una carpeta amb el nom &quot;%folder_name%&quot;, o heu polsat el botó més d'una vegada. Utilitzeu el botó Enrere del navegador i trieu un altre nom, o &lt;a href=&quot;%directory_url%&quot;&gt;torneu a la llista&lt;/a&gt; per a comprovar que la carpeta hi és. </msg>
+  <msg key="lt_File-Storage_folder_f">Carpeta d'arxius: %folder_name%\n </msg>
+  <msg key="lt_File_Storage_Notifica">Avís d'emmagatzemament d'arxius</msg>
   <msg key="lt_Folder_folder_name_is">La carpeta %folder_name% està buida. </msg>
   <msg key="lt_It_appears_that_there">Sembla que ja hi ha un arxiu amb aquest nom en aquesta carpeta (també és possible que hàgeu pitjat diverses vegades el botó). </msg>
   <msg key="lt_Leave_blank_for_linked_documents">Deixeu en blanc l'espai del títol quan carregueu documents entrellaçats múltiples.</msg>
@@ -66,8 +77,12 @@
   <msg key="lt_Modify_permissions_on">Modificar els permisos d'aquest arxiu</msg>
   <msg key="lt_Modify_permissions_on_1">Modificar els permisos d'aquesta carpeta </msg>
   <msg key="lt_Moving_allowed_count_">Movent %allowed_count% arxius. </msg>
+  <msg key="lt_Name_of_the_action_ty">Nom del %action_type%: %filename%\n </msg>
+  <msg key="lt_New_version_of_file_u">Nova versió de l'arxiu carregada</msg>
+  <msg key="lt_New_Version_Uploaded_">Carregada nova versió per a l'arxiu: %filename%\n </msg>
   <msg key="lt_No_valid_items_to_be_">No hi ha arxius vàlids per a moure. </msg>
   <msg key="lt_not_allowed_count_ite">%not_allowed_count% arxius no es poden moure </msg>
+  <msg key="lt_Notification_for_File">Avís per a: Emmagatzemament d'arxius: %action_type%\n </msg>
   <msg key="lt_Please_enter_the_new_">Per favor, introduïu el nou nom de l'arxiu:</msg>
   <msg key="lt_Select_the_folder_tha">Seleccioneu la carpeta en què voleu copiar &quot;%file_name%&quot; </msg>
   <msg key="lt_Select_the_folder_tha_1">Seleccioneu la carpeta a què voleu moure &quot;%file_name%&quot;</msg>
@@ -84,6 +99,8 @@
   <msg key="lt_This_is_a_ZIP">Això és un arxiu ZIP que conté arxius múltiples </msg>
   <msg key="lt_Use_the_Browse_button">Pitgeu &quot;Examinar...&quot; per a trobar l'arxiu; després feu clic en &quot;Obrir&quot;. </msg>
   <msg key="lt_version_not_valid">La versió especificada no és vàlida.</msg>
+  <msg key="lt_Version_Notes_descrip">Notes sobre la versió: %description%\n</msg>
+  <msg key="lt_View_folder_contents_">Veure els continguts de les carpetes: %url_version% \n\n </msg>
   <msg key="lt_We_got_an_error_that_">S'ha produït un error que no hem pogut identificar. Per favor, informeu-ne l'administrador del sistema.</msg>
   <msg key="lt_We_received_an_error_">S'ha produït un error en la base de dades. És probable que la carpeta seleccionada ja continga un arxiu amb aquest nom.</msg>
   <msg key="lt_Were_sorry_but_at_the">Ho sentim, però ara no podeu eliminar carpetes si no estan buides. </msg>
@@ -95,15 +112,20 @@
   <msg key="lt_Your_search_on_query__1">La vostra recerca en &quot;%query%&quot; ha trobat els arxius següents:</msg>
   <msg key="Modified">Modificat</msg>
   <msg key="Move">Moure</msg>
+  <msg key="Move_File">Traslladar un arxiu</msg>
   <msg key="Multiple_files">Múltiples arxius:</msg>
   <msg key="Name">Nom </msg>
   <msg key="new">nou</msg>
+  <msg key="New_File_Uploaded">Nou arxiu carregat</msg>
   <msg key="New_Folder">Nova carpeta</msg>
+  <msg key="New_URL_Uploaded">Nova URL carregada</msg>
   <msg key="No_such_type">No s'ha trobat aquest tipus </msg>
   <msg key="no_such_URL">no s'ha trobat aquesta URL </msg>
+  <msg key="PDF">PDF</msg>
   <msg key="Permissions">Permisos </msg>
   <msg key="properties">Propietats</msg>
   <msg key="Rename">Tornar a anomenar</msg>
+  <msg key="Rename_File">Tornar a anomenar el fitxer</msg>
   <msg key="Rename_this_folder">Tonar a anomenar aquesta carpeta </msg>
   <msg key="Save">Guardar</msg>
   <msg key="Search">Buscar</msg>
@@ -123,9 +145,15 @@
   <msg key="Upload">Carregar</msg>
   <msg key="Upload_a_file">Carregar un arxiu </msg>
   <msg key="Upload_a_new_version">Carregar una nova versió </msg>
+  <msg key="Upload_Limit">Límit de càrrega (bytes)</msg>
+  <msg key="Upload_limit_error">El límit de càrrega no ha de ser més gran de</msg>
+  <msg key="Upload_limit_error_2">bytes. Augmenteu el límit de càrrega en l'arxiu de configuració Tcl del vostre servidor AOL.</msg>
   <msg key="Upload_New_File">Carregar un arxiu nou </msg>
   <msg key="Upload_New_Version">Carregar una versió nova </msg>
+  <msg key="Upload_Revision">Carregar la revisió</msg>
+  <msg key="Uploaded_by_ownern">Carregat per: %owner%\n </msg>
   <msg key="URL">URL:</msg>
+  <msg key="URL_deleted">URL eliminada</msg>
   <msg key="version_add_page_title">Carregar una versió nova de %title% </msg>
   <msg key="version_delete_page_title">Eliminar %version_name%</msg>
   <msg key="Version_filename">Versió del nom del fitxer</msg>

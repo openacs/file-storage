@@ -128,15 +128,15 @@
     <fullquery name="fs_context_bar_list.context_bar">
         <querytext>
             select case when file_storage.get_content_type(i.item_id) = 'content_folder'
-                        then :folder_url || '?' || :extra_vars || '&folder_id='
-                        else :file_url || '?' || :extra_vars || '&file_id='
+                        then :folder_url || '?folder_id='
+                        else :file_url || '?file_id='
                    end || i.item_id,
                    file_storage.get_title(i.item_id)
             from cr_items i
             where item_id not in (select i2.item_id
                                   from cr_items i2
                                   connect by prior i2.parent_id = i2.item_id
-                                  start with i2.item_id = file_storage.get_parent_id(:root_folder_id))
+                                  start with i2.item_id = :root_folder_id)
             connect by prior i.parent_id = i.item_id
             start with item_id = :start_id
             order by level desc
@@ -270,5 +270,13 @@
         where r.folder_id = t.folder_id)
     </querytext>
   </fullquery>
+
+    <fullquery name="fs::get_object_prettyname.select_object_prettyname">
+        <querytext>
+            select nvl(title,name) as prettyname
+            from fs_objects
+            where object_id = :object_id
+        </querytext>
+    </fullquery>
 
 </queryset>

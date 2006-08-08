@@ -283,6 +283,7 @@ ad_proc -public fs::new_folder {
     @param creation_user Who created this folder
     @param creation_ip What is the ip address of the creation_user
     @param description of the folder. Not used in the current FS UI but might be used elsewhere.
+    @param no_callback defines if the callback should be called. Defaults to yes
     @return folder_id of the newly created folder
 } {
     if {[empty_string_p $creation_user]} {
@@ -339,6 +340,14 @@ ad_proc -public fs::get_object_name {
     Select the name of this object.
 } {
     return [db_string select_object_name {} -default $object_id]
+}
+
+ad_proc -public fs::get_object_prettyname {
+    {-object_id:required}
+} {
+    Select a pretty name for this object. If title is empty, returns name.
+} {
+    return [db_string select_object_prettyname {} -default $object_id]
 }
 
 ad_proc -public fs::get_file_system_safe_object_name {
@@ -487,7 +496,7 @@ ad_proc -public fs::publish_object_to_file_system {
     }
 
     db_1row select_object_info {}
-
+    
     if {[string equal folder $type]} {
 	set result [publish_folder_to_file_system -folder_id $object_id -path $path -folder_name $name -user_id $user_id]
     } elseif {[string equal url $type]} {
@@ -515,8 +524,9 @@ ad_proc -public fs::publish_folder_to_file_system {
 	set folder_name [get_object_name -object_id $folder_id]
     }
     set folder_name [remove_special_file_system_characters -string $folder_name]
-
-    set dir [file join ${path} ${folder_name}]
+    
+    set dir "[file join ${path} "${folder_name}"]"
+    # set dir "[file join ${path} "download"]"
     file mkdir $dir
 
     foreach object [get_folder_contents -folder_id $folder_id -user_id $user_id] {
@@ -573,13 +583,22 @@ ad_proc -public fs::publish_versioned_object_to_file_system {
 
     db_1row select_object_metadata {}
 
-    if {[empty_string_p $file_name]} {
-        if {![info exists upload_file_name]} {
+    # After upgrade change title and filename...
+    set like_filesystem_p [parameter::get -parameter BehaveLikeFilesystemP -default 1]
+
+    if { $like_filesystem_p } {
+	set file_name $title
+	if {[empty_string_p $file_name]} {
+	    if {![info exists upload_file_name]} {
 		set file_name "unnamedfile"
-    	} else {
-	set file_name $file_upload_name
+	    } else {
+		set file_name $file_upload_name
+	    }
 	}
+    } else {
+	set file_name $file_upload_name
     }
+
     set file_name [remove_special_file_system_characters -string $file_name]
 
     switch $storage_type {
@@ -659,13 +678,14 @@ ad_proc -public fs::get_item_id {
 ad_proc -public fs::add_file {
     -name
     -parent_id
-    -tmp_filename
     -package_id
     {-item_id ""}
     {-creation_user ""}
     {-creation_ip ""}
     {-title ""}
     {-description ""}
+    {-tmp_filename ""}
+    {-mime_type ""}
     -no_callback:boolean
 } {
     Create a new file storage item or add a new revision if
@@ -681,16 +701,106 @@ ad_proc -public fs::add_file {
 	set indbp "f"
         set storage_type "file"
     }
+    if {[string equal "" $mime_type]} {
+        set mime_type [cr_filename_to_mime_type -create -- $name]
+    }
+    # we have to do this here because we create the object before
+    # calling cr_import_content
+    
+    if {[db_string image_type_p "" -default 0]} {
+        set content_type image
+    } else {
+        set content_type file_storage_object
+    }
 
-    set mime_type [cr_filename_to_mime_type -create -- $name]
-    switch  [cr_registered_type_for_mime_type $mime_type] {
-        image {
-	    set content_type "image"
+    db_transaction {
+	if {[empty_string_p $item_id] || ![db_string item_exists ""]} {
+	    set item_id [db_exec_plsql create_item ""]
+	    if {![empty_string_p $creation_user]} {
+		permission::grant -party_id $creation_user -object_id $item_id -privilege admin
+	    }
+	    set do_notify_here_p "t"
+	} else {
+	    # th: fixed to set old item_id if item already exists and no new item needed to be created
+	    db_1row get_old_item ""
+	    set do_notify_here_p "f"
 	}
-	default {
-	    set content_type "file_storage_object"
+	if {$no_callback_p} {
+	    set revision_id [fs::add_version \
+				 -name $name \
+				 -tmp_filename $tmp_filename \
+				 -package_id $package_id \
+				 -item_id $item_id \
+				 -creation_user $creation_user \
+				 -creation_ip $creation_ip \
+				 -title $title \
+				 -description $description \
+				 -suppress_notify_p $do_notify_here_p \
+				 -storage_type $storage_type \
+				 -mime_type $mime_type \
+				 -no_callback
+			    ]
+	} else {
+	    set revision_id [fs::add_version \
+				 -name $name \
+				 -tmp_filename $tmp_filename \
+				 -package_id $package_id \
+				 -item_id $item_id \
+				 -creation_user $creation_user \
+				 -creation_ip $creation_ip \
+				 -title $title \
+				 -description $description \
+				 -suppress_notify_p $do_notify_here_p \
+				 -storage_type $storage_type \
+				 -mime_type $mime_type
+			    ]
+	}
+	
+	if {[string is true $do_notify_here_p]} {
+	    fs::do_notifications -folder_id $parent_id -filename $title -item_id $revision_id -action "new_file" -package_id $package_id
+	    if {!$no_callback_p} {
+		callback fs::file_new -package_id $package_id -file_id $item_id
+	    }
 	}
     }
+    return $revision_id
+}
+
+ad_proc -public fs::add_created_file {
+    {-name ""}
+    -parent_id
+    -package_id
+    {-item_id ""}
+    {-mime_type ""}
+    {-creation_user ""}
+    {-creation_ip ""}
+    {-title ""}
+    {-description ""}
+    {-content_body ""}
+} {
+    Create a new file storage item or add a new revision if
+    an item with the same name and parent folder already exists
+
+    @return revision_id
+} {
+    if {[parameter::get -parameter "StoreFilesInDatabaseP" -package_id $package_id]} {
+	set indbp "t"
+        set storage_type "lob"
+    } else {
+	set indbp "f"
+        set storage_type "file"
+    }
+    if {![string equal "" $item_id]} {
+        set storage_type [db_string get_storage_type "select storage_type from cr_items where item_id=:item_id"]
+    }
+    if {[empty_string_p $mime_type] } {
+	set mime_type "text/html"
+    }
+    if { [empty_string_p $name] } {
+	set name $title
+    }
+
+    set content_type "file_storage_object"
 
     db_transaction {
 	if {[empty_string_p $item_id] || ![db_string item_exists ""]} {
@@ -703,18 +813,18 @@ ad_proc -public fs::add_file {
 	    set do_notify_here_p "f"
 	}
 	
-	set revision_id [fs::add_version \
-			     -name $name \
-			     -tmp_filename $tmp_filename \
-			     -package_id $package_id \
-			     -item_id $item_id \
-			     -creation_user $creation_user \
-			     -creation_ip $creation_ip \
-			     -title $title \
-			     -description $description \
-			     -suppress_notify_p $do_notify_here_p \
-                             -storage_type $storage_type
-			]
+        set revision_id [fs::add_created_version \
+            -name $title \
+            -item_id $item_id \
+            -creation_user $creation_user \
+            -creation_ip [ad_conn peeradd] \
+            -title $title \
+            -description $description \
+            -package_id $package_id \
+            -content_body $content_body \
+            -mime_type $mime_type \
+            -storage_type $storage_type]
+
 	
 	if {[string is true $do_notify_here_p]} {
 	    fs::do_notifications -folder_id $parent_id -filename $title -item_id $revision_id -action "new_file" -package_id $package_id
@@ -728,6 +838,95 @@ ad_proc -public fs::add_file {
     return $revision_id
 }
 
+ad_proc fs::add_created_version {
+    -name
+    -content_body
+    -mime_type
+    -item_id
+    {-creation_user ""}
+    {-creation_ip ""}
+    {-title ""}
+    {-description ""}
+    {-suppress_notify_p "f" }
+    {-storage_type ""}
+    {-package_id ""}
+    {-storage_type ""}
+} {
+    Create a new version of a file storage item using the content passed in content_body
+    @return revision_id
+} {
+    if {[empty_string_p $package_id]} {
+	set package_id [ad_conn package_id]
+    }
+    if {[empty_string_p $storage_type]} {
+	set storage_type [db_string get_storage_type ""]
+    }
+    if {[empty_string_p $creation_user]} {
+	set creation_user [ad_conn user_id]
+    }
+    if {[empty_string_p $creation_ip]} {
+	set creation_ip [ns_conn peeraddr]
+    }
+    set parent_id [fs::get_parent -item_id $item_id]
+    if {[string equal "" $storage_type]} {
+        set storage_type [db_string get_storage_type "select storage_type from cr_items where item_id=:item_id"]    
+    }
+    switch -- $storage_type {
+        file {
+            set revision_id [db_exec_plsql new_file_revision { }]
+
+            set cr_file [cr_create_content_file_from_string $item_id $revision_id $content_body]
+
+            # get the size
+            set file_size [cr_file_size $cr_file]
+
+            # update the file path in the CR and the size on cr_revisions
+            db_dml update_revision { }
+        }
+        lob {
+            # if someone stored file storage content in the database
+            # we need to use lob. the only want ot get a lob into the
+            # database if to pass it as a file
+            set revision_id [cr_import_content \
+             -item_id $item_id \
+			 -storage_type  \
+			 -creation_user $creation_user \
+			 -creation_ip $creation_ip \
+			 -other_type "file_storage_object" \
+			 -image_type "file_storage_object" \
+			 -title $title \
+			 -description $description \
+			 $parent_id \
+			 $tmp_filename \
+			 $tmp_size \
+			 $mime_type \
+			 $name]
+                db_dml set_lob_content "" -blobs [list $content_body]
+                db_dml set_lob_size ""
+        }
+        text {
+            set revision_id [db_exec_plsql new_text_revision {}]
+        }
+    }
+
+    db_dml set_live_revision ""
+    db_exec_plsql update_last_modified ""
+
+    if {[string is false $suppress_notify_p]} {
+	fs::do_notifications -folder_id $parent_id -filename $title -item_id $revision_id -action "new_version" -package_id $package_id
+    }
+
+    #It's safe to rebuild RSS repeatedly, assuming it's not too expensive.
+    set folder_info [fs::get_folder_package_and_root $parent_id]
+    set db_package_id [lindex $folder_info 0]
+    if { [parameter::get -package_id $db_package_id -parameter ExposeRssP -default 0] } {
+        fs::rss::build_feeds $parent_id
+    }
+
+    return $revision_id
+}
+
+
 ad_proc fs::add_version {
     -name
     -tmp_filename
@@ -739,6 +938,7 @@ ad_proc fs::add_version {
     {-description ""}
     {-suppress_notify_p "f"}
     {-storage_type ""}
+    {-mime_type ""}
     -no_callback:boolean
 } {
     Create a new version of a file storage item 
@@ -748,9 +948,12 @@ ad_proc fs::add_version {
     if {[string equal "" $storage_type]} {
         set storage_type [db_string get_storage_type ""]
     }
-    set mime_type [cr_filename_to_mime_type -create -- $name]
+    if {[string equal "" $mime_type]} {
+        set mime_type [cr_filename_to_mime_type -create -- $name]
+    }
+
     set tmp_size [file size $tmp_filename]
-    set parent_id [get_parent -item_id $item_id]
+    set parent_id [fs::get_parent -item_id $item_id]
     set revision_id [cr_import_content \
 			 -item_id $item_id \
 			 -storage_type $storage_type \
@@ -801,12 +1004,20 @@ ad_proc fs::delete_file {
     }
 
     set version_name [get_object_name -object_id $item_id]
-    db_exec_plsql delete_file ""
 
     if {[empty_string_p $parent_id]} {
-	set parent_id [get_parent -item_id $item_id]
+	set parent_id [fs::get_parent -item_id $item_id]
     }
     
+    set folder_info [fs::get_folder_package_and_root $parent_id]
+    set package_id [lindex $folder_info 0]
+
+    if {!$no_callback_p} {
+	callback fs::file_delete -package_id $package_id -file_id $item_id
+    }
+
+    db_exec_plsql delete_file ""
+
     fs::do_notifications -folder_id $parent_id -filename $version_name -item_id $item_id -action "delete_file"
 }
 
@@ -827,7 +1038,7 @@ ad_proc fs::delete_folder {
     db_exec_plsql delete_folder ""
 
     if {[empty_string_p $parent_id]} {
-	set parent_id [get_parent -item_id $folder_id]
+	set parent_id [fs::get_parent -item_id $folder_id]
     }
     
     fs::do_notifications -folder_id $parent_id -filename $version_name -item_id $folder_id -action "delete_folder"
@@ -911,10 +1122,11 @@ ad_proc -public fs::do_notifications {
     @param action The kind of operation. One of: new_file, new_version, new_url, delete_file, delete_url
                   delete_folder
 } {
+    set package_and_root [fs::get_folder_package_and_root $folder_id]
+    set root_folder [lindex $package_and_root 1]
     if {[string equal "" $package_id]} {
-        set package_id [ad_conn package_id]
+	set package_id [lindex $package_and_root 0]
     }
-    set root_folder [fs_get_root_folder -package_id $package_id]
 
     if {[string equal $action "new_file"]} {
         set action_type "[_ file-storage.New_File_Uploaded]"
@@ -954,25 +1166,25 @@ ad_proc -public fs::do_notifications {
     
     # Set email message body - "text only" for now
     set text_version ""
-    append text_version "[_ file-storage.lt_Notification_for_File]"
+    append text_version "[_ file-storage.lt_Notification_for_File]\n"
     set folder_name [fs_get_folder_name $folder_id]
-    append text_version "[_ file-storage.lt_File-Storage_folder_f]"
+    append text_version "[_ file-storage.lt_File-Storage_folder_f]\n"
 
     if {[string equal $action "new_version"]} {
-        append text_version "[_ file-storage.lt_New_Version_Uploaded_]"
+        append text_version "[_ file-storage.lt_New_Version_Uploaded_]\n"
     } else {
-        append text_version "[_ file-storage.lt_Name_of_the_action_ty]"
+        append text_version "[_ file-storage.lt_Name_of_the_action_ty]\n"
     }
     if {[info exists owner]} {
-        append text_version "[_ file-storage.Uploaded_by_ownern]"
+        append text_version "[_ file-storage.Uploaded_by_ownern]\n"
     }
     if {[info exists description]} {
-        append text_version "[_ file-storage.lt_Version_Notes_descrip]" 
+        append text_version "[_ file-storage.lt_Version_Notes_descrip]\n" 
     }
 
     set url_version "$url$path1?folder_id=$folder_id"
-    append text_version "[_ file-storage.lt_View_folder_contents_]"
-
+    append text_version "[_ file-storage.lt_View_folder_contents_]\n"
+    
     set html_version [ad_html_text_convert -from text/plain -to text/html -- $text_version]
     append html_version "<br /><br />"
     # Do the notification for the file-storage
@@ -994,7 +1206,8 @@ ad_proc -public fs::do_notifications {
                           -short_name fs_fs_notif] \
             -object_id $parent_id \
             -notif_subject "[_ file-storage.lt_File_Storage_Notifica]" \
-            -notif_text $new_content
+            -notif_text $new_content \
+	    -notif_html $html_version
         set folder_id $parent_id
     }
 }
@@ -1071,9 +1284,22 @@ ad_proc -public fs::get_object_info {
         set revision_id [item::get_live_revision $file_id]
     }
 
-    db_1row file_info {} -column_array file_object_info
+    db_1row file_info {
+	select r.item_id as file_id, r.revision_id,
+	       r.mime_type, r.title, r.description,
+	       r.content_length as content_size,
+	       i.name, o.last_modified, i.parent_id,
+	       i.storage_type, i.storage_area_key
+	from cr_revisions r, cr_items i, acs_objects o
+	where r.revision_id = :revision_id
+	and r.item_id = i.item_id
+	and i.item_id = :file_id
+	and i.content_type = 'file_storage_object'
+	and r.revision_id = o.object_id
+    } -column_array file_object_info
 
-    set content [db_exec_plsql get_content {}]
+    set content [db_exec_plsql get_content {
+    }]
 
     if {[string equal $file_object_info(storage_type) file]} {
         set filename [cr_fs_path $file_object_info(storage_area_key)]

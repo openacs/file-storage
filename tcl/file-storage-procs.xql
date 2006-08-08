@@ -117,6 +117,14 @@
       </querytext>
     </fullquery>
 
+    <fullquery name="fs::add_file.get_old_item">
+      <querytext>
+          select item_id from cr_items
+          where name=:name
+          and parent_id=:parent_id
+      </querytext>
+    </fullquery>
+
   <fullquery name="fs::get_parent.get_parent_id">
     <querytext>
 	select parent_id from cr_items where item_id=:item_id
@@ -161,5 +169,43 @@
       where object_id = :file_id
     </querytext>
   </fullquery>
+
+<fullquery name="fs::add_file.image_type_p">
+    <querytext>
+        select 1
+        from cr_content_mime_type_map
+        where mime_type = :mime_type
+        and content_type = 'image'
+    </querytext>
+</fullquery>
+
+<fullquery name="fs::add_created_version.get_storage_type">
+  <querytext>
+    select storage_type from cr_items where item_id=:item_id
+  </querytext>
+</fullquery>
+
+<fullquery name="fs::add_created_version.set_live_revision">
+  <querytext>
+      update cr_items set live_revision=:revision_id
+      where item_id=:item_id
+  </querytext>
+</fullquery>
+
+<fullquery name="fs::add_created_version.update_revision">
+  <querytext>
+	update	cr_revisions
+	set content = :cr_file,	content_length = :file_size
+	where revision_id = :revision_id
+  </querytext>
+</fullquery>
+
+<fullquery name="fs::add_created_file.item_exists">
+   <querytext>
+          select count(*) from cr_items
+          where name=:name
+          and parent_id=:parent_id
+   </querytext>
+</fullquery>
 
 </queryset>

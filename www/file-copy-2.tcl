@@ -20,6 +20,7 @@ ad_page_contract {
 	}
     }
 }
+ns_log Notice "Huh? right script ..."
 
 # check for read permission on the file and write permission on the
 # target folder
@@ -32,6 +33,7 @@ set ip_address [ad_conn peeraddr]
 
 # Question - do we copy revisions or not?
 # Current Answer - we copy the live revision only
+
 
 db_transaction {
 

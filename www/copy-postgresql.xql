@@ -60,7 +60,7 @@
                    where m.object_id = cf.folder_id
                      and m.party_id = :user_id
                      and m.privilege = 'write')
-      order by tree_level(ci1.tree_sortkey), cf.label
+      order by ci1.tree_sortkey, cf.label
     </querytext>
   </fullquery>
   
