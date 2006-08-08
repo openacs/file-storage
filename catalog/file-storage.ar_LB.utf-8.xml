@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="file-storage" package_version="5.1.0a10" locale="ar_LB" charset="utf-8">
+<message_catalog package_key="file-storage" package_version="5.2.2" locale="ar_LB" charset="utf-8">
 
+  <msg key="_Upload">مراجعة</msg>
   <msg key="Action">الفعل</msg>
   <msg key="Actions">الأفعال:</msg>
   <msg key="Actions_1">الأفعال</msg>
@@ -9,8 +10,12 @@
   <msg key="Author">المؤلف</msg>
   <msg key="back_to_folder_view">الرجوع الى منظر الحافظة</msg>
   <msg key="bytes">بايت</msg>
-  <msg key="Change_Name">غييرْ الإسم</msg>
+  <msg key="Change_Name">ْغيّر الإسم</msg>
+  <msg key="Change_upload_limit">تغيير حد التحميل</msg>
+  <msg key="Choose_Destination_Folder">إختار الحافظة الهدف</msg>
+  <msg key="Configure_File_Upload_Limit">تعديل حد تحميل الملفات</msg>
   <msg key="Copy">إنسخ</msg>
+  <msg key="Copy_File">نسخ ملف</msg>
   <msg key="Create">إخلق</msg>
   <msg key="Create_a_new_folder">إخلقْ حافظةً جديدةً</msg>
   <msg key="Create_a_URL">انشئ موقعاً</msg>
@@ -19,6 +24,7 @@
   <msg key="days_as_new">الأيام الماضية كجديدة.</msg>
   <msg key="Delete">إحذفْ</msg>
   <msg key="delete">إحذفْ</msg>
+  <msg key="Delete_File">إحذف ملف</msg>
   <msg key="delete_folder_and_children">هذا سوف يحذف %folder_name% و %child_count% ملفات و الحافظات هل تريد الاستمرار
 </msg>
   <msg key="Delete_this_folder">إحذفْ هذه الحافظة</msg>
@@ -30,19 +36,23 @@
   <msg key="Edit_URL">حررْ موقع</msg>
   <msg key="file">ملف</msg>
   <msg key="file_delete_page_title">حذف %title%</msg>
+  <msg key="File_deleted">تم حذف الملف</msg>
   <msg key="file_edit_page_title">إعادة تسمية %title%</msg>
   <msg key="file_edit_page_title_1">تحرير %pretty_name%</msg>
   <msg key="file_page_file_title_label">العنوان %title%</msg>
   <msg key="file_page_owner_label">المالك %owner%</msg>
+  <msg key="Folder">حافظة</msg>
   <msg key="folder">حافظة</msg>
   <msg key="Folder_available_via_WebDAV_at">هذه الحافظة متوفرة بواسطة WebDAV على %webdav_url%</msg>
   <msg key="folder_delete_page_title">حذف  %folder_name%</msg>
+  <msg key="Folder_deleted">تم حذف الحافظة</msg>
   <msg key="Folder_ID">هوية الحافظة</msg>
   <msg key="Folder_Name">إسم الحافظة:</msg>
   <msg key="folder_type_pretty_name">حافظة</msg>
   <msg key="index_page_navigate_up_folder">حتى %up_name%</msg>
   <msg key="item">بند</msg>
   <msg key="items">بنود</msg>
+  <msg key="kb">kb</msg>
   <msg key="Last_Modified">آخر تعديل</msg>
   <msg key="last_month">الشهر الماضي</msg>
   <msg key="last_week">الاسبوع الماضي</msg>
@@ -56,6 +66,7 @@
   <msg key="lt_delete_file">هل أنت متأكّد تريد حذف الملف &quot;%title%&quot;وكلّ نسخه؟ هذا العمل لا يمكن أن يعكس.</msg>
   <msg key="lt_delete_folder">هل أنت متأكّدة أنك تريد حذف الحافظة &quot;%folder_name%&quot; وكلّ المواد التي تحتويها؟ هذا الإجراء لا يمكن الرجوع عنه.</msg>
   <msg key="lt_Delete_this_file_incl">إحذفْ هذا الملف - متضمّناً كلّ الإصدارات</msg>
+  <msg key="lt_Do_you_want_to_delete">هل تريد حذف هذه العناصر؟</msg>
   <msg key="lt_Download_an_archive_o">حملْ أرشيف محتويات هذه الحافظة</msg>
   <msg key="lt_Either_there_is_alrea">أو أنت نقرت على الزرّ أكثر من مرة. أنت تستطيع إستعمال زرّ الرجوع لعودة وإختيار   &quot;%folder_name%&quot; أمّا هناك حافظة بالاسم
 للرؤية إذا حافظتك هناك.  &lt;a href=&quot;%directory_url%&quot;&gt; عد إلى عنصر القوائم &lt;/a&gt; اسما جديدا، أو
@@ -94,16 +105,21 @@
   <msg key="lt_Your_search_on_query_">بحثك على &quot;%query%&quot; لم يؤدي الى اية نتائج</msg>
   <msg key="lt_Your_search_on_query__1">بحثك على &quot;%query%&quot; اعاد هؤلاء الملفات:</msg>
   <msg key="Modified">معدل</msg>
-  <msg key="Move">تحرّكْ</msg>
+  <msg key="Move">أنقل</msg>
+  <msg key="Move_File">أنقل الملف</msg>
   <msg key="Multiple_files">ملفات متعددة</msg>
   <msg key="Name">إسم</msg>
   <msg key="new">جديد</msg>
+  <msg key="New_File_Uploaded">تم تحميل ملف جديد</msg>
   <msg key="New_Folder">حاظنة جديدة</msg>
+  <msg key="New_URL_Uploaded">تم تحميل موقع جديد</msg>
   <msg key="No_such_type">لا مثل هذا النوع</msg>
   <msg key="no_such_URL">لا مثل هذا الموقع</msg>
+  <msg key="PDF">PDF</msg>
   <msg key="Permissions">صلاحيات</msg>
   <msg key="properties">خصائص</msg>
   <msg key="Rename">أعدْ تسمية</msg>
+  <msg key="Rename_File">أعدْ تسمية الملف</msg>
   <msg key="Rename_this_folder">أعدْ تسمية هذه الحافظة</msg>
   <msg key="Save">إحفظْ</msg>
   <msg key="Search">إبحثْ</msg>
@@ -123,9 +139,14 @@
   <msg key="Upload">إرسالْ</msg>
   <msg key="Upload_a_file">أرسلْ ملفاً</msg>
   <msg key="Upload_a_new_version">أرسلْ إصداراً جديداً</msg>
+  <msg key="Upload_Limit">حد التحميل )بايت)</msg>
+  <msg key="Upload_limit_error">حد التحميل يجب أن يكون أكثر من</msg>
+  <msg key="Upload_limit_error_2">bytes. Increase the upload limit in your AOLserver's Tcl configuration file.</msg>
   <msg key="Upload_New_File">أرسلْ ملف جديد</msg>
   <msg key="Upload_New_Version">أرسلْ إصدار جديد</msg>
+  <msg key="Upload_Revision">مراجعة التحميل</msg>
   <msg key="URL">الموقع:</msg>
+  <msg key="URL_deleted">تم حذف الموقع</msg>
   <msg key="version_add_page_title">تحميل نسخة جديدة من %title%</msg>
   <msg key="version_delete_page_title">حذف %version_name%</msg>
   <msg key="Version_filename">إصدار إسم الملف</msg>

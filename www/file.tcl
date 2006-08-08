@@ -96,8 +96,10 @@ db_multirow -unclobber -extend { author_link last_modified_pretty content_size_p
     }
     if {![string equal $version_id $live_revision]} {
 	set version_url "view/${file_url}?[export_vars {{revision_id $version_id}}]"
+	set version_url [export_vars -base "download/$title" {version_id}]
     } else {
 	set version_url "view/${file_url}"
+	set version_url [export_vars -base "download/$title" {file_id}]
     }
     set version_delete [_ file-storage.Delete_Version]
     set version_delete_url "version-delete?[export_vars version_id]"

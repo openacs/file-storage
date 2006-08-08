@@ -10,10 +10,15 @@ ad_page_contract {
     object_id:notnull,integer,multiple
     folder_id:integer,optional
     {return_url ""}
+    {root_folder_id ""}
     {redirect_to_folder:boolean 0}
     {show_items:boolean 0}
+} -errors {object_id:,notnull,integer,multiple {Please select at least one item to move.}
 }
 
+set peer_addr [ad_conn peeraddr]  
+set package_id [ad_conn package_id]  
+set copy_and_delete_p [parameter::get -parameter MoveByCopyDeleteP -package_id $package_id -default 0]
 
 set objects_to_move $object_id
 set object_id_list [join $object_id ","]
@@ -51,14 +56,39 @@ if {[info exists folder_id]} {
     # check for WRTIE permission on each object to be moved
     # DaveB: I think it should be DELETE instead of WRITE
     # but the existing file-move page checks for WRITE
-      
+     set error_items [list]
     template::multirow foreach move_objects {
-	db_transaction {
-	    db_exec_plsql move_item {}
-      }
-    }    
-
-     ad_returnredirect $return_url
+	if {$copy_and_delete_p} {  
+             # copy and delete file to move it
+	    db_transaction {
+		if {![string equal $type "folder"] } {  
+		    set file_rev_id [db_exec_plsql copy_item {}]  
+		    set file_id [content::revision::item_id -revision_id $file_rev_id]  
+		    callback fs::file_revision_new -package_id $package_id -file_id $file_id -parent_id $folder_id  
+		    fs::delete_file -item_id $object_id -parent_id $parent_id  
+		} else {  
+		    db_exec_plsql copy_folder {}  
+		    fs::delete_folder -folder_id $object_id -parent_id $parent_id  
+		}
+	    } on_error {
+		lappend error_items $name
+	    }
+	} else {
+	    # execute move command  
+	    db_transaction {  
+		db_exec_plsql move_item {}
+	    } on_error {
+		lappend error_items $name
+	    }
+	}    
+    }
+     
+     if {[llength $error_items]} {
+	 set message "There was a problem moving the following items: [join $error_items ", "]"
+     } else {
+	 set message "Selected items moved"
+     }
+     ad_returnredirect -message $message $return_url
      ad_script_abort
 
  } else {
@@ -85,15 +115,19 @@ if {[info exists folder_id]} {
 		display_template {<div style="text-indent: @folder_tree.level_num@em;">@folder_tree.label@</div>} 
             }
         }
-    set root_folder_id [fs::get_root_folder]
+
+    if {[empty_string_p $root_folder_id]} {
+	set root_folder_id [fs::get_root_folder]
+    }
     set object_id $objects_to_move
+    set cancel_url "[ad_conn url]?[ad_conn query]"
     db_multirow -extend {move_url level} folder_tree get_folder_tree "" {
 	# teadams 2003-08-22 - change level to level num to avoid 
 	# Oracle issue with key words.
 
-	set move_url [export_vars -base "move" { object_id:multiple folder_id return_url }]
-
-	
+	set target_url [export_vars -base "[ad_conn package_url]move" { object_id:multiple folder_id return_url }]
+#	set move_url [export_vars -base "file-upload-confirm" {folder_id cancel_url {return_url $target_url}}]
+	set move_url $target_url
     }
 
 }

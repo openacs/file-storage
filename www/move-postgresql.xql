@@ -15,7 +15,7 @@
   
   <fullquery name="get_move_objects">
     <querytext>
-      select fs.object_id, fs.name,
+      select fs.object_id, fs.name, fs.type, fs.parent_id,
       acs_permission__permission_p(fs.object_id, :user_id, 'write') as move_p
       from fs_objects fs
       where fs.object_id in ([template::util::tcl_to_sql_list $object_id])
@@ -47,8 +47,30 @@
                    where m.object_id = cf.folder_id
                      and m.party_id = :user_id
                      and m.privilege = 'write')
-      order by tree_level(ci1.tree_sortkey), cf.label
+      order by ci1.tree_sortkey, cf.label
     </querytext>
   </fullquery>
+
+   <fullquery name="copy_item"> 	 
+     <querytext> 	 
+       select file_storage__copy_file( 	 
+            :object_id, 	 
+            :folder_id, 	 
+            :user_id, 	 
+            :peer_addr 	 
+       ) 	 
+     </querytext> 	 
+   </fullquery> 	 
+  	 
+   <fullquery name="copy_folder"> 	 
+     <querytext> 	 
+       select content_folder__copy ( 	 
+            :object_id, 	 
+            :folder_id, 	 
+            :user_id, 	 
+            :peer_addr 	 
+       ) 	 
+     </querytext> 	 
+   </fullquery>
   
 </queryset>

@@ -41,7 +41,8 @@ as
         folder_id in cr_items.parent_id%TYPE,
         creation_user in acs_objects.creation_user%TYPE,
         creation_ip in acs_objects.creation_ip%TYPE,
-        indb_p in char default 't'
+        indb_p in char default 't',
+        package_id in acs_objects.package_id%TYPE default null
     ) return cr_items.item_id%TYPE;
 
     procedure delete_file(
@@ -238,7 +239,8 @@ as
         folder_id in cr_items.parent_id%TYPE,
         creation_user in acs_objects.creation_user%TYPE,
         creation_ip in acs_objects.creation_ip%TYPE,
-        indb_p in char default 't'
+        indb_p in char default 't',
+	package_id in acs_objects.package_id%TYPE default null
     ) return cr_items.item_id%TYPE
     is
         v_item_id               cr_items.item_id%TYPE;
@@ -253,7 +255,8 @@ as
                 context_id => new_file.folder_id,
                 creation_ip => new_file.creation_ip,
                 content_type => 'file_storage_object',
-                item_subtype => 'content_item'
+                item_subtype => 'content_item',
+		package_id => new_file.package_id
             );
         else
             v_item_id := content_item.new(
@@ -458,9 +461,10 @@ as
                 from cr_symlinks
                 where symlink_id = get_title.item_id;
             else
-                select name into v_title
-                from cr_items
-                where item_id = get_title.item_id;
+		select crr.title into v_title
+		from cr_revisions crr, cr_items cri
+		where crr.revision_id=cri.live_revision
+		and cri.item_id=get_title.item_id;
             end if;
         end if;
 
