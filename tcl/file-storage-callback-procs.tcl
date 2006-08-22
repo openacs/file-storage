@@ -12,11 +12,6 @@ ad_library {
 
 namespace eval fs::folder_chunk {}
 
-    @author Dirk Gomez <openacs@dirkgomez.de>
-    @creation-date 2005-06-16
-    @cvs-id $Id$
-}
-
 # Define file storage callbacks
 
 ad_proc -public -callback fs::folder_chunk::add_bulk_actions {
