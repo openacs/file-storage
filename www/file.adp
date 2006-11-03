@@ -4,7 +4,7 @@
 <property name="context">@context;noquote@</property>
 <property name="displayed_object_id">@file_id;noquote@</property>
 
-<p>#file-storage.back_to_folder_view#</p>
+<p><a href="@folder_view_url@">#file-storage.back_to_folder_view#</a></p>
 <p><if @show_all_versions_p@ true>
     <a href="file?file_id=@file_id@&show_all_versions_p=f" class="button">#file-storage.lt_show_only_live_versio#</a>
   </if>
