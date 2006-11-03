@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="file-storage" package_version="5.2.2" locale="es_ES" charset="ISO-8859-1">
+<message_catalog package_key="file-storage" package_version="5.2.3" locale="es_ES" charset="ISO-8859-1">
 
   <msg key="_Upload">Revisión</msg>
   <msg key="Action">Opciones</msg>
   <msg key="Actions">Opciones:</msg>
   <msg key="Actions_1">Opciones</msg>
+  <msg key="Add_Dup_As_New_File">Si sube un documento con el mismo nombre que otro documento ya existente en esta carpeta, se añadirá al nombre de su documento un sufijo incremental (p.e. &quot;mydoc.doc&quot; -&amp;gt; &quot;mydoc-1.doc&quot;). Notese que el título del documento no será cambiado. Es el nombre de documento el que debe ser único en cada carpeta.</msg>
   <msg key="Add_File">Añadir archivo</msg>
   <msg key="Add_pretty_name">Añadir %pretty_name%</msg>
+  <msg key="Add_Revision">Subir una revisión</msg>
   <msg key="Author">Autor</msg>
-  <msg key="back_to_folder_view">&lt;a href=&quot;%folder_view_url%&quot;&gt;Volver&lt;/a&gt; a la vista por carpetas </msg>
   <msg key="back_to_project">Volver al proyecto</msg>
   <msg key="bytes">bytes</msg>
   <msg key="Change_Name">Renombrar</msg>
