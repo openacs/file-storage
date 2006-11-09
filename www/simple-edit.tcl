@@ -17,7 +17,7 @@ ad_form -name simple-edit -form {
     object_id:key
     {name:text {label "#file-storage.Title_#"} {html {size 40} } }
     {url:text {label "#file-storage.URL#"} {html {size 50} } }
-    {description:text(textarea) {label "#file-storage.Description#" } {html { rows 5 cols 50 } } }
+    {description:text(textarea),optional {label "#file-storage.Description#" } {html { rows 5 cols 50 } } }
     {folder_id:text(hidden)}
 } -edit_request {
     db_1row extlink_data ""
