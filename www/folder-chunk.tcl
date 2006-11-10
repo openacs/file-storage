@@ -102,7 +102,7 @@ if {$admin_p} {
 
 #set n_past_filter_values [list [list "Yesterday" 1] [list [_ file-storage.last_week] 7] [list [_ file-storage.last_month] 30]]
 set elements [list type [list label [_ file-storage.Type] \
-                             display_template {<img src="@contents.icon@"  border=0 alt="#file-storage.@contents.pretty_type@#" />@contents.pretty_type@} \
+                             display_template {<img src="@contents.icon@"  border=0 alt="@contents.content_type_alt_text@" />@contents.pretty_type@} \
 			    orderby_desc {sort_key_desc,fs_objects.pretty_type desc} \
 			    orderby_asc {fs_objects.sort_key, fs_objects.pretty_type asc}] \
                   name \
@@ -189,7 +189,11 @@ if {[string equal $orderby ""]} {
     set orderby " order by fs_objects.sort_key, fs_objects.name asc"
 }
 
-db_multirow -extend {label icon last_modified_pretty content_size_pretty properties_link properties_url download_link download_url new_version_link new_version_url} contents select_folder_contents {} {
+db_multirow -extend {label icon last_modified_pretty content_size_pretty properties_link properties_url download_link download_url new_version_link new_version_url content_type_alt_text} contents select_folder_contents {} {
+
+    # Setting the alt text for content type image
+    set content_type_alt_text [_ file-storage.$type]
+
     set last_modified_ansi [lc_time_system_to_conn $last_modified_ansi]
     
     set last_modified_pretty [lc_time_fmt $last_modified_ansi "%x %X"]
