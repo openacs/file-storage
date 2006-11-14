@@ -238,9 +238,13 @@ db_multirow -extend {label icon last_modified_pretty content_size_pretty propert
 	    
 	}
 	symlink {
+	    # save the original object_id to set it later back (see below)
+	    set original_object_id $object_id
 	    set properties_link [_ file-storage.properties]
-	    set object_id [content::symlink::resolve -item_id $object_id]
-	    db_1row file_info {select * from fs_objects where object_id = :object_id}
+	    set target_object_id [content::symlink::resolve -item_id $object_id]
+	    db_1row file_info {select * from fs_objects where object_id = :target_object_id}
+	    # because of the side effect that SQL sets TCL variables, set object_id back to the original value
+            set object_id $original_object_id
 	    if {[string equal $type "folder"]} {
 		set content_size_pretty [lc_numeric $content_size]
 		append content_size_pretty "&nbsp;[_ file-storage.items]"
@@ -260,10 +264,10 @@ db_multirow -extend {label icon last_modified_pretty content_size_pretty propert
 	    set file_url "${fs_url}view/${file_url}"
 	    set download_link [_ file-storage.Download]
 	    if {$like_filesystem_p} {
-		set download_url "${fs_url}download/$title?[export_vars {{file_id $object_id}}]"                
+		set download_url "${fs_url}download/$title?[export_vars {{file_id $target_object_id}}]"                
 		set file_url $download_url
 	    } else {
-		set download_url "${fs_url}download/$name?[export_vars {{file_id $object_id}}]"                
+		set download_url "${fs_url}download/$name?[export_vars {{file_id $target_object_id}}]"                
 	    }
 	}
 	default {
