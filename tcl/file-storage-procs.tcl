@@ -1364,3 +1364,64 @@ ad_proc -public fs::notification::get_url {
 }
 
 
+ad_proc -public fs::file_copy {
+    {-file_id:required}
+    {-target_folder_id:required}
+    {-postfix ""}
+    -symlink:boolean
+} {
+    copy file to target folder
+    
+    @param file_id Item_id of the file to be copied
+    @param target_folder_id Folder ID of the folder to which the file is copied to
+    @param postfix Postfix will be added with "_" to the new filename (not title). Very useful if you want to avoid unique name constraints on cr_items.
+    @param symlink Defines if, instead of a full item, we should just add a symlink.
+} {
+    db_1row file_data {}
+
+    if {![empty_string_p $postfix]} {
+	set name [lang::util::localize "[file rootname $name]_$postfix[file extension $name]"]
+    }
+
+    if {$symlink_p} {
+	return [content::symlink::new -name $name -label $title -target_id $file_id -parent_id $target_folder_id]
+    } else {
+	set user_id [ad_conn user_id]
+	set creation_ip [ad_conn peeraddr]
+	set file_path "[cr_fs_path][cr_create_content_file_path $file_id $file_rev_id]"
+
+	# We need to check if the file already exists with the same name in the target folder
+	# If yes, just add a new revision.
+	
+	set new_file_id [content::item::get_id_by_name -name $name -parent_id $target_folder_id]
+	if {$new_file_id eq ""} {
+	    set new_file_id [content::item::new \
+				 -name $name \
+				 -parent_id $target_folder_id \
+				 -context_id $target_folder_id \
+				 -item_subtype "content_item" \
+				 -content_type "file_storage_object" \
+				 -storage_type "file"]
+	}
+
+	# Now create the revision
+	set new_file_rev_id [content::revision::copy \
+				 -revision_id $file_rev_id \
+				 -target_item_id $new_file_id \
+				 -creation_user $user_id \
+				 -creation_ip $creation_ip]
+	
+	set new_path [cr_create_content_file_path $new_file_id $new_file_rev_id]
+	cr_create_content_file $new_file_id $new_file_rev_id $file_path
+	
+	if {![empty_string_p $postfix]} {
+	    # set postfixed new title
+	    db_dml update_title {}
+	}
+
+	content::item::set_live_revision -revision_id $new_file_rev_id
+	
+	return $new_file_id
+    } 
+}
+
