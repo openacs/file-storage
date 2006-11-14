@@ -25,16 +25,19 @@ ad_proc -public -callback fs::file_delete {
     {-package_id:required}
     {-file_id:required}
 } {
-}
+    Callback executed right before the file is deleted
+    This should make sure that any foreign key constraints to the file are removed
+} -
 
-# this can be used to check for confirmation before upload to folder
+
 ad_proc -public -callback fs::before_file_new {
     {-package_id:required}
     {-folder_id:required}
     {-cancel_url:required}
     {-return_url:required}
 } {
-}
+    this can be used to check for confirmation before upload to folder
+} -
 
 ad_proc -public -callback fs::file_new {
     {-package_id:required}

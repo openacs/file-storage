@@ -131,13 +131,6 @@
     </querytext>
   </fullquery>
 
-  <fullquery name="fs::add_version.set_live_revision">
-    <querytext>
-      update cr_items set live_revision=:revision_id
-      where item_id=:item_id
-    </querytext>
-  </fullquery>
-
 <fullquery name="fs::delete_file.version_name">      
       <querytext>
       
@@ -207,6 +200,34 @@
           and parent_id=:parent_id
    </querytext>
 </fullquery>
+   <fullquery name="fs::file_copy.file_data">
+         <querytext>
+
+	select i.name, i.latest_revision as file_rev_id, r.title
+	from cr_items i, cr_revisions r
+	where i.item_id = :file_id
+	and r.revision_id = i.latest_revision
+
+         </querytext>
+   </fullquery>
+
+   <fullquery name="fs::file_copy.update_title">
+         <querytext>
+
+	    update cr_revisions
+	    set title = :title
+	    where revision_id = :new_file_rev_id
+
+         </querytext>
+   </fullquery>
+
+<fullquery name="fs::delete_file.get_all_symlinks">
+	<querytext>
+		select symlink_id from cr_symlinks
+		where target_id=:item_id
+	</querytext>
+</fullquery>
+
    <fullquery name="fs::file_copy.file_data">
          <querytext>
 

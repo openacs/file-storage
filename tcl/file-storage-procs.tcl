@@ -1,6 +1,5 @@
 ad_library {
     TCL library for the file-storage system (v.4)
-
     @author Kevin Scaldeferri (kevin@arsdigita.com)
     @creation-date 6 November 2000
     @cvs-id $Id$
@@ -293,12 +292,13 @@ ad_proc -public fs::new_folder {
     if {[empty_string_p $creation_ip]} {
 	set creation_ip [ns_conn peeraddr]
     }
-    set folder_id [db_exec_plsql new_folder {}]
-    fs::set_folder_description -folder_id $folder_id -description $description
+    
+    set folder_id [content::folder::new -name $name -label $pretty_name -parent_id $parent_id -creation_user $creation_user -creation_ip $creation_ip -description $description]
+    permission::grant -party_id $creation_user -object_id $folder_id -privilege "admin"
 
-    if {!$no_callback_p} {
-# FIXME This callback doesn't work because sometimes is called without a connection and [ad_conn package_id] breaks
-#	callback fs::folder_new -package_id [ad_conn package_id] -folder_id $folder_id
+    set package_id [ad_conn package_id]
+    if {!$no_callback_p && ![string eq "" package_id]} {
+	callback fs::folder_new -package_id $package_id -folder_id $folder_id
     }
     return $folder_id
 }
@@ -497,14 +497,21 @@ ad_proc -public fs::publish_object_to_file_system {
 
     db_1row select_object_info {}
     
-    if {[string equal folder $type]} {
-	set result [publish_folder_to_file_system -folder_id $object_id -path $path -folder_name $name -user_id $user_id]
-    } elseif {[string equal url $type]} {
-	set result [publish_url_to_file_system -object_id $object_id -path $path -file_name $file_name]
-    } else {
-	set result [publish_versioned_object_to_file_system -object_id $object_id -path $path -file_name $file_name]
+    switch $type {
+	folder {
+	    set result [publish_folder_to_file_system -folder_id $object_id -path $path -folder_name $name -user_id $user_id]
+	} 
+	url {
+	    set result [publish_url_to_file_system -object_id $object_id -path $path -file_name $file_name]
+	} 
+	symlink {
+	    set linked_object_id [content::symlink::resolve -item_id $object_id]
+	    set result [publish_versioned_object_to_file_system -object_id $linked_object_id -path $path -file_name $file_name]
+	} 
+	default {
+	    set result [publish_versioned_object_to_file_system -object_id $object_id -path $path -file_name $file_name]
+	}
     }
-
     return $result
 }
 
@@ -713,9 +720,31 @@ ad_proc -public fs::add_file {
         set content_type file_storage_object
     }
 
+    if {$item_id eq ""} {
+	set item_id [db_nextval acs_object_id_seq]
+    }
+
     db_transaction {
-	if {[empty_string_p $item_id] || ![db_string item_exists ""]} {
-	    set item_id [db_exec_plsql create_item ""]
+	if {![db_string item_exists ""]} {
+	    
+	    if {$indbp} {
+		set storage_type ""
+	    } else {
+		set storage_type "file"
+	    }
+	    
+	    set item_id [content::item::new \
+			     -item_id $item_id \
+			     -parent_id $parent_id \
+			     -creation_user "$creation_user" \
+			     -creation_ip "$creation_ip" \
+			     -package_id "$package_id" \
+			     -name $name \
+			     -storage_type "$storage_type" \
+			     -content_type "file_storage_object" \
+			     -mime_type "text/plain"
+			    ]
+			     
 	    if {![empty_string_p $creation_user]} {
 		permission::grant -party_id $creation_user -object_id $item_id -privilege admin
 	    }
@@ -969,8 +998,9 @@ ad_proc fs::add_version {
 			 $mime_type \
 			 $name]
 	
-	db_dml set_live_revision ""
-	db_exec_plsql update_last_modified ""
+    content::item::set_live_revision -revision_id $revision_id
+
+    db_exec_plsql update_last_modified ""
 
     if {[string is false $suppress_notify_p]} {
 	fs::do_notifications -folder_id $parent_id -filename $title -item_id $revision_id -action "new_version" -package_id $package_id
@@ -991,6 +1021,7 @@ ad_proc fs::add_version {
     return $revision_id
 }
 
+# modified 2006/08/11 (nfl) delete all symlinks
 ad_proc fs::delete_file {
     -item_id
     {-parent_id ""}
@@ -1011,6 +1042,12 @@ ad_proc fs::delete_file {
     
     set folder_info [fs::get_folder_package_and_root $parent_id]
     set package_id [lindex $folder_info 0]
+
+    # check if there were symlinks, if yes, delete them
+    set all_symlinks [db_list get_all_symlinks {}]
+    foreach symlink_id $all_symlinks {
+	fs::delete_file -item_id $symlink_id
+    }
 
     if {!$no_callback_p} {
 	callback fs::file_delete -package_id $package_id -file_id $item_id
@@ -1363,6 +1400,66 @@ ad_proc -public fs::notification::get_url {
     return "[ad_url][db_string select_fs_package_url {}]index?folder_id=$folder_id"
 }
 
+ad_proc -public fs::file_copy {
+    {-file_id:required}
+    {-target_folder_id:required}
+    {-postfix ""}
+    -symlink:boolean
+} {
+    copy file to target folder
+    
+    @param file_id Item_id of the file to be copied
+    @param target_folder_id Folder ID of the folder to which the file is copied to
+    @param postfix Postfix will be added with "_" to the new filename (not title). Very useful if you want to avoid unique name constraints on cr_items.
+    @param symlink Defines if, instead of a full item, we should just add a symlink.
+} {
+    db_1row file_data {}
+
+    if {![empty_string_p $postfix]} {
+	set name [lang::util::localize "[file rootname $name]_$postfix[file extension $name]"]
+    }
+
+    if {$symlink_p} {
+	return [content::symlink::new -name $name -label $title -target_id $file_id -parent_id $target_folder_id]
+    } else {
+	set user_id [ad_conn user_id]
+	set creation_ip [ad_conn peeraddr]
+	set file_path "[cr_fs_path][cr_create_content_file_path $file_id $file_rev_id]"
+
+	# We need to check if the file already exists with the same name in the target folder
+	# If yes, just add a new revision.
+	
+	set new_file_id [content::item::get_id_by_name -name $name -parent_id $target_folder_id]
+	if {$new_file_id eq ""} {
+	    set new_file_id [content::item::new \
+				 -name $name \
+				 -parent_id $target_folder_id \
+				 -context_id $target_folder_id \
+				 -item_subtype "content_item" \
+				 -content_type "file_storage_object" \
+				 -storage_type "file"]
+	}
+
+	# Now create the revision
+	set new_file_rev_id [content::revision::copy \
+				 -revision_id $file_rev_id \
+				 -target_item_id $new_file_id \
+				 -creation_user $user_id \
+				 -creation_ip $creation_ip]
+	
+	set new_path [cr_create_content_file_path $new_file_id $new_file_rev_id]
+	cr_create_content_file $new_file_id $new_file_rev_id $file_path
+	
+	if {![empty_string_p $postfix]} {
+	    # set postfixed new title
+	    db_dml update_title {}
+	}
+
+	content::item::set_live_revision -revision_id $new_file_rev_id
+	
+	return $new_file_id
+    } 
+}
 
 ad_proc -public fs::file_copy {
     {-file_id:required}
