@@ -296,9 +296,10 @@ ad_proc -public fs::new_folder {
     set folder_id [content::folder::new -name $name -label $pretty_name -parent_id $parent_id -creation_user $creation_user -creation_ip $creation_ip -description $description]
     permission::grant -party_id $creation_user -object_id $folder_id -privilege "admin"
 
-    set package_id [ad_conn package_id]
-    if {!$no_callback_p && ![string eq "" package_id]} {
-	callback fs::folder_new -package_id $package_id -folder_id $folder_id
+    if {!$no_callback_p} {
+	if {![catch {ad_conn package_id} package_id]} {
+	    callback fs::folder_new -package_id $package_id -folder_id $folder_id
+	}
     }
     return $folder_id
 }
@@ -312,8 +313,9 @@ ad_proc -public fs::rename_folder {
 } {
     db_exec_plsql rename_folder {}
     if {!$no_callback_p} {
-# FIXME This callback doesn't work because sometimes is called without a connection and [ad_conn package_id] breaks
-#	callback fs::folder_edit -package_id [ad_conn package_id] -folder_id $folder_id
+	if {![catch {ad_conn package_id} package_id]} {
+	    callback fs::folder_edit -package_id $package_id -folder_id $folder_id
+	}
     }
 }
 
@@ -714,7 +716,7 @@ ad_proc -public fs::add_file {
     # we have to do this here because we create the object before
     # calling cr_import_content
     
-    if {[db_string image_type_p "" -default 0]} {
+    if {[content::type::content_type_p -mime_type $mime_type -content_type "image"]} {
         set content_type image
     } else {
         set content_type file_storage_object
@@ -788,7 +790,9 @@ ad_proc -public fs::add_file {
 	if {[string is true $do_notify_here_p]} {
 	    fs::do_notifications -folder_id $parent_id -filename $title -item_id $revision_id -action "new_file" -package_id $package_id
 	    if {!$no_callback_p} {
-		callback fs::file_new -package_id $package_id -file_id $item_id
+		if {![catch {ad_conn package_id} package_id]} {
+		    callback fs::file_new -package_id $package_id -file_id $item_id
+		}
 	    }
 	}
     }
@@ -860,8 +864,9 @@ ad_proc -public fs::add_created_file {
 	}
 
 	if {!$no_callback_p} {
-# FIXME This callback doesn't work because sometimes is called without a connection and [ad_conn package_id] breaks
-#	    callback fs::file_new -package_id [ad_conn package_id] -file_id $item_id
+	    if {![catch {ad_conn package_id} package_id]} {
+		callback fs::file_new -package_id $package_id -file_id $item_id
+	    }
 	}
     }
     return $revision_id
@@ -1014,8 +1019,9 @@ ad_proc fs::add_version {
     }
 
     if {!$no_callback_p} {
-# FIXME This callback doesn't work because sometimes is called without a connection and [ad_conn package_id] breaks
-#	callback fs::file_edit -package_id [ad_conn package_id] -file_id $item_id
+	if {![catch {ad_conn package_id} package_id]} {
+	    callback fs::file_revision_new -package_id $package_id -file_id $item_id -parent_id $parent_id
+	}
     }
 
     return $revision_id
@@ -1029,10 +1035,6 @@ ad_proc fs::delete_file {
 } {
     Deletes a file and all its revisions
 } {
-    if {!$no_callback_p} {
-# FIXME This callback doesn't work because sometimes is called without a connection and [ad_conn package_id] breaks
-#	callback fs::file_delete -package_id [ad_conn package_id] -file_id $item_id
-    }
 
     set version_name [get_object_name -object_id $item_id]
 
@@ -1050,7 +1052,9 @@ ad_proc fs::delete_file {
     }
 
     if {!$no_callback_p} {
-	callback fs::file_delete -package_id $package_id -file_id $item_id
+	if {![catch {ad_conn package_id} package_id]} {
+	    callback fs::file_delete -package_id $package_id -file_id $item_id
+	}
     }
 
     db_exec_plsql delete_file ""
@@ -1067,8 +1071,9 @@ ad_proc fs::delete_folder {
     Deletes a folder and all contents
 } {
     if {!$no_callback_p} {
-# FIXME This callback doesn't work because sometimes is called without a connection and [ad_conn package_id] breaks
-#	callback fs::folder_delete -package_id [ad_conn package_id] -folder_id $folder_id
+	if {![catch {ad_conn package_id} package_id]} {
+	    callback fs::folder_delete -package_id $package_id -folder_id $folder_id
+	}
     }
 
     set version_name [get_object_name -object_id $folder_id]
@@ -1521,4 +1526,3 @@ ad_proc -public fs::file_copy {
 	return $new_file_id
     } 
 }
-
