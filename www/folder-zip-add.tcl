@@ -79,7 +79,7 @@ if {$lock_title_p} {
 
 if {[ad_form_new_p -key file_id]} { 
     ad_form -extend -name file_add -form {
-        {unpack_message:text(inform) {label "[_ file-storage.Important]"} {value "[_ file-storage.Use_this_form_to_upload_a_ZIP]"}}
+        {unpack_message:text(inform) {label "Important!"} {value "Use this form to upload a ZIP file (its contents will be extracted into a folder with the title you enter above)."}}
     }
 }
 
