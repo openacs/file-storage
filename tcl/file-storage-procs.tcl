@@ -271,6 +271,7 @@ ad_proc -public fs::new_folder {
     {-creation_user ""}
     {-creation_ip ""}
     {-description ""}
+    {-package_id ""}
     -no_callback:boolean
 } {
     Create a new folder.
@@ -282,6 +283,7 @@ ad_proc -public fs::new_folder {
     @param creation_user Who created this folder
     @param creation_ip What is the ip address of the creation_user
     @param description of the folder. Not used in the current FS UI but might be used elsewhere.
+    @param package_id Package_id of the package for which to create the new folder. Preferably a file storage package_id
     @param no_callback defines if the callback should be called. Defaults to yes
     @return folder_id of the newly created folder
 } {
@@ -293,14 +295,17 @@ ad_proc -public fs::new_folder {
 	set creation_ip [ns_conn peeraddr]
     }
     
-    set folder_id [content::folder::new -name $name -label $pretty_name -parent_id $parent_id -creation_user $creation_user -creation_ip $creation_ip -description $description]
+    if {$package_id eq ""} {
+	set package_id [acs_object::package_id -object_id $parent_id]
+    }
+    
+    set folder_id [content::folder::new -name $name -label $pretty_name -parent_id $parent_id -creation_user $creation_user -creation_ip $creation_ip -description $description -package_id $package_id]
     permission::grant -party_id $creation_user -object_id $folder_id -privilege "admin"
 
     if {!$no_callback_p} {
-	if {![catch {ad_conn package_id} package_id]} {
-	    callback fs::folder_new -package_id $package_id -folder_id $folder_id
-	}
+	callback fs::folder_new -package_id $package_id -folder_id $folder_id
     }
+
     return $folder_id
 }
 
