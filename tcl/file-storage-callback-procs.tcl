@@ -1,4 +1,4 @@
-# packages/file-storage/tcl/file-storage-callback-procs.tcl
+## packages/file-storage/tcl/file-storage-callback-procs.tcl
 
 ad_library {
     
@@ -49,8 +49,16 @@ ad_proc -public -callback fs::file_revision_new {
     {-package_id:required}
     {-file_id:required}
     {-parent_id:required}
+    {-creation_user ""}
+    {-creation_ip ""}
 } {
-}
+    Callback executed when a new file revision is created
+    @package_id Package_id of the file storage package
+    @file_id New file_id for the revision
+    @parent_id Usually the folder the file was uploaded to.
+    @creation_user User_id of the user creating the revision
+    @creation_ip IP Of the creation
+} - 
 
 
 # Our callback implementations
