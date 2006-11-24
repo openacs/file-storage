@@ -63,6 +63,7 @@ template::list::create \
 	title {
 	    label \#file-storage.Title\#
 	    link_url_col version_url
+	    link_html {title "\#file-storage.show_version_title\#"}
 	}
 	author { label \#file-storage.Author\#
             display_template {@version.author_link;noquote@}
@@ -78,7 +79,11 @@ template::list::create \
 	    display_col last_modified_pretty
 	}
 	description { label \#file-storage.Version_Notes\#}
-	version_delete {label "" link_url_col version_delete_url}
+	version_delete {
+	    label "" 
+	    link_url_col version_delete_url
+	    link_html {title "\#file-storage.Delete_Version\#"}
+	}
     }
 
 db_multirow -unclobber -extend { author_link last_modified_pretty content_size_pretty version_url version_delete version_delete_url} version version_info {} {
