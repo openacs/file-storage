@@ -297,6 +297,9 @@ ad_proc -public fs::new_folder {
     
     if {$package_id eq ""} {
 	set package_id [acs_object::package_id -object_id $parent_id]
+	if {[apm_package_key_from_id $package_id] ne "file-storage"} {
+	    set package_id ""
+	}
     }
     
     set folder_id [content::folder::new -name $name -label $pretty_name -parent_id $parent_id -creation_user $creation_user -creation_ip $creation_ip -description $description -package_id $package_id]
