@@ -154,6 +154,7 @@ delete, therefore you cannot delete it.</msg>
   <msg key="Search_Results">Search Results</msg>
   <msg key="Set_Permissions">Set Permissions</msg>
   <msg key="show_all_versions">show all versions</msg>
+  <msg key="show_version_title">Show %version.title%</msg>
   <msg key="simple_add_page_title">Create %pretty_name%</msg>
   <msg key="Size">Size</msg>
   <msg key="Size_bytes">Size (bytes)</msg>
