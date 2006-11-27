@@ -294,13 +294,19 @@ ad_proc -public fs::new_folder {
     if {[empty_string_p $creation_ip]} {
 	set creation_ip [ns_conn peeraddr]
     }
-    
+
+    # If the package_id is empty, try the package_id from the parent_object
     if {$package_id eq ""} {
 	set package_id [acs_object::package_id -object_id $parent_id]
-	if {[apm_package_key_from_id $package_id] ne "file-storage"} {
-	    set package_id ""
+	
+	# If the package_id from the parent_id exists, make sure it is a file-storage package_id
+	if {$package_id ne ""} {
+	    if {[apm_package_key_from_id $package_id] ne "file-storage"} {
+		set package_id ""
+	    }
 	}
     }
+
     
     set folder_id [content::folder::new -name $name -label $pretty_name -parent_id $parent_id -creation_user $creation_user -creation_ip $creation_ip -description $description -package_id $package_id]
     permission::grant -party_id $creation_user -object_id $folder_id -privilege "admin"
