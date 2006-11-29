@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="file-storage" package_version="5.2.2" locale="pl_PL" charset="utf-8">
+<message_catalog package_key="file-storage" package_version="5.2.3" locale="pl_PL" charset="utf-8">
 
+  <msg key="_Rename">Plik</msg>
   <msg key="Action">Czynność</msg>
   <msg key="Actions">Czynności:</msg>
   <msg key="Actions_1">Czynności</msg>
@@ -130,18 +131,25 @@
   <msg key="New_URL_Uploaded">Nowy URL Utworzony</msg>
   <msg key="No_such_type">Brak takiego typu</msg>
   <msg key="no_such_URL">nie ma takiego URL</msg>
+  <msg key="PDF">PDF</msg>
+  <msg key="Permissions">Prawa</msg>
+  <msg key="properties">właściwości</msg>
   <msg key="Rename">Zmień nazwę</msg>
+  <msg key="Rename_File">Zmień Nazwę Pliku</msg>
   <msg key="Rename_this_folder">Zmień nazwę tego foldera</msg>
   <msg key="Save">Zapisz</msg>
   <msg key="Search">Szukaj</msg>
   <msg key="Search_again">Szukaj ponownie:</msg>
   <msg key="Search_Results">Wyniki Poszukiwań</msg>
+  <msg key="Set_Permissions">Ustaw Prawa</msg>
   <msg key="show_all_versions">pokaż wszystkie wersje</msg>
+  <msg key="simple_add_page_title">Utwórz %pretty_name%</msg>
   <msg key="Size">Rozmiar</msg>
   <msg key="Size_bytes">Rozmiar (w bajtach)</msg>
   <msg key="Title">Tytuł:</msg>
   <msg key="Title_">Tytuł :</msg>
   <msg key="Type">Typ</msg>
+  <msg key="untitled">brak tytułu</msg>
   <msg key="Update">Odśwież</msg>
   <msg key="Upload">Wgraj</msg>
   <msg key="Upload_a_file">Wgraj plik</msg>
@@ -149,11 +157,14 @@
   <msg key="Upload_New_File">Wgraj Nowy Plik</msg>
   <msg key="Upload_New_Version">Wgraj Nową Wersję</msg>
   <msg key="URL">URL:</msg>
+  <msg key="URL_deleted">URL usunięty</msg>
+  <msg key="version_delete_page_title">Usuń %version_name%</msg>
   <msg key="Version_filename">Nazwa Wersji Pliku</msg>
   <msg key="Version_filename_">Nazwa Wersji Pliku</msg>
   <msg key="Version_filename_1">Nazwa Wersji Pliku:</msg>
   <msg key="Version_Notes">Uwagi</msg>
   <msg key="Version_Notes_1">Uwagi:</msg>
   <msg key="view_details">zobacz szczegóły</msg>
+  <msg key="Yes_Delete">Tak, Usuwaj</msg>
   <msg key="Yes_Delete_It">Tak, Usuwaj</msg>
 </message_catalog>

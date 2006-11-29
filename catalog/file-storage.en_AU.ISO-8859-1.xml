@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="file-storage" package_version="5.2.2" locale="en_AU" charset="ISO-8859-1">
+<message_catalog package_key="file-storage" package_version="5.2.3" locale="en_AU" charset="ISO-8859-1">
 
   <msg key="_Upload">Revision</msg>
   <msg key="Action">Action</msg>
@@ -7,8 +7,8 @@
   <msg key="Actions_1">Actions</msg>
   <msg key="Add_Dup_As_New_File">If you upload a file with the same name as a file already in this folder, we will alter your new file's name by adding an incremental suffix (eg. &amp;quot;mydoc.doc&amp;quot; -&amp;gt; &amp;quot;mydoc-1.doc&amp;quot;) and making it a new, separate file. &lt;br /&gt;&lt;br /&gt;&lt;em&gt;Note that this is not the Title of the file, which you can specify as you like. This is the File Name, which must be unique in each folder.&lt;/em&gt;</msg>
   <msg key="Add_File">Add File</msg>
-  <msg key="Add_Revision">Add Revision</msg>
   <msg key="Add_pretty_name">Add %pretty_name%</msg>
+  <msg key="Add_Revision">Add Revision</msg>
   <msg key="Author">Author</msg>
   <msg key="back_to_folder_view">Back to folder view</msg>
   <msg key="bytes">bytes</msg>
