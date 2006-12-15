@@ -2,7 +2,7 @@
 
   <if @content_size_total@ gt 0>
     <p>
-      <a href="@fs_url@download-archive/index?object_id=@folder_id@">
+      <a href="@fs_url@download-archive/index?object_id=@folder_id@" title="#file-storage.lt_Download_an_archive_o#">
         #file-storage.lt_Download_an_archive_o#
       </a>
       <br>
