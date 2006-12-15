@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="file-storage" package_version="5.2.2" locale="es_ES" charset="ISO-8859-1">
+<message_catalog package_key="file-storage" package_version="5.2.3" locale="es_ES" charset="ISO-8859-1">
 
   <msg key="_Upload">Revisión</msg>
   <msg key="Action">Opciones</msg>
   <msg key="Actions">Opciones:</msg>
   <msg key="Actions_1">Opciones</msg>
+  <msg key="Add_Dup_As_New_File">Si sube un documento con el mismo nombre que otro documento ya existente en esta carpeta, se añadirá al nombre de su documento un sufijo incremental (p.e. &quot;mydoc.doc&quot; -&amp;gt; &quot;mydoc-1.doc&quot;). Notese que el título del documento no será cambiado. Es el nombre de documento el que debe ser único en cada carpeta.</msg>
   <msg key="Add_File">Añadir archivo</msg>
+  <msg key="Add_folder_from_fs">Añadir una carpeta desde sistema de ficheros</msg>
   <msg key="Add_pretty_name">Añadir %pretty_name%</msg>
+  <msg key="Add_Revision">Subir una revisión</msg>
   <msg key="Author">Autor</msg>
-  <msg key="back_to_folder_view">&lt;a href=&quot;%folder_view_url%&quot;&gt;Volver&lt;/a&gt; a la vista por carpetas </msg>
   <msg key="back_to_project">Volver al proyecto</msg>
   <msg key="bytes">bytes</msg>
   <msg key="Change_Name">Renombrar</msg>
@@ -17,6 +19,7 @@
   <msg key="Configure_File_Upload_Limit">Configurar el límite para subir archivos</msg>
   <msg key="Copy">Copiar</msg>
   <msg key="Copy_File">Copiar Archivo</msg>
+  <msg key="Copy_to_folder_title">Copiar a la carpeta</msg>
   <msg key="Create">Crear</msg>
   <msg key="Create_a_new_folder">Crear una carpeta</msg>
   <msg key="Create_a_URL">Crear un enlace</msg>
@@ -45,6 +48,7 @@
   <msg key="file_page_owner_label">Dueño: %owner%</msg>
   <msg key="Folder">Carpeta</msg>
   <msg key="folder">Carpeta</msg>
+  <msg key="Folder_Add">Añadir una carpeta</msg>
   <msg key="Folder_available_via_WebDAV_at">Esta carpeta esta disponible vía WebDAV en         %webdav_url%</msg>
   <msg key="folder_delete_page_title">Eliminar %folder_name%</msg>
   <msg key="Folder_deleted">Carpeta borrada</msg>
@@ -131,6 +135,7 @@
   <msg key="New_URL_Uploaded">Nuevo URL Subido</msg>
   <msg key="No_such_type">Tipo no encontrado</msg>
   <msg key="no_such_URL">URL no encontrada</msg>
+  <msg key="No_valid_destination_folders_exist">Ninguna carpeta destino válida</msg>
   <msg key="PDF">PDF</msg>
   <msg key="Permissions">Permisos</msg>
   <msg key="properties">propiedades</msg>
@@ -143,6 +148,7 @@
   <msg key="Search_Results">Resultados de búsqueda</msg>
   <msg key="Set_Permissions">Establecer Permisos</msg>
   <msg key="show_all_versions">mostrar todas las versiones</msg>
+  <msg key="show_version_title">Mostrar %version.title%</msg>
   <msg key="simple_add_page_title">Crear %pretty_name%</msg>
   <msg key="Size">Tamaño</msg>
   <msg key="Size_bytes">Tamaño (bytes)</msg>
@@ -154,7 +160,9 @@
   <msg key="Update">Actualizar</msg>
   <msg key="Upload">Subir Archivo</msg>
   <msg key="Upload_a_file">Subir un archivo</msg>
+  <msg key="Upload_a_folder">Subir una carpeta</msg>
   <msg key="Upload_a_new_version">Subir una nueva versión</msg>
+  <msg key="Upload_folder_help">Subir una carpeta desde el sistema de ficheros</msg>
   <msg key="Upload_Limit">Tamaño Límite(bytes)</msg>
   <msg key="Upload_limit_error">El tamaño límite no debe ser mayor que</msg>
   <msg key="Upload_limit_error_2">bytes. Aumente el tamaño límite en su archivo Tcl de configuración de AOLserver</msg>
@@ -171,6 +179,7 @@
   <msg key="Version_filename_1">Título:</msg>
   <msg key="Version_Notes">Descripción</msg>
   <msg key="Version_Notes_1">Notas sobre la versión:</msg>
+  <msg key="view_contents">Ver contenidos</msg>
   <msg key="view_details">Ver detalles</msg>
   <msg key="Yes_Delete">Sí, Eliminar</msg>
   <msg key="Yes_Delete_It">Sí, borrar</msg>

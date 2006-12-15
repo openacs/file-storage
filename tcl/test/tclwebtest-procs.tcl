@@ -8,21 +8,9 @@ ad_library {
 
 namespace eval file_storage::twt {}
 
-ad_proc file_storage::twt::go_to_dotlrn_my_files_page_url {} {
-
-    # The admin dotlrn page url
-    set dotlrn_admin_page_url "[site_node::get_package_url -package_key dotlrn]admin"
-    ::twt::do_request $dotlrn_admin_page_url
-
-    # The control panel dotlrn page url
-    set dotlrn_calendar_page_url "/dotlrn/?page_num=1"
-    ::twt::do_request $dotlrn_calendar_page_url
-
-    # Add a new user
-    tclwebtest::form find ~n "add_user"
-    tclwebtest::form submit
-
-    tclwebtest::link follow {My Files}
+ad_proc file_storage::twt::call_fs_page {} {
+    set fs_page [aa_get_first_url -package_key file-storage]
+    ::twt::do_request $fs_page
 }
 
 ad_proc file_storage:::twt::create_file { f_name }  {
@@ -45,7 +33,7 @@ ad_proc file_storage::twt::create_new_folder { folder_name folder_description } 
     
     set response 0
     
-    tclwebtest::link follow {Create a new folder}
+    tclwebtest::link follow {New folder}
     
     tclwebtest::form find ~n "folder-ae"
     tclwebtest::field find ~n "folder_name"
@@ -56,7 +44,7 @@ ad_proc file_storage::twt::create_new_folder { folder_name folder_description } 
     
     set response_url [tclwebtest::response url]
 
-    if { [string match  "*/dotlrn/file-storage/\?folder_id*" $response_url] } {
+    if { [string match  "*/\?folder_id*" $response_url] } {
 
         if { [catch {tclwebtest::assert text $folder_name} errmsg]} {
             aa_error "file_storage::twt::create_new_folder failed $errmsg : Didn't Create a New Folder"
@@ -82,7 +70,7 @@ ad_proc file_storage::twt::delete_folder {}  {
 
     set response_url [tclwebtest::response url]
 
-    if { [string match  "*/dotlrn/file-storage/index\?folder_id*" $response_url] } {
+    if { [string match  "*\?folder_id*" $response_url] } {
 
         if { ![catch {tclwebtest::link find $folder_name} errmsg]} {
             aa_error "file_storage::twt::delete_folder failed $errmsg : Didn't Delete a Folder"
@@ -110,7 +98,7 @@ ad_proc file_storage::twt::edit_folder { folder_name }  {
 
     set response_url [tclwebtest::response url]
 
-    if { [string match  "*/dotlrn/file-storage/\?folder_id*" $response_url] } {
+    if { [string match  "*\?folder_id*" $response_url] } {
 
         if { [catch {tclwebtest::assert text $folder_name} errmsg]} {
             aa_error "file_storage::twt::edit_folder failed $errmsg : Didn't Edit a Folder"
@@ -143,7 +131,7 @@ ad_proc file_storage::twt::add_file_to_folder { folder_name file_name file_descr
 
     set response_url [tclwebtest::response url]
 
-    if { [string match  "*/dotlrn/file-storage/\?folder*id*" $response_url] } {
+    if { [string match  "*\?folder*id*" $response_url] } {
 
         set list_words [split "$file_name" /]
         set short_file_name [lindex $list_words [expr [llength $list_words]-1]]
@@ -179,7 +167,7 @@ ad_proc file_storage::twt::create_url_in_folder { url_title url url_description 
 
     set response_url [tclwebtest::response url]
 
-    if { [string match  "*/dotlrn/file-storage/\?folder*id*" $response_url] } {
+    if { [string match  "*\?folder_id*" $response_url] } {
 
         if {[catch {tclwebtest::link find $url_title} errmsg]} {
             aa_error "file_storage::twt::create_url_in_folder $errmsg : Didn't create an URL in a folder"
@@ -198,102 +186,102 @@ ad_proc file_storage::twt::upload_file { file_name file_description }  {
     set response 0
 
     # Follow the Upload File link
-    tclwebtest::link follow {Upload a file}
+    tclwebtest::link follow {Add File}
 
-    tclwebtest::form find ~n "file-add"
-    tclwebtest::field find ~n "upload_file"
-    tclwebtest::field fill $file_name
-    tclwebtest::field find ~n "title"
-    tclwebtest::field fill $file_name
-    tclwebtest::field find ~n "description"
-    tclwebtest::field fill $file_description
-    tclwebtest::form submit
+     tclwebtest::form find ~n "file-add"
+     tclwebtest::field find ~n "upload_file"
+     tclwebtest::field fill $file_name
+     tclwebtest::field find ~n "title"
+     tclwebtest::field fill $file_name
+     tclwebtest::field find ~n "description"
+     tclwebtest::field fill $file_description
+     tclwebtest::form submit
 
-    set response_url [tclwebtest::response url]
+     set response_url [tclwebtest::response url]
 
-    if { [string match  "*/dotlrn/file-storage/\?folder*id*" $response_url] } {
+     if { [string match  "*\?folder*id*" $response_url] } {
 
-	set list_words [split "$file_name" /]
-        set short_file_name [lindex $list_words [expr [llength $list_words]-1]]
+ 	set list_words [split "$file_name" /]
+         set short_file_name [lindex $list_words [expr [llength $list_words]-1]]
 
-        if {[catch {tclwebtest::link find $short_file_name} errmsg]} {
-            aa_error "file_storage::twt::upload_file failed $errmsg : Didn't upload a File"
-        } else {
-            aa_log "a File uploaded"
-            set response 1
-        }
-    } else {
-        aa_error "file_storage::twt::upload_file failed, bad response url : $response_url"
-    }
+         if {[catch {tclwebtest::link find $short_file_name} errmsg]} {
+             aa_error "file_storage::twt::upload_file failed $errmsg : Didn't upload a File"
+         } else {
+             aa_log "a File uploaded"
+             set response 1
+         }
+     } else {
+         aa_error "file_storage::twt::upload_file failed, bad response url : $response_url"
+     }
     
-    return $response
-}
+     return $response
+ }
 
-ad_proc file_storage::twt::delete_uploaded_file { file_name }  {
+ ad_proc file_storage::twt::delete_uploaded_file { file_name }  {
 
-    set response 0
+     set response 0
 
-    # Follow the Delete File Link
-    tclwebtest::link follow properties
-    tclwebtest::link follow {Delete File}
+     # Follow the Delete File Link
+     tclwebtest::link follow properties
+     tclwebtest::link follow {Delete File}
 
-    tclwebtest::form find ~n "file-delete"
-    tclwebtest::form submit
+     tclwebtest::form find ~n "file-delete"
+     tclwebtest::form submit
 
-    set response_url [tclwebtest::response url]
+     set response_url [tclwebtest::response url]
 
-    if { [string match  "*/dotlrn/file-storage/\?folder*id*" $response_url] } {
+     if { [string match  "*\?folder*id*" $response_url] } {
 
-	# Get the short file name
-	set list_words [split "$file_name" /]
-	set short_file_name [lindex $list_words [expr [llength $list_words]-1]]
+ 	# Get the short file name
+ 	set list_words [split "$file_name" /]
+ 	set short_file_name [lindex $list_words [expr [llength $list_words]-1]]
 
-        if {![catch {tclwebtest::link find $short_file_name} errmsg]} {
-            aa_error "file_storage::twt::delete_file failed $errmsg : Didn't delete a File"
-        } else {
-            aa_log "a File deleted"
-            set response 1
-        }
-    } else {
-        aa_error "file_storage::twt::delete_file failed, bad response url : $response_url"
-    }
+         if {![catch {tclwebtest::link find $short_file_name} errmsg]} {
+             aa_error "file_storage::twt::delete_file failed $errmsg : Didn't delete a File"
+         } else {
+             aa_log "a File deleted"
+             set response 1
+         }
+     } else {
+         aa_error "file_storage::twt::delete_file failed, bad response url : $response_url"
+     }
     
-    return $response
-}
+     return $response
+ }
 
-ad_proc file_storage::twt::rename_file { file_name }  {
+ ad_proc file_storage::twt::rename_file { file_name }  {
 
-    set response 0
+     set response 0
 
-    tclwebtest::link follow {properties}
+     tclwebtest::link follow {properties}
 
-    # Follow the Rename File link
-    tclwebtest::link follow {Rename File}
+     # Follow the Rename File link
+     tclwebtest::link follow {Rename File}
 
-    tclwebtest::form find ~n "file-edit"
-    tclwebtest::field find ~n "title"
-    tclwebtest::field fill $file_name
-    tclwebtest::form submit
+     tclwebtest::form find ~n "file-edit"
+     tclwebtest::field find ~n "title"
+     tclwebtest::field fill $file_name
+     tclwebtest::form submit
 
-    set response_url [tclwebtest::response url]
+     set response_url [tclwebtest::response url]
 
-    if { [string match  "*/dotlrn/file-storage/file\?file*id*" $response_url] } {
+     if { [string match  "*/file\?file_id*" $response_url] } {
 
-        if {[catch {tclwebtest::link find $file_name} errmsg]} {
-            aa_error "file_storage::twt::rename_file $errmsg : Didn't rename a file"
-        } else {
-            aa_log "a File ranamed"
-            set response 1
-        }
+         if {[catch {tclwebtest::link find $file_name} errmsg]} {
+             aa_error "file_storage::twt::rename_file $errmsg : Didn't rename a file"
+         } else {
+             aa_log "a File ranamed"
+             set response 1
+         }
 
-    } else {
-        aa_error "file_storage::twt::rename_file failed, bad response url : $response_url"
-    }
+     } else {
+         aa_error "file_storage::twt::rename_file failed, bad response url : $response_url"
+     }
 
-    return $response
-}
+     return $response
+ }
 
-ad_proc file_storage::twt::copy_file { folder_name file_name }  {
+ ad_proc file_storage::twt::copy_file { folder_name file_name }  {
 
     set response 0
 
@@ -377,7 +365,7 @@ ad_proc file_storage::twt::create_url { url_title url url_description }  {
 
     set response_url [tclwebtest::response url]
 
-    if { [string match  "*/dotlrn/file-storage/\?folder*id*" $response_url] } {
+    if { [string match  "*\?folder*id*" $response_url] } {
 	
         if {[catch {tclwebtest::link find $url_title} errmsg]} {
             aa_error "file_storage::twt::create_url $errmsg : Didn't create an URL"
@@ -457,7 +445,3 @@ ad_proc file_storage::twt::delete_url { url_title }  {
     return $response
 }
 
-# Get the file id
-#set file_id [db_string file_id "
-# select file_id from fs_files where file_upload_name = :short_file_name"]
-#tclwebtest::link follow ~u "file\?file*id=$file_id"

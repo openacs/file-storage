@@ -102,18 +102,18 @@ if {$admin_p} {
 
 #set n_past_filter_values [list [list "Yesterday" 1] [list [_ file-storage.last_week] 7] [list [_ file-storage.last_month] 30]]
 set elements [list type [list label [_ file-storage.Type] \
-                             display_template {<img src="@contents.icon@"  border=0 alt="#file-storage.@contents.pretty_type@#" />@contents.pretty_type@} \
+                             display_template {<img src="@contents.icon@"  border=0 alt="@contents.alt_icon@" />@contents.pretty_type@} \
 			    orderby_desc {sort_key_desc,fs_objects.pretty_type desc} \
 			    orderby_asc {fs_objects.sort_key, fs_objects.pretty_type asc}] \
                   name \
 		  [list label [_ file-storage.Name] \
-                       display_template {<a @target_attr@ href="@contents.file_url@"><if @contents.title@ nil>@contents.name@</a></if><else>@contents.title@</a><br/><if @contents.name@ ne @contents.title@><span style="color: \#999;">@contents.name@</span></if></else>} \
+                       display_template {<a @target_attr@ href="@contents.file_url@" title="\#file-storage.view_contents\#"><if @contents.title@ nil>@contents.name@</a></if><else>@contents.title@</a><br/><if @contents.name@ ne @contents.title@><span style="color: \#999;">@contents.name@</span></if></else>} \
 		       orderby_desc {fs_objects.name desc} \
 		       orderby_asc {fs_objects.name asc}] \
  		  short_name \
  		  [list label [_ file-storage.Name] \
                         hide_p 1 \
- 		       display_template {<a href="@contents.download_url@">@contents.title@</a>} \
+ 		       display_template {<a href="@contents.download_url@" title="\#file-storage.Download\#">@contents.title@</a>} \
  		       orderby_desc {fs_objects.name desc} \
  		       orderby_asc {fs_objects.name asc}] \
 		  content_size_pretty \
@@ -127,13 +127,16 @@ set elements [list type [list label [_ file-storage.Type] \
 		       orderby_asc {last_modified_ansi asc}] \
 		  properties_link \
 		  [list label "" \
-		       link_url_col properties_url] \
+		       link_url_col properties_url \
+		       link_html { title "[_ file-storage.properties]" }] \
                   new_version_link \
 		  [list label "" \
-		       link_url_col new_version_url] \
+		       link_url_col new_version_url \
+		       link_html { title "[_ file-storage.Upload_a_new_version]" }] \
                   download_link \
 		  [list label "" \
-		       link_url_col download_url]
+		       link_url_col download_url \
+		       link_html { title "[_ file-storage.Download]" }]
 	      ]
 
 if {![exists_and_not_null return_url]} {
@@ -189,7 +192,7 @@ if {[string equal $orderby ""]} {
     set orderby " order by fs_objects.sort_key, fs_objects.name asc"
 }
 
-db_multirow -extend {label icon last_modified_pretty content_size_pretty properties_link properties_url download_link download_url new_version_link new_version_url} contents select_folder_contents {} {
+db_multirow -extend {label alt_icon icon last_modified_pretty content_size_pretty properties_link properties_url download_link download_url new_version_link new_version_url} contents select_folder_contents {} {
     set last_modified_ansi [lc_time_system_to_conn $last_modified_ansi]
     
     set last_modified_pretty [lc_time_fmt $last_modified_ansi "%x %X"]
@@ -222,6 +225,7 @@ db_multirow -extend {label icon last_modified_pretty content_size_pretty propert
 	    set new_version_link {}
 	    set new_version_url {}
 	    set icon "/resources/file-storage/folder.gif"
+	    set alt_icon #file-storage.folder#
 	    set file_url "${fs_url}index?[export_vars {{folder_id $object_id}}]"
 	    set download_link [_ file-storage.Download]
             set download_url "${fs_url}download-archive/index?[export_vars {object_id}]"
@@ -232,6 +236,10 @@ db_multirow -extend {label icon last_modified_pretty content_size_pretty propert
 	    set new_version_link [_ acs-kernel.common_New]
 	    set new_version_url "${fs_url}file-add?[export_vars {{file_id $object_id}}]"
 	    set icon "/resources/acs-subsite/url-button.gif"
+	    # DRB: This alt text somewhat sucks, but the message key already exists in
+	    # the language catalog files we care most about and we want to avoid a new
+	    # round of translation work for this minor release if possible ...
+	    set alt_icon #file-storage.link#
 	    set file_url ${url}
             set download_url {}
 	    set download_link {}
@@ -261,6 +269,7 @@ db_multirow -extend {label icon last_modified_pretty content_size_pretty propert
 	    set new_version_link [_ acs-kernel.common_New]
 	    set new_version_url "${fs_url}file-add?[export_vars {{file_id $object_id}}]"
 	    set icon "/resources/file-storage/file.gif"
+	    set alt_icon #file-storage.file#
 	    set file_url "${fs_url}view/${file_url}"
 	    set download_link [_ file-storage.Download]
 	    if {$like_filesystem_p} {
@@ -276,6 +285,7 @@ db_multirow -extend {label icon last_modified_pretty content_size_pretty propert
 	    set new_version_link [_ acs-kernel.common_New]
 	    set new_version_url "${fs_url}file-add?[export_vars {{file_id $object_id}}]"
 	    set icon "/resources/file-storage/file.gif"
+	    set alt_icon "#file-storage.file#"
 	    set file_url "${fs_url}view/${file_url}"
 	    set download_link [_ file-storage.Download]
 	    if {$like_filesystem_p} {
