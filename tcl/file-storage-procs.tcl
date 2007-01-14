@@ -730,7 +730,7 @@ ad_proc -public fs::add_file {
     # we have to do this here because we create the object before
     # calling cr_import_content
     
-    if {[content::type::content_type_p -mime_type $mime_type -content_type "image"]} {
+    if {[db_string image_type_p "" -default 0]} {
         set content_type image
     } else {
         set content_type file_storage_object
