@@ -145,7 +145,7 @@ if {![exists_and_not_null return_url]} {
 set vars_to_export [list return_url]
 
 if {$allow_bulk_actions} {
-    set bulk_actions [list "[_ file-storage.Move]" "${fs_url}move" "[_ file-storage.lt_Move_Checked_Items_to]" "[_ file-storage.Copy]" "${fs_url}copy" "[_ file-storage.lt_Copy_Checked_Items_to]" "[_ file-storage.Delete]" "${fs_url}delete" "[_ file-storage.Delete_Checked_Items]"]
+    set bulk_actions [list "[_ file-storage.Move]" "${fs_url}move" "[_ file-storage.lt_Move_Checked_Items_to]" "[_ file-storage.Copy]" "${fs_url}copy" "[_ file-storage.lt_Copy_Checked_Items_to]" "[_ file-storage.Delete]" "${fs_url}delete" "[_ file-storage.Delete_Checked_Items]" "[_ file-storage.Download_ZIP]" "${fs_url}download-zip" "[_ file-storage.Download_ZIP_Checked_Items]"]
     callback fs::folder_chunk::add_bulk_actions \
 	-bulk_variable "bulk_actions" \
 	-folder_id $folder_id \
@@ -217,7 +217,6 @@ db_multirow -extend {label alt_icon icon last_modified_pretty content_size_prett
 
 
     set name [lang::util::localize $name]
-
     switch -- $type {
 	folder {
 	    set properties_link ""
@@ -228,7 +227,7 @@ db_multirow -extend {label alt_icon icon last_modified_pretty content_size_prett
 	    set alt_icon #file-storage.folder#
 	    set file_url "${fs_url}index?[export_vars {{folder_id $object_id}}]"
 	    set download_link [_ file-storage.Download]
-            set download_url "${fs_url}download-archive/index?[export_vars {object_id}]"
+            set download_url "[export_vars -base "${fs_url}download-zip" -url {object_id}]"
 	}
 	url {
 	    set properties_link [_ file-storage.properties]
@@ -316,4 +315,7 @@ if { $expose_rss_p } {
     db_multirow feeds select_subscrs {}
 }
 
+if {$content_size_total > 0} {
+    set compressed_url [export_vars -base "${fs_url}download-zip" -url {{object_id $folder_id}}]
+}
 ad_return_template
