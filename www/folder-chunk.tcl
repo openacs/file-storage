@@ -136,8 +136,14 @@ set elements [list type [list label [_ file-storage.Type] \
                   download_link \
 		  [list label "" \
 		       link_url_col download_url \
-		       link_html { title "[_ file-storage.Download]" }]
+		       link_html { title "[_ file-storage.Download]" }] \
+                  views \
+		  [list label "Views" ]
 	      ]
+
+if {[apm_package_installed_p views]} {
+    concat $elements [list views [list label "Views"]]
+}
 
 if {![exists_and_not_null return_url]} {
     set return_url [export_vars -base "index" {folder_id}]
@@ -192,7 +198,7 @@ if {[string equal $orderby ""]} {
     set orderby " order by fs_objects.sort_key, fs_objects.name asc"
 }
 
-db_multirow -extend {label alt_icon icon last_modified_pretty content_size_pretty properties_link properties_url download_link download_url new_version_link new_version_url} contents select_folder_contents {} {
+db_multirow -extend {label alt_icon icon last_modified_pretty content_size_pretty properties_link properties_url download_link download_url new_version_link new_version_url views} contents select_folder_contents {} {
     set last_modified_ansi [lc_time_system_to_conn $last_modified_ansi]
     
     set last_modified_pretty [lc_time_fmt $last_modified_ansi "%x %X"]
@@ -215,6 +221,13 @@ db_multirow -extend {label alt_icon icon last_modified_pretty content_size_prett
         incr content_size_total $content_size
     }
 
+    set views ""
+    if {[apm_package_installed_p views]} {
+	array set views_arr [views::get -object_id $object_id] 
+	if {$views_arr(views) ne ""} {
+	    set views " $views_arr(views) / $views_arr(unique_views)"
+	}
+    }
 
     set name [lang::util::localize $name]
     switch -- $type {
