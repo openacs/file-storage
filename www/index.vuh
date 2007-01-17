@@ -23,4 +23,9 @@ permission::require_permission \
 
 set file_live_revision [item::get_live_revision $file_item_id]
 
+if {[apm_package_installed_p views]} {
+	views::record_view -object_id $file_item_id -viewer_id $user_id
+}
+
+
 cr_write_content -revision_id $file_live_revision
