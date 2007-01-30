@@ -91,34 +91,22 @@ ad_proc -public -callback search::datasource -impl file_storage_object {} {
 	and   r.revision_id = :object_id
     } -column_array datasource
 
-    # retrieve the file-storage file
-    set file_content [cr_write_content -string -revision_id $object_id ]
-
-    # and convert the file to text. Currently using a very poor man's
-    # INSO filter (==strings).
-
-    # Also file creation might be implemented too poorly - e.g. there
-    # are probably platforms which do not have /tmp.  I think there is
-    # no need to muck around with highly temporary filenames
-    # though. The revision_id (passed in in the variable object_id) is
-    # unique anyway.
-
-    set filename "/tmp/search$object_id"
-    set fileId [open $filename "w"]
-    puts -nonewline $fileId $file_content
-    close $fileId
-
-    # TODO: replace strings with a procedure.
-    set text_file_content [exec strings $filename ]
-
-    file delete $filename
-
     return [list object_id $object_id \
-                title datasource(title) \
-                content $text_file_content \
+                title $datasource(title) \
+                content $datasource(content) \
                 keywords {} \
-                storage_type text \
-                mime text/plain ]
+                storage_type $datasource(storage_type) \
+                mime $datasource(mime) ]
+}
+
+ad_proc -public -callback search::url -impl file_storage_object {
+     -object_id:required
+} {
+    Return the URL to the file_storage_object
+} {
+    set item_id [content::revision::item_id -revision_id $object_id]
+    set name [db_string item "select name from cr_items where item_id = :item_id" -default ""]
+    return "/file/$item_id/$name"
 }
 
 
