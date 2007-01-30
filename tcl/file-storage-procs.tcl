@@ -730,11 +730,11 @@ ad_proc -public fs::add_file {
     # we have to do this here because we create the object before
     # calling cr_import_content
     
-    if {[content::type::content_type_p -mime_type $mime_type -content_type "image"]} {
-        set content_type image
-    } else {
+#    if {[content::type::content_type_p -mime_type $mime_type -content_type "image"]} {
+#        set content_type image
+#    } else {
         set content_type file_storage_object
-    }
+#    }
 
     if {$item_id eq ""} {
 	set item_id [db_nextval acs_object_id_seq]
@@ -1202,8 +1202,10 @@ ad_proc -public fs::do_notifications {
 
     set url "[ad_url]"
     set new_content ""
+    db_1row get_owner_name { }
+
     if {[string equal $action "new_file"] || [string equal $action "new_url"] || [string equal $action "new_version"]} {
-        db_1row get_owner_name { }
+
 
         if {[string equal $action "new_version"]} {
             set sql "select description as description from cr_revisions 
