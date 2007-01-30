@@ -301,10 +301,10 @@ db_multirow -extend {label alt_icon icon last_modified_pretty content_size_prett
 	    set file_url "${fs_url}view/${file_url}"
 	    set download_link [_ file-storage.Download]
 	    if {$like_filesystem_p} {
-		set download_url "${fs_url}download/$title?[export_vars {{file_id $object_id}}]"                
-		set file_url $download_url
+		set file_url "${fs_url}download/$title?[export_vars {{file_id $object_id}}]"                
+		set download_url "/file/$object_id/${title}[file extension $name]"
 	    } else {
-		set download_url "${fs_url}download/$name?[export_vars {{file_id $object_id}}]"                
+		set download_url "/file/$object_id/$name"
 	    }
 	}
 
