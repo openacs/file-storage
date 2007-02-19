@@ -2,6 +2,8 @@
 <property name="title">@title@</property>
 <property name="context">context</property>
 
+<h1>@title;noquote@</h1>
+
  <if @allowed_count@ gt 0>
       
   <if @not_allowed_count@ gt 0>@not_allowed_count@ items can not be deleted.</if>
