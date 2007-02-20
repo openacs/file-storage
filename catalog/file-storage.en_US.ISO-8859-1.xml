@@ -56,6 +56,7 @@
   <msg key="Folder_ID">Folder ID</msg>
   <msg key="Folder_Name">Folder Name:</msg>
   <msg key="folder_type_pretty_name">folder</msg>
+  <msg key="Important">Important!</msg>
   <msg key="index_page_navigate_up_folder">Up to %up_name%</msg>
   <msg key="item">item</msg>
   <msg key="items">items</msg>
@@ -144,6 +145,7 @@ delete, therefore you cannot delete it.</msg>
   <msg key="No_valid_destination_folders_exist">No valid destination folder exists</msg>
   <msg key="PDF">PDF</msg>
   <msg key="Permissions">Permissions</msg>
+  <msg key="pretty_name">File-Storage</msg>
   <msg key="properties">properties</msg>
   <msg key="Rename">Rename</msg>
   <msg key="Rename_File">Rename File</msg>
@@ -178,6 +180,7 @@ delete, therefore you cannot delete it.</msg>
   <msg key="Uploaded_by_ownern">Uploaded by: %owner%</msg>
   <msg key="URL">URL:</msg>
   <msg key="URL_deleted">URL deleted</msg>
+  <msg key="Use_this_form_to_upload_a_ZIP">Use this form to upload a ZIP file (its contents will be extracted into a folder with the title you enter above).</msg>
   <msg key="version_add_page_title">Upload New Version of %title%</msg>
   <msg key="version_delete_page_title">Delete %version_name%</msg>
   <msg key="Version_filename">Version filename</msg>
