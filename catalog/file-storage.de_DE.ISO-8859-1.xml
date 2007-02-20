@@ -5,6 +5,7 @@
   <msg key="Action">Aktion</msg>
   <msg key="Actions">Aktionen:</msg>
   <msg key="Actions_1">Aktionen</msg>
+  <msg key="Add_Dup_As_New_File">Wenn Sie eine Datei mit demselben Namen hochladen, wird dem Dateinamen zur Unterscheidung ein Suffix angehängt. Bitte beachten Sie, dass es sich hierbei nicht um einen Titel für die Datei handelt. Diesen können Sie beliebig wählen. Der Dateiname hingegen muß immer eindeutig sein.</msg>
   <msg key="Add_File">Datei hochladen</msg>
   <msg key="Add_pretty_name">%pretty_name% hinzufügen</msg>
   <msg key="Author">Autor</msg>
@@ -52,6 +53,7 @@
   <msg key="Folder_ID">Ordner-ID</msg>
   <msg key="Folder_Name">Ordnername:</msg>
   <msg key="folder_type_pretty_name">Ordner</msg>
+  <msg key="Important">Warnung!</msg>
   <msg key="index_page_navigate_up_folder">Eine Ebene nach oben zu %up_name%</msg>
   <msg key="item">Element</msg>
   <msg key="items">Elemente</msg>
@@ -134,6 +136,7 @@
   <msg key="no_such_URL">URL nicht gefunden</msg>
   <msg key="PDF">PDF</msg>
   <msg key="Permissions">Berechtigungen</msg>
+  <msg key="pretty_name">Dateisystem</msg>
   <msg key="properties">Eigenschaften</msg>
   <msg key="Rename">Umbenennen</msg>
   <msg key="Rename_File">Datei umbenennen</msg>
@@ -165,6 +168,7 @@
   <msg key="Uploaded_by_ownern">Hochgeladen von: %owner%</msg>
   <msg key="URL">URL:</msg>
   <msg key="URL_deleted">URL gelöscht</msg>
+  <msg key="Use_this_form_to_upload_a_ZIP">Verwenden Sie dieses Formular, um eine ZIP-Datei hochzuladen. Der Inhalt wird in ein Verzeichnis mit obigem Namen oder dem der ZIP-Datei entpackt.</msg>
   <msg key="version_add_page_title">Neue Version von &quot;%title%&quot; hochladen</msg>
   <msg key="version_delete_page_title">&quot;%version_name%&quot; löschen</msg>
   <msg key="Version_filename">Dateiname der Version</msg>
