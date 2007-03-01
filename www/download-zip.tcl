@@ -47,6 +47,8 @@ with_catch errmsg {
 
 # return the archive to the connection.
 ns_set put [ad_conn outputheaders] Content-Disposition "attachment;filename=\"$download_name\""
+ns_set put [ad_conn outputheaders] Content-Type "application/zip"
+ns_set put [ad_conn outputheaders] Content-Size "[file size $out_file]"
 ns_returnfile 200 application/octet-stream $out_file
 
 # clean everything up
