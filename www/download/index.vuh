@@ -21,9 +21,7 @@ ad_page_contract {
 
 if {![exists_and_not_null version_id]} {
     set version_id [item::get_live_revision $file_id]
-} elseif {![exists_and_not_null file_id]} {
-    set file_id [content::revision::item_id -revision_id $version_id]
-}
+} 
 
 set user_id [ad_conn user_id]
 
@@ -34,8 +32,5 @@ if {[apm_package_installed_p views]} {
 	views::record_view -object_id $file_id -viewer_id $user_id
 }
 
-if {[exists_and_not_null file_id]} {
-	cr_write_content -item_id $file_id
-} else {
-	cr_write_content -revision_id $version_id
-}
+cr_write_content -revision_id $version_id
+
