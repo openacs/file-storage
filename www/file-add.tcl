@@ -41,6 +41,7 @@ ad_page_contract {
 
 set user_id [ad_conn user_id]
 set package_id [ad_conn package_id]
+set unpack_binary [string trim [parameter::get -parameter UnzipBinary]]
 # check for write permission on the folder or item
 
 permission::require_permission \
@@ -104,8 +105,8 @@ if {$lock_title_p} {
     ad_form -extend -form {
 	{title:text(hidden) {value $title}}
     }
-} else {
-    ad_form -extend -form {
+} else { 
+   ad_form -extend -form {
 	{title:text,optional {label \#file-storage.Title\#} {html {size 30}} }
     }
 }
@@ -114,7 +115,13 @@ ad_form -extend -form {
     {description:text(textarea),optional {label \#file-storage.Description\#} {html "rows 5 cols 35"}}
 }
 
-if {[ad_form_new_p -key file_id]} { 
+if [catch {set binary [exec $unpack_binary]} errormsg] {
+      set unpack_bin_installed 0
+} else {
+        set unpack_bin_installed 1
+}
+
+if {([ad_form_new_p -key file_id]) && $unpack_bin_installed } { 
     ad_form -extend -form {
 	{unpack_p:boolean(checkbox),optional {label \#file-storage.Multiple_files\#} {html {onclick "javascript:UnpackChanged(this);"}} {options { {\#file-storage.lt_This_is_a_ZIP\# t} }} }
     }
@@ -122,21 +129,20 @@ if {[ad_form_new_p -key file_id]} {
 
 ad_form -extend -form {} -select_query_name {get_file} -new_data {
     
-
-    set unpack_p [template::util::is_true $unpack_p]
-    set unzip_binary [string trim [parameter::get -parameter UnzipBinary]]
-
-    if { $unpack_p && ![empty_string_p $unzip_binary] && [file extension [template::util::file::get_property filename $upload_file]] eq ".zip"  } {
+  if {![exists_and_not_null unpack_p]} {
+      set unpack_p f
+  }
+  if { $unpack_p && ![empty_string_p $unpack_binary] && [file extension [template::util::file::get_property filename $upload_file]] eq ".zip"  } {
 	
 	set path [ns_tmpnam]
 	file mkdir $path
 	
 	
-	catch { exec $unzip_binary -jd $path ${upload_file.tmpfile} } errmsg
+	catch { exec $unpack_binary -jd $path ${upload_file.tmpfile} } errmsg
 	
 	# More flexible parameter design could be:
 	# zip {unzip -jd {out_path} {in_file}} tar {tar xf {in_file} {out_path}} tgz {tar xzf {in_file} {out_path}} 
-	
+
 	set upload_files [list]
 	set upload_tmpfiles [list]
 	
