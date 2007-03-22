@@ -11,6 +11,7 @@
   <msg key="Add_pretty_name">Añadir %pretty_name%</msg>
   <msg key="Add_Revision">Subir una revisión</msg>
   <msg key="Author">Autor</msg>
+  <msg key="back_to_folder_view">Volver a la vista de carpeta</msg>
   <msg key="back_to_project">Volver al proyecto</msg>
   <msg key="bytes">bytes</msg>
   <msg key="Change_Name">Renombrar</msg>
@@ -55,6 +56,7 @@
   <msg key="Folder_ID">Identificador de carpeta</msg>
   <msg key="Folder_Name">Nombre de carpeta:</msg>
   <msg key="folder_type_pretty_name">carpeta</msg>
+  <msg key="Important">¡Importante!</msg>
   <msg key="index_page_navigate_up_folder">Subir a %up_name%</msg>
   <msg key="item">archivo</msg>
   <msg key="items">archivos</msg>
@@ -138,6 +140,7 @@
   <msg key="No_valid_destination_folders_exist">Ninguna carpeta destino válida</msg>
   <msg key="PDF">PDF</msg>
   <msg key="Permissions">Permisos</msg>
+  <msg key="pretty_name">Documentos</msg>
   <msg key="properties">propiedades</msg>
   <msg key="Rename">Renombrar</msg>
   <msg key="Rename_File">Renombrar Archivo</msg>
@@ -172,6 +175,7 @@
   <msg key="Uploaded_by_ownern">Subido por: %owner%</msg>
   <msg key="URL">URL:</msg>
   <msg key="URL_deleted">URL borrado</msg>
+  <msg key="Use_this_form_to_upload_a_ZIP">Utilice este formulario para subir un fichero ZIP (sus contenidos serán descomprimidos en la carpeta cuyo título ha especificado)</msg>
   <msg key="version_add_page_title">Subir una nueva versión de %title%</msg>
   <msg key="version_delete_page_title">Eliminar %version_name%</msg>
   <msg key="Version_filename">Título</msg>
