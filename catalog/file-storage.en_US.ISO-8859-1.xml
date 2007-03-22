@@ -40,6 +40,7 @@
   <msg key="edit">edit</msg>
   <msg key="Edit_Folder">Edit Folder</msg>
   <msg key="Edit_URL">Edit URL</msg>
+  <msg key="File">File</msg>
   <msg key="file">file</msg>
   <msg key="file_delete_page_title">Delete %title%</msg>
   <msg key="File_deleted">File deleted</msg>
