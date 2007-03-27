@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="file-storage" package_version="5.2.3" locale="en_US" charset="ISO-8859-1">
+<message_catalog package_key="file-storage" package_version="5.4.0d2" locale="en_US" charset="ISO-8859-1">
 
   <msg key="_Upload">Revision</msg>
   <msg key="Action">Action</msg>
@@ -36,6 +36,8 @@
   <msg key="Delete_Version">Delete Version</msg>
   <msg key="Description">Description:</msg>
   <msg key="Download">Download</msg>
+  <msg key="Download_ZIP">Download as a ZIP file</msg>
+  <msg key="Download_ZIP_Checked_Items">Download checked items as a ZIP file</msg>
   <msg key="Edit">Edit</msg>
   <msg key="edit">edit</msg>
   <msg key="Edit_Folder">Edit Folder</msg>
