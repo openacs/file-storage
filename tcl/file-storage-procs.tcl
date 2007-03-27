@@ -710,6 +710,7 @@ ad_proc -public fs::add_file {
     {-tmp_filename ""}
     {-mime_type ""}
     -no_callback:boolean
+    -no_notification:boolean
 } {
     Create a new file storage item or add a new revision if
     an item with the same name and parent folder already exists
@@ -764,7 +765,14 @@ ad_proc -public fs::add_file {
 	    if {![empty_string_p $creation_user]} {
 		permission::grant -party_id $creation_user -object_id $item_id -privilege admin
 	    }
-	    set do_notify_here_p "t"
+
+	    # Deal with notifications. Usually send out the notification
+	    # But surpress it if the parameter is given
+	    if {$no_notification_p} {
+		set do_notify_here_p "f"
+	    } else {
+		set do_notify_here_p "t"
+	    }
 	} else {
 	    # th: fixed to set old item_id if item already exists and no new item needed to be created
 	    db_1row get_old_item ""
