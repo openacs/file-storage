@@ -64,7 +64,7 @@ if {![exists_and_not_null root_folder_id]} {
 }
 
 if {![string equal $root_folder_id $folder_id]} {
-    set folder_path "[db_exec_plsql get_folder_path {}]\\"
+    set folder_path "[db_exec_plsql get_folder_path {}]"
 } else {
     set folder_path ""
 }
