@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<message_catalog package_key="file-storage" package_version="5.3.0d1" locale="el_GR" charset="utf-8">
+
+  <msg key="Add_Dup_As_New_File">Αν ανεβάσετε ένα αρχείο με όνομα ίδιο με ένα ήδη υπάρχον σε αυτόν τον φάκελο, θα αλλάξουμε το όνομα του αρχείου προσθέτοντας του ένα αριθμητικό επίθεμα (πχ. mydoc.doc -&gt; mydoc-1.doc) ώστε το σύστημα να τα ξεχωρίζει.  &lt;br /&gt;&lt;br /&gt;&lt;em&gt;Ο τίτλος δεν τροποποιείται και μπορείτε να τον ορίσετε όπως επιθυμήτε.&amp;lt;&lt;/em&gt;</msg>
+  <msg key="Add_File">Προσθήκη Αρχείου</msg>
+  <msg key="Create_a_new_folder">Δημιουργία νέου φακέλου</msg>
+  <msg key="Create_a_URL">Προσθήκη συνδέσμου</msg>
+  <msg key="Delete_this_folder">Διαγραφή Φακέλου</msg>
+  <msg key="Description">Περιγραφή:</msg>
+  <msg key="Download">Κατέβασμα</msg>
+  <msg key="Edit_Folder">Μετονομασία φακέλου</msg>
+  <msg key="Folder">Φάκελος</msg>
+  <msg key="folder">φάκελος</msg>
+  <msg key="folder_type_pretty_name">φάκελος</msg>
+  <msg key="items">στοιχεία</msg>
+  <msg key="Last_Modified">Τελευταία Τροποποίηση</msg>
+  <msg key="lt_Add_a_link_to_a_web_p">Προσθήκη συνδέσμου προς ιστοσελίδα στον φάκελο</msg>
+  <msg key="lt_Download_an_archive_o">Κατεβάστε συμπιεσμένα όλα τα περιεχόμενα του φακέλου</msg>
+  <msg key="lt_Modify_permissions_on_1">Δικαιώματα πρόσβασης</msg>
+  <msg key="lt_This_is_a_ZIP">Αυτό είναι ένα αρχείο ZIP το οποίο περιέχει με τη σειρά του πολλά αρχεία. Μεγάλα αρχεία απαιτούν αρκετό χρόνο για να ανέβουν. Μπορείτε να ελαχιστοποιήσετε τον περιηγητή ιστοσελίδων όσο ανεβαίνει το αρχείο αλλά όχι να τον κλείσετε.</msg>
+  <msg key="lt_Upload_a_compressed_f">Ανεβάστε έναν πλήρη συμπιεσμένο φάκελο ο οποίος θα αποσυμπιεστεί αυτόματα.</msg>
+  <msg key="lt_Upload_a_file_in_this">Ανέβασμα αρχείου στον φάκελο</msg>
+  <msg key="lt_Upload_compressed_fol">Ανέβασμα Συμπιεσμένου Φακέλου</msg>
+  <msg key="Multiple_files">Πολλαπλά αρχεία:</msg>
+  <msg key="Name">Όνομα</msg>
+  <msg key="New_Folder">Νέος Φάκελος</msg>
+  <msg key="properties">ιδιότητες</msg>
+  <msg key="Rename_this_folder">Αλλαγή ονόματος του φακέλου</msg>
+  <msg key="Size">Μέγεθος</msg>
+  <msg key="this_may_take_a_while">&lt;strong&gt;Σημείωση:&lt;/strong&gt; Αυτή η διαδικασία μπορεί να απαιτήσει αρκετό χρόνο.</msg>
+  <msg key="Title">Τίτλος</msg>
+  <msg key="Type">Τύπος</msg>
+  <msg key="Upload_a_file">Ανεβάστε ένα αρχείο</msg>
+  <msg key="Upload_a_new_version">Ανεβάστε νέα έκδοση</msg>
+  <msg key="view_contents">Προβολή περιεχόμενων</msg>
+</message_catalog>
