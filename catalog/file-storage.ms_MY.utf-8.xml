@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="file-storage" package_version="5.2.3" locale="ms_MY" charset="utf-8">
+<message_catalog package_key="file-storage" package_version="5.3.0d1" locale="ms_MY" charset="utf-8">
 
   <msg key="Action">Tindakan</msg>
   <msg key="Actions">Tindakan-tindakan:</msg>
@@ -7,7 +7,6 @@
   <msg key="Add_File">Tambah Fail</msg>
   <msg key="Add_pretty_name">Tambah %pretty_name% </msg>
   <msg key="Author">Penulis</msg>
-  <msg key="back_to_folder_view">&lt;a href=&quot;%folder_view_url%&quot;&gt;Kembali&lt;/a&gt; untuk paparan folder</msg>
   <msg key="bytes">bait</msg>
   <msg key="Change_Name">Tukar Nama</msg>
   <msg key="Copy">Salin</msg>
