@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="file-storage" package_version="5.2.3" locale="es_ES" charset="ISO-8859-1">
+<message_catalog package_key="file-storage" package_version="5.3.0d1" locale="es_ES" charset="ISO-8859-1">
 
   <msg key="_Upload">Revisión</msg>
   <msg key="Action">Opciones</msg>
@@ -11,6 +11,7 @@
   <msg key="Add_pretty_name">Añadir %pretty_name%</msg>
   <msg key="Add_Revision">Subir una revisión</msg>
   <msg key="Author">Autor</msg>
+  <msg key="back_to_folder_view">Volver a la vista de carpeta</msg>
   <msg key="back_to_project">Volver al proyecto</msg>
   <msg key="bytes">bytes</msg>
   <msg key="Change_Name">Renombrar</msg>
@@ -39,6 +40,7 @@
   <msg key="edit">editar</msg>
   <msg key="Edit_Folder">Editar carpeta</msg>
   <msg key="Edit_URL">Editar URL</msg>
+  <msg key="File">Fichero</msg>
   <msg key="file">Archivo</msg>
   <msg key="file_delete_page_title">Eliminar %title%</msg>
   <msg key="File_deleted">Archivo borrado</msg>
@@ -55,6 +57,7 @@
   <msg key="Folder_ID">Identificador de carpeta</msg>
   <msg key="Folder_Name">Nombre de carpeta:</msg>
   <msg key="folder_type_pretty_name">carpeta</msg>
+  <msg key="Important">¡Importante!</msg>
   <msg key="index_page_navigate_up_folder">Subir a %up_name%</msg>
   <msg key="item">archivo</msg>
   <msg key="items">archivos</msg>
@@ -89,7 +92,7 @@
   <msg key="lt_Moving_allowed_count_">Moviendo %allowed_count% archivos.</msg>
   <msg key="lt_Name_of_the_action_ty">Nombre de %action_type%: %filename%</msg>
   <msg key="lt_New_version_of_file_u">Nueva Versión del Archivo subido</msg>
-  <msg key="lt_New_Version_Uploaded_">Nueva Versión del Archivo subido: %filename%\n</msg>
+  <msg key="lt_New_Version_Uploaded_">Nueva Versión del Archivo subido: %filename%</msg>
   <msg key="lt_No_valid_items_to_be_">No existen archivos válidos para mover.</msg>
   <msg key="lt_not_allowed_count_ite">%not_allowed_count% archivos no pueden ser movidos</msg>
   <msg key="lt_Notification_for_File">Notificación para Documentos: %action_type%</msg>
@@ -112,7 +115,7 @@
   <msg key="lt_Upload_compressed_fol">Subir un archivo comprimido</msg>
   <msg key="lt_Use_the_Browse_button">Pulse &quot;Examinar...&quot; para seleccionar el archivo</msg>
   <msg key="lt_version_not_valid">La versión especificada no es válida.</msg>
-  <msg key="lt_Version_Notes_descrip">Notas de la Versión: %description%\n</msg>
+  <msg key="lt_Version_Notes_descrip">Notas de la Versión: %description%</msg>
   <msg key="lt_View_folder_contents_">Ver contenido de la carpeta: %url_version%</msg>
   <msg key="lt_We_got_an_error_that_">Ha ocurrido un error. Por favor, informe al administrador del sistema.</msg>
   <msg key="lt_We_received_an_error_">Ha ocurrido un error en la base de datos. Es probable que la carpeta seleccionada ya contiene un archivo con este nombre.</msg>
@@ -138,6 +141,7 @@
   <msg key="No_valid_destination_folders_exist">Ninguna carpeta destino válida</msg>
   <msg key="PDF">PDF</msg>
   <msg key="Permissions">Permisos</msg>
+  <msg key="pretty_name">Documentos</msg>
   <msg key="properties">propiedades</msg>
   <msg key="Rename">Renombrar</msg>
   <msg key="Rename_File">Renombrar Archivo</msg>
@@ -169,9 +173,10 @@
   <msg key="Upload_New_File">Subir un archivo nuevo</msg>
   <msg key="Upload_New_Version">Subir una nueva versión</msg>
   <msg key="Upload_Revision">Subir nueva versión</msg>
-  <msg key="Uploaded_by_ownern">Subido por: %owner%\n</msg>
+  <msg key="Uploaded_by_ownern">Subido por: %owner%</msg>
   <msg key="URL">URL:</msg>
   <msg key="URL_deleted">URL borrado</msg>
+  <msg key="Use_this_form_to_upload_a_ZIP">Utilice este formulario para subir un fichero ZIP (sus contenidos serán descomprimidos en la carpeta cuyo título ha especificado)</msg>
   <msg key="version_add_page_title">Subir una nueva versión de %title%</msg>
   <msg key="version_delete_page_title">Eliminar %version_name%</msg>
   <msg key="Version_filename">Título</msg>
