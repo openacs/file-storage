@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="file-storage" package_version="5.2.3" locale="zh_CN" charset="utf-8">
+<message_catalog package_key="file-storage" package_version="5.3.0d1" locale="zh_CN" charset="utf-8">
 
   <msg key="_Upload">版本</msg>
   <msg key="Action">操作</msg>
@@ -8,7 +8,6 @@
   <msg key="Add_File">添加文件</msg>
   <msg key="Add_pretty_name">增加%pretty_name%</msg>
   <msg key="Author">作者</msg>
-  <msg key="back_to_folder_view">&lt;a href=&quot;%folder_view_url%&quot;&gt;返回&lt;/a&gt;浏览文件夹</msg>
   <msg key="bytes">字节</msg>
   <msg key="Change_Name">改变名称</msg>
   <msg key="Change_upload_limit">改变上传限制</msg>
