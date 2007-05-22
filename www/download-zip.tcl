@@ -19,10 +19,7 @@ if {[llength $object_id] eq 1} {
     set download_name [fs::get_file_system_safe_object_name -object_id [fs::get_parent -item_id [lindex $object_id 0]]]
 }
 
-set ext [fs::get_archive_extension]
-if {![empty_string_p $ext]} {
-    append download_name ".${ext}"
-}
+append download_name ".zip"
 
 foreach fs_object_id $object_id {
     set file [fs::publish_object_to_file_system -object_id $fs_object_id -path $in_path -user_id $user_id]
