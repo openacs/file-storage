@@ -48,4 +48,12 @@
         </querytext>
     </fullquery>
 
+    <partialquery name="categories_limitation">
+        <querytext>
+
+            and fs_objects.object_id in ( select object_id from category_object_map where category_id = :category_id )
+
+        </querytext>
+    </partialquery>
+
 </queryset>

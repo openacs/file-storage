@@ -215,7 +215,6 @@ if {[string equal $orderby ""]} {
 
 if { $categories_p && [exists_and_not_null category_id] } {
     set categories_limitation [db_map categories_limitation]
-    set categories_limitation " and fs_objects.object_id in ( select object_id from category_object_map where category_id = $category_id )"
 } else {
     set categories_limitation {}
 }
