@@ -18,7 +18,7 @@
 	</div>
 </if>
 <include src="folder-chunk" folder_id="@folder_id@"
-    n_past_days="@n_past_days@" allow_bulk_actions="1" return_url="@return_url@">
+    n_past_days="@n_past_days@" allow_bulk_actions="1" return_url="@return_url@" category_id="@category_id@">
 
 
 <p>@notification_chunk;noquote@</p>

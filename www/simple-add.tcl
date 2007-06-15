@@ -46,9 +46,7 @@ if {[empty_string_p $title]} {
 set page_title [_ file-storage.simple_add_page_title]
 
 
-ad_form -action simple-add-2 -export {folder_id type} -form {
-    {dummy:text(hidden)}
-} -has_submit 1
+ad_form -export {folder_id type}
 
 if {$lock_title_p} {
     ad_form -extend -form {
@@ -66,5 +64,43 @@ set submit_label [_ file-storage.Create]
 ad_form -extend -form {
     {url:text(text) {label \#file-storage.URL\#} {value "http://"}}
     {description:text(textarea),optional {html {rows 5 cols 50}} {label \#file-storage.Description\#}}
+}
+
+set package_id [ad_conn package_id]
+set user_id [ad_conn user_id]
+if { [parameter::get -parameter CategoriesP -package_id $package_id -default 0] } {
+    category::ad_form::add_widgets \
+	 -container_object_id $package_id \
+	 -categorized_object_id $folder_id \
+	 -form_name simple-add
+}
+
+ad_form -extend -form {
     {submit:text(submit) {label $submit_label}}
+} -on_request {
+} -on_submit {
+    set item_id [content_extlink::new -url $url -label $title -description $description -parent_id $folder_id]
+
+    # Analogous as for files (see file-add-2) we know the user has write permission to this folder, 
+    # but they may not have admin privileges.
+    # They should always be able to admin their own url (item) by default, so they can delete it, control
+    # who can read it, etc.
+    
+    if { [string is false [permission::permission_p -party_id $user_id -object_id $folder_id -privilege admin]] } {
+	permission::grant -party_id $user_id -object_id $item_id -privilege admin
+    }
+
+    if { [parameter::get -parameter CategoriesP -package_id $package_id -default 0] } {
+	category::map_object -remove_old -object_id $item_id [category::ad_form::get_categories \
+								       -container_object_id $package_id \
+								       -element_name category_id]
+    }
+
+
+    fs::do_notifications -folder_id $folder_id -filename $url -item_id $item_id -action "new_url"
+
+} -after_submit {
+
+    ad_returnredirect "?folder_id=$folder_id"
+
 }

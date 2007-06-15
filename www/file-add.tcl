@@ -126,6 +126,19 @@ if {([ad_form_new_p -key file_id]) && $unpack_bin_installed } {
 	{unpack_p:boolean(checkbox),optional {label \#file-storage.Multiple_files\#} {html {onclick "javascript:UnpackChanged(this);"}} {options { {\#file-storage.lt_This_is_a_ZIP\# t} }} }
     }
 }
+if { [parameter::get -parameter CategoriesP -package_id $package_id -default 0] } {
+     if { [exists_and_not_null file_id] } {
+	 set categorized_object_id $file_id
+     } else {
+	 # pre-populate with categories from the folder
+	 set categorized_object_id $folder_id
+     }
+    
+    category::ad_form::add_widgets \
+	 -container_object_id $package_id \
+	 -categorized_object_id $categorized_object_id \
+	 -form_name file-add
+}
 
 ad_form -extend -form {} -select_query_name {get_file} -new_data {
     
@@ -224,6 +237,12 @@ ad_form -extend -form {} -select_query_name {get_file} -new_data {
 	    -package_id $package_id \
             -mime_type $mime_type
 
+	if { [parameter::get -parameter CategoriesP -package_id $package_id -default 0] } {
+	    category::map_object -remove_old -object_id $this_file_id [category::ad_form::get_categories \
+									   -container_object_id $package_id \
+									   -element_name category_id]
+        }
+
         file delete $tmpfile
         incr i
         if {$i < $number_upload_files} {
@@ -248,6 +267,11 @@ ad_form -extend -form {} -select_query_name {get_file} -new_data {
 	-description $description \
 	-package_id $package_id
 	
+    if { [parameter::get -parameter CategoriesP -package_id $package_id -default 0] } {
+	category::map_object -remove_old -object_id $file_id [category::ad_form::get_categories \
+								  -container_object_id $package_id \
+								  -element_name category_id]
+    }
 } -after_submit {
 
     if {[exists_and_not_null return_url]} {

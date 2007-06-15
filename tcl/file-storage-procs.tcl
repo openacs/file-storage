@@ -1550,3 +1550,39 @@ ad_proc -public fs::file_copy {
 	return $new_file_id
     } 
 }
+
+ad_proc -private fs::category_links {
+    {-object_id:required}
+    {-folder_id:required}
+    {-selected_category_id ""}
+    {-fs_url ""}
+    {-joinwith ", "}
+} {
+    @param object_id the file storage object_id whose category list we creating
+    @param folder_id the folder the category link should shearch on
+    @param selected_category_id the category that has been selected and for which a link to return to the folder without that category limitation should exist
+    @param fs_url is the file storage url for which these links will be created - defaults to the current package_url
+    @param joinwith allows you to join the link list with something other than the default ", "
+
+    @return a list of category_links to filter the supplied folder for a given category
+} {
+    if { $fs_url eq "" } {
+	set fs_url [ad_conn package_url]
+    }
+    set selected_found_p 0
+    set categories [list]
+    foreach category_id [category::get_mapped_categories $object_id] {
+	if { $category_id eq $selected_category_id } {
+	    set selected_found_p 1
+	    lappend categories "[category::get_name $category_id] <a href=\"[export_vars -base $fs_url -url {folder_id}]\">(x)</a>"
+	} else {
+	    lappend categories "<a href=\"[export_vars -base $fs_url -url {folder_id category_id}]\">[category::get_name $category_id]</a>"
+	}
+    }
+    if { [string is false $selected_found_p] && $selected_category_id ne "" } {
+	# we need to show the link to remove this category file at the
+	# top of the folder
+	lappend categories "[category::get_name $selected_category_id] <a href=\"[export_vars -base $fs_url -url {folder_id}]\">(x)</a>"
+    }
+    return [join $categories $joinwith]
+}

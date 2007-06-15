@@ -20,7 +20,9 @@ if {![exists_and_not_null folder_id]} {
 if {![exists_and_not_null allow_bulk_actions]} {
     set allow_bulk_actions "0"
 }
-
+if { ![exists_and_not_null category_id] } {
+    set category_id ""
+}
 set viewing_user_id [ad_conn user_id]
 
 permission::require_permission -party_id $viewing_user_id -object_id $folder_id -privilege "read"
@@ -99,6 +101,13 @@ if {$admin_p} {
 	lappend actions "Configure RSS" "${fs_url}admin/rss-subscrs?folder_id=$folder_id" "Configure RSS"
     }
 }
+set categories_p [parameter::get -parameter CategoriesP -package_id $package_id -default 0]
+if { $categories_p } {
+    if { [permission::permission_p -party_id $viewing_user_id -object_id $package_id -privilege "admin"] } {
+	lappend actions [_ categories.cadmin] [export_vars -base "/categories/cadmin/object-map" -url {{object_id $package_id}}] [_ categories.cadmin]
+    }
+    set category_links [fs::category_links -object_id $folder_id -folder_id $folder_id -selected_category_id $category_id -fs_url $fs_url]
+}
 
 #set n_past_filter_values [list [list "Yesterday" 1] [list [_ file-storage.last_week] 7] [list [_ file-storage.last_month] 30]]
 set elements [list type [list label [_ file-storage.Type] \
@@ -137,9 +146,15 @@ set elements [list type [list label [_ file-storage.Type] \
 		  [list label "" \
 		       link_url_col download_url \
 		       link_html { title "[_ file-storage.Download]" }] \
-                  views \
-		  [list label "Views" ]
-	      ]
+		  ]
+
+
+if { $categories_p } {
+    lappend elements categories [list label [_ file-storage.Categories] display_col "categories;noquote"]
+}
+lappend elements views [list label "Views" ]
+
+
 
 if {[apm_package_installed_p views]} {
     concat $elements [list views [list label "Views"]]
@@ -198,7 +213,14 @@ if {[string equal $orderby ""]} {
     set orderby " order by fs_objects.sort_key, fs_objects.name asc"
 }
 
-db_multirow -extend {label alt_icon icon last_modified_pretty content_size_pretty properties_link properties_url download_link download_url new_version_link new_version_url views} contents select_folder_contents {} {
+if { $categories_p && [exists_and_not_null category_id] } {
+    set categories_limitation [db_map categories_limitation]
+    set categories_limitation " and fs_objects.object_id in ( select object_id from category_object_map where category_id = $category_id )"
+} else {
+    set categories_limitation {}
+}
+
+db_multirow -extend {label alt_icon icon last_modified_pretty content_size_pretty properties_link properties_url download_link download_url new_version_link new_version_url views categories} contents select_folder_contents {} {
     set last_modified_ansi [lc_time_system_to_conn $last_modified_ansi]
     
     set last_modified_pretty [lc_time_fmt $last_modified_ansi "%x %X"]
@@ -309,7 +331,14 @@ db_multirow -extend {label alt_icon icon last_modified_pretty content_size_prett
 	}
 
     }
-
+    if { $categories_p } {
+	if { $type eq "folder" } {
+	    set cat_folder_id $object_id
+	} else {
+	    set cat_folder_id $folder_id
+	}
+	set categories [fs::category_links -object_id $object_id -folder_id $cat_folder_id -selected_category_id $category_id -fs_url $fs_url -joinwith "<br />"]
+    }
 
     # We need to encode the hashes in any i18n message keys (.LRN plays this trick on some of its folders).
     # If we don't, the hashes will cause the path to be chopped off (by ns_conn url) at the leftmost hash.

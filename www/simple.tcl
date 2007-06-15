@@ -19,4 +19,8 @@ set title $name
 set pretty_name $name
 set context [fs_context_bar_list -final [_ file-storage.link] $folder_id]
 
+set categories_p [parameter::get -parameter CategoriesP -package_id [ad_conn package_id] -default 0]
+if { $categories_p } {
+    set category_links [fs::category_links -object_id $object_id -folder_id $folder_id]
+}
 
