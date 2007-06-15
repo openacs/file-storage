@@ -19,10 +19,25 @@ ad_form -name simple-edit -form {
     {url:text {label "#file-storage.URL#"} {html {size 50} } }
     {description:text(textarea),optional {label "#file-storage.Description#" } {html { rows 5 cols 50 } } }
     {folder_id:text(hidden)}
-} -edit_request {
+}
+
+set package_id [ad_conn package_id]
+if { [parameter::get -parameter CategoriesP -package_id $package_id -default 0] } {
+    category::ad_form::add_widgets \
+	 -container_object_id $package_id \
+	 -categorized_object_id $object_id \
+	 -form_name simple-edit
+}
+
+ad_form -extend -edit_request {
     db_1row extlink_data ""
 } -edit_data {
     content_extlink::edit -extlink_id $object_id -url $url -label $name -description $description
+    if { [parameter::get -parameter CategoriesP -package_id $package_id -default 0] } {
+	category::map_object -remove_old -object_id $object_id [category::ad_form::get_categories \
+								       -container_object_id $package_id \
+								       -element_name category_id]
+    }
     ad_returnredirect "?[export_vars folder_id]"
 }
 

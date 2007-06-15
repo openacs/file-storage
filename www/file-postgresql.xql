@@ -14,6 +14,7 @@
       
 	select person__name(o.creation_user) as owner,
        		f.name as title,
+                f.parent_id,
        		coalesce(f.url,f.file_upload_name) as name,
        		acs_permission__permission_p(:file_id,:user_id,'write') as write_p,
        		acs_permission__permission_p(:file_id,:user_id,'delete') as delete_p,

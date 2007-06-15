@@ -35,6 +35,7 @@
                    where m.object_id = fs_objects.object_id
                      and m.party_id = :viewing_user_id
                      and m.privilege = 'read')
+                $categories_limitation
 		$orderby
         </querytext>
     </fullquery>

@@ -52,7 +52,24 @@ ad_form -name "folder-ae" -html { enctype multipart/form-data } -export { parent
     folder_id:key
     {folder_name:text,optional {label \#file-storage.Title\#} {html {size 30}} }
     {description:text(textarea),optional {label \#file-storage.Description\#} {html "rows 5 cols 35"}}
-} -edit_request {
+}
+
+set package_id [ad_conn package_id]
+if { [parameter::get -parameter CategoriesP -package_id $package_id -default 0] } {
+    if { [exists_and_not_null folder_id] } {
+	set categorized_object_id $folder_id
+    } elseif { [exists_and_not_null parent_id] } {
+	set categorized_object_id $parent_id
+    } else {
+	set categorized_object_id ""
+    }
+    category::ad_form::add_widgets \
+	 -container_object_id $package_id \
+	 -categorized_object_id $categorized_object_id \
+	 -form_name folder-ae
+}
+
+ad_form -extend -name "folder-ae" -edit_request {
     #For now I'm using the bCSM proc. We need to move it to somewhere its more accessible.
     #But I hope we can avoid repeating the code in 2 places.
 #    array set folder [bcms::folder::get_folder -folder_id $folder_id]
@@ -90,12 +107,23 @@ ad_form -name "folder-ae" -html { enctype multipart/form-data } -export { parent
      ad_script_abort
     }
 
+    if { [parameter::get -parameter CategoriesP -package_id $package_id -default 0] } {
+	category::map_object -remove_old -object_id $folder_id [category::ad_form::get_categories \
+								       -container_object_id $package_id \
+								       -element_name category_id]
+    }
+
     ad_returnredirect "?folder_id=$folder_id"
     ad_script_abort
 } -edit_data {
     db_transaction {
 	fs::rename_folder -folder_id $folder_id -name $folder_name
 	fs::set_folder_description -folder_id $folder_id -description $description
+    }
+    if { [parameter::get -parameter CategoriesP -package_id $package_id -default 0] } {
+	category::map_object -remove_old -object_id $folder_id [category::ad_form::get_categories \
+								       -container_object_id $package_id \
+								       -element_name category_id]
     }
     ad_returnredirect "?folder_id=$folder_id"
     ad_script_abort

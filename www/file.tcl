@@ -42,10 +42,18 @@ if {[string equal $show_all_versions_p "t"]} {
 } else {
     set show_versions [db_map show_live_version]
 }
+
 set return_url [ad_conn url]?[export_vars file_id]
 
+set categories_p [parameter::get -parameter CategoriesP -package_id [ad_conn package_id] -default 0]
+if { $categories_p } {
+    set rename_name [_ file-storage.Edit_File]
+} else {
+    set rename_name [_ file-storage.Rename_File]
+}
+
 set actions [list "[_ file-storage.Upload_Revision]" file-add?[export_vars [list file_id return_url]] "Upload a new version of this file" \
-		 "[_ file-storage.Rename_File]" file-edit?[export_vars file_id] "Rename file" \
+		 "$rename_name" file-edit?[export_vars file_id] "Rename file" \
 		 "[_ file-storage.Copy_File]" file-copy?[export_vars file_id] "Copy file" \
 		 "[_ file-storage.Move_File]" move?object_id=$file_id "Move file" \
 		 "[_ file-storage.Delete_File]" file-delete?[export_vars file_id] "Delete file"]
@@ -125,3 +133,7 @@ if { [apm_package_installed_p "general-comments"] && [ad_parameter "GeneralComme
 set folder_id [db_string get_folder ""]
 
 set folder_view_url "index?folder_id=$folder_id"
+
+if { $categories_p } {
+    set category_links [fs::category_links -object_id $file_id -folder_id $folder_id]
+}

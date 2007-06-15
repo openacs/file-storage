@@ -1,3 +1,5 @@
+<if @categories_p@><if @category_links@><p>#file-storage.Categories#: @category_links;noquote@</p></if></if>
+
 <listtemplate name="contents"></listtemplate>
 
   <if @content_size_total@ gt 0>

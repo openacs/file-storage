@@ -9,6 +9,7 @@ ad_page_contract {
     {folder_id:integer [fs_get_root_folder]}
     {n_past_days:integer "99999"}
     {orderby:optional}
+    {category_id:integer ""}
     {return_url ""}
 } -validate {
     valid_folder -requires {folder_id:integer} {
