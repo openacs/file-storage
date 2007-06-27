@@ -7,15 +7,16 @@
     <initial-install-p>f</initial-install-p>
     <singleton-p>f</singleton-p>
     
-    <version name="5.4.0d3" url="http://openacs.org/repository/download/apm/file-storage-5.4.0d3.apm">
+    <version name="5.4.0d4" url="http://openacs.org/repository/download/apm/file-storage-5.4.0d4.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Collaborative document storage</summary>
-        <release-date>2005-09-30</release-date>
+        <release-date>2007-06-15</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/plain">Provides a versioned document store with storage in the filesystem or database (depending on configuration).  Documents and folders can be permissioned and folders downloaded.</description>
         <maturity>0</maturity>
+        <package_instance_name>#file-storage.file-storage#</package_instance_name>
 
-        <provides url="file-storage" version="5.4.0d3"/>
+        <provides url="file-storage" version="5.4.0d4"/>
         <requires url="acs-content-repository" version="5.3.1a1"/>
         <requires url="acs-kernel" version="5.3.1a1"/>
         <requires url="categories" version="1.1"/>
@@ -36,7 +37,6 @@
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ArchiveCommand"  default="/usr/bin/zip -r {out_file} {in_file}" description="Program (and program options) to use for archiving file storage objects. Use the special tags {in_file} and {out_file} (including the curly braces) to denote the locations of the input and output files on the command line."/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ArchiveExtension"  default="zip" description="The extension that the programmer should add to the output file. This depends on the value of ArchiveCommand"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="BehaveLikeFilesystemP"  default="0" description="Switch to use file-title for download instead of original filename"/>
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="CategoriesP"  default="0" description="Allow categories to be attached to a file."/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="DownloadTargetWindowName"  description="Many modern Web browsers will attempt to open documents directly in the browser if they can.  To disable this &quot;plugin mode&quot; behavior and cause downloads to open in a new window, set this value to &quot;_blank&quot; or any non-empty string.  Setting this value to the empty string (default) will leave it to the browser program to decide."/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="ExposeRssP"  default="0" description="Should we offer navigation to set up RSS feeds for folders?"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="GeneralCommentsP"  default="0" description="Allow comments to be attached to a file."/>
