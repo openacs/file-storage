@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="file-storage" package_version="5.3.0d1" locale="es_GT" charset="ISO-8859-1">
+<message_catalog package_key="file-storage" package_version="5.4.0d2" locale="es_GT" charset="ISO-8859-1">
 
   <msg key="Action">Opción</msg>
   <msg key="Actions">Opciones:</msg>
@@ -33,6 +33,7 @@
   <msg key="Edit_Folder">Editar Carpeta</msg>
   <msg key="Edit_URL">Editar Enlace</msg>
   <msg key="file">archivo</msg>
+  <msg key="file-storage">Documentos</msg>
   <msg key="file_delete_page_title">Eliminar %title%</msg>
   <msg key="file_edit_page_title">Renombrar %title%</msg>
   <msg key="file_edit_page_title_1">Editar %pretty_name%</msg>
