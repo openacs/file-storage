@@ -579,7 +579,7 @@ ad_proc -public fs::publish_url_to_file_system {
     db_1row select_object_metadata {}
 
     if {[empty_string_p $file_name]} {
-	set file_name $label
+	set file_name $name
     }
     set file_name "${file_name}.url"
     set file_name [remove_special_file_system_characters -string $file_name]
@@ -616,6 +616,13 @@ ad_proc -public fs::publish_versioned_object_to_file_system {
 		set file_name "unnamedfile"
 	    } else {
 		set file_name $file_upload_name
+	    }
+	} elseif { [item::get_mime_info [item::get_live_revision $object_id]] } {
+	    # We make sure that the file_name contains the file
+	    # extension at the end so that the users default
+	    # application for that file type can be used
+	    if { ![regexp "\.$mime_info(file_extension)$" $file_name match] } {
+		set file_name "${file_name}.$mime_info(file_extension)"
 	    }
 	}
     } else {
@@ -1210,7 +1217,7 @@ ad_proc -public fs::do_notifications {
 
     set url "[ad_url]"
     set new_content ""
-    db_1row get_owner_name { }
+    db_0or1row get_owner_name { }
 
     if {[string equal $action "new_file"] || [string equal $action "new_url"] || [string equal $action "new_version"]} {
 
