@@ -245,8 +245,8 @@ db_multirow -extend {label alt_icon icon last_modified_pretty content_size_prett
     set views ""
     if {[apm_package_installed_p views]} {
 	array set views_arr [views::get -object_id $object_id] 
-	if {$views_arr(views) ne ""} {
-	    set views " $views_arr(views) / $views_arr(unique_views)"
+	if {$views_arr(views_count) ne ""} {
+	    set views " $views_arr(views_count) / $views_arr(unique_views)"
 	}
     }
 

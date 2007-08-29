@@ -33,7 +33,7 @@ ad_proc file_storage::twt::create_new_folder { folder_name folder_description } 
     
     set response 0
     
-    tclwebtest::link follow {New folder}
+    tclwebtest::link follow {New Folder}
     
     tclwebtest::form find ~n "folder-ae"
     tclwebtest::field find ~n "folder_name"
