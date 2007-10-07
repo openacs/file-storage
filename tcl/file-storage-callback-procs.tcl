@@ -109,6 +109,15 @@ ad_proc -public -callback search::url -impl file_storage_object {
     return "/file/$item_id/$name"
 }
 
+ad_proc -public -callback search::url -impl file_storage_object {
+    -object_id:required
+} {
+    Return the URL to the file_storage_object
+} {
+    set item_id [content::revision::item_id -revision_id $object_id]
+    set name [db_string item "select name from cr_items where item_id = :item_id" -default ""]
+    return "[ad_url]/file/$item_id/$name"
+}
 
 ad_proc -public -callback datamanager::copy_folder -impl datamanager {
      -object_id:required
