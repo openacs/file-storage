@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="file-storage" package_version="5.3.1" locale="el_GR" charset="utf-8">
+<message_catalog package_key="file-storage" locale="el_GR" charset="utf-8">
 
   <msg key="_Upload">Έκδοση</msg>
   <msg key="Action">Ενέργεια</msg>
