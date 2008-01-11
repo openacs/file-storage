@@ -1259,7 +1259,7 @@ ad_proc -public fs::do_notifications {
     append text_version "[_ file-storage.lt_View_folder_contents_]\n"
     
     set html_version [ad_html_text_convert -from text/plain -to text/html -- $text_version]
-    append html_version "<br /><br />"
+    append html_version "<br><br>"
     # Do the notification for the file-storage
     
     notification::new \

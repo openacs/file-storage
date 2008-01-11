@@ -13,7 +13,7 @@ ad_page_contract {
     {root_folder_id ""}
     {redirect_to_folder:boolean 0}
     {show_items:boolean 0}
-} -errors {object_id:,notnull,integer,multiple {Please select at least one item to move.}
+} -errors {object_id:,notnull,integer,multiple {<li>Please select at least one item to move.}
 }
 
 set peer_addr [ad_conn peeraddr]  
@@ -106,13 +106,12 @@ if {[info exists folder_id]} {
         -pass_properties { item_id redirect_to_folder return_url } \
         -multirow folder_tree \
         -key folder_id \
-	-no_data [_ file-storage.No_valid_destination_folders_exist] \
+        -no_data [_ file-storage.No_valid_destination_folders_exist] \
         -elements {
             label {
                 label "\#file-storage.Choose_Destination_Folder\#"
                 link_url_col move_url
-		link_html {title "\#file-storage.Move_to_folder_title\#"}
-		display_template {<div style="text-indent: @folder_tree.level_num@em;">@folder_tree.label@</div>} 
+                link_html {title "\#file-storage.Move_to_folder_title\#" style "padding-left: @folder_tree.level_num@em;"}
             }
         }
 
