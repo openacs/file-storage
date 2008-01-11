@@ -12,12 +12,12 @@ ad_page_contract {
 } -validate {
     file_id_or_folder_id {
 	if { ![exists_and_not_null folder_id] && ![exists_and_not_null parent_id] } {
-	    ad_complain "Input error: Must either have a parent_id or a folder_id"
+	    ad_complain "<li>Input error: Must either have a parent_id or a folder_id"
 	}
     }
     valid_folder -requires {parent_id:integer} {
 	if ![fs_folder_p $parent_id] {
-	    ad_complain "[_ file-storage.lt_The_specified_parent_]"
+	    ad_complain "<li>[_ file-storage.lt_The_specified_parent_]"
 	}
     }
 } -properties {
@@ -50,7 +50,7 @@ if {![ad_form_new_p -key folder_id]} {
 
 ad_form -name "folder-ae" -html { enctype multipart/form-data } -export { parent_id } -form {
     folder_id:key
-    {folder_name:text,optional {label \#file-storage.Title\#} {html {size 30}} }
+    {folder_name:text {label \#file-storage.Title\#} {html {size 30}} }
     {description:text(textarea),optional {label \#file-storage.Description\#} {html "rows 5 cols 35"}}
 }
 

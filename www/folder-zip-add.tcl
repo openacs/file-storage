@@ -20,19 +20,19 @@ ad_page_contract {
     lock_title_p:onevalue
 } -validate {
     file_id_or_folder_id {
-	if {[exists_and_not_null file_id] && ![exists_and_not_null folder_id]} {
-	    set folder_id [db_string get_folder_id "select parent_id as folder_id from cr_items where item_id=:file_id" -default ""]
-	}
-	if {![fs_folder_p $folder_id]} {
-	    ad_complain "The specified parent folder is not valid."
-	}
+        if {[exists_and_not_null file_id] && ![exists_and_not_null folder_id]} {
+            set folder_id [db_string get_folder_id "select parent_id as folder_id from cr_items where item_id=:file_id" -default ""]
+        }
+        if {![fs_folder_p $folder_id]} {
+            ad_complain "The specified parent folder is not valid."
+        }
     }
     max_size -requires {upload_file} {
-	set n_bytes [file size ${upload_file.tmpfile}]
-	set max_bytes [ad_parameter "MaximumFileSize"]
-	if { $n_bytes > $max_bytes } {
-	    ad_complain "Your file is larger than the maximum file size allowed on this system ([util_commify_number $max_bytes] bytes)"
-	}
+        set n_bytes [file size ${upload_file.tmpfile}]
+        set max_bytes [ad_parameter "MaximumFileSize"]
+        if { $n_bytes > $max_bytes } {
+            ad_complain "Your file is larger than the maximum file size allowed on this system ([util_commify_number $max_bytes] bytes)"
+        }
     }
 }
 
@@ -58,7 +58,7 @@ if {![ad_form_new_p -key file_id]} {
 
 ad_form -name file_add -html { enctype multipart/form-data } -export { folder_id lock_title_p } -form {
     file_id:key
-    {upload_file:file,optional {label \#file-storage.Upload_a_file\#} {html "size 30"}}
+    {upload_file:file {label \#file-storage.Upload_a_file\#} {html "size 30"}}
 }
 
 if {[exists_and_not_null return_url]} {
@@ -73,7 +73,7 @@ if {$lock_title_p} {
     }
 } else {
     ad_form -extend -name file_add -form {
-	{title:text,optional {label \#file-storage.Title\#} {html {size 30}} }
+	{title:text {label \#file-storage.Title\#} {html {size 30}} }
     }
 }
 
@@ -119,8 +119,8 @@ ad_form -extend -name file_add -form {} -new_data {
     }
     
     if { [empty_string_p [lindex $upload_files 0]]} {
-	ad_return_complaint 1 "You have to upload a file"
-	ad_script_abort
+        ad_return_complaint 1 "<li>You have to upload a file"
+        ad_script_abort
     }
     
     set i 0

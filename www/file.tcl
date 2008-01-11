@@ -6,7 +6,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     file_id:integer,notnull
-    {show_all_versions_p "t"}
+    {show_all_versions_p "f"}
 } -validate {
     valid_file -requires {file_id} {
 	if ![fs_file_p $file_id] {
@@ -36,12 +36,20 @@ set show_administer_permissions_link_p [ad_parameter "ShowAdministerPermissionsL
 set root_folder_id [fs::get_root_folder]
 db_1row file_info ""
 
+# get folder id so we can implement a back link
+set folder_id [db_string get_folder ""]
+
+set folder_view_url [export_vars -base index {folder_id}]
+
 # We use the new db_map here
-if {[string equal $show_all_versions_p "t"]} {
+if { $show_all_versions_p } {
     set show_versions [db_map show_all_versions]
 } else {
     set show_versions [db_map show_live_version]
 }
+
+set not_show_all_versions_p [expr {!$show_all_versions_p}]
+set show_versions_url [export_vars -base file {file_id {show_all_versions_p $not_show_all_versions_p}}]
 
 set return_url [ad_conn url]?[export_vars file_id]
 
@@ -53,10 +61,10 @@ if { $categories_p } {
 }
 
 set actions [list "[_ file-storage.Upload_Revision]" file-add?[export_vars [list file_id return_url]] "Upload a new version of this file" \
-		 "$rename_name" file-edit?[export_vars file_id] "Rename file" \
-		 "[_ file-storage.Copy_File]" file-copy?[export_vars file_id] "Copy file" \
-		 "[_ file-storage.Move_File]" move?object_id=$file_id "Move file" \
-		 "[_ file-storage.Delete_File]" file-delete?[export_vars file_id] "Delete file"]
+                 "$rename_name" file-edit?[export_vars file_id] "Rename file" \
+                 "[_ file-storage.Copy_File]" [export_vars -base copy {{object_id $file_id} return_url}] "Copy file" \
+                 "[_ file-storage.Move_File]" [export_vars -base move {{object_id $file_id} {return_url $folder_view_url}}] "Move file" \
+                 "[_ file-storage.Delete_File]" [export_vars -base delete {{object_id $file_id} {return_url $folder_view_url}}] "Delete file"]
 
 if {[string equal $delete_p "t"]} {
     lappend actions [_ file-storage.Set_Permissions] [export_vars -base permissions {{object_id $file_id}}] [_ file-storage.lt_Modify_permissions_on]
@@ -119,8 +127,6 @@ db_multirow -unclobber -extend { author_link last_modified_pretty content_size_p
     set author_link [acs_community_member_link -user_id $author_id -label $author]
 }
 
-set return_url "[ad_conn url]?file_id=$file_id"
-
 if { [apm_package_installed_p "general-comments"] && [ad_parameter "GeneralCommentsP" -package_id [ad_conn package_id]] } {
     set gc_link [general_comments_create_link $file_id $return_url]
     set gc_comments [general_comments_get_comments $file_id $return_url]
@@ -128,11 +134,6 @@ if { [apm_package_installed_p "general-comments"] && [ad_parameter "GeneralComme
     set gc_link ""
     set gc_comments ""
 }
-
-# get folder id so we can implement a back link
-set folder_id [db_string get_folder ""]
-
-set folder_view_url "index?folder_id=$folder_id"
 
 if { $categories_p } {
     set category_links [fs::category_links -object_id $file_id -folder_id $folder_id]
