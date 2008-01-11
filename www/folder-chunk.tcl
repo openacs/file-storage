@@ -111,12 +111,12 @@ if { $categories_p } {
 
 #set n_past_filter_values [list [list "Yesterday" 1] [list [_ file-storage.last_week] 7] [list [_ file-storage.last_month] 30]]
 set elements [list type [list label [_ file-storage.Type] \
-                             display_template {<img src="@contents.icon@"  border=0 alt="@contents.alt_icon@" />@contents.pretty_type@} \
+                             display_template {<img src="@contents.icon@"  style="border: 0;" alt="@contents.alt_icon@">@contents.pretty_type@} \
 			    orderby_desc {sort_key_desc,fs_objects.pretty_type desc} \
 			    orderby_asc {fs_objects.sort_key, fs_objects.pretty_type asc}] \
                   name \
 		  [list label [_ file-storage.Name] \
-                       display_template {<a @target_attr@ href="@contents.file_url@" title="\#file-storage.view_contents\#"><if @contents.title@ nil>@contents.name@</a></if><else>@contents.title@</a><br/><if @contents.name@ ne @contents.title@><span style="color: \#999;">@contents.name@</span></if></else>} \
+                       display_template {<a @target_attr@ href="@contents.file_url@" title="\#file-storage.view_contents\#"><if @contents.title@ nil>@contents.name@</a></if><else>@contents.title@</a><br><if @contents.name@ ne @contents.title@><span style="color: \#999;">@contents.name@</span></if></else>} \
 		       orderby_desc {fs_objects.name desc} \
 		       orderby_asc {fs_objects.name asc}] \
  		  short_name \
@@ -336,7 +336,7 @@ db_multirow -extend {label alt_icon icon last_modified_pretty content_size_prett
 	} else {
 	    set cat_folder_id $folder_id
 	}
-	set categories [fs::category_links -object_id $object_id -folder_id $cat_folder_id -selected_category_id $category_id -fs_url $fs_url -joinwith "<br />"]
+	set categories [fs::category_links -object_id $object_id -folder_id $cat_folder_id -selected_category_id $category_id -fs_url $fs_url -joinwith "<br>"]
     }
 
     # We need to encode the hashes in any i18n message keys (.LRN plays this trick on some of its folders).

@@ -4,7 +4,7 @@ ad_page_contract {
     object_id:notnull,multiple
     {confirm_p:optional,boolean 0}
     {return_url ""}
-} -errors {object_id:,notnull,integer,multiple {Please select at least one item to download.}
+} -errors {object_id:,notnull,integer,multiple {<li>Please select at least one item to download.}
 }
 
 set user_id [ad_conn user_id]

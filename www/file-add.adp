@@ -5,7 +5,7 @@
 <h1>#file-storage.Upload_New_File#</h1>
 
 <if @unpack_available_p@ true>
-  <script language="JavaScript">
+  <script type="text/javascript">
       function UnpackChanged(elm) {
         var form_name = "file-add";
 

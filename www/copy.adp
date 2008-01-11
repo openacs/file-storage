@@ -7,7 +7,7 @@
  <if @allowed_count@ gt 0>
   <p>
 	<if @allowed_count@ eq @total_count@>
-    	#file-storage.lt_Moving_allowed_count_#
+	   #file-storage.lt_Moving_allowed_count_#
 	</if>
 	<else>
 		#file-storage.lt_not_allowed_count_ite#

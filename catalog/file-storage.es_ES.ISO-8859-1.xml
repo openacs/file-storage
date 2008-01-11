@@ -3,6 +3,7 @@
 
   <msg key="_Upload">Revisión</msg>
   <msg key="Action">Opciones</msg>
+  <msg key="Please_select_at_least_one_item_to_copy.">Por favor, selecciona un archivo para copiar.</msg>
   <msg key="Actions">Opciones:</msg>
   <msg key="Actions_1">Opciones</msg>
   <msg key="Add_Dup_As_New_File">Si sube un documento con el mismo nombre que otro documento ya existente en esta carpeta, se añadirá al nombre de su documento un sufijo incremental (p.e. &quot;mydoc.doc&quot; -&amp;gt; &quot;mydoc-1.doc&quot;). Notese que el título del documento no será cambiado. Es el nombre de documento el que debe ser único en cada carpeta.</msg>
