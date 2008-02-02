@@ -13,7 +13,7 @@ ad_page_contract {
     {root_folder_id ""}
     {redirect_to_folder:boolean 0}
     {show_items:boolean 0}
-} -errors {object_id:,notnull,integer,multiple {<li>Please select at least one item to copy.}
+} -errors {object_id:,notnull,integer,multiple {Please select at least one item to copy.}
 }
 
 set objects_to_copy $object_id

@@ -12,12 +12,12 @@ ad_page_contract {
 } -validate {
     file_id_or_folder_id {
 	if { ![exists_and_not_null folder_id] && ![exists_and_not_null parent_id] } {
-	    ad_complain "<li>Input error: Must either have a parent_id or a folder_id"
+	    ad_complain "Input error: Must either have a parent_id or a folder_id"
 	}
     }
     valid_folder -requires {parent_id:integer} {
 	if ![fs_folder_p $parent_id] {
-	    ad_complain "<li>[_ file-storage.lt_The_specified_parent_]"
+	    ad_complain "[_ file-storage.lt_The_specified_parent_]"
 	}
     }
 } -properties {
