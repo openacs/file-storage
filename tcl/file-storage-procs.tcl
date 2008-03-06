@@ -738,11 +738,11 @@ ad_proc -public fs::add_file {
     # we have to do this here because we create the object before
     # calling cr_import_content
     
-#    if {[content::type::content_type_p -mime_type $mime_type -content_type "image"]} {
-#        set content_type image
-#    } else {
+    if {[content::type::content_type_p -mime_type $mime_type -content_type "image"]} {
+        set content_type image
+    } else {
         set content_type file_storage_object
-#    }
+    }
 
     if {$item_id eq ""} {
 	set item_id [db_nextval acs_object_id_seq]
@@ -750,12 +750,6 @@ ad_proc -public fs::add_file {
 
     db_transaction {
 	if {![db_string item_exists ""]} {
-	    
-	    if {$indbp} {
-		set storage_type ""
-	    } else {
-		set storage_type "file"
-	    }
 	    
 	    set item_id [content::item::new \
 			     -item_id $item_id \
