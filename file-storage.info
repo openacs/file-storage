@@ -7,7 +7,7 @@
     <initial-install-p>f</initial-install-p>
     <singleton-p>f</singleton-p>
     
-    <version name="5.4.0d6" url="http://openacs.org/repository/download/apm/file-storage-5.4.0d6.apm">
+    <version name="5.4.0d7" url="http://openacs.org/repository/download/apm/file-storage-5.4.0d7.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Collaborative document storage</summary>
         <release-date>2007-06-15</release-date>
@@ -16,7 +16,7 @@
         <maturity>0</maturity>
         <package_instance_name>#file-storage.file-storage#</package_instance_name>
 
-        <provides url="file-storage" version="5.4.0d6"/>
+        <provides url="file-storage" version="5.4.0d7"/>
         <requires url="acs-content-repository" version="5.3.1a1"/>
         <requires url="acs-kernel" version="5.3.1a1"/>
         <requires url="categories" version="1.1"/>
@@ -42,7 +42,7 @@
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="ExposeRssP"  default="0" description="Should we offer navigation to set up RSS feeds for folders?"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="GeneralCommentsP"  default="0" description="Allow comments to be attached to a file."/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="MaximumFileSize"  default="524288000" description="The maximum size, in bytes, of files that users are allowed to upload.  Should not be set larger than the systemwide AOLServer parameter maxinput."/>
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="MoveByCopyDeleteP"  default="1" description="Move files by copying and then deleting the original? Default: Normal move"/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="MoveByCopyDeleteP"  default="0" description="Move files by copying and then deleting the original? Default is false, use normal move"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="ShowAdministerPermissionsLinkP"  default="1" description="Whether or not to show a link to administer permissions on the file storage object."/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="StoreFilesInDatabaseP"  default="0" description="Flag to determine the storage type. A flag of 1 (true) will store the files in the database. If 0 (false) files are stored in the filesystem. ***This parameter should only be changed at package instance creation.***"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="UnzipBinary"  default="unzip" description="The path and name of the unzip binary to unpack zip files containing multiple files."/>
