@@ -180,7 +180,7 @@ if {$format eq "list"} {
 } 
 
 template::list::create \
-    -name contents \
+    -name contents_${folder_id} \
     -multirow contents \
     -key object_id \
     -actions $actions \
@@ -207,7 +207,7 @@ template::list::create \
     } \
     -elements $elements
 
-set orderby [template::list::orderby_clause -orderby -name contents]
+set orderby [template::list::orderby_clause -orderby -name contents_${folder_id}]
 
 if {[string equal $orderby ""]} {
     set orderby " order by fs_objects.sort_key, fs_objects.name asc"
