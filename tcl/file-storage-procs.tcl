@@ -176,6 +176,9 @@ ad_proc fs_context_bar_list {
 	set start_id $item_id
     }
 
+    if { [exists_and_not_null extra_vars] } {
+	set extra_vars [concat &$extra_vars]
+    }
     set context_bar [db_list_of_lists context_bar {}]
     if {!($item_id == $root_folder_id)} {
         lappend context_bar $final
