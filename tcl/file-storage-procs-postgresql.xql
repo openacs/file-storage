@@ -120,7 +120,7 @@
             select (case when file_storage__get_content_type(i.item_id) = 'content_folder'
                          then :folder_url || '?folder_id='
                          else :file_url || '?file_id='
-                    end) || i.item_id,
+                    end) || i.item_id || :extra_vars,
                    file_storage__get_title(i.item_id)
             from (select tree_ancestor_keys(cr_items_get_tree_sortkey(:start_id)) as tree_sortkey) parents,
                  (select tree_sortkey from cr_items where item_id = :root_folder_id) root,
