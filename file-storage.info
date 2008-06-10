@@ -17,10 +17,10 @@
         <package_instance_name>#file-storage.file-storage#</package_instance_name>
 
         <provides url="file-storage" version="5.4.0d7"/>
-        <requires url="acs-content-repository" version="5.3.1a1"/>
-        <requires url="acs-kernel" version="5.3.1a1"/>
-        <requires url="categories" version="1.1"/>
-        <requires url="notifications" version="5.3.0d1"/>
+        <requires url="acs-content-repository" version="5.4.2"/>
+        <requires url="acs-kernel" version="5.4.2"/>
+        <requires url="categories" version="1.1.2d3"/>
+        <requires url="notifications" version="5.4.2"/>
         <requires url="oacs-dav" version="1.1b1"/>
         <requires url="rss-support" version="0.3"/>
 
