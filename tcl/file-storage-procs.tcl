@@ -1099,12 +1099,12 @@ ad_proc fs::delete_folder {
 	}
     }
 
-    set version_name [get_object_name -object_id $folder_id]
-    db_exec_plsql delete_folder ""
-
     if {[empty_string_p $parent_id]} {
 	set parent_id [fs::get_parent -item_id $folder_id]
     }
+
+    set version_name [get_object_name -object_id $folder_id]
+    db_exec_plsql delete_folder ""
     
     fs::do_notifications -folder_id $parent_id -filename $version_name -item_id $folder_id -action "delete_folder"
     
