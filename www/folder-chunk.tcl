@@ -228,7 +228,9 @@ db_multirow -extend {label alt_icon icon last_modified_pretty content_size_prett
 	append content_size_pretty "&nbsp;[_ file-storage.items]"
 	set pretty_type "#file-storage.Folder#"
     } else {
-	if {$content_size < 1024} {
+        if { $content_size eq "" } {
+	    set content_size_pretty ""
+	} elseif {$content_size < 1024} {
 	    set content_size_pretty "[lc_numeric $content_size]&nbsp;[_ file-storage.bytes]"
 	} else {
 	    set content_size_pretty "[lc_numeric [expr $content_size / 1024 ]]&nbsp;[_ file-storage.kb]"
