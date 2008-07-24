@@ -82,7 +82,7 @@ set add_url [export_vars -base "${fs_url}file-add" {folder_id}]
 lappend actions "#file-storage.Add_File#" [export_vars -base "${fs_url}file-upload-confirm" {folder_id cancel_url {return_url $add_url}}] "[_ file-storage.lt_Upload_a_file_in_this]" "#file-storage.Create_a_URL#" ${fs_url}simple-add?[export_vars folder_id] "[_ file-storage.lt_Add_a_link_to_a_web_p]" "#file-storage.New_Folder#" ${fs_url}folder-create?[export_vars {{parent_id $folder_id}}] "#file-storage.Create_a_new_folder#" "[_ file-storage.lt_Upload_compressed_fol]" ${fs_url}folder-zip-add?[export_vars folder_id] "[_ file-storage.lt_Upload_a_compressed_f]"
 
 set expose_rss_p [parameter::get -parameter ExposeRssP -package_id $package_id -default 0]
-set like_filesystem_p [parameter::get -parameter BehaveLikeFilesystemP -default 1]
+set like_filesystem_p [parameter::get -parameter BehaveLikeFilesystemP -package_id $package_id -default 1]
 
 set target_window_name [parameter::get -parameter DownloadTargetWindowName -package_id $package_id -default ""]
 if { [string equal $target_window_name ""] } {
