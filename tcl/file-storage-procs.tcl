@@ -167,18 +167,17 @@ ad_proc fs_context_bar_list {
             && !($item_id == $root_folder_id)} {
         # don't get title for last element if we are in the
         # root folder
-	set start_id [db_string parent_id "
-	select parent_id from cr_items where item_id = :item_id"]
-	set final [db_exec_plsql title "begin
-	    :1 := file_storage.get_title(:item_id);
-	end;"]
+        set start_id [db_string parent_id "
+    select parent_id from cr_items where item_id = :item_id"]
+        set final [db_exec_plsql title "begin
+        :1 := file_storage.get_title(:item_id);
+    end;"]
     } else {
-	set start_id $item_id
+        set start_id $item_id
     }
 
-    if { [exists_and_not_null extra_vars] } {
-	set extra_vars [concat &$extra_vars]
-    }
+    set extra_vars [concat &$extra_vars]
+
     set context_bar [db_list_of_lists context_bar {}]
     if {!($item_id == $root_folder_id)} {
         lappend context_bar $final
