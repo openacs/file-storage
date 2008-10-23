@@ -24,6 +24,8 @@ set peer_addr [ad_conn peeraddr]
 set allowed_count 0
 set not_allowed_count 0
 set package_id [ad_conn package_id]
+set not_allowed_parents [list]
+set not_allowed_children [list]
 
 db_multirow -extend {copy_message} copy_objects get_copy_objects "" {
     if {$copy_p} {
@@ -32,6 +34,10 @@ db_multirow -extend {copy_message} copy_objects get_copy_objects "" {
     } else {
 	set copy_message [_ file_storage.Not_Allowed]
 	incr not_allowed_count
+    }
+    if {$type eq "folder"} {
+        lappend not_allowed_children $object_id
+        lappend not_allowed_parents $parent_id
     }
   
 }
@@ -92,6 +98,11 @@ if {[info exists folder_id]} {
         -elements {
             label {
                 label "\#file-storage.Choose_Destination_Folder\#"
+                display_template {
+                    <if @folder_tree.copy_url@ nil>
+                    <div style="padding-left: @folder_tree.level_num@em;">@folder_tree.label@</div>
+                    </if><else>@folder_tree.label@</else>
+                }
                 link_url_col copy_url
                 link_html {title "\#file-storage.Copy_to_folder_title\#" style "padding-left: @folder_tree.level_num@em;"}
             }
@@ -103,10 +114,19 @@ if {[info exists folder_id]} {
     set object_id $objects_to_copy
     set cancel_url "[ad_conn url]?[ad_conn query]"
     db_multirow -extend {copy_url} folder_tree get_folder_tree "" {
-	set target_url [export_vars -base "[ad_conn package_url]copy" { object_id:multiple folder_id return_url }]
-	set copy_url [export_vars -base "file-upload-confirm" {folder_id cancel_url {return_url $target_url}}]
+        if {[lsearch [concat $not_allowed_parents $not_allowed_children] $folder_id] ne "-1" || 
+            [lsearch $not_allowed_children $parent_id] ne "-1" } {
+            
+            if {[lsearch $not_allowed_children $parent_id] ne "-1"} {
+                lappend not_allowed_children $folder_id
+            }
+            set copy_url ""
+        } else {
+            set target_url [export_vars -base "[ad_conn package_url]copy" { object_id:multiple folder_id return_url }]
+            set copy_url [export_vars -base "file-upload-confirm" {folder_id cancel_url {return_url $target_url}}]
+        }
     }
-
+    
 }
 
 set context [list "\#file-storage.Copy\#"]

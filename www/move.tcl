@@ -27,6 +27,8 @@ set user_id [ad_conn user_id]
 
 set allowed_count 0
 set not_allowed_count 0
+set not_allowed_parents [list]
+set not_allowed_children [list]
 
 db_multirow -extend {move_message} move_objects get_move_objects "" {
     if {$move_p} {
@@ -35,6 +37,10 @@ db_multirow -extend {move_message} move_objects get_move_objects "" {
     } else {
 	set move_message [_ file_storage.Not_Allowed]
 	incr not_allowed_count
+    }
+    if {$type eq "folder"} {
+        lappend not_allowed_children $object_id
+        lappend not_allowed_parents $parent_id
     }
   
 }
@@ -110,6 +116,11 @@ if {[info exists folder_id]} {
         -elements {
             label {
                 label "\#file-storage.Choose_Destination_Folder\#"
+                display_template {
+                    <if @folder_tree.move_url@ nil>
+                    <div style="padding-left: @folder_tree.level_num@em;">@folder_tree.label@</div>
+                    </if><else>@folder_tree.label@</else>
+                }
                 link_url_col move_url
                 link_html {title "\#file-storage.Move_to_folder_title\#" style "padding-left: @folder_tree.level_num@em;"}
             }
@@ -123,10 +134,18 @@ if {[info exists folder_id]} {
     db_multirow -extend {move_url level} folder_tree get_folder_tree "" {
 	# teadams 2003-08-22 - change level to level num to avoid 
 	# Oracle issue with key words.
-
-	set target_url [export_vars -base "[ad_conn package_url]move" { object_id:multiple folder_id return_url }]
-#	set move_url [export_vars -base "file-upload-confirm" {folder_id cancel_url {return_url $target_url}}]
-	set move_url $target_url
+        if {[lsearch [concat $not_allowed_parents $not_allowed_children] $folder_id] ne "-1" || 
+            [lsearch $not_allowed_children $parent_id] ne "-1" } {
+            
+            if {[lsearch $not_allowed_children $parent_id] ne "-1"} {
+                lappend not_allowed_children $folder_id
+            }
+            set move_url ""
+        } else {
+            set target_url [export_vars -base "[ad_conn package_url]move" { object_id:multiple folder_id return_url }]
+            #	set move_url [export_vars -base "file-upload-confirm" {folder_id cancel_url {return_url $target_url}}]
+            set move_url $target_url
+        }
     }
 
 }

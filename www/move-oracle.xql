@@ -50,7 +50,7 @@
   <fullquery name="get_folder_tree">
     <querytext>
       select
-      cf.folder_id, cf.label, ci1.level_num
+      cf.folder_id, ci1.parent_id, cf.label, ci1.level_num
       from cr_folders cf, (select item_id, parent_id, level as level_num from
                            cr_items
 		           where cr_items.item_id not in ($object_id_list)
