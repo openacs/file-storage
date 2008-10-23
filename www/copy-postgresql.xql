@@ -15,7 +15,7 @@
   
   <fullquery name="get_copy_objects">
     <querytext>
-      select fs.object_id, fs.name,
+      select fs.object_id, fs.name, fs.parent_id,
       acs_permission__permission_p(fs.object_id, :user_id, 'read') as copy_p, fs.type
       from fs_objects fs
       where fs.object_id in ([template::util::tcl_to_sql_list $object_id])
@@ -48,7 +48,7 @@
   <fullquery name="get_folder_tree">
     <querytext>
       select
-      cf.folder_id, cf.label, tree_level(ci1.tree_sortkey) as level_num
+      cf.folder_id, ci1.parent_id, cf.label, tree_level(ci1.tree_sortkey) as level_num
       from cr_folders cf, cr_items ci1, cr_items ci2
       where
       ci1.tree_sortkey between ci2.tree_sortkey and
