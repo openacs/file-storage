@@ -4,7 +4,7 @@
 <property name="context">@context;noquote@</property>
 
 <if @rebuild_short_name@ not nil>
-<blockquote>*Rebuilt feed: @rebuild_short_name@</blockquote>
+<p>*Rebuilt feed: @rebuild_short_name@</p>
 </if>
 
 <p>Configuring RSS for <a href="../?folder_id=@folder_id@">@folder_name@</a></p>
