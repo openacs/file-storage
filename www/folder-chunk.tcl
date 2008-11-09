@@ -116,7 +116,7 @@ set elements [list type [list label [_ file-storage.Type] \
 			    orderby_asc {fs_objects.sort_key, fs_objects.pretty_type asc}] \
                   name \
 		  [list label [_ file-storage.Name] \
-                       display_template {<a @target_attr@ href="@contents.file_url@" title="\#file-storage.view_contents\#"><if @contents.title@ nil>@contents.name@</a></if><else>@contents.title@</a><br><if @contents.name@ ne @contents.title@><span style="color: \#999;">@contents.name@</span></if></else>} \
+                       display_template {<a @target_attr@ href="@contents.file_url@" title="\#file-storage.view_contents\#"><if @contents.title@ nil>@contents.name@</a></if><else>@contents.title@</a><br><if @contents.name@ ne @contents.title@><i>@contents.name@</i></if></else>} \
 		       orderby_desc {fs_objects.name desc} \
 		       orderby_asc {fs_objects.name asc}] \
  		  short_name \
@@ -180,7 +180,7 @@ if {$format eq "list"} {
 } 
 
 template::list::create \
-    -name contents \
+    -name contents_${folder_id} \
     -multirow contents \
     -key object_id \
     -actions $actions \
@@ -207,7 +207,7 @@ template::list::create \
     } \
     -elements $elements
 
-set orderby [template::list::orderby_clause -orderby -name contents]
+set orderby [template::list::orderby_clause -orderby -name contents_${folder_id}]
 
 if {[string equal $orderby ""]} {
     set orderby " order by fs_objects.sort_key, fs_objects.name asc"

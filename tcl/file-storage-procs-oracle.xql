@@ -130,7 +130,7 @@
             select case when file_storage.get_content_type(i.item_id) = 'content_folder'
                         then :folder_url || '?folder_id='
                         else :file_url || '?file_id='
-                   end || i.item_id,
+                   end || i.item_id || :extra_vars,  
                    file_storage.get_title(i.item_id)
             from cr_items i
             where item_id not in (select i2.item_id

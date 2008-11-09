@@ -3,7 +3,6 @@
 
   <msg key="_Upload">Revisión</msg>
   <msg key="Action">Opciones</msg>
-  <msg key="Please_select_at_least_one_item_to_copy.">Por favor, selecciona un archivo para copiar.</msg>
   <msg key="Actions">Opciones:</msg>
   <msg key="Actions_1">Opciones</msg>
   <msg key="Add_Dup_As_New_File">Si sube un documento con el mismo nombre que otro documento ya existente en esta carpeta, se añadirá al nombre de su documento un sufijo incremental (p.e. &quot;mydoc.doc&quot; -&amp;gt; &quot;mydoc-1.doc&quot;). Notese que el título del documento no será cambiado. Es el nombre de documento el que debe ser único en cada carpeta.</msg>
@@ -15,6 +14,7 @@
   <msg key="back_to_folder_view">Volver a la vista de carpeta</msg>
   <msg key="back_to_project">Volver al proyecto</msg>
   <msg key="bytes">bytes</msg>
+  <msg key="Categories">Categorías</msg>
   <msg key="Change_Name">Renombrar</msg>
   <msg key="Change_upload_limit">Cambiar el límite para subir archivos</msg>
   <msg key="Choose_Destination_Folder">Seleccionar carpeta destino</msg>
@@ -37,12 +37,16 @@
   <msg key="Delete_Version">Borrar versión</msg>
   <msg key="Description">Descripción:</msg>
   <msg key="Download">Descargar</msg>
+  <msg key="Download_ZIP">Descargar en un ZIP</msg>
+  <msg key="Download_ZIP_Checked_Items">Descargar elementos seleccionados en un ZIP</msg>
   <msg key="Edit">Editar</msg>
   <msg key="edit">editar</msg>
+  <msg key="Edit_File">Editar documento</msg>
   <msg key="Edit_Folder">Editar carpeta</msg>
   <msg key="Edit_URL">Editar URL</msg>
   <msg key="File">Fichero</msg>
   <msg key="file">Archivo</msg>
+  <msg key="file-storage">Documentos</msg>
   <msg key="file_delete_page_title">Eliminar %title%</msg>
   <msg key="File_deleted">Archivo borrado</msg>
   <msg key="file_edit_page_title">Renombrar %title%</msg>
@@ -142,6 +146,7 @@
   <msg key="No_valid_destination_folders_exist">Ninguna carpeta destino válida</msg>
   <msg key="PDF">PDF</msg>
   <msg key="Permissions">Permisos</msg>
+  <msg key="Please_select_at_least_one_item_to_copy.">Por favor, selecciona un archivo para copiar.</msg>
   <msg key="pretty_name">Documentos</msg>
   <msg key="properties">propiedades</msg>
   <msg key="Rename">Renombrar</msg>
