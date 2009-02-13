@@ -32,7 +32,7 @@ if { [parameter::get -parameter CategoriesP -package_id $package_id -default 0] 
 ad_form -extend -edit_request {
     db_1row extlink_data ""
 } -edit_data {
-    content_extlink::edit -extlink_id $object_id -url $url -label $name -description $description
+    content::extlink::edit -extlink_id $object_id -url $url -label $name -description $description
     if { [parameter::get -parameter CategoriesP -package_id $package_id -default 0] } {
 	category::map_object -remove_old -object_id $object_id [category::ad_form::get_categories \
 								       -container_object_id $package_id \
