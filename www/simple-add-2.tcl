@@ -23,7 +23,7 @@ set user_id [ad_conn user_id]
 # Check for write permission on this folder
 ad_require_permission $folder_id write
 
-set item_id [content_extlink::new -url $url -label $title -description $description -parent_id $folder_id]
+set item_id [content::extlink::new -url $url -label $title -description $description -parent_id $folder_id]
 
 # Analogous as for files (see file-add-2) we know the user has write permission to this folder, 
 # but they may not have admin privileges.
