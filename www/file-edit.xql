@@ -2,6 +2,18 @@
 
 <queryset>
 
+  <fullquery name="file_info">      
+    <querytext>
+      
+      select cr.title
+      from   cr_revisions cr, cr_items ci
+      where  ci.item_id = :file_id
+         and cr.revision_id = ci.live_revision
+
+    </querytext>
+  </fullquery>
+
+ 
 <fullquery name="edit_title">
     <querytext>
         update cr_revisions set title=:title
