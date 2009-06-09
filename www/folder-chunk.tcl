@@ -65,8 +65,8 @@ if {![exists_and_not_null root_folder_id]} {
     set root_folder_id [lindex $package_and_root 1]
 }
 
-if {![string equal $root_folder_id $folder_id]} {
-    set folder_path "[db_exec_plsql get_folder_path {}]"
+if { $root_folder_id ne $folder_id } {
+    set folder_path "[db_exec_plsql get_folder_path {}]/"
 } else {
     set folder_path ""
 }
@@ -79,7 +79,10 @@ set actions [list]
 set cancel_url "[ad_conn url]?[ad_conn query]"
 set add_url [export_vars -base "${fs_url}file-add" {folder_id}]
 
-lappend actions "#file-storage.Add_File#" [export_vars -base "${fs_url}file-upload-confirm" {folder_id cancel_url {return_url $add_url}}] "[_ file-storage.lt_Upload_a_file_in_this]" "#file-storage.Create_a_URL#" ${fs_url}simple-add?[export_vars folder_id] "[_ file-storage.lt_Add_a_link_to_a_web_p]" "#file-storage.New_Folder#" ${fs_url}folder-create?[export_vars {{parent_id $folder_id}}] "#file-storage.Create_a_new_folder#" "[_ file-storage.lt_Upload_compressed_fol]" ${fs_url}folder-zip-add?[export_vars folder_id] "[_ file-storage.lt_Upload_a_compressed_f]"
+lappend actions "#file-storage.Add_File#" [export_vars -base "${fs_url}file-upload-confirm" {folder_id cancel_url {return_url $add_url}}] "[_ file-storage.lt_Upload_a_file_in_this]" \
+    "#file-storage.Create_a_URL#" [export_vars -base "${fs_url}simple-add" {folder_id}] "[_ file-storage.lt_Add_a_link_to_a_web_p]" \
+    "#file-storage.New_Folder#" [export_vars -base "${fs_url}folder-create" {{parent_id $folder_id}}] "#file-storage.Create_a_new_folder#" \
+    "[_ file-storage.lt_Upload_compressed_fol]" [export_vars -base "${fs_url}folder-zip-add" {folder_id}] "[_ file-storage.lt_Upload_a_compressed_f]"
 
 set expose_rss_p [parameter::get -parameter ExposeRssP -package_id $package_id -default 0]
 set like_filesystem_p [parameter::get -parameter BehaveLikeFilesystemP -package_id $package_id -default 1]
@@ -92,13 +95,13 @@ if { [string equal $target_window_name ""] } {
 }
 
 if {$delete_p} {
-    lappend actions "#file-storage.Delete_this_folder#" ${fs_url}folder-delete?[export_vars folder_id] "#file-storage.Delete_this_folder#"
+    lappend actions "#file-storage.Delete_this_folder#" [export_vars -base "${fs_url}folder-delete" {folder_id}] "#file-storage.Delete_this_folder#"
 }
 if {$admin_p} {
-    lappend actions "#file-storage.Edit_Folder#" "${fs_url}folder-edit?folder_id=$folder_id" "#file-storage.Rename_this_folder#"
-    lappend actions "#file-storage.lt_Modify_permissions_on_1#" "${fs_url}permissions?[export_vars -override {{object_id $folder_id}} {{return_url "[ad_conn url]"}}]" "#file-storage.lt_Modify_permissions_on_1#"
+    lappend actions "#file-storage.Edit_Folder#" [export_vars -base "${fs_url}folder-edit" {folder_id}] "#file-storage.Rename_this_folder#"
+    lappend actions "#file-storage.lt_Modify_permissions_on_1#" [export_vars -base "${fs_url}permissions" -override {{object_id $folder_id}} {{return_url "[ad_conn url]"}}] "#file-storage.lt_Modify_permissions_on_1#"
     if { $expose_rss_p } {
-        lappend actions "Configure RSS" "${fs_url}admin/rss-subscrs?folder_id=$folder_id" "Configure RSS"
+        lappend actions "Configure RSS" [export_vars -base "${fs_url}admin/rss-subscrs" {folder_id}] "Configure RSS"
     }
 }
 set categories_p [parameter::get -parameter CategoriesP -package_id $package_id -default 0]
@@ -110,14 +113,15 @@ if { $categories_p } {
 }
 
 #set n_past_filter_values [list [list "Yesterday" 1] [list [_ file-storage.last_week] 7] [list [_ file-storage.last_month] 30]]
-set elements [list type \
+set elements [list \
+                  type \
                   [list label [_ file-storage.Type] \
                              display_template {<img src="@contents.icon@"  style="border: 0;" alt="@contents.alt_icon@">@contents.pretty_type@} \
                              orderby_desc {sort_key_desc,fs_objects.pretty_type desc} \
                              orderby_asc {fs_objects.sort_key, fs_objects.pretty_type asc}] \
                   name \
                   [list label [_ file-storage.Name] \
-                       display_template {<a @target_attr@ href="@contents.file_url@" title="\#file-storage.view_contents\#"><if @contents.title@ nil>@contents.name@</a></if><else>@contents.title@</a><br><if @contents.name@ ne @contents.title@><i>@contents.name@</i></if></else>} \
+                       display_template {<a @target_attr@ href="@contents.file_url@" title="\#file-storage.view_contents\#"><if @contents.title@ nil>@contents.name@</a></if><else>@contents.title@</a><br><if @contents.name@ ne @contents.title@>@contents.name@</if></else>} \
                        orderby_desc {fs_objects.name desc} \
                        orderby_asc {fs_objects.name asc}] \
                   short_name \
@@ -262,15 +266,15 @@ db_multirow -extend {label alt_icon icon last_modified_pretty content_size_prett
             set new_version_url {}
             set icon "/resources/file-storage/folder.gif"
             set alt_icon #file-storage.folder#
-            set file_url "${fs_url}index?[export_vars {{folder_id $object_id}}]"
+            set file_url [export_vars -base "${fs_url}index" {{folder_id $object_id}}]
             set download_link [_ file-storage.Download]
             set download_url "[export_vars -base "${fs_url}download-zip" -url {object_id}]"
         }
         url {
             set properties_link [_ file-storage.properties]
-            set properties_url "${fs_url}simple?[export_vars object_id]"
+            set properties_url [export_vars -base "${fs_url}simple" {object_id}]
             set new_version_link [_ acs-kernel.common_New]
-            set new_version_url "${fs_url}file-add?[export_vars {{file_id $object_id}}]"
+            set new_version_url [export_vars -base "${fs_url}file-add" {{file_id $object_id}}]
             set icon "/resources/acs-subsite/url-button.gif"
             # DRB: This alt text somewhat sucks, but the message key already exists in
             # the language catalog files we care most about and we want to avoid a new
@@ -301,34 +305,34 @@ db_multirow -extend {label alt_icon icon last_modified_pretty content_size_prett
                 }
                 
             }
-            set properties_url "${fs_url}file?[export_vars {{file_id $object_id}}]"
+            set properties_url [export_vars -base "${fs_url}file" {{file_id $object_id}}]
             set new_version_link [_ acs-kernel.common_New]
-            set new_version_url "${fs_url}file-add?[export_vars {{file_id $object_id}}]"
+            set new_version_url [export_vars -base "${fs_url}file-add" {{file_id $object_id}}]
             set icon "/resources/file-storage/file.gif"
             set alt_icon #file-storage.file#
             set file_url "${fs_url}view/${file_url}"
             set download_link [_ file-storage.Download]
             if {$like_filesystem_p} {
-                set download_url "${fs_url}download/$title?[export_vars {{file_id $target_object_id}}]"                
+                set download_url [export_vars -base "${fs_url}download/$title" {{file_id $target_object_id}}]
                 set file_url $download_url
             } else {
-                set download_url "${fs_url}download/$name?[export_vars {{file_id $target_object_id}}]"                
+                set download_url [export_vars -base "${fs_url}download/$name" {{file_id $target_object_id}}]
             }
         }
         default {
             set properties_link [_ file-storage.properties]
-            set properties_url "${fs_url}file?[export_vars {{file_id $object_id}}]"
+            set properties_url [export_vars -base "${fs_url}file" {{file_id $object_id}}]
             set new_version_link [_ acs-kernel.common_New]
-            set new_version_url "${fs_url}file-add?[export_vars {{file_id $object_id}}]"
+            set new_version_url [export_vars -base "${fs_url}file-add" {{file_id $object_id}}]
             set icon "/resources/file-storage/file.gif"
             set alt_icon "#file-storage.file#"
-            set file_url "${fs_url}view/${file_url}"
+            set file_url "${fs_url}view/${folder_path}[ad_urlencode ${name}]"
             set download_link [_ file-storage.Download]
             if {$like_filesystem_p} {
-                set file_url "${fs_url}download/$title?[export_vars {{file_id $object_id}}]"                
-                set download_url "/file/$object_id/${title}[file extension $name]"
+                set file_url [export_vars -base "${fs_url}download/[ad_urlencode $title]" {{file_id $object_id}}]
+                set download_url "/file/$object_id/[ad_urlencode $title][file extension $name]"
             } else {
-                set download_url "/file/$object_id/$name"
+                set download_url "/file/$object_id/[ad_urlencode $name]"
             }
         }
 
@@ -342,9 +346,6 @@ db_multirow -extend {label alt_icon icon last_modified_pretty content_size_prett
         set categories [fs::category_links -object_id $object_id -folder_id $cat_folder_id -selected_category_id $category_id -fs_url $fs_url -joinwith "<br>"]
     }
 
-    # We need to encode the hashes in any i18n message keys (.LRN plays this trick on some of its folders).
-    # If we don't, the hashes will cause the path to be chopped off (by ns_conn url) at the leftmost hash.
-    regsub -all \# $file_url {%23} file_url
 }
 
 if { $expose_rss_p } {

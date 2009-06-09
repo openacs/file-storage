@@ -19,7 +19,7 @@
 <if @feeds:rowcount@ not nil and @feeds:rowcount@ gt 0>
   <ul>
     <multiple name="feeds">
-      <li><a href="rss/@feeds.subscr_id@/rss.xml"><img src="/resources/acs-subsite/xml.gif" width="36" height="14" style="border: 0;">@feeds.short_name@</a></li>
+      <li><a href="rss/@feeds.subscr_id@/rss.xml"><img src="/resources/acs-subsite/xml.gif" width="36" height="14" alt="RSS feed" style="border: 0; padding: 0px 5px;">@feeds.short_name@</a></li>
     </multiple>
   </ul>
 </if>
