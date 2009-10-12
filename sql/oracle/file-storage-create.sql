@@ -36,9 +36,15 @@ create table fs_root_folders (
                                 primary key,
     -- the ID of the root folder
     -- JS: I removed the on delete cascade constraint on folder_id
+    -- DAVEB: I put it back. I have no idea what JS is referring to.
+    -- DAVEB: If you ever want to delete a root folder, say by deleting a
+    -- DAVEB: package instance of file-storage, you need this.
+    -- DAVEB: You DO have to delete all the folder contents and use CR pl/sql
+    -- DAVEB: procs to delete the folder, when you do that the on delete
+    -- DAVEB: cascade works fine.    
     folder_id                   integer
                                 constraint fs_root_folder_folder_id_fk
-                                references cr_folders
+                                references cr_folders on delete cascade
                                 constraint fs_root_folder_folder_id_un
                                 unique
 );
@@ -48,6 +54,9 @@ create table fs_root_folders (
 -- To enable site-wide search to distinguish CR items as File Storage items
 -- we create an item subtype of content_item in the ACS Object Model
 
+-- DAVEB: acs_object_types supports a null table name so we do that  
+-- instead of passing a false value so we can actually use the
+-- content repository instead of duplicating all the code in file-storage
 set escape on
 
 declare
@@ -58,8 +67,8 @@ begin
         pretty_name => 'File Storage Object',
         pretty_plural => 'File Storage Objects',
         supertype => 'content_revision',
-        table_name => 'fs_root_folders',
-        id_column => 'folder_id',
+        table_name => NULL,
+        id_column => NULL,
         name_method => 'file_storage.get_title'
     );
 
