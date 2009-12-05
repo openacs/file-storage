@@ -16,6 +16,14 @@ ad_proc -public fs::rss::create_rss_gen_subscr_impl {} {
     }]
 }
 
+ad_proc -public fs::rss::drop_rss_gen_subscr_impl {} {
+    Unegister the service contract implementation and return the impl_id
+    
+    @return impl_id of the created implementation
+} {
+    acs_sc::impl::delete -contract_name RssGenerationSubscriber -impl_name fs_rss
+}
+
 ad_proc -private fs::rss::datasource {
     summary_context_id
 } {

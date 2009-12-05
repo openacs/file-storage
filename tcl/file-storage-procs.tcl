@@ -1092,6 +1092,7 @@ ad_proc fs::delete_folder {
     {-cascade_p "t"}
     {-parent_id ""}
     -no_callback:boolean
+    -no_notifications:boolean
 } {
     Deletes a folder and all contents
 } {
@@ -1108,8 +1109,9 @@ ad_proc fs::delete_folder {
     set version_name [get_object_name -object_id $folder_id]
     db_exec_plsql delete_folder ""
     
-    fs::do_notifications -folder_id $parent_id -filename $version_name -item_id $folder_id -action "delete_folder"
-    
+    if { !$no_notifications_p } {
+        fs::do_notifications -folder_id $parent_id -filename $version_name -item_id $folder_id -action "delete_folder"
+    }
 }
 
 ad_proc fs::delete_version {

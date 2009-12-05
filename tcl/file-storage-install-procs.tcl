@@ -25,6 +25,7 @@ ad_proc -private fs::install::package_uninstall {} {
 } {
     db_transaction {
 	unregister_implementation
+	fs::rss::drop_rss_gen_subscr_impl
     }
 }
 
@@ -51,7 +52,7 @@ ad_proc -private fs::install::before_uninstantiate {
     {-package_id:required}
 } {
 } {
-    # TODO: make this clean up the root folder
+    fs::delete_folder -folder_id [fs::get_root_folder -package_id $package_id] -no_notifications
 }
 
 ad_proc -private fs::install::register_implementation {
@@ -114,6 +115,8 @@ ad_proc -private fs::install::unregister_implementation {
     remove file-storage service contract implementation
 } {
     acs_sc::impl::delete -contract_name dav -impl_name file_storage_object
+    acs_sc::impl::delete -contract_name dav_mkcol_type -impl_name file-storage
+    acs_sc::impl::delete -contract_name dav_put_type -impl_name file-storage
 }
 
 ad_proc -private fs::install::upgrade {

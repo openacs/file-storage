@@ -19,6 +19,7 @@ create function inline_0()
 returns integer as '
 declare
 	rec_root_folder		record;
+        template_id             integer;
 begin
 
     for rec_root_folder in 
@@ -30,6 +31,11 @@ begin
         PERFORM apm_package__delete(rec_root_folder.package_id);
     end loop;
 
+    -- Unregister the content template
+    template_id := content_type__get_template(''file_storage_object'',''public'');
+
+    perform content_type__unregister_template (''file_storage_object'', template_id, ''public'');
+    perform content_template__del(template_id);
     return 0;
 
 end;' language 'plpgsql';
@@ -44,6 +50,7 @@ drop function fs_package_items_delete_trig();
 drop trigger fs_root_folder_delete_trig on fs_root_folders;
 drop function fs_root_folder_delete_trig();
 
+
 select content_type__drop_type (
        'file_storage_object',	 -- content_type
        'f',			 -- drop_children_p
@@ -52,25 +59,11 @@ select content_type__drop_type (
 
 -- this data model added by file-storage patch number 146 from 
 -- openacs.org bugtracker
+
 \i file-storage-notifications-drop.sql
 
--- this content type is created incorrectly tying the file_storage_root_folders
--- table to file_storage_object
--- so we drop these directly
+drop table fs_root_folders cascade;
 
-drop view file_storage_root_foldersi;
-drop view file_storage_root_foldersx;
-
-drop table fs_root_folders;
+drop table fs_rss_subscrs;
 
 select drop_package('file_storage');
-
--- Unregister the content template
-select content_type__unregister_template (
-       'file-storage-object',
-       content_type__get_template('file-storage-object','public'),
-       'public'
-);
-
--- Remove subtype of content_revision so that site-wide-search
--- can distinguish file-storage items in the search results
