@@ -29,7 +29,7 @@ begin
                       ''fs_fs_notif_type''	-- impl_name
         );
 
-        PERFORM acs_sc_binding__delete (
+        perform acs_sc_binding__delete (
                     ''NotificationType'',
                     ''fs_fs_notif_type''
         );
@@ -44,6 +44,11 @@ begin
                     ''NotificationType'',		-- impl_contract_name	
                     ''fs_fs_notif_type'',	-- impl_name
                     ''ProcessReply''			-- impl_operation_name
+        );
+
+        perform acs_sc_impl__delete(
+                    ''NotificationType'',                -- impl_contract_name
+                    ''fs_fs_notif_type''                 -- impl_name
         );
 
 	select into v_foo type_id 

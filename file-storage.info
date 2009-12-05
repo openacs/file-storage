@@ -16,7 +16,7 @@
         <maturity>0</maturity>
         <package_instance_name>#file-storage.file-storage#</package_instance_name>
 
-        <provides url="file-storage" version="5.6.0d2"/>
+        <provides url="file-storage" version="5.6.0d3"/>
         <requires url="acs-content-repository" version="5.6.0d1"/>
         <requires url="acs-kernel" version="5.6.0d1"/>
         <requires url="categories" version="1.1.2d3"/>
@@ -26,6 +26,7 @@
 
         <callbacks>
             <callback type="after-install"  proc="fs::install::package_install"/>
+            <callback type="before-uninstall"  proc="fs::install::package_uninstall"/>
             <callback type="after-instantiate"  proc="fs::install::after_instantiate"/>
             <callback type="after-mount"  proc="fs::after_mount"/>
             <callback type="after-upgrade"  proc="fs::install::upgrade"/>
