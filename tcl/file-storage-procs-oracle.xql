@@ -260,8 +260,7 @@
     <querytext>
       select site_node.url(node_id) 
       from site_nodes
-      where object_id = (select r.package_id,
-               r.folder_id as root_folder_id
+      where object_id = (select r.package_id
 	from fs_root_folders r,
 	     (select item_id as folder_id
               from cr_items
