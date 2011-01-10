@@ -112,7 +112,7 @@ ad_proc -public -callback search::url -impl file_storage_object {
 ad_proc -public -callback datamanager::copy_folder -impl datamanager {
      -object_id:required
      -selected_community:required
-     {-mode: "both"}
+     {-mode "both"}
 } {
     Copy a folder to another class or community
 } {
