@@ -15,12 +15,18 @@
 -- content repository is set up to cascade, so we should just have to 
 -- delete the root folders
 --
-create function inline_0() 
-returns integer as '
-declare
+
+
+--
+-- procedure inline_0/0
+--
+CREATE OR REPLACE FUNCTION inline_0(
+
+) RETURNS integer AS $$
+DECLARE
 	rec_root_folder		record;
         template_id             integer;
-begin
+BEGIN
 
     for rec_root_folder in 
         select package_id
@@ -32,13 +38,14 @@ begin
     end loop;
 
     -- Unregister the content template
-    template_id := content_type__get_template(''file_storage_object'',''public'');
+    template_id := content_type__get_template('file_storage_object','public');
 
-    perform content_type__unregister_template (''file_storage_object'', template_id, ''public'');
+    perform content_type__unregister_template ('file_storage_object', template_id, 'public');
     perform content_template__del(template_id);
     return 0;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 select inline_0();
 drop function inline_0();

@@ -1,29 +1,27 @@
 -- Add user_id and IP to update_last_modified
 -- $Id
 
-create or replace function file_storage__new_file(
-       -- 
-       -- Create a file in CR in preparation for actual storage
-       -- Wrapper for content_item__new
-       --
-       -- DRB: I added this version to allow one to predefine item_id, among other things to
-       -- make it easier to use with ad_form
-       varchar,         -- cr_items.name%TYPE,
-       integer,         -- cr_items.parent_id%TYPE,
-       integer,         -- acs_objects.creation_user%TYPE,
-       varchar,         -- acs_objects.creation_ip%TYPE,
-       boolean,         -- store in db? 
-       integer          -- cr_items.item_id%TYPE,
-) returns integer as ' -- cr_items.item_id%TYPE
-declare
-        new_file__title                 alias for $1;
-        new_file__folder_id             alias for $2;
-        new_file__user_id               alias for $3;
-        new_file__creation_ip           alias for $4;
-        new_file__indb_p                alias for $5;
-        new_file__item_id               alias for $6;
+
+
+-- added
+select define_function_args('file_storage__new_file','title,folder_id,user_id,creation_ip,indb_p,item_id');
+
+--
+-- procedure file_storage__new_file/6
+--
+CREATE OR REPLACE FUNCTION file_storage__new_file(
+   new_file__title --         varchar,
+   new_file__folder_id integer,
+   new_file__user_id integer,
+   new_file__creation_ip varchar,
+   new_file__indb_p boolean,
+   new_file__item_id integer
+
+) RETURNS integer AS $$
+-- cr_items.item_id%TYPE
+DECLARE
         v_item_id                       integer;
-begin
+BEGIN
 
         if new_file__indb_p
         then 
@@ -36,11 +34,11 @@ begin
                         new_file__user_id,        -- creation_user
                         new_file__folder_id,      -- context_id
                         new_file__creation_ip,    -- creation_ip
-                        ''content_item'',         -- item_subtype (default)
-                        ''file_storage_object'',  -- content_type (needed by site-wide search)
+                        'content_item',         -- item_subtype (default)
+                        'file_storage_object',  -- content_type (needed by site-wide search)
                         null,                       -- title (default)
                         null,                       -- description
-                        ''text/plain'',     -- mime_type (default)
+                        'text/plain',     -- mime_type (default)
                         null,                       -- nls_language (default)
                         null                        -- data (default)
                     );
@@ -54,14 +52,14 @@ begin
                         new_file__user_id,          -- creation_user
                         new_file__folder_id,        -- context_id
                         new_file__creation_ip,    -- creation_ip
-                        ''content_item'',         -- item_subtype (default)
-                        ''file_storage_object'',  -- content_type (needed by site-wide search)
+                        'content_item',         -- item_subtype (default)
+                        'file_storage_object',  -- content_type (needed by site-wide search)
                         null,                       -- title (default)
                         null,                       -- description
-                        ''text/plain'',     -- mime_type (default)
+                        'text/plain',     -- mime_type (default)
                         null,                       -- nls_language (default)
                         null,                       -- text (default)
-                        ''file''                    -- storage_type
+                        'file'                    -- storage_type
                     );
 
         end if;
@@ -70,23 +68,28 @@ begin
 
         return v_item_id;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
     
 
-create or replace function file_storage__copy_file(
-       --
-       -- Copy a file, but only copy the live_revision
-       --
-       integer,         -- cr_items.item_id%TYPE,
-       integer,         -- cr_items.parent_id%TYPE,
-       integer,         -- acs_objects.creation_user%TYPE,
-       varchar          -- acs_objects.creation_ip%TYPE
-) returns integer as '  -- cr_revisions.revision_id%TYPE 
-declare
-        copy_file__file_id           alias for $1;
-        copy_file__target_folder_id  alias for $2;
-        copy_file__creation_user     alias for $3;
-        copy_file__creation_ip       alias for $4;
+
+
+-- added
+select define_function_args('file_storage__copy_file','file_id,target_folder_id,creation_user,creation_ip');
+
+--
+-- procedure file_storage__copy_file/4
+--
+CREATE OR REPLACE FUNCTION file_storage__copy_file(
+   copy_file__file_id --        --
+       integer,
+   copy_file__target_folder_id integer,
+   copy_file__creation_user integer,
+   copy_file__creation_ip varchar
+
+) RETURNS integer AS $$
+-- cr_revisions.revision_id%TYPE
+DECLARE
         v_title                      cr_items.name%TYPE;
         v_live_revision              cr_items.live_revision%TYPE;
         v_filename                   cr_revisions.title%TYPE;
@@ -99,12 +102,12 @@ declare
         v_new_file_id                cr_items.item_id%TYPE;
         v_new_version_id                     cr_revisions.revision_id%TYPE;
         v_indb_p                     boolean;
-begin
+BEGIN
 
         -- We copy only the title from the file being copied, and attributes of the
         -- live revision
         select i.name,i.live_revision,r.title,r.description,r.mime_type,r.content_length,
-               (case when i.storage_type = ''lob''
+               (case when i.storage_type = 'lob'
                      then true
                      else false
                 end)
@@ -172,25 +175,28 @@ begin
 
         return v_new_version_id;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
-create or replace function file_storage__move_file (
-       --
-       -- Move a file (ans all its versions) to a different folder.
-       -- Wrapper for content_item__move
-       -- 
-       integer,         -- cr_folders.folder_id%TYPE,
-       integer,          -- cr_folders.folder_id%TYPE
-       integer,
-       varchar
-) returns integer as '  -- 0 for success 
-declare
-        move_file__file_id              alias for $1;
-        move_file__target_folder_id     alias for $2;
-        move_file__creation_user        alias for $3;
-        move_file__creation_ip          alias for $4;
-begin
+
+
+-- added
+select define_function_args('file_storage__move_file','file_id,target_folder_id,creation_user,creation_ip');
+
+--
+-- procedure file_storage__move_file/4
+--
+CREATE OR REPLACE FUNCTION file_storage__move_file(
+   move_file__file_id --          integer,
+   move_file__target_folder_id integer,
+   move_file__creation_user integer,
+   move_file__creation_ip varchar
+
+) RETURNS integer AS $$
+-- 0 for success
+DECLARE
+BEGIN
 
         perform content_item__move(
                move_file__file_id,              -- item_id
@@ -200,30 +206,32 @@ begin
         perform acs_object__update_last_modified(move_file__target_folder_id,move_file__creation_user,move_file__creation_ip);
 
         return 0;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
-create or replace function file_storage__new_version (
-       --
-       -- Create a new version of a file
-       -- Wrapper for content_revision__new
-       --
-       varchar,         -- cr_revisions.title%TYPE,
-       varchar,         -- cr_revisions.description%TYPE,
-       varchar,         -- cr_revisions.mime_type%TYPE,
-       integer,         -- cr_items.item_id%TYPE,
-       integer,         -- acs_objects.creation_user%TYPE,
-       varchar          -- acs_objects.creation_ip%TYPE
-) returns integer as '  -- cr_revisions.revision_id 
-declare
-        new_version__filename           alias for $1;
-        new_version__description        alias for $2;
-        new_version__mime_type          alias for $3;
-        new_version__item_id            alias for $4;
-        new_version__creation_user      alias for $5;
-        new_version__creation_ip        alias for $6;
+
+
+-- added
+select define_function_args('file_storage__new_version','filename,description,mime_type,item_id,creation_user,creation_ip');
+
+--
+-- procedure file_storage__new_version/6
+--
+CREATE OR REPLACE FUNCTION file_storage__new_version(
+   new_version__filename --         --
+       varchar,
+   new_version__description varchar,
+   new_version__mime_type varchar,
+   new_version__item_id integer,
+   new_version__creation_user integer,
+   new_version__creation_ip varchar
+
+) RETURNS integer AS $$
+-- cr_revisions.revision_id
+DECLARE
         v_revision_id                   cr_revisions.revision_id%TYPE;
         v_folder_id                     cr_items.parent_id%TYPE;
-begin
+BEGIN
         -- Create a revision
         v_revision_id := content_revision__new (
                           new_version__filename,        -- title
@@ -251,5 +259,6 @@ begin
 
         return v_revision_id;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 

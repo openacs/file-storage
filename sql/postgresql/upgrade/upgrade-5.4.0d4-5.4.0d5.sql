@@ -1,17 +1,19 @@
-create or replace function file_storage__copy_file(
-       --
-       -- Copy a file, but only copy the live_revision
-       --
-       integer,         -- cr_items.item_id%TYPE,
-       integer,         -- cr_items.parent_id%TYPE,
-       integer,         -- acs_objects.creation_user%TYPE,
-       varchar          -- acs_objects.creation_ip%TYPE
-) returns integer as '  -- cr_revisions.revision_id%TYPE
-declare
-        copy_file__file_id           alias for $1;
-        copy_file__target_folder_id  alias for $2;
-        copy_file__creation_user     alias for $3;
-        copy_file__creation_ip       alias for $4;
+
+-- added
+select define_function_args('file_storage__copy_file','file_id,target_folder_id,creation_user,creation_ip');
+
+--
+-- procedure file_storage__copy_file/4
+--
+CREATE OR REPLACE FUNCTION file_storage__copy_file(
+   copy_file__file_id integer,
+   copy_file__target_folder_id integer,
+   copy_file__creation_user integer,
+   copy_file__creation_ip varchar
+
+) RETURNS integer AS $$
+-- cr_revisions.revision_id%TYPE
+DECLARE
         v_name                      cr_items.name%TYPE;
         v_live_revision              cr_items.live_revision%TYPE;
         v_filename                   cr_revisions.title%TYPE;
@@ -27,11 +29,11 @@ declare
         v_isurl                      boolean;
         v_content_type               cr_items.content_type%TYPE;
         v_package_id                 apm_packages.package_id%TYPE;
-begin
+BEGIN
 
         v_isurl:= false;
         select content_type into v_content_type from cr_items where item_id = copy_file__file_id;
-        if v_content_type = ''content_extlink''
+        if v_content_type = 'content_extlink'
         then
           v_isurl:= true;
         end if;
@@ -40,7 +42,7 @@ begin
         if v_isurl = false
         then
           select i.name,i.live_revision,r.title,r.description,r.mime_type,r.content_length,
-               (case when i.storage_type = ''lob''
+               (case when i.storage_type = 'lob'
                      then true
                      else false
                 end)
@@ -110,5 +112,6 @@ begin
           return 0;
         end if;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
