@@ -1,13 +1,20 @@
 -- Move old fs_simple_objects URLs to the content repository, where they
 -- belong.
 
-create or replace function inline_0() returns integer as '
-declare
+
+
+--
+-- procedure inline_0/0
+--
+CREATE OR REPLACE FUNCTION inline_0(
+
+) RETURNS integer AS $$
+DECLARE
   root           record;
   folder         record;
   fs_url         record;
   new_url_id     cr_extlinks.extlink_id%TYPE;
-begin
+BEGIN
 
     for root in select tree_sortkey
                 from fs_root_folders, cr_items
@@ -19,11 +26,11 @@ begin
                     where cr_items.tree_sortkey between root.tree_sortkey and tree_right(root.tree_sortkey)
                       and cr_folders.folder_id = cr_items.item_id
       loop
-        if not content_folder__is_registered(folder.folder_id, ''content_symlink'', ''t'') then
-          perform content_folder__register_content_type(folder.folder_id, ''content_symlink'', ''t'');
+        if not content_folder__is_registered(folder.folder_id, 'content_symlink', 't') then
+          perform content_folder__register_content_type(folder.folder_id, 'content_symlink', 't');
         end if;
-        if not content_folder__is_registered(folder.folder_id, ''content_extlink'', ''t'') then
-          perform content_folder__register_content_type(folder.folder_id, ''content_extlink'', ''t'');
+        if not content_folder__is_registered(folder.folder_id, 'content_extlink', 't') then
+          perform content_folder__register_content_type(folder.folder_id, 'content_extlink', 't');
         end if;
       end loop;
 
@@ -60,7 +67,8 @@ begin
 
   return 0;
 
-end' language 'plpgsql';
+end
+$$ LANGUAGE plpgsql;
 
 begin;
   select inline_0();
@@ -123,11 +131,18 @@ as
 
 -- JS: BEFORE DELETE TRIGGER to clean up CR entries (except root folder)
 drop function fs_package_items_delete_trig ();
-create function fs_package_items_delete_trig () returns opaque as '
-declare
+
+
+--
+-- procedure fs_package_items_delete_trig/0
+--
+CREATE OR REPLACE FUNCTION fs_package_items_delete_trig(
+
+) RETURNS trigger AS $$
+DECLARE
 
         v_rec   record;
-begin
+BEGIN
 
         for v_rec in
         
@@ -141,35 +156,35 @@ begin
                 order by c1.tree_sortkey desc
         loop
 
-                -- DRB: Why can''t we just use object delete here?
+                -- DRB: Why can't we just use object delete here?
 
 
                 -- We delete the item. On delete cascade should take care
                 -- of deletion of revisions.
-                if v_rec.content_type = ''file_storage_object''
+                if v_rec.content_type = 'file_storage_object'
                 then
-                    raise notice ''Deleting item_id = %'',v_rec.item_id;
+                    raise notice 'Deleting item_id = %',v_rec.item_id;
                     PERFORM content_item__delete(v_rec.item_id);
                 end if;
 
                 -- Instead of doing an if-else, we make sure we are deleting a folder.
-                if v_rec.content_type = ''content_folder''
+                if v_rec.content_type = 'content_folder'
                 then
-                    raise notice ''Deleting folder_id = %'',v_rec.item_id;
+                    raise notice 'Deleting folder_id = %',v_rec.item_id;
                     PERFORM content_folder__delete(v_rec.item_id);
                 end if;
 
                 -- Instead of doing an if-else, we make sure we are deleting a folder.
-                if v_rec.content_type = ''content_symlink''
+                if v_rec.content_type = 'content_symlink'
                 then
-                    raise notice ''Deleting symlink_id = %'',v_rec.item_id;
+                    raise notice 'Deleting symlink_id = %',v_rec.item_id;
                     PERFORM content_symlink__delete(v_rec.item_id);
                 end if;
 
                 -- Instead of doing an if-else, we make sure we are deleting a folder.
-                if v_rec.content_type = ''content_extlink''
+                if v_rec.content_type = 'content_extlink'
                 then
-                    raise notice ''Deleting folder_id = %'',v_rec.item_id;
+                    raise notice 'Deleting folder_id = %',v_rec.item_id;
                     PERFORM content_extlink__delete(v_rec.item_id);
                 end if;
 
@@ -178,7 +193,8 @@ begin
         -- We need to return something for the trigger to be activated
         return old;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 drop trigger fs_package_items_delete_trig on fs_root_folders;
 create trigger fs_package_items_delete_trig before delete

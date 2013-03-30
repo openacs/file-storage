@@ -5,38 +5,52 @@
 -- @cvs-id $Id$
 --
 
-create or replace function file_storage__delete_folder(
-       --
-       -- Delete a folder
-       --
-       integer          -- cr_folders.folder_id%TYPE
-) returns integer as '  -- 0 for success
-declare
-        delete_folder__folder_id        alias for $1; 
-begin
+
+
+-- added
+
+--
+-- procedure file_storage__delete_folder/1
+--
+CREATE OR REPLACE FUNCTION file_storage__delete_folder(
+   delete_folder__folder_id --        --
+       integer
+
+) RETURNS integer AS $$
+-- 0 for success
+DECLARE
+BEGIN
 
         return file_storage__delete_folder(
                     delete_folder__folder_id,  -- folder_id
-                    ''f''
+                    'f'
                     );
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
-create or replace function file_storage__delete_folder(
-       --
-       -- Delete a folder
-       --
-       integer,          -- cr_folders.folder_id%TYPE
-       boolean
-) returns integer as '  -- 0 for success
-declare
-        delete_folder__folder_id        alias for $1; 
-        delete_folder__cascade_p        alias for $2;
-begin
+
+
+-- added
+select define_function_args('file_storage__delete_folder','folder_id,cascade_p');
+
+--
+-- procedure file_storage__delete_folder/2
+--
+CREATE OR REPLACE FUNCTION file_storage__delete_folder(
+   delete_folder__folder_id --        --
+       integer,
+   delete_folder__cascade_p boolean
+
+) RETURNS integer AS $$
+-- 0 for success
+DECLARE
+BEGIN
 
         return content_folder__delete(
                     delete_folder__folder_id,  -- folder_id
                     delete_folder__cascade_p
                     );
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;

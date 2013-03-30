@@ -52,27 +52,26 @@ as
 
 -- dropped old version in d1-d2 upgrade script. 
 
-create or replace function file_storage__new_root_folder (
-       --
-       -- Creates a new root folder
-       --
-       -- 
-       -- A hackish function to get around the fact that we can not run
-       -- code automatically when a new package instance is created.
-       --
-       integer,         -- apm_packages.package_id%TYPE
-       varchar,         -- cr_folders.label%TYPE
-       varchar,          -- cr_items.name%TYPE
-       varchar
-)
-returns integer as '    --  fs_root_folders.folder_id%TYPE
-declare
-        new_root_folder__package_id         alias for $1;
-        new_root_folder__folder_name        alias for $2;
-	new_root_folder__url	            alias for $3;
-        new_root_folder__description        alias for $4;
+
+
+-- added
+select define_function_args('file_storage__new_root_folder','package_id,folder_name,url,description');
+
+--
+-- procedure file_storage__new_root_folder/4
+--
+CREATE OR REPLACE FUNCTION file_storage__new_root_folder(
+   new_root_folder__package_id --        --          --
+       integer,
+   new_root_folder__folder_name varchar,
+   new_root_folder__url varchar,
+   new_root_folder__description varchar
+
+) RETURNS integer AS $$
+--  fs_root_folders.folder_id%TYPE
+DECLARE
         v_folder_id                         fs_root_folders.folder_id%TYPE;
-begin
+BEGIN
 
 
         v_folder_id := content_folder__new (
@@ -97,25 +96,26 @@ begin
         -- JS: true since we created a new subtype.
         PERFORM content_folder__register_content_type(
                 v_folder_id,            -- folder_id
-                ''content_revision'',   -- content_types
-                ''t''                   -- include_subtypes 
+                'content_revision',   -- content_types
+                't'                   -- include_subtypes 
                 );
         PERFORM content_folder__register_content_type(
                 v_folder_id,            -- folder_id
-                ''content_folder'',     -- content_types
-                ''t''                   -- include_subtypes 
+                'content_folder',     -- content_types
+                't'                   -- include_subtypes 
                 );
         PERFORM content_folder__register_content_type(
                 v_folder_id,            -- folder_id
-                ''content_symlink'',    -- content_types
-                ''t''                   -- include_subtypes 
+                'content_symlink',    -- content_types
+                't'                   -- include_subtypes 
                 );
         PERFORM content_folder__register_content_type(
                 v_folder_id,            -- folder_id
-                ''content_extlink'',    -- content_types
-                ''t''                   -- include_subtypes 
+                'content_extlink',    -- content_types
+                't'                   -- include_subtypes 
                 );
 
         return v_folder_id;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
