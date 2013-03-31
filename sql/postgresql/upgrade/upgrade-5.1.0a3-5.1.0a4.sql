@@ -8,13 +8,12 @@ select define_function_args('file_storage__move_file','file_id,target_folder_id,
 -- procedure file_storage__move_file/4
 --
 CREATE OR REPLACE FUNCTION file_storage__move_file(
-   move_file__file_id --          integer,
+   move_file__file_id integer,
    move_file__target_folder_id integer,
    move_file__creation_user integer,
    move_file__creation_ip varchar
 
 ) RETURNS integer AS $$
--- 0 for success
 DECLARE
 BEGIN
 
