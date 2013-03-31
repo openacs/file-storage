@@ -10,7 +10,7 @@ select define_function_args('file_storage__new_file','title,folder_id,user_id,cr
 -- procedure file_storage__new_file/6
 --
 CREATE OR REPLACE FUNCTION file_storage__new_file(
-   new_file__title --         varchar,
+   new_file__title varchar,
    new_file__folder_id integer,
    new_file__user_id integer,
    new_file__creation_ip varchar,
@@ -81,8 +81,7 @@ select define_function_args('file_storage__copy_file','file_id,target_folder_id,
 -- procedure file_storage__copy_file/4
 --
 CREATE OR REPLACE FUNCTION file_storage__copy_file(
-   copy_file__file_id --        --
-       integer,
+   copy_file__file_id integer,
    copy_file__target_folder_id integer,
    copy_file__creation_user integer,
    copy_file__creation_ip varchar
@@ -188,7 +187,7 @@ select define_function_args('file_storage__move_file','file_id,target_folder_id,
 -- procedure file_storage__move_file/4
 --
 CREATE OR REPLACE FUNCTION file_storage__move_file(
-   move_file__file_id --          integer,
+   move_file__file_id integer,
    move_file__target_folder_id integer,
    move_file__creation_user integer,
    move_file__creation_ip varchar
@@ -218,8 +217,7 @@ select define_function_args('file_storage__new_version','filename,description,mi
 -- procedure file_storage__new_version/6
 --
 CREATE OR REPLACE FUNCTION file_storage__new_version(
-   new_version__filename --         --
-       varchar,
+   new_version__filename varchar,
    new_version__description varchar,
    new_version__mime_type varchar,
    new_version__item_id integer,

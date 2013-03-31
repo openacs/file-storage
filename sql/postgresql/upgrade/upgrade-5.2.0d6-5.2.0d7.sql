@@ -17,8 +17,7 @@ select define_function_args('file_storage__new_root_folder','package_id,folder_n
 -- procedure file_storage__new_root_folder/4
 --
 CREATE OR REPLACE FUNCTION file_storage__new_root_folder(
-   new_root_folder__package_id --        --          --
-       integer,
+   new_root_folder__package_id integer,
    new_root_folder__folder_name varchar,
    new_root_folder__url varchar,
    new_root_folder__description varchar
@@ -86,7 +85,7 @@ select define_function_args('file_storage__new_file','name,folder_id,user_id,cre
 -- procedure file_storage__new_file/7
 --
 CREATE OR REPLACE FUNCTION file_storage__new_file(
-   new_file__name --         varchar,
+   new_file__name varchar,
    new_file__folder_id integer,
    new_file__user_id integer,
    new_file__creation_ip varchar,

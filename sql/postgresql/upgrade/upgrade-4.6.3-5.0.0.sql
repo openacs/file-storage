@@ -4,7 +4,7 @@
 -- @author Ola Hansson <ola@polyxena.net>
 
 create or replace function inline_0 ()
-returns integer as'
+returns integer as $$
 declare
     template_id integer;
 begin
@@ -45,8 +45,7 @@ select define_function_args('file_storage__new_version','filename,description,mi
 -- procedure file_storage__new_version/6
 --
 CREATE OR REPLACE FUNCTION file_storage__new_version(
-   new_version__filename --         --
-       varchar,
+   new_version__filename varchar,
    new_version__description varchar,
    new_version__mime_type varchar,
    new_version__item_id integer,
