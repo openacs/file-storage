@@ -43,6 +43,19 @@
         </querytext>
     </fullquery>
 
+    <fullquery name="fs::get_folder_objects.select_folder_contents">
+        <rdbms><type>postgresql</type><version>8.4</version></rdbms>
+        <querytext>
+
+          select cr_items.item_id as object_id,
+          cr_items.name
+          from cr_items
+          where cr_items.parent_id = :folder_id
+          and acs_permission__permission_p(cr_items.item_id, :user_id, 'read')
+
+        </querytext>
+    </fullquery>
+
     <fullquery name="fs::get_folder_contents.select_folder_contents">
         <querytext>
 
@@ -73,6 +86,36 @@
 
         </querytext>
     </fullquery>
+
+
+    <fullquery name="fs::get_folder_contents.select_folder_contents">
+        <rdbms><type>postgresql</type><version>8.4</version></rdbms>
+        <querytext>
+
+           select fs_objects.object_id,
+           fs_objects.name,
+           fs_objects.title,
+           fs_objects.live_revision,
+           fs_objects.type,
+           to_char(fs_objects.last_modified, 'YYYY-MM-DD HH24:MI:SS') as last_modified_ansi,
+           fs_objects.content_size,
+           fs_objects.url,
+           fs_objects.key,
+           fs_objects.sort_key,
+           fs_objects.file_upload_name,
+           fs_objects.title,
+           case when fs_objects.last_modified >= (now() - interval '$n_past_days days') then 1 else 0 end as new_p,
+           acs_permission__permission_p(fs_objects.object_id, :user_id, 'admin') as admin_p,
+           acs_permission__permission_p(fs_objects.object_id, :user_id, 'delete') as delete_p,
+           acs_permission__permission_p(fs_objects.object_id, :user_id, 'write') as write_p
+           from fs_objects
+           where fs_objects.parent_id = :folder_id
+           and acs_permission__permission_p(fs_objects.object_id, :user_id, 'read')
+           order by fs_objects.sort_key, fs_objects.name
+
+        </querytext>
+    </fullquery>
+
 
     <fullquery name="fs_get_folder_name.folder_name">
         <querytext>
