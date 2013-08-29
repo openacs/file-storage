@@ -955,6 +955,7 @@ ad_proc fs::add_created_version {
 			 -image_type "file_storage_object" \
 			 -title $title \
 			 -description $description \
+             -package_id $package_id \
 			 $parent_id \
 			 $tmp_filename \
 			 $tmp_size \
@@ -1022,6 +1023,7 @@ ad_proc fs::add_version {
 			 -image_type "file_storage_object" \
 			 -title $title \
 			 -description $description \
+             -package_id $package_id \
 			 $parent_id \
 			 $tmp_filename \
 			 $tmp_size \
