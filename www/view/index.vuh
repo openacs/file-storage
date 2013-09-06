@@ -60,7 +60,7 @@ if {[parameter::get -parameter BehaveLikeFilesystemP -default 0] || [catch {set 
         }           
 
         if {![exists_and_not_null version_id]} {
-            set version_id [item::get_live_revision $file_id]
+            set version_id [content::item::get_live_revision -item_id $file_id]
         }
 
         if {[apm_package_installed_p views]} {
@@ -77,7 +77,7 @@ if {[parameter::get -parameter BehaveLikeFilesystemP -default 0] || [catch {set 
 
 } else {
     
-    set version_id [item::get_live_revision $file_id]
+    set version_id [content::item::get_live_revision -item_id $file_id]
     permission::require_permission \
         -party_id $user_id \
         -object_id $version_id \
