@@ -9,7 +9,7 @@ ad_page_contract {
 } 
 
 # Check for read permission on this url
-ad_require_permission $url_id read
+permission::require_permission -object_id $url_id -privilege read
 
 # Check the URL
 set url [db_string select_url {} -default {}]

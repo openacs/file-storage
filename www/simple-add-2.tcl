@@ -21,7 +21,7 @@ ad_page_contract {
 set user_id [ad_conn user_id]
 
 # Check for write permission on this folder
-ad_require_permission $folder_id write
+permission::require_permission -object_id $folder_id -privilege write
 
 set item_id [content::extlink::new -url $url -label $title -description $description -parent_id $folder_id]
 

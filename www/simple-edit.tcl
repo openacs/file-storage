@@ -9,7 +9,7 @@ ad_page_contract {
 }
 
 # check for write permission on the item
-ad_require_permission $object_id write
+permission::require_permission -object_id $object_id -privilege write
 
 # Message lookup uses variable pretty_name
 
