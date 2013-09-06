@@ -30,7 +30,7 @@ ad_page_contract {
 
 # check for delete permission on the folder
 
-ad_require_permission $folder_id delete
+permission::require_permission -object_id $folder_id -privilege delete
 
 # Check if there are child items they don't have permission to delete
 # (Irrelevant at this point because they can't delete folders with

@@ -21,7 +21,7 @@ ad_page_contract {
 
 #check they have write permission on this file
 
-ad_require_permission $file_id write
+permission::require_permission -object_id $file_id -privilege write
 
 set context [fs_context_bar_list -final "[_ file-storage.Rename]" $file_id]
 

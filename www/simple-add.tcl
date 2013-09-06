@@ -23,7 +23,7 @@ ad_page_contract {
 
 # check for write permission on the folder
 
-ad_require_permission $folder_id write
+permission::require_permission -object_id $folder_id -privilege write
 
 # set templating datasources
 

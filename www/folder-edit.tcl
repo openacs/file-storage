@@ -17,7 +17,7 @@ ad_page_contract {
     context_bar:onevalue
 }
 
-ad_require_permission $folder_id admin
+permission::require_permission -object_id $folder_id -privilege admin
 
 # set templating datasources
 

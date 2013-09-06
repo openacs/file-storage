@@ -10,7 +10,7 @@ ad_page_contract {
 }
 
 # check for delete permission on the file
-ad_require_permission $object_id delete
+permission::require_permission -object_id $object_id -privilege delete
 
 # Delete
 
