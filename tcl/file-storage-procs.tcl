@@ -619,7 +619,7 @@ ad_proc -public fs::publish_versioned_object_to_file_system {
 	    } else {
 		set file_name $file_upload_name
 	    }
-	} elseif { [item::get_mime_info [item::get_live_revision $object_id]] } {
+	} elseif { [item::get_mime_info [content::item::get_live_revision -item_id $object_id]] } {
 	    # We make sure that the file_name contains the file
 	    # extension at the end so that the users default
 	    # application for that file type can be used
@@ -1304,7 +1304,7 @@ ad_proc -public fs::item_editable_info {
     # hardcoding it for now
     set editable_mime_types [list "text/html" "text/plain"]
 
-    item::get_mime_info [item::get_live_revision $item_id]
+    item::get_mime_info [content::item::get_live_revision -item_id $item_id]
 
     if {[lsearch -exact $editable_mime_types [string tolower $mime_info(mime_type)]] != -1} {
         set mime_info(editable_p) 1
@@ -1354,7 +1354,7 @@ ad_proc -public fs::get_object_info {
     set user_id [ad_conn user_id]
     set root_folder_id [fs::get_root_folder]
     if {![exists_and_not_null revision_id]} {
-        set revision_id [item::get_live_revision $file_id]
+        set revision_id [content::item::get_live_revision -item_id $file_id]
     }
 
     db_1row file_info {
