@@ -44,8 +44,8 @@ set user_id [ad_conn user_id]
     -object_id $folder_id \
     -privilege "read"
 
-set write_p [ad_permission_p $folder_id write]
-set admin_p [ad_permission_p $folder_id admin]
+set write_p [permission::permission_p -object_id $folder_id -privilege write]
+set admin_p [permission::permission_p -object_id $folder_id -privilege admin]
 
 # might want a more complicated check here, since a person might have
 # delete permission on the folder, but not on some child items and,
@@ -54,7 +54,7 @@ set admin_p [ad_permission_p $folder_id admin]
 
 set delete_p $admin_p
 if {!$delete_p} {
-    set delete_p [ad_permission_p $folder_id delete]
+    set delete_p [permission::permission_p -object_id $folder_id -privilege delete]
 }
 
 set package_id [ad_conn package_id]
