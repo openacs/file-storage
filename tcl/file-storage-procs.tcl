@@ -1145,7 +1145,7 @@ ad_proc fs::webdav_url {
             item is not WebDAV enabled
 } {
 
-    if {  [ad_parameter "UseWebDavP"] == 0 } {
+    if {  [parameter::get -parameter "UseWebDavP"] == 0 } {
 	return "ho"
     }  
     if {[empty_string_p $package_id]} {

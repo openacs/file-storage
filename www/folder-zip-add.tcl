@@ -29,7 +29,7 @@ ad_page_contract {
     }
     max_size -requires {upload_file} {
         set n_bytes [file size ${upload_file.tmpfile}]
-        set max_bytes [ad_parameter "MaximumFileSize"]
+        set max_bytes [parameter::get -parameter "MaximumFileSize"]
         if { $n_bytes > $max_bytes } {
             ad_complain "Your file is larger than the maximum file size allowed on this system ([util_commify_number $max_bytes] bytes)"
         }

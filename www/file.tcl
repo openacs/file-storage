@@ -32,7 +32,7 @@ permission::require_permission -object_id $file_id -privilege read
 set user_id [ad_conn user_id]
 set context [fs_context_bar_list $file_id]
 
-set show_administer_permissions_link_p [ad_parameter "ShowAdministerPermissionsLinkP"]
+set show_administer_permissions_link_p [parameter::get -parameter "ShowAdministerPermissionsLinkP"]
 set root_folder_id [fs::get_root_folder]
 db_1row file_info ""
 
