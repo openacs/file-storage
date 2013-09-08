@@ -15,7 +15,7 @@ if { ![regexp {^[1-9][0-9]*$} $subscr_id] } {
 
 set stub [lindex $path_info 1]
 
-if { ![string equal $stub rss.xml] } {
+if { $stub ne "rss.xml" } {
 	ns_returnnotfound
 	ad_script_abort 
 }

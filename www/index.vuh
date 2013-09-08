@@ -11,7 +11,7 @@ set extra_uri [ad_conn path_info]
 set root_folder [fs_get_root_folder]
 set file_item_id [fs::get_item_id -name $extra_uri -folder_id $root_folder]
 ns_log debug "File Storage index.vuh item_id=$file_item_id URL=[ad_conn url]"
-if {[empty_string_p $file_item_id]} {
+if {$file_item_id eq ""} {
 	ns_log debug "File Storage return not found"
 	ns_return 404 text/plain "File Not Found"
 	ad_script_abort
