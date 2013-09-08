@@ -10,14 +10,14 @@
     <version name="5.6.0d2" url="http://openacs.org/repository/download/apm/file-storage-5.6.0d2.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Collaborative document storage</summary>
-        <release-date>2013-08-30</release-date>
+        <release-date>2013-09-08</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/plain">Provides a versioned document store with storage in the filesystem or database (depending on configuration).  Documents and folders can be permissioned and folders downloaded.</description>
         <maturity>0</maturity>
         <package_instance_name>#file-storage.file-storage#</package_instance_name>
 
         <provides url="file-storage" version="5.6.0d3"/>
-	<requires url="acs-kernel" version="5.8.0"/>
+	<requires url="acs-kernel" version="5.8.1d1"/>
         <requires url="acs-content-repository" version="5.6.0d1"/>
         
         <requires url="categories" version="1.1.2d3"/>
