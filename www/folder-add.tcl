@@ -26,7 +26,7 @@ ad_page_contract {
 set user_id [ad_conn user_id]
 
 if {![acs_user::site_wide_admin_p]} {
-    ad_returnredirect "./?[export_url_vars folder_id]"
+    ad_returnredirect "./?[export_vars -url {folder_id}]"
 }
 
 set package_id [ad_conn package_id]
@@ -140,7 +140,7 @@ ad_form -extend -name file_add -form {} -on_submit {
     if {[exists_and_not_null return_url]} {
 	ad_returnredirect $return_url
     } else {
-	ad_returnredirect "./?[export_url_vars folder_id]"
+	ad_returnredirect "./?[export_vars -url {folder_id}]"
     }
     ad_script_abort
     

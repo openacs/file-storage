@@ -277,7 +277,7 @@ ad_form -extend -form {} -select_query_name {get_file} -new_data {
     if {[exists_and_not_null return_url]} {
 	ad_returnredirect $return_url
     } else {
-	ad_returnredirect "./?[export_url_vars folder_id]"
+	ad_returnredirect "./?[export_vars -url {folder_id}]"
     }
     ad_script_abort
 
