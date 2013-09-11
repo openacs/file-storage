@@ -1,5 +1,5 @@
 <master>
-<property name="title">Add/Edit RSS for @folder_name@</property>
+<property name="doc(title)">Add/Edit RSS for @folder_name@</property>
 <property name="header">Add/Edit RSS for @folder_name@</property>
 <property name="context">@context;noquote@</property>
 
