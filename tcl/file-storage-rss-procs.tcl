@@ -75,7 +75,7 @@ ad_proc -private fs::rss::datasource {
     # But folder names can contain spaces, so we'll urlencode just in case.
     set pretty_folder_url "${ad_url}${base_url}"
     if { $folder_id != $root_folder_id } {
-        set url_stub [item::get_url -root_folder_id $root_folder_id $folder_id]
+        set url_stub [content::item::get_virtual_path -item_id $root_folder_id $folder_id]
         set stub_parts [split $url_stub /]
         set enc_url_stub_list [list]
         foreach part $stub_parts {
