@@ -1,5 +1,5 @@
 <master>
-<property name="title">@folder_name@</property>
+<property name="doc(title)">@folder_name@</property>
 <property name="header">@folder_name@</property>
 <property name="context">@context;noquote@</property>
 <property name="displayed_object_id">@folder_id;noquote@</property>
