@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <message_catalog package_key="file-storage" locale="en_US" charset="ISO-8859-1">
-
   <msg key="_Upload">Revision</msg>
   <msg key="Action">Action</msg>
   <msg key="Actions">Actions:</msg>
@@ -149,6 +148,7 @@ delete, therefore you cannot delete it.</msg>
   <msg key="No_such_type">No such type</msg>
   <msg key="no_such_URL">no such URL</msg>
   <msg key="No_valid_destination_folders_exist">No valid destination folder exists</msg>
+  <msg key="Not_Allowed">Not Allowed</msg>
   <msg key="PDF">PDF</msg>
   <msg key="Permissions">Permissions</msg>
   <msg key="Please_select_at_least_one_item_to_copy.">Please select at least one item to copy.</msg>
