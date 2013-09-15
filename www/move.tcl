@@ -35,7 +35,7 @@ db_multirow -extend {move_message} move_objects get_move_objects "" {
 	set move_message ""
 	incr allowed_count
     } else {
-	set move_message [_ file_storage.Not_Allowed]
+	set move_message [_ file-storage.Not_Allowed]
 	incr not_allowed_count
     }
     if {$type eq "folder"} {

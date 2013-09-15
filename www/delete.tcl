@@ -45,7 +45,7 @@ db_multirow -extend {delete_message} delete_list get_to_be_deleted {} {
 	      set delete_message ""
 	      incr allowed_count
 	  } else {
-	      set delete_message [_ file_storage.Not_Allowed]
+	      set delete_message [_ file-storage.Not_Allowed]
 	      incr not_allowed_count
 	  }
 

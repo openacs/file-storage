@@ -32,7 +32,7 @@ db_multirow -extend {copy_message} copy_objects get_copy_objects "" {
 	set copy_message ""
 	incr allowed_count
     } else {
-	set copy_message [_ file_storage.Not_Allowed]
+	set copy_message [_ file-storage.Not_Allowed]
 	incr not_allowed_count
     }
     if {$type eq "folder"} {
