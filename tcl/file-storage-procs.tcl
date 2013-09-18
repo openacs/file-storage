@@ -657,7 +657,21 @@ ad_proc -public fs::publish_versioned_object_to_file_system {
 	    set cr_path [cr_fs_path $storage_area_key]
 	    set cr_file_name [db_string select_file_name {}]
 
-	    file copy -- "${cr_path}${cr_file_name}" [file join ${path} ${file_name}]
+	    #
+	    # When there are multiple "unnamed files" in a directory,
+	    # the constructed full_name might exist already. This
+	    # would lead to an error in the "file copy"
+	    # operation. Therefore, generate a new name with an
+	    # alternate suffix in these cases.
+	    #
+            set full_name [file join $path $file_name]
+            set base_name $full_name
+            set count 0
+            while {[file exists $full_name]} { 
+               set full_name $base_name-[incr $count]
+            }
+
+            file copy -- "${cr_path}${cr_file_name}" $full_name 
 	}
     }
 
