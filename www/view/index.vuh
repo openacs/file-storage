@@ -45,14 +45,7 @@ if {[parameter::get -parameter BehaveLikeFilesystemP -default 0] || [catch {set 
     }
 
     if {$file_id == 0} {
-        # ns_returnnotfound
-        set page "[ad_header {Content Item Not Found}]"
-        append page "<h3>Content Item Not Found</h3>"
-        append page "The requested item is not available for viewing.  "
-        append page "The item is either not available on this server or it is not in a publishable state  "
-        append page "Unpublished items can be viewed via the CMS interface if the CMS package is installed.<br>"
-        append page "[ad_footer]"
-        doc_return 404 text/html $page
+        ns_returnnotfound
     } else {
 
         if {[content::symlink::is_symlink -item_id $file_id]} {
