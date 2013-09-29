@@ -47,7 +47,7 @@ if {[info exists permission_check] && $permission_check eq 0 } {
 
 set folder_name [lang::util::localize [fs::get_object_name -object_id  $folder_id]]
 
-foreach { package_id root_folder_id } [fs::get_folder_package_and_root $folder_id] break
+lassign [fs::get_folder_package_and_root $folder_id]  package_id root_folder_id 
     set fs_url [site_node::get_url_from_object_id -object_id $package_id]
     if {![string equal $root_folder_id $folder_id] && [string equal "/view/" $base_url]} {
 	set folder_path [db_exec_plsql get_folder_path {}]
