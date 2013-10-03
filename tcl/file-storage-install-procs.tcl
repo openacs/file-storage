@@ -166,7 +166,7 @@ ad_proc -private ::install::xml::action::file-storage-folder { node } {
 
     set folder_id [fs::new_folder -name $name -pretty_name $pretty_name -parent_id $root -creation_user [ad_conn user_id] -creation_ip 127.0.0.1]
 
-    if {![string equal $id ""]} {
+    if {$id ne "" } {
       set ::install::xml::ids($id) $folder_id
     }
 }

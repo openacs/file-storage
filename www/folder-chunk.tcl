@@ -13,14 +13,14 @@ ad_page_contract {
     page_num
 }
 
-if {![exists_and_not_null folder_id]} {
+if {(![info exists folder_id] || $folder_id eq "")} {
     ad_return_complaint 1 [_ file-storage.lt_bad_folder_id_folder_]
     ad_script_abort
 }
-if {![exists_and_not_null allow_bulk_actions]} {
+if {(![info exists allow_bulk_actions] || $allow_bulk_actions eq "")} {
     set allow_bulk_actions "0"
 }
-if { ![exists_and_not_null category_id] } {
+if { (![info exists category_id] || $category_id eq "") } {
     set category_id ""
 }
 set viewing_user_id [ad_conn user_id]
@@ -41,11 +41,11 @@ if {!$delete_p} {
     set delete_p [permission::permission_p -party_id $viewing_user_id -object_id $folder_id -privilege "delete"]
 }
 
-if {![exists_and_not_null n_past_days]} {
+if {(![info exists n_past_days] || $n_past_days eq "")} {
     set n_past_days 99999
 }
 
-if {![exists_and_not_null fs_url]} {
+if {(![info exists fs_url] || $fs_url eq "")} {
     set fs_url [ad_conn package_url]
 }
 
@@ -53,7 +53,7 @@ set folder_name [lang::util::localize [fs::get_object_name -object_id  $folder_i
 
 set content_size_total 0
 
-if {![exists_and_not_null format]} {
+if {(![info exists format] || $format eq "")} {
     set format table
 }
 
@@ -61,7 +61,7 @@ if {![exists_and_not_null format]} {
 #So we need to query for the package_id rather than getting it from ad_conn.
 set package_and_root [fs::get_folder_package_and_root $folder_id]
 set package_id [lindex $package_and_root 0]
-if {![exists_and_not_null root_folder_id]} {
+if {(![info exists root_folder_id] || $root_folder_id eq "")} {
     set root_folder_id [lindex $package_and_root 1]
 }
 
@@ -88,7 +88,7 @@ set expose_rss_p [parameter::get -parameter ExposeRssP -package_id $package_id -
 set like_filesystem_p [parameter::get -parameter BehaveLikeFilesystemP -package_id $package_id -default 1]
 
 set target_window_name [parameter::get -parameter DownloadTargetWindowName -package_id $package_id -default ""]
-if { [string equal $target_window_name ""] } {
+if {$target_window_name eq ""} {
     set target_attr ""
 } else {
     set target_attr "target=\"$target_window_name\""
@@ -165,7 +165,7 @@ if {[apm_package_installed_p views]} {
     concat $elements [list views [list label "Views"]]
 }
 
-if {![exists_and_not_null return_url]} {
+if {(![info exists return_url] || $return_url eq "")} {
     set return_url [export_vars -base "index" {folder_id}]
 }
 set vars_to_export [list return_url]
@@ -214,11 +214,11 @@ template::list::create \
 
 set orderby [template::list::orderby_clause -orderby -name contents_${folder_id}]
 
-if {[string equal $orderby ""]} {
+if {$orderby eq ""} {
     set orderby " order by fs_objects.sort_key, fs_objects.name asc"
 }
 
-if { $categories_p && [exists_and_not_null category_id] } {
+if { $categories_p && ([info exists category_id] && $category_id ne "") } {
     set categories_limitation [db_map categories_limitation]
 } else {
     set categories_limitation {}
@@ -228,7 +228,7 @@ db_multirow -extend {label alt_icon icon last_modified_pretty content_size_prett
     set last_modified_ansi [lc_time_system_to_conn $last_modified_ansi]
     
     set last_modified_pretty [lc_time_fmt $last_modified_ansi "%x %X"]
-    if {[string equal $type "folder"]} {
+    if {$type eq "folder"} {
         set content_size_pretty [lc_numeric $content_size]
         append content_size_pretty "&nbsp;[_ file-storage.items]"
         set pretty_type "#file-storage.Folder#"
@@ -238,14 +238,14 @@ db_multirow -extend {label alt_icon icon last_modified_pretty content_size_prett
         } elseif {$content_size < 1024} {
             set content_size_pretty "[lc_numeric $content_size]&nbsp;[_ file-storage.bytes]"
         } else {
-            set content_size_pretty "[lc_numeric [expr $content_size / 1024 ]]&nbsp;[_ file-storage.kb]"
+            set content_size_pretty "[lc_numeric [expr {$content_size / 1024 }]]&nbsp;[_ file-storage.kb]"
         }
 
     }
 
     set file_upload_name [fs::remove_special_file_system_characters -string $file_upload_name]
 
-    if { ![empty_string_p $content_size] } {
+    if { $content_size ne "" } {
         incr content_size_total $content_size
     }
 
@@ -293,7 +293,7 @@ db_multirow -extend {label alt_icon icon last_modified_pretty content_size_prett
             db_1row file_info {select * from fs_objects where object_id = :target_object_id}
             # because of the side effect that SQL sets TCL variables, set object_id back to the original value
             set object_id $original_object_id
-            if {[string equal $type "folder"]} {
+            if {$type eq "folder"} {
                 set content_size_pretty [lc_numeric $content_size]
                 append content_size_pretty "&nbsp;[_ file-storage.items]"
                 set pretty_type "#file-storage.Folder#"
@@ -301,7 +301,7 @@ db_multirow -extend {label alt_icon icon last_modified_pretty content_size_prett
                 if {$content_size < 1024} {
                     set content_size_pretty "[lc_numeric $content_size]&nbsp;[_ file-storage.bytes]"
                 } else {
-                    set content_size_pretty "[lc_numeric [expr $content_size / 1024 ]]&nbsp;[_ file-storage.kb]"
+                    set content_size_pretty "[lc_numeric [expr {$content_size / 1024 }]]&nbsp;[_ file-storage.kb]"
                 }
                 
             }

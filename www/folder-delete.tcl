@@ -10,7 +10,7 @@ ad_page_contract {
     {confirmed_p "f"}
 } -validate {
     valid_folder -requires {folder_id:integer} {
-	if ![fs_folder_p $folder_id] {
+	if {![fs_folder_p $folder_id]} {
 	    ad_complain "[_ file-storage.lt_The_specified_folder__1]"
 	}
     }
@@ -58,7 +58,7 @@ ad_form -name "folder-delete" \
     } -on_request {
 
     } -on_submit {
-	if {[string equal $blocked_p "f"] } {
+	if {$blocked_p eq "f"} {
 	    # they have confirmed that they want to delete the folder
 	    
 	    callback fs::folder_delete -package_id [ad_conn package_id] -folder_id $folder_id
@@ -73,7 +73,7 @@ ad_form -name "folder-delete" \
     -export {folder_id}
    
 
-if { [string equal $confirmed_p "t"] && [string equal $blocked_p "f"] } {
+if { $confirmed_p eq "t" && $blocked_p eq "f" } {
     # they have confirmed that they want to delete the folder
 
     db_1row parent_id "

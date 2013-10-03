@@ -14,7 +14,7 @@ permission::require_permission -object_id $url_id -privilege read
 # Check the URL
 set url [db_string select_url {} -default {}]
 
-if {![empty_string_p $url]} {
+if {$url ne ""} {
     ad_returnredirect $url
 } else {
     return -code error [_ file-storage.no_such_URL]

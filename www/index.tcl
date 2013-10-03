@@ -98,7 +98,7 @@ set context [fs_context_bar_list -root_folder_id $root_folder_id $folder_id]
 # For now I leave it in as it is.
 
 set project_item_id [application_data_link::get_linked -from_object_id $folder_id -to_object_type "content_item"]
-if {[exists_and_not_null project_item_id]} {
+if {([info exists project_item_id] && $project_item_id ne "")} {
     set project_url [pm::project::url -project_item_id $project_item_id]
     set project_name [pm::project::name -project_item_id $project_item_id]
 } else {
@@ -106,7 +106,7 @@ if {[exists_and_not_null project_item_id]} {
     # The folder itself was not linked. Let's try the parent folder.
     set parent_folder [content::item::get_parent_folder -item_id $folder_id]
     set project_item_id [application_data_link::get_linked -from_object_id $parent_folder -to_object_type "content_item"]
-    if {[exists_and_not_null project_item_id]} {
+    if {([info exists project_item_id] && $project_item_id ne "")} {
 	set project_url [pm::project::url -project_item_id $project_item_id]
 	set project_name [pm::project::name -project_item_id $project_item_id]
     } else {
@@ -117,7 +117,7 @@ if {[exists_and_not_null project_item_id]} {
 }
 
 # Check if the user has permissions. If not, don't care
-if {![empty_string_p $project_item_id] && ![permission::permission_p -object_id $project_item_id -privilege "read"]} {
+if {$project_item_id ne "" && ![permission::permission_p -object_id $project_item_id -privilege "read"]} {
     set project_url {}
 }
 

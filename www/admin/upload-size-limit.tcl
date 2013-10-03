@@ -12,7 +12,7 @@ ad_page_contract {
 } 
 
 set max_size [ns_config "ns/server/[ns_info server]/module/nssock" maxinput]
-if { [string equal $max_size ""] } {
+if {$max_size eq ""} {
     set max_size 0
 }
 
@@ -32,7 +32,7 @@ ad_form -name upload_limit_size -export folder_id -form {
 
 } -on_submit {
     parameter::set_value  -parameter "MaximumFileSize" -value $new_size
-    if {![empty_string_p $return_url]} {
+    if {$return_url ne ""} {
 	ad_returnredirect $return_url
     }
 }
