@@ -9,7 +9,7 @@ ad_page_contract {
     {confirmed_p "f"}
 } -validate {
     valid_version -requires {version_id} {
-	if ![fs_version_p $version_id] {
+	if {![fs_version_p $version_id]} {
 	    ad_complain [_ file-storage.lt_version_not_valid]
 	}
     }

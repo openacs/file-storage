@@ -23,7 +23,7 @@ ad_page_contract {
     instructions:onevalue
 } -validate {
     file_id_or_folder_id {
-	if {[exists_and_not_null file_id] && ![exists_and_not_null folder_id]} {
+	if {([info exists file_id] && $file_id ne "") && (![info exists folder_id] || $folder_id eq "")} {
 	    set folder_id [db_string get_folder_id "select parent_id as folder_id from cr_items where item_id=:file_id;" -default ""]
 	}
 	if {![fs_folder_p $folder_id]} {
@@ -80,7 +80,7 @@ if {[parameter::get -parameter AllowTextEdit -default 0]} {
         # To make content editable
         set revision_id [content::item::get_live_revision -item_id $file_id]
         set mime_type [db_string get_mime_type "select mime_type from cr_revisions where revision_id = :revision_id"]
-        if { [string equal $mime_type "text/html"] } {
+        if {$mime_type eq "text/html"} {
             ad_form -extend -form {
                 {edit_content:richtext(richtext),optional 
                     {label "Content"} 
@@ -95,7 +95,7 @@ if {[parameter::get -parameter AllowTextEdit -default 0]} {
     }
 }
 
-if {[exists_and_not_null return_url]} {
+if {([info exists return_url] && $return_url ne "")} {
     ad_form -extend -form {
 	{return_url:text(hidden) {value $return_url}}
     }
@@ -127,7 +127,7 @@ if {([ad_form_new_p -key file_id]) && $unpack_bin_installed } {
     }
 }
 if { [parameter::get -parameter CategoriesP -package_id $package_id -default 0] } {
-     if { [exists_and_not_null file_id] } {
+     if { ([info exists file_id] && $file_id ne "") } {
 	 set categorized_object_id $file_id
      } else {
 	 # pre-populate with categories from the folder
@@ -142,10 +142,10 @@ if { [parameter::get -parameter CategoriesP -package_id $package_id -default 0] 
 
 ad_form -extend -form {} -select_query_name {get_file} -new_data {
     
-  if {![exists_and_not_null unpack_p]} {
+  if {(![info exists unpack_p] || $unpack_p eq "")} {
       set unpack_p f
   }
-  if { $unpack_p && ![empty_string_p $unpack_binary] && [file extension [template::util::file::get_property filename $upload_file]] eq ".zip"  } {
+  if { $unpack_p && $unpack_binary ne "" && [file extension [template::util::file::get_property filename $upload_file]] eq ".zip"  } {
 	
 	set path [ns_tmpnam]
 	file mkdir $path
@@ -196,17 +196,17 @@ ad_form -extend -form {} -select_query_name {get_file} -new_data {
 	# and the file with the same name already exists
 	# we create a new revision
 	
-	if {[string equal $this_title ""]} {
+	if {$this_title eq ""} {
 	    set this_title $upload_file
 	}
 	
-	if {![empty_string_p $name]} {
+	if {$name ne ""} {
 	    set upload_file $name
 	}
 
 	set existing_item_id [fs::get_item_id -name $upload_file -folder_id $folder_id]
 	
-	if {![empty_string_p $existing_item_id]} {
+	if {$existing_item_id ne ""} {
 	    # file with the same name already exists in this folder
             if { [parameter::get -parameter "BehaveLikeFilesystemP" -package_id [ad_conn package_id]] } {
                 # create a new revision -- in effect, replace the existing file
@@ -253,7 +253,7 @@ ad_form -extend -form {} -select_query_name {get_file} -new_data {
 } -edit_data {
     set this_title $title
     set filename [template::util::file::get_property filename $upload_file]
-    if {[string equal $this_title ""]} {
+    if {$this_title eq ""} {
 	set this_title $filename
     }
 	
@@ -274,7 +274,7 @@ ad_form -extend -form {} -select_query_name {get_file} -new_data {
     }
 } -after_submit {
 
-    if {[exists_and_not_null return_url]} {
+    if {([info exists return_url] && $return_url ne "")} {
 	ad_returnredirect $return_url
     } else {
 	ad_returnredirect "./?[export_vars -url {folder_id}]"
@@ -284,7 +284,7 @@ ad_form -extend -form {} -select_query_name {get_file} -new_data {
 }
 
 # if title isn't passed in ignore lock_title_p
-if {[empty_string_p $title]} {
+if {$title eq ""} {
     set lock_title_p 0
 }
 
@@ -294,6 +294,6 @@ if { [parameter::get -parameter "BehaveLikeFilesystemP" -package_id [ad_conn pac
     set instructions "[_ file-storage.Add_Dup_As_New_File]"
 }
 
-set unpack_available_p [expr ![empty_string_p [string trim [parameter::get -parameter UnzipBinary]]]]
+set unpack_available_p [expr {[string trim [parameter::get -parameter UnzipBinary]] ne ""]]
 
 ad_return_template

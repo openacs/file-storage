@@ -8,7 +8,7 @@ ad_page_contract {
     folder_id:integer,notnull
 } -validate {
     valid_folder -requires {parent_id:integer} {
-	if ![fs_folder_p $folder_id] {
+	if {![fs_folder_p $folder_id]} {
 	    ad_complain "[_ file-storage.lt_The_specified_folder_]"
 	}
     }

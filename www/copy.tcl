@@ -61,7 +61,7 @@ if {[info exists folder_id]} {
      set error_items [list]      
     template::multirow foreach copy_objects {
         db_transaction {
-            if {![string equal $type "folder"] } {
+            if {$type ne "folder" } {
                 set file_rev_id [db_exec_plsql copy_item {}]
 		callback fs::file_revision_new -package_id $package_id -file_id $object_id -parent_id $folder_id
             } else {
@@ -108,16 +108,16 @@ if {[info exists folder_id]} {
             }
         }
 
-    if {[empty_string_p $root_folder_id]} {
+    if {$root_folder_id eq ""} {
 	set root_folder_id [fs::get_root_folder]
     }
     set object_id $objects_to_copy
     set cancel_url "[ad_conn url]?[ad_conn query]"
     db_multirow -extend {copy_url} folder_tree get_folder_tree "" {
-        if {[lsearch [concat $not_allowed_parents $not_allowed_children] $folder_id] ne "-1" || 
-            [lsearch $not_allowed_children $parent_id] ne "-1" } {
-            
-            if {[lsearch $not_allowed_children $parent_id] ne "-1"} {
+        if {$folder_id in [concat $not_allowed_parents $not_allowed_children] 
+	    || $parent_id in $not_allowed_children
+	} {
+            if {$parent_id in $not_allowed_children} {
                 lappend not_allowed_children $folder_id
             }
             set copy_url ""
