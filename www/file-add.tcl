@@ -294,6 +294,6 @@ if { [parameter::get -parameter "BehaveLikeFilesystemP" -package_id [ad_conn pac
     set instructions "[_ file-storage.Add_Dup_As_New_File]"
 }
 
-set unpack_available_p [expr {[string trim [parameter::get -parameter UnzipBinary]] ne ""]]
+set unpack_available_p [expr {[string trim [parameter::get -parameter UnzipBinary]] ne ""}]
 
 ad_return_template
