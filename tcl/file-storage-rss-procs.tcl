@@ -88,13 +88,13 @@ ad_proc -private fs::rss::datasource {
     set items [list]
     set counter 0
 
-    if {$descend_p eq "f"} {
+    if {$descend_p == "f"} {
         set parent_clause "parent_id = :folder_id"
     } else {
         set parent_clause [db_map descend_parent_clause]
     }
 
-    if {$include_revisions_p eq "f"} {
+    if {$include_revisions_p == "f"} {
         set revisions_clause "r.revision_id = o.live_revision"
     } else {
         set revisions_clause "r.item_id = o.object_id"
@@ -105,7 +105,7 @@ ad_proc -private fs::rss::datasource {
         set content "content"
         set description $description
 
-        if {$include_revisions_p eq "t"} {
+        if {$include_revisions_p == "t"} {
             append description "<br><br><b>Note:</b> This may be a new revision of an existing file."
         }
         
