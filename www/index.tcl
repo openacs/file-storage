@@ -127,8 +127,8 @@ if { !${root_folder_p}} {
 	set up_url [ad_conn package_url]
 	set up_name [ad_conn instance_name]
     } else {
-	set up_url [lindex [lindex $context end-1] 0]
-	set up_name [lindex [lindex $context end-1] 1]
+	set up_url [lindex $context end-1 0]
+	set up_name [lindex $context end-1 1]
     }
     set up_name [lang::util::localize $up_name]
 }

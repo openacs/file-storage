@@ -66,7 +66,7 @@ set actions [list "[_ file-storage.Upload_Revision]" file-add?[export_vars [list
                  "[_ file-storage.Move_File]" [export_vars -base move {{object_id $file_id} {return_url $folder_view_url}}] "Move file" \
                  "[_ file-storage.Delete_File]" [export_vars -base delete {{object_id $file_id} {return_url $folder_view_url}}] "Delete file"]
 
-if {$delete_p eq "t"} {
+if {$delete_p == "t"} {
     lappend actions [_ file-storage.Set_Permissions] [export_vars -base permissions {{object_id $file_id}}] [_ file-storage.lt_Modify_permissions_on]
 }
 

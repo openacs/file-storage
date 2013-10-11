@@ -58,7 +58,7 @@ ad_form -name "folder-delete" \
     } -on_request {
 
     } -on_submit {
-	if {$blocked_p eq "f"} {
+	if {$blocked_p == "f"} {
 	    # they have confirmed that they want to delete the folder
 	    
 	    callback fs::folder_delete -package_id [ad_conn package_id] -folder_id $folder_id
@@ -73,7 +73,7 @@ ad_form -name "folder-delete" \
     -export {folder_id}
    
 
-if { $confirmed_p eq "t" && $blocked_p eq "f" } {
+if { $confirmed_p == "t" && $blocked_p == "f" } {
     # they have confirmed that they want to delete the folder
 
     db_1row parent_id "
