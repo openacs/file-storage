@@ -147,7 +147,7 @@ ad_form -extend -form {} -select_query_name {get_file} -new_data {
   }
   if { $unpack_p && $unpack_binary ne "" && [file extension [template::util::file::get_property filename $upload_file]] eq ".zip"  } {
 	
-	set path [ns_tmpnam]
+	set path [ad_tmpnam]
 	file mkdir $path
 	
 	
@@ -177,7 +177,7 @@ ad_form -extend -form {} -select_query_name {get_file} -new_data {
         # create a tmp file to import from user entered HTML
         set content_body [template::util::richtext::get_property html_value $content_body]
         set mime_type text/html
-        set tmp_filename [ns_tmpnam]
+        set tmp_filename [ad_tmpnam]
         set fd [open $tmp_filename w] 
         puts $fd $content_body
         close $fd

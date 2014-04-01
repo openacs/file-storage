@@ -512,7 +512,7 @@ ad_proc -public fs::publish_object_to_file_system {
     publish a file storage object to the file system
 } {
     if {$path eq ""} {
-	set path [ns_tmpnam]
+	set path [ad_tmpnam]
     }
 
     db_1row select_object_info {}
@@ -544,7 +544,7 @@ ad_proc -public fs::publish_folder_to_file_system {
     publish the contents of a file storage folder to the file system
 } {
     if {$path eq ""} {
-	set path [ns_tmpnam]
+	set path [ad_tmpnam]
     }
 
     if {$folder_name eq ""} {
@@ -576,7 +576,7 @@ ad_proc -public fs::publish_url_to_file_system {
     (which at least KDE also knows how to handle)
 } {
     if {$path eq ""} {
-	set path [ns_tmpnam]
+	set path [ad_tmpnam]
 	file mkdir $path
     }
 
@@ -604,7 +604,7 @@ ad_proc -public fs::publish_versioned_object_to_file_system {
     publish an object to the file system
 } {
     if {$path eq ""} {
-	set path [ns_tmpnam]
+	set path [ad_tmpnam]
 	file mkdir $path
     }
 
