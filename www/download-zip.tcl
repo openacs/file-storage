@@ -11,7 +11,7 @@ auth::require_login
 set user_id [ad_conn user_id]
 
 # publish the object to the file system
-set in_path [ns_tmpnam]
+set in_path [ad_tmpnam]
 file mkdir $in_path
 
 if {[llength $object_id] == 1} {
@@ -35,7 +35,7 @@ foreach fs_object_id $object_id {
 }
 
 # create a temp dir to put the archive in
-set out_path [ns_tmpnam]
+set out_path [ad_tmpnam]
 file mkdir $out_path
 
 set out_file [file join ${out_path} ${download_name}]

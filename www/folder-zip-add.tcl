@@ -97,7 +97,7 @@ ad_form -extend -name file_add -form {} -new_data {
     
     if { $unzip_binary ne "" } {
         
-        set unzip_path [ns_tmpnam]
+        set unzip_path [ad_tmpnam]
         file mkdir $unzip_path
         # save paths! get rid of -j switch --DAVEB 20050628
         catch { exec $unzip_binary -d $unzip_path ${upload_file.tmpfile} } errmsg
