@@ -7,7 +7,7 @@ ad_page_contract {
     @version $Id$
 
 } -query {
-    {object_id:integer,optional}
+    {object_id:naturalnum,optional}
 }
 
 if {([info exists object_id] && $object_id ne "")} {

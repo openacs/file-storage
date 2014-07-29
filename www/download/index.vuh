@@ -9,8 +9,8 @@ ad_page_contract {
     @creation-date 18 December 2000
     @cvs-id $Id$
 } {
-    file_id:integer,optional
-    version_id:integer,optional
+    file_id:naturalnum,optional
+    version_id:naturalnum,optional
 } -validate {
     either_one {
 	if { ! [info exists file_id] && ! [info exists version_id] } {
