@@ -5,7 +5,7 @@ ad_page_contract {
     @creation-date 10 November 2000
     @cvs-id $Id$
 } {
-    version_id:integer,notnull
+    version_id:naturalnum,notnull
     {confirmed_p "f"}
 } -validate {
     valid_version -requires {version_id} {

@@ -6,7 +6,7 @@ ad_page_contract {
     @creation-date 01 April 2002
     @cvs-id $Id$
 } {
-    folder_id:integer,notnull
+    folder_id:naturalnum,notnull
     {type "fs_url"}
     {title ""}
     {lock_title_p 0}
