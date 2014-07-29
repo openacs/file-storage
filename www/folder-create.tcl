@@ -7,8 +7,8 @@ ad_page_contract {
     @creation-date 4 Jan 2004
     @cvs-id $Id$
 } {
-    parent_id:integer,optional,notnull
-    folder_id:integer,optional,notnull
+    parent_id:naturalnum,optional,notnull
+    folder_id:naturalnum,optional,notnull
 } -validate {
     file_id_or_folder_id {
 	if { (![info exists folder_id] || $folder_id eq "") && (![info exists parent_id] || $parent_id eq "") } {

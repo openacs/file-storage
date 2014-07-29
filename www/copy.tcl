@@ -8,7 +8,7 @@ ad_page_contract {
     
 } -query {
     object_id:notnull,integer,multiple
-    folder_id:integer,optional
+    folder_id:naturalnum,optional
     {return_url ""}
     {root_folder_id ""}
     {redirect_to_folder:boolean 0}
