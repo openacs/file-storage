@@ -5,7 +5,7 @@ ad_page_contract {
     @creation-date 6 Nov 2000
     @cvs-id $Id$
 } {
-    folder_id:integer,optional,notnull
+    folder_id:naturalnum,optional,notnull
     upload_folder:trim,optional
     return_url:optional
     {lock_title_p 0}
