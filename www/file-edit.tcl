@@ -5,7 +5,7 @@ ad_page_contract {
     @creation-date 5 Dec 2000
     @cvs-id $Id$
 } {
-    file_id:integer,notnull
+    file_id:naturalnum,notnull
 } -validate {
     valid_file -requires {file_id} {
         if {![fs_file_p $file_id]} {

@@ -5,7 +5,7 @@ ad_page_contract {
     @creation-date 10 Nov 2000
     @cvs-id $Id$
 } {
-    object_id:integer,notnull
+    object_id:naturalnum,notnull
     folder_id:notnull
 }
 

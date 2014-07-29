@@ -5,7 +5,7 @@ ad_page_contract {
     @creation-date 24 Jun 2002
     @cvs-id $Id$
 } {
-    folder_id:integer,notnull
+    folder_id:naturalnum,notnull
 } -validate {
     valid_folder -requires {parent_id:integer} {
 	if {![fs_folder_p $folder_id]} {
