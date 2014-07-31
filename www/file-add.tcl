@@ -23,10 +23,12 @@ ad_page_contract {
     instructions:onevalue
 } -validate {
     file_id_or_folder_id {
-	if {([info exists file_id] && $file_id ne "") && (![info exists folder_id] || $folder_id eq "")} {
+	if {[info exists file_id] 
+	    && [string is integer -strict $file_id]
+	    && (![info exists folder_id] || $folder_id eq "")} {
 	    set folder_id [db_string get_folder_id "select parent_id as folder_id from cr_items where item_id=:file_id;" -default ""]
 	}
-	if {![fs_folder_p $folder_id]} {
+	if {![string is integer -strict $folder_id] || ![fs_folder_p $folder_id]} {
 	    ad_complain "The specified parent folder is not valid."
 	}
     }
