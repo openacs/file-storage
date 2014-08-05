@@ -5,7 +5,7 @@ ad_page_contract {
     @creation-date 01 April 2002
     @cvs-id $Id$
 } {
-    object_id:notnull
+    object_id:naturalnum,notnull
 }
 
 # check for write permission on the item

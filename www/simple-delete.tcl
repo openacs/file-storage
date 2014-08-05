@@ -6,7 +6,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     object_id:naturalnum,notnull
-    folder_id:notnull
+    folder_id:naturalnum,notnull
 }
 
 # check for delete permission on the file
