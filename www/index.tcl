@@ -6,10 +6,10 @@ ad_page_contract {
     @creation-date 6 Nov 2000
     @cvs-id $Id$
 } {
-    {folder_id:integer [fs_get_root_folder]}
+    {folder_id:naturalnum,notnull [fs_get_root_folder]}
     {n_past_days:integer "99999"}
     {orderby:optional}
-    {category_id:integer ""}
+    {category_id:naturalnum ""}
     {return_url ""}
 } -validate {
     valid_folder -requires {folder_id:integer} {

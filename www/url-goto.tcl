@@ -5,7 +5,7 @@ ad_page_contract {
     @creation-date 01 April 2002
     @cvs-id $Id$
 } {
-    url_id:notnull
+    url_id:naturalnum,notnull
 } 
 
 # Check for read permission on this url
