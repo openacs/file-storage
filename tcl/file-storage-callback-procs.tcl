@@ -21,15 +21,6 @@ ad_proc -public -callback fs::folder_chunk::add_bulk_actions {
 } {
 }
 
-ad_proc -public -callback fs::file_delete {
-    {-package_id:required}
-    {-file_id:required}
-} {
-    Callback executed right before the file is deleted
-    This should make sure that any foreign key constraints to the file are removed
-} -
-
-
 ad_proc -public -callback fs::before_file_new {
     {-package_id:required}
     {-folder_id:required}
@@ -38,12 +29,6 @@ ad_proc -public -callback fs::before_file_new {
 } {
     this can be used to check for confirmation before upload to folder
 } -
-
-ad_proc -public -callback fs::file_new {
-    {-package_id:required}
-    {-file_id:required}
-} {
-}
 
 ad_proc -public -callback fs::file_revision_new {
     {-package_id:required}
@@ -122,12 +107,6 @@ ad_proc -public -callback datamanager::copy_folder -impl datamanager {
 
     return $new_folder_id
     
-}
-
-ad_proc -public -callback fs::folder_new {
-    {-package_id:required}
-    {-folder_id:required}
-} {
 }
 
 ad_proc -public -callback pm::project_new -impl file_storage {
