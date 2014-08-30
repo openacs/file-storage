@@ -207,26 +207,4 @@ ad_proc -public -callback fs::file_delete {
 } {
 }
 
-ad_proc -public -callback pm::project_new -impl file_storage {
-    {-package_id:required}
-    {-project_id:required}
-    {-data:required}
-} {
-    create a new folder for each new project
-} {
-    set pm_name [pm::project::name -project_item_id $project_id]
-
-    foreach fs_package_id [application_link::get_linked -from_package_id $package_id -to_package_key "file-storage"] {
-	set root_folder_id [fs::get_root_folder -package_id $fs_package_id]
-
-	set folder_id [fs::new_folder \
-			   -name $project_id \
-			   -pretty_name $pm_name \
-			   -parent_id $root_folder_id \
-			   -no_callback]
-
-	application_data_link::new -this_object_id $project_id -target_object_id $folder_id
-    }
-}
-
 
