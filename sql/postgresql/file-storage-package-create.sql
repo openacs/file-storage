@@ -503,6 +503,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+select define_function_args('file_storage__get_parent_id','item_id');
 
 CREATE OR REPLACE FUNCTION file_storage__get_parent_id (
         get_parent_id__item_id integer 
