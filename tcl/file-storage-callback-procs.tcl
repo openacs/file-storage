@@ -52,7 +52,7 @@ ad_proc -public -callback search::datasource -impl file_storage_object {} {
 
     @author Dirk Gomez (openacs@dirkgomez.de)
     @author Jowell S. Sabino (jowellsabino@netscape.net)
-    @creation_date 2005-06-13
+    @creation-date 2005-06-13
 
     returns a datasource for the search package
     this is the content that will be indexed by the full text
