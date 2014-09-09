@@ -322,7 +322,7 @@ db_multirow \
             set properties_link [_ file-storage.properties]
             set target_object_id [content::symlink::resolve -item_id $object_id]
             db_1row file_info {select * from fs_objects where object_id = :target_object_id}
-            # because of the side effect that SQL sets TCL variables, set object_id back to the original value
+            # because of the side effect that SQL sets Tcl variables, set object_id back to the original value
             set object_id $original_object_id
             if {$type eq "folder"} {
                 set content_size_pretty [lc_numeric $content_size]
