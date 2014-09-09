@@ -17,7 +17,7 @@ OpenACS.
 
 <ul>
 <li>User directory:  <a href="/file-storage/">/file-storage/</a>
-<li>TCL procedures: <a href="/api-doc/procs-file-view?path=tcl%2ffile%2dstorage%2ddefs%2etcl">/tcl/file-storage-defs.tcl</a>
+<li>Tcl procedures: <a href="/api-doc/procs-file-view?path=tcl%2ffile%2dstorage%2ddefs%2etcl">/tcl/file-storage-defs.tcl</a>
 <li>Requirements document:  <a href="requirements.html">/doc/requirements/file-storage.html</a>
 <li>Data model:  <a href="/doc/sql/display-sql?url=file-storage-create.sql&package_key=file-storage">file-storage-create.sql</a>
 </ul>
@@ -42,11 +42,11 @@ may:
 
 <p>We want something that is relatively secure, and can be extended
 and maintained by any ArsDigita programmer, <i>i.e.</i>, something that
-requires only AOLserver TCL and Oracle skills.
+requires only AOLserver Tcl and Oracle skills.
 
 <p>In ACS 4, File Storage can be implemented on top of the Content
 Repository.  Thus, there is no data model associated with File
-Storage.  It is only a UI and a small set of TCL and PL/SQL library
+Storage.  It is only a UI and a small set of Tcl and PL/SQL library
 procedures.  The actual storage and versioning is relegated to the
 Content Repository.
 
@@ -235,7 +235,7 @@ Repository API, however: <code>get_root_folder</code> and
 href="/api-doc/plsql-subprogram-one?type=PACKAGE&name=FILE%5fSTORAGE">file_storage
 PL/SQL package</a>
 
-<h4>TCL API</h4>
+<h4>Tcl API</h4>
 
 <table width=100%><tr><td bgcolor=#e4e4e4>
 <h3><a href="/api-doc/proc-view?proc=children%5fhave%5fpermission%5fp">children_have_permission_p</a></h3><pre>children_have_permission_p [ -user_id <i>user_id</i> ] <i>item_id</i> <i>privilege</i></pre>

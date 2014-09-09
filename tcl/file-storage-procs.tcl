@@ -1,5 +1,5 @@
 ad_library {
-    TCL library for the file-storage system (v.4)
+    Tcl library for the file-storage system (v.4)
     @author Kevin Scaldeferri (kevin@arsdigita.com)
     @creation-date 6 November 2000
     @cvs-id $Id$
@@ -194,7 +194,7 @@ ad_proc -private fs::after_mount {
     -node_id
 } {
     Create root folder for package instance
-    via tcl callback.
+    via Tcl callback.
 } {
     set folder_id [fs::get_root_folder -package_id $package_id]
 
@@ -206,7 +206,7 @@ ad_proc -private fs::before_unmount {
     -node_id
 } {
     Create root folder for package instance
-    via tcl callback.
+    via Tcl callback.
 } {
     set folder_id [fs::get_root_folder -package_id $package_id]
 
@@ -1404,7 +1404,7 @@ ad_proc -public fs::get_object_info {
 
 ad_proc -public fs::get_folder_package_and_root folder_id {
 
-    Returns a two-element tcl list containing the package_id
+    Returns a two-element Tcl list containing the package_id
     and root_folder_id for the passed-in folder_id.
 
     @author Andrew Grumet (aegrumet@alum.mit.edu)
