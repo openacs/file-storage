@@ -621,12 +621,18 @@ ad_proc -public fs::publish_versioned_object_to_file_system {
 	    } else {
 		set file_name $file_upload_name
 	    }
-	} elseif { [item::get_mime_info [content::item::get_live_revision -item_id $object_id]] } {
+	} elseif {[content::item::get -item_id $object_id -array_name item_info]} {
 	    # We make sure that the file_name contains the file
 	    # extension at the end so that the users default
 	    # application for that file type can be used
-	    if { ![regexp "\.$mime_info(file_extension)$" $file_name match] } {
-		set file_name "${file_name}.$mime_info(file_extension)"
+	    
+	    set mime_type $item_info(mime_type)
+	    set file_extension [db_string get_extension {
+		select file_extension from cr_mime_types where mime_type = :mime_type
+	    }]
+
+	    if { ![regexp "\.$file_extension$" $file_name match] } {
+		set file_name "$file_name.$file_extension"
 	    }
 	}
     } else {
@@ -1320,7 +1326,11 @@ ad_proc -public fs::item_editable_info {
     # hardcoding it for now
     set editable_mime_types [list "text/html" "text/plain"]
 
-    item::get_mime_info [content::item::get_live_revision -item_id $item_id]
+    content::item::get -item_id $item_id -array_name item_info
+    set mime_info(mime_type) [set mime_type $item_info(mime_type)]
+    set mime_info(file_extension) [db_string get_extension {
+	select file_extension from cr_mime_types where mime_type = :mime_type
+    }]
 
     if {[string tolower $mime_info(mime_type)] in $editable_mime_types} {
         set mime_info(editable_p) 1
