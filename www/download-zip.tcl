@@ -40,12 +40,9 @@ file mkdir $out_path
 
 set out_file [file join ${out_path} ${download_name}]
 
-# get the archive command
-set cmd "zip -r \"$out_file\" ."
-
 # create the archive
 with_catch errmsg {
-    exec bash -c "cd $in_path; $cmd; cd -"
+    util::zip_file -source $in_path -destination $out_file
 } {
     # some day we'll do something useful here
     file delete -force $in_path
