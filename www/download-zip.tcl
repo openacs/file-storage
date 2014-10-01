@@ -42,7 +42,7 @@ set out_file [file join ${out_path} ${download_name}]
 
 # create the archive
 with_catch errmsg {
-    util::zip_file -source $in_path -destination $out_file
+    util::zip -source $in_path -destination $out_file
 } {
     # some day we'll do something useful here
     file delete -force $in_path
