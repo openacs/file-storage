@@ -134,7 +134,7 @@ if {[info exists folder_id]} {
     db_multirow -extend {move_url level} folder_tree get_folder_tree "" {
 	# teadams 2003-08-22 - change level to level num to avoid 
 	# Oracle issue with key words.
-        if {$folder_in in [concat $not_allowed_parents $not_allowed_children]
+        if {$folder_id in [concat $not_allowed_parents $not_allowed_children]
 	    || $parent_id in $not_allowed_children
 	} {
             if {$parent_id in $not_allowed_children} {
