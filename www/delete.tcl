@@ -48,7 +48,7 @@ db_multirow -extend {delete_message} delete_list get_to_be_deleted {} {
 set total_count [template::multirow size delete_list]
 set delete_inform [_ file-storage.lt_Do_you_want_to_delete]
 
-ad_form -name delete_confirm -method GET -cancel_url $return_url -form {
+ad_form -name delete_confirm -cancel_url $return_url -form {
     {notice:text(inform) {label ""} {value $delete_inform}}
     {return_url:text(hidden) {value $return_url}}
     {object_id:naturalnum(hidden) {values $object_id}}
