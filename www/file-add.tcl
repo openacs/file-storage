@@ -188,7 +188,7 @@ ad_form -extend -form {} -select_query_name {get_file} -new_data {
         set upload_files [list $title]
         set upload_tmpfiles [list $tmp_filename]
     }
-    ns_log notice "file_add mime_type='${mime_type}'"	    
+    # ns_log notice "file_add mime_type='${mime_type}'"	    
     set i 0
     set number_upload_files [llength $upload_files]
     foreach upload_file $upload_files tmpfile $upload_tmpfiles {
