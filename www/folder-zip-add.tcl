@@ -125,6 +125,8 @@ ad_form -extend -name file_add -form {} -new_data {
     
     set i 0
     set number_upload_files [llength $upload_files]
+    set unzip_path_list_len [llength [file split $unzip_path]]
+
     foreach upload_file $upload_files tmpfile $upload_tmpfiles {
 	set this_file_id $file_id
 	set this_title $title
@@ -137,8 +139,11 @@ ad_form -extend -name file_add -form {} -new_data {
 	# the folders if they don't exist
 	set p_f_id $folder_id
 	set file_paths [file split [file dirname $upload_file]]
-	ns_log notice "\n DAVEB1 \n '${file_paths}'"
-	if {"." ne $file_paths && [llength $file_paths]} {
+
+        # remove unzip_path portion by selecting remaining part of list
+	set file_paths [lrange $file_paths $unzip_path_list_len end]
+
+	if {"." ne $file_paths && [llength $file_paths] > 0} {
 	    # make sure every folder exists
 	    set path ""
 	    foreach p $file_paths {
