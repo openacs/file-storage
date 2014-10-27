@@ -7,16 +7,16 @@ ad_page_contract {
     @creation-date 4 Jan 2004
     @cvs-id $Id$
 } {
-    parent_id:integer,optional,notnull
-    folder_id:integer,optional,notnull
+    parent_id:naturalnum,optional,notnull
+    folder_id:naturalnum,optional,notnull
 } -validate {
     file_id_or_folder_id {
-	if { ![exists_and_not_null folder_id] && ![exists_and_not_null parent_id] } {
+	if { (![info exists folder_id] || $folder_id eq "") && (![info exists parent_id] || $parent_id eq "") } {
 	    ad_complain "Input error: Must either have a parent_id or a folder_id"
 	}
     }
     valid_folder -requires {parent_id:integer} {
-	if ![fs_folder_p $parent_id] {
+	if {![fs_folder_p $parent_id]} {
 	    ad_complain "[_ file-storage.lt_The_specified_parent_]"
 	}
     }
@@ -29,7 +29,7 @@ ad_page_contract {
 set user_id [ad_conn user_id]
 set package_id [ad_conn package_id]
 # check that they have write permission on the parent folder or this folder if its an edit.
-if { [exists_and_not_null parent_id] } {
+if { ([info exists parent_id] && $parent_id ne "") } {
     permission::require_permission \
 	    -object_id $parent_id \
 	    -party_id $user_id \
@@ -56,9 +56,9 @@ ad_form -name "folder-ae" -html { enctype multipart/form-data } -export { parent
 
 set package_id [ad_conn package_id]
 if { [parameter::get -parameter CategoriesP -package_id $package_id -default 0] } {
-    if { [exists_and_not_null folder_id] } {
+    if { ([info exists folder_id] && $folder_id ne "") } {
 	set categorized_object_id $folder_id
-    } elseif { [exists_and_not_null parent_id] } {
+    } elseif { ([info exists parent_id] && $parent_id ne "") } {
 	set categorized_object_id $parent_id
     } else {
 	set categorized_object_id ""

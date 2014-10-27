@@ -5,13 +5,13 @@ ad_page_contract {
     @creation-date 6 Nov 2000
     @cvs-id $Id$
 } {
-    folder_id:integer,notnull
+    folder_id:naturalnum,notnull
     title:notnull,trim
     description
     url:notnull,trim
 } -validate {
     valid_folder -requires {folder_id:integer} {
-	if ![fs_folder_p $folder_id] {
+	if {![fs_folder_p $folder_id]} {
 	    ad_complain "[_ file-storage.lt_The_specified_parent_]"
 	}
     }
@@ -21,7 +21,7 @@ ad_page_contract {
 set user_id [ad_conn user_id]
 
 # Check for write permission on this folder
-ad_require_permission $folder_id write
+permission::require_permission -object_id $folder_id -privilege write
 
 set item_id [content::extlink::new -url $url -label $title -description $description -parent_id $folder_id]
 

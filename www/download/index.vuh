@@ -9,8 +9,8 @@ ad_page_contract {
     @creation-date 18 December 2000
     @cvs-id $Id$
 } {
-    file_id:integer,optional
-    version_id:integer,optional
+    file_id:naturalnum,optional
+    version_id:naturalnum,optional
 } -validate {
     either_one {
 	if { ! [info exists file_id] && ! [info exists version_id] } {
@@ -19,10 +19,10 @@ ad_page_contract {
     }
 }
 
-if {![exists_and_not_null version_id] && [info exists file_id]} {
-    set version_id [item::get_live_revision $file_id]
+if {(![info exists version_id] || $version_id eq "") && [info exists file_id]} {
+    set version_id [content::item::get_live_revision -item_id $file_id]
 }
-if { ![exists_and_not_null file_id] && [info exists version_id] } {
+if { (![info exists file_id] || $file_id eq "") && [info exists version_id] } {
     set file_id [content::revision::item_id -revision_id $version_id]
 }
 

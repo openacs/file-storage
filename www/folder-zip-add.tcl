@@ -5,8 +5,8 @@ ad_page_contract {
     @creation-date 6 Nov 2000
     @cvs-id $Id$
 } {
-    file_id:integer,optional,notnull
-    folder_id:integer,optional,notnull
+    file_id:naturalnum,optional,notnull
+    folder_id:naturalnum,optional,notnull
     upload_file:trim,optional
     return_url:optional
     upload_file.tmpfile:tmpfile,optional
@@ -20,7 +20,7 @@ ad_page_contract {
     lock_title_p:onevalue
 } -validate {
     file_id_or_folder_id {
-        if {[exists_and_not_null file_id] && ![exists_and_not_null folder_id]} {
+        if {([info exists file_id] && $file_id ne "") && (![info exists folder_id] || $folder_id eq "")} {
             set folder_id [db_string get_folder_id "select parent_id as folder_id from cr_items where item_id=:file_id" -default ""]
         }
         if {![fs_folder_p $folder_id]} {
@@ -29,7 +29,7 @@ ad_page_contract {
     }
     max_size -requires {upload_file} {
         set n_bytes [file size ${upload_file.tmpfile}]
-        set max_bytes [ad_parameter "MaximumFileSize"]
+        set max_bytes [parameter::get -parameter "MaximumFileSize"]
         if { $n_bytes > $max_bytes } {
             ad_complain "Your file is larger than the maximum file size allowed on this system ([util_commify_number $max_bytes] bytes)"
         }
@@ -61,7 +61,7 @@ ad_form -name file_add -html { enctype multipart/form-data } -export { folder_id
     {upload_file:file {label \#file-storage.Upload_a_file\#} {html "size 30"}}
 }
 
-if {[exists_and_not_null return_url]} {
+if {([info exists return_url] && $return_url ne "")} {
     ad_form -extend -name file_add -form {
 	{return_url:text(hidden) {value $return_url}}
     }
@@ -88,16 +88,16 @@ ad_form -extend -name file_add -form {} -new_data {
     # create a new folder to hold the zip contents
     # TODO make sure its name is unique?
     
-    if {[empty_string_p $title]} {
+    if {$title eq ""} {
 	set title [file rootname [list [template::util::file::get_property filename $upload_file]]]
     }
     set folder_id [content::folder::new -name $title -parent_id $folder_id -label $title]
     
     set unzip_binary [string trim [parameter::get -parameter UnzipBinary]]
     
-    if { ![empty_string_p $unzip_binary] } {
+    if { $unzip_binary ne "" } {
         
-        set unzip_path [ns_tmpnam]
+        set unzip_path [ad_tmpnam]
         file mkdir $unzip_path
         # save paths! get rid of -j switch --DAVEB 20050628
         catch { exec $unzip_binary -d $unzip_path ${upload_file.tmpfile} } errmsg
@@ -125,6 +125,8 @@ ad_form -extend -name file_add -form {} -new_data {
     
     set i 0
     set number_upload_files [llength $upload_files]
+    set unzip_path_list_len [llength [file split $unzip_path]]
+
     foreach upload_file $upload_files tmpfile $upload_tmpfiles {
 	set this_file_id $file_id
 	set this_title $title
@@ -137,15 +139,18 @@ ad_form -extend -name file_add -form {} -new_data {
 	# the folders if they don't exist
 	set p_f_id $folder_id
 	set file_paths [file split [file dirname $upload_file]]
-	ns_log notice "\n DAVEB1 \n '${file_paths}'"
-	if {![string equal "." $file_paths] && [llength $file_paths]} {
+
+        # remove unzip_path portion by selecting remaining part of list
+	set file_paths [lrange $file_paths $unzip_path_list_len end]
+
+	if {"." ne $file_paths && [llength $file_paths] > 0} {
 	    # make sure every folder exists
 	    set path ""
 	    foreach p $file_paths {
 		append path /${p}
 		if {![info exists paths($path)]} {
 		    set f_id [content::item::get_id -item_path $path -root_folder_id $p_f_id]
-		    if {[string equal "" $f_id]} {
+		    if {$f_id eq ""} {
 			set p_f_id [content::folder::new -parent_id $p_f_id -name $p -label $p]
 			set paths($path) $p_f_id
 		    }
@@ -162,7 +167,7 @@ ad_form -extend -name file_add -form {} -new_data {
 	
 	set existing_item_id [fs::get_item_id -name $upload_file -folder_id $this_folder_id]
 	
-	if {![empty_string_p $existing_item_id]} {
+	if {$existing_item_id ne ""} {
 	    # file with the same name already exists
 	    # in this folder, create a new revision
 	    set this_file_id $existing_item_id
@@ -185,7 +190,7 @@ ad_form -extend -name file_add -form {} -new_data {
 	file delete $tmpfile
 	incr i
 
-	if {![empty_string_p $rev_id]} {
+	if {$rev_id ne ""} {
 	    set this_file_id [db_string get_item_id {
 		select item_id
 		from cr_revisions
@@ -198,7 +203,7 @@ ad_form -extend -name file_add -form {} -new_data {
 	}
 	
     }
-    if {![string equal "" $unzip_path]} {
+    if {$unzip_path ne ""} {
 	file delete -force $unzip_path
     }
     file delete $upload_file.tmpfile
@@ -214,15 +219,15 @@ ad_form -extend -name file_add -form {} -new_data {
     
 } -after_submit {
     
-    if {[exists_and_not_null return_url]} {
+    if {([info exists return_url] && $return_url ne "")} {
 	ad_returnredirect $return_url
     } else {
-	ad_returnredirect "./?[export_url_vars folder_id]"
+	ad_returnredirect "./?[export_vars -url {folder_id}]"
     }
     ad_script_abort
     
 }
 
-set unpack_available_p [expr ![empty_string_p [string trim [parameter::get -parameter UnzipBinary]]]]
+set unpack_available_p [expr {[string trim [parameter::get -parameter UnzipBinary]] ne ""}]
 
 ad_return_template

@@ -5,11 +5,11 @@ ad_page_contract {
     @creation-date 10 November 2000
     @cvs-id $Id$
 } {
-    version_id:integer,notnull
+    version_id:naturalnum,notnull
     {confirmed_p "f"}
 } -validate {
     valid_version -requires {version_id} {
-	if ![fs_version_p $version_id] {
+	if {![fs_version_p $version_id]} {
 	    ad_complain [_ file-storage.lt_version_not_valid]
 	}
     }
@@ -22,7 +22,7 @@ ad_page_contract {
 
 # check for delete permission on the version
 
-ad_require_permission $version_id delete
+permission::require_permission -object_id $version_id -privilege delete
 
 db_1row item_select "
 select item_id

@@ -134,7 +134,7 @@ ad_proc file_storage::twt::add_file_to_folder { folder_name file_name file_descr
     if { [string match  "*\?folder*id*" $response_url] } {
 
         set list_words [split "$file_name" /]
-        set short_file_name [lindex $list_words [expr [llength $list_words]-1]]
+        set short_file_name [lindex $list_words [llength $list_words]-1]
 
         if {[catch {tclwebtest::assert text $folder_name} errmsg] || [catch {tclwebtest::link find $short_file_name} errmsg]} {
             aa_error "file_storage::twt::add_file_to_folder failed $errmsg : Didn't add a file to folder"
@@ -202,7 +202,7 @@ ad_proc file_storage::twt::upload_file { file_name file_description }  {
      if { [string match  "*\?folder*id*" $response_url] } {
 
  	set list_words [split "$file_name" /]
-         set short_file_name [lindex $list_words [expr [llength $list_words]-1]]
+         set short_file_name [lindex $list_words [llength $list_words]-1]
 
          if {[catch {tclwebtest::link find $short_file_name} errmsg]} {
              aa_error "file_storage::twt::upload_file failed $errmsg : Didn't upload a File"
@@ -234,7 +234,7 @@ ad_proc file_storage::twt::upload_file { file_name file_description }  {
 
  	# Get the short file name
  	set list_words [split "$file_name" /]
- 	set short_file_name [lindex $list_words [expr [llength $list_words]-1]]
+ 	set short_file_name [lindex $list_words [llength $list_words]-1]
 
          if {![catch {tclwebtest::link find $short_file_name} errmsg]} {
              aa_error "file_storage::twt::delete_file failed $errmsg : Didn't delete a File"
@@ -297,7 +297,7 @@ ad_proc file_storage::twt::upload_file { file_name file_description }  {
 
         # Get the short file name
         set list_words [split "$file_name" /]
-        set short_file_name [lindex $list_words [expr [llength $list_words]-1]]
+        set short_file_name [lindex $list_words [llength $list_words]-1]
 
         if {![catch {tclwebtest::link find $short_file_name} errmsg]} {
             aa_error "file_storage::twt::move_file $errmsg : Didn't move a file"
@@ -329,7 +329,7 @@ ad_proc file_storage::twt::move_file { folder_name file_name }  {
 
         # Get the short file name
         set list_words [split "$file_name" /]
-        set short_file_name [lindex $list_words [expr [llength $list_words]-1]]
+        set short_file_name [lindex $list_words [llength $list_words]-1]
 
         if {[catch {tclwebtest::link find $short_file_name} errmsg]} {
             aa_error "file_storage::twt::copy_file $errmsg : Didn't copy a file"

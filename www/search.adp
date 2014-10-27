@@ -1,5 +1,5 @@
 <master>
-<property name="title">#file-storage.Search_Results#</property>
+<property name="doc(title)">#file-storage.Search_Results#</property>
 <property name="context">@context;noquote@</property>
 
 <if @results:rowcount@ eq 0>

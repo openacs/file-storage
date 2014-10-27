@@ -6,13 +6,13 @@ ad_page_contract {
     @creation-date 01 April 2002
     @cvs-id $Id$
 } {
-    folder_id:integer,notnull
+    folder_id:naturalnum,notnull
     {type "fs_url"}
     {title ""}
     {lock_title_p 0}
 } -validate {
     valid_folder -requires {folder_id:integer} {
-	if ![fs_folder_p $folder_id] {
+	if {![fs_folder_p $folder_id]} {
 	    ad_complain "[_ file-storage.lt_The_specified_parent_]"
 	}
     }
@@ -23,12 +23,12 @@ ad_page_contract {
 
 # check for write permission on the folder
 
-ad_require_permission $folder_id write
+permission::require_permission -object_id $folder_id -privilege write
 
 # set templating datasources
 
 set pretty_name "URL"
-if {[empty_string_p $pretty_name]} {
+if {$pretty_name eq ""} {
     return -code error "[_ file-storage.No_such_type]"
 }
 
@@ -38,7 +38,7 @@ set context [fs_context_bar_list -final [_ file-storage.Add_pretty_name [list pr
 # double-click protection
 
 # if title isn't passed in ignore lock_title_p
-if {[empty_string_p $title]} {
+if {$title eq ""} {
     set lock_title_p 0
 }
 
