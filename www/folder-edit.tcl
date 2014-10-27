@@ -5,10 +5,10 @@ ad_page_contract {
     @creation-date 24 Jun 2002
     @cvs-id $Id$
 } {
-    folder_id:integer,notnull
+    folder_id:naturalnum,notnull
 } -validate {
     valid_folder -requires {parent_id:integer} {
-	if ![fs_folder_p $folder_id] {
+	if {![fs_folder_p $folder_id]} {
 	    ad_complain "[_ file-storage.lt_The_specified_folder_]"
 	}
     }
@@ -17,7 +17,7 @@ ad_page_contract {
     context_bar:onevalue
 }
 
-ad_require_permission $folder_id admin
+permission::require_permission -object_id $folder_id -privilege admin
 
 # set templating datasources
 

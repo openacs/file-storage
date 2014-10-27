@@ -5,7 +5,7 @@ ad_page_contract {
     @creation-date 6 Nov 2000
     @cvs-id $Id$
 } {
-    folder_id:integer,optional,notnull
+    folder_id:naturalnum,optional,notnull
     upload_folder:trim,optional
     return_url:optional
     {lock_title_p 0}
@@ -26,7 +26,7 @@ ad_page_contract {
 set user_id [ad_conn user_id]
 
 if {![acs_user::site_wide_admin_p]} {
-    ad_returnredirect "./?[export_url_vars folder_id]"
+    ad_returnredirect "./?[export_vars -url {folder_id}]"
 }
 
 set package_id [ad_conn package_id]
@@ -44,7 +44,7 @@ ad_form -name file_add -html { enctype multipart/form-data } -export { folder_id
     {upload_folder:text(text) {label \#file-storage.Upload_a_folder#} {html "size 30"} {help_text "[_ file-storage.Upload_folder_help]"}}
 }
 
-if {[exists_and_not_null return_url]} {
+if {([info exists return_url] && $return_url ne "")} {
     ad_form -extend -name file_add -form {
 	{return_url:text(hidden) {value $return_url}}
     }
@@ -76,14 +76,14 @@ ad_form -extend -name file_add -form {} -on_submit {
 	set p_f_id $folder_id
 	set file_paths [file split [file dirname $upload_file]]
 
-	if {![string equal "." $file_paths] && [llength $file_paths]} {
+	if {"." ne $file_paths && [llength $file_paths]} {
 	    # make sure every folder exists
 	    set path ""
 	    foreach p $file_paths {
 		append path /${p}
 		if {![info exists paths($path)]} {
 		    set f_id [content::item::get_id -item_path $path -root_folder_id $p_f_id]
-		    if {[string equal "" $f_id]} {
+		    if {$f_id eq ""} {
 			set p_f_id [content::folder::new -parent_id $p_f_id -name $p -label $p]
 			set paths($path) $p_f_id
 		    }
@@ -100,7 +100,7 @@ ad_form -extend -name file_add -form {} -on_submit {
 	
 	set existing_item_id [fs::get_item_id -name $upload_file -folder_id $this_folder_id]
 	
-	if {![empty_string_p $existing_item_id]} {
+	if {$existing_item_id ne ""} {
 	    # file with the same name already exists
 	    # in this folder, create a new revision
 	    set this_file_id $existing_item_id
@@ -121,7 +121,7 @@ ad_form -extend -name file_add -form {} -on_submit {
 	
 	incr i
 
-	if {![empty_string_p $rev_id]} {
+	if {$rev_id ne ""} {
 	    set this_file_id [db_string get_item_id {
 		select item_id
 		from cr_revisions
@@ -137,15 +137,15 @@ ad_form -extend -name file_add -form {} -on_submit {
  
 } -after_submit {
     
-    if {[exists_and_not_null return_url]} {
+    if {([info exists return_url] && $return_url ne "")} {
 	ad_returnredirect $return_url
     } else {
-	ad_returnredirect "./?[export_url_vars folder_id]"
+	ad_returnredirect "./?[export_vars -url {folder_id}]"
     }
     ad_script_abort
     
 }
 
-set unpack_available_p [expr ![empty_string_p [string trim [parameter::get -parameter UnzipBinary]]]]
+set unpack_available_p [expr {[string trim [parameter::get -parameter UnzipBinary]] ne ""}]
 
 ad_return_template

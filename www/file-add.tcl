@@ -5,8 +5,8 @@ ad_page_contract {
     @creation-date 6 Nov 2000
     @cvs-id $Id$
 } {
-    file_id:integer,optional,notnull
-    folder_id:integer,optional,notnull
+    file_id:naturalnum,optional,notnull
+    folder_id:naturalnum,optional,notnull
     upload_file:trim,optional
     return_url:optional
     upload_file.tmpfile:tmpfile,optional
@@ -23,8 +23,12 @@ ad_page_contract {
     instructions:onevalue
 } -validate {
     file_id_or_folder_id {
-	if {[exists_and_not_null file_id] && ![exists_and_not_null folder_id]} {
-	    set folder_id [db_string get_folder_id "select parent_id as folder_id from cr_items where item_id=:file_id;" -default ""]
+	if {[info exists file_id] && ![info exists folder_id]} {
+	    set folder_id [content::item::get_parent_folder -item_id $file_id]
+	    if {$folder_id eq ""} {
+		ad_complain "The specified file_id is not valid."
+		return
+	    }
 	}
 	if {![fs_folder_p $folder_id]} {
 	    ad_complain "The specified parent folder is not valid."
@@ -32,7 +36,7 @@ ad_page_contract {
     }
     max_size -requires {upload_file} {
 	set n_bytes [file size ${upload_file.tmpfile}]
-	set max_bytes [ad_parameter "MaximumFileSize"]
+	set max_bytes [parameter::get -parameter "MaximumFileSize"]
 	if { $n_bytes > $max_bytes } {
 	    ad_complain "Your file is larger than the maximum file size allowed on this system ([util_commify_number $max_bytes] bytes)"
 	}
@@ -80,7 +84,7 @@ if {[parameter::get -parameter AllowTextEdit -default 0]} {
         # To make content editable
         set revision_id [content::item::get_live_revision -item_id $file_id]
         set mime_type [db_string get_mime_type "select mime_type from cr_revisions where revision_id = :revision_id"]
-        if { [string equal $mime_type "text/html"] } {
+        if {$mime_type eq "text/html"} {
             ad_form -extend -form {
                 {edit_content:richtext(richtext),optional 
                     {label "Content"} 
@@ -95,7 +99,7 @@ if {[parameter::get -parameter AllowTextEdit -default 0]} {
     }
 }
 
-if {[exists_and_not_null return_url]} {
+if {([info exists return_url] && $return_url ne "")} {
     ad_form -extend -form {
 	{return_url:text(hidden) {value $return_url}}
     }
@@ -127,7 +131,7 @@ if {([ad_form_new_p -key file_id]) && $unpack_bin_installed } {
     }
 }
 if { [parameter::get -parameter CategoriesP -package_id $package_id -default 0] } {
-     if { [exists_and_not_null file_id] } {
+     if { ([info exists file_id] && $file_id ne "") } {
 	 set categorized_object_id $file_id
      } else {
 	 # pre-populate with categories from the folder
@@ -142,12 +146,12 @@ if { [parameter::get -parameter CategoriesP -package_id $package_id -default 0] 
 
 ad_form -extend -form {} -select_query_name {get_file} -new_data {
     
-  if {![exists_and_not_null unpack_p]} {
+  if {(![info exists unpack_p] || $unpack_p eq "")} {
       set unpack_p f
   }
-  if { $unpack_p && ![empty_string_p $unpack_binary] && [file extension [template::util::file::get_property filename $upload_file]] eq ".zip"  } {
+  if { $unpack_p && $unpack_binary ne "" && [file extension [template::util::file::get_property filename $upload_file]] eq ".zip"  } {
 	
-	set path [ns_tmpnam]
+	set path [ad_tmpnam]
 	file mkdir $path
 	
 	
@@ -177,14 +181,14 @@ ad_form -extend -form {} -select_query_name {get_file} -new_data {
         # create a tmp file to import from user entered HTML
         set content_body [template::util::richtext::get_property html_value $content_body]
         set mime_type text/html
-        set tmp_filename [ns_tmpnam]
+        set tmp_filename [ad_tmpnam]
         set fd [open $tmp_filename w] 
         puts $fd $content_body
         close $fd
         set upload_files [list $title]
         set upload_tmpfiles [list $tmp_filename]
     }
-    ns_log notice "file_add mime_type='${mime_type}'"	    
+    # ns_log notice "file_add mime_type='${mime_type}'"	    
     set i 0
     set number_upload_files [llength $upload_files]
     foreach upload_file $upload_files tmpfile $upload_tmpfiles {
@@ -196,17 +200,17 @@ ad_form -extend -form {} -select_query_name {get_file} -new_data {
 	# and the file with the same name already exists
 	# we create a new revision
 	
-	if {[string equal $this_title ""]} {
+	if {$this_title eq ""} {
 	    set this_title $upload_file
 	}
 	
-	if {![empty_string_p $name]} {
+	if {$name ne ""} {
 	    set upload_file $name
 	}
 
 	set existing_item_id [fs::get_item_id -name $upload_file -folder_id $folder_id]
 	
-	if {![empty_string_p $existing_item_id]} {
+	if {$existing_item_id ne ""} {
 	    # file with the same name already exists in this folder
             if { [parameter::get -parameter "BehaveLikeFilesystemP" -package_id [ad_conn package_id]] } {
                 # create a new revision -- in effect, replace the existing file
@@ -253,7 +257,7 @@ ad_form -extend -form {} -select_query_name {get_file} -new_data {
 } -edit_data {
     set this_title $title
     set filename [template::util::file::get_property filename $upload_file]
-    if {[string equal $this_title ""]} {
+    if {$this_title eq ""} {
 	set this_title $filename
     }
 	
@@ -274,17 +278,17 @@ ad_form -extend -form {} -select_query_name {get_file} -new_data {
     }
 } -after_submit {
 
-    if {[exists_and_not_null return_url]} {
+    if {([info exists return_url] && $return_url ne "")} {
 	ad_returnredirect $return_url
     } else {
-	ad_returnredirect "./?[export_url_vars folder_id]"
+	ad_returnredirect "./?[export_vars -url {folder_id}]"
     }
     ad_script_abort
 
 }
 
 # if title isn't passed in ignore lock_title_p
-if {[empty_string_p $title]} {
+if {$title eq ""} {
     set lock_title_p 0
 }
 
@@ -294,6 +298,6 @@ if { [parameter::get -parameter "BehaveLikeFilesystemP" -package_id [ad_conn pac
     set instructions "[_ file-storage.Add_Dup_As_New_File]"
 }
 
-set unpack_available_p [expr ![empty_string_p [string trim [parameter::get -parameter UnzipBinary]]]]
+set unpack_available_p [expr {[string trim [parameter::get -parameter UnzipBinary]] ne ""}]
 
 ad_return_template

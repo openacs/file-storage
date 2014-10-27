@@ -57,7 +57,7 @@ ad_proc -private fs::rss::datasource {
 
     set image_url "/resources/dotlrn/logo-user.gif"
 
-    if { [empty_string_p $image_url] } {
+    if { $image_url eq "" } {
         set column_array(image) ""
     } else {
         set column_array(image) [list \
@@ -75,7 +75,7 @@ ad_proc -private fs::rss::datasource {
     # But folder names can contain spaces, so we'll urlencode just in case.
     set pretty_folder_url "${ad_url}${base_url}"
     if { $folder_id != $root_folder_id } {
-        set url_stub [item::get_url -root_folder_id $root_folder_id $folder_id]
+        set url_stub [content::item::get_virtual_path -root_folder_id $root_folder_id -item_id $folder_id]
         set stub_parts [split $url_stub /]
         set enc_url_stub_list [list]
         foreach part $stub_parts {
@@ -88,13 +88,13 @@ ad_proc -private fs::rss::datasource {
     set items [list]
     set counter 0
 
-    if { [string equal $descend_p f] } {
+    if {$descend_p == "f"} {
         set parent_clause "parent_id = :folder_id"
     } else {
         set parent_clause [db_map descend_parent_clause]
     }
 
-    if { [string equal $include_revisions_p f] } {
+    if {$include_revisions_p == "f"} {
         set revisions_clause "r.revision_id = o.live_revision"
     } else {
         set revisions_clause "r.item_id = o.object_id"
@@ -105,7 +105,7 @@ ad_proc -private fs::rss::datasource {
         set content "content"
         set description $description
 
-        if { [string equal $include_revisions_p t] } {
+        if {$include_revisions_p == "t"} {
             append description "<br><br><b>Note:</b> This may be a new revision of an existing file."
         }
         
@@ -119,7 +119,7 @@ ad_proc -private fs::rss::datasource {
                           description $description \
                           timestamp $publish_timestamp ]
 
-        if { ![string equal $enclosure_match_patterns ""] } {
+        if { $enclosure_match_patterns ne "" } {
             foreach pattern $enclosure_match_patterns {
                 if { [string match $pattern $title] } {
                     lappend iteminfo \

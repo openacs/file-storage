@@ -1,5 +1,5 @@
 ad_library {
-    TCL library for the file-storage system (v.4)
+    Tcl library for the file-storage system (v.4)
     @author Kevin Scaldeferri (kevin@arsdigita.com)
     @creation-date 6 November 2000
     @cvs-id $Id$
@@ -10,7 +10,7 @@ ad_proc fs_get_root_folder {
 } {
     Returns the root folder for the file storage system.
 } {
-    if [empty_string_p $package_id] {
+    if {$package_id eq ""} {
 	set package_id [ad_conn package_id]
     }
 
@@ -46,10 +46,11 @@ ad_proc fs_folder_p {
     Returns 1 if the folder_id corresponds to a folder in the file-storage
     system.  Returns 0 otherwise.
 } {
-    if {[string equal [db_string object_type "
-    select object_type 
-    from   acs_objects
-    where  object_id = :folder_id" -default ""] "content_folder"]} {
+    if {[db_string object_type {
+	select object_type 
+	from   acs_objects
+	where  object_id = :folder_id
+    } -default ""] eq "content_folder"} {
 	return 1
     } else {
 	return 0
@@ -62,10 +63,10 @@ ad_proc fs_file_p {
     Returns 1 if the file_id corresponds to a file in the file-storage
     system.  Returns 0 otherwise.
 } {
-    if {[string equal [db_string object_type "
+    if {[db_string object_type "
     select object_type 
     from   acs_objects
-    where  object_id = :file_id" -default ""] "content_item"]} {
+    where  object_id = :file_id" -default ""] eq "content_item"} {
 	return 1
     } else {
 	return 0
@@ -78,10 +79,10 @@ ad_proc fs_version_p {
     Returns 1 if the version_id corresponds to a version in the file-storage
     system.  Returns 0 otherwise.
 } {
-    if {[string equal [db_string object_type "
+    if {[db_string object_type "
     select object_type 
     from   acs_objects
-    where  object_id = :version_id" -default ""] "file_storage_object"]} {
+    where  object_id = :version_id" -default ""] eq "file_storage_object"} {
 	return 1
     } else {
 	return 0
@@ -103,7 +104,7 @@ ad_proc children_have_permission_p {
     does not have the privilege.  It returns 1 if the user has the
     privilege on every child item.
 } {
-    if [empty_string_p $user_id] {
+    if {$user_id eq ""} {
 	set user_id [ad_conn user_id]
     }
 
@@ -159,12 +160,13 @@ ad_proc fs_context_bar_list {
     item in the context bar.  Otherwise, the name corresponding to 
     item_id will be used.
 } {
-    if {[empty_string_p $root_folder_id]} {
+    if {$root_folder_id eq ""} {
         set root_folder_id [fs_get_root_folder]
     }
 
-    if {[empty_string_p $final] \
-            && !($item_id == $root_folder_id)} {
+    if {$final eq "" 
+	&& !($item_id == $root_folder_id)
+    } {
         # don't get title for last element if we are in the
         # root folder
         set start_id [db_string parent_id "
@@ -192,7 +194,7 @@ ad_proc -private fs::after_mount {
     -node_id
 } {
     Create root folder for package instance
-    via tcl callback.
+    via Tcl callback.
 } {
     set folder_id [fs::get_root_folder -package_id $package_id]
 
@@ -204,7 +206,7 @@ ad_proc -private fs::before_unmount {
     -node_id
 } {
     Create root folder for package instance
-    via tcl callback.
+    via Tcl callback.
 } {
     set folder_id [fs::get_root_folder -package_id $package_id]
 
@@ -224,15 +226,15 @@ ad_proc -public fs::new_root_folder {
     @return folder_id of the new root folder
 } {
 
-    if {[empty_string_p $package_id]} {
+    if {$package_id eq ""} {
 	set package_id [ad_conn package_id]
     }
 
-    if {[empty_string_p $pretty_name]} {
+    if {$pretty_name eq ""} {
 	set pretty_name [apm_instance_name_from_id $package_id]
     }
 
-    if {[empty_string_p $name]} {
+    if {$name eq ""} {
 	set name "file-storage_${package_id}"
     }
 
@@ -250,7 +252,7 @@ ad_proc -public fs::get_root_folder {
 
     @return folder_id of the root folder retrieved
 } {
-    if {[empty_string_p $package_id]} {
+    if {$package_id eq ""} {
 	set package_id [ad_conn package_id]
     }
 
@@ -289,11 +291,11 @@ ad_proc -public fs::new_folder {
     @param no_callback defines if the callback should be called. Defaults to yes
     @return folder_id of the newly created folder
 } {
-    if {[empty_string_p $creation_user]} {
+    if {$creation_user eq ""} {
 	set creation_user [ad_conn user_id]
     }
 
-    if {[empty_string_p $creation_ip]} {
+    if {$creation_ip eq ""} {
 	set creation_ip [ns_conn peeraddr]
     }
 
@@ -454,11 +456,11 @@ ad_proc -public fs::get_folder_contents {
 					       permission)
     @param n_past_days Mark files that are newer than the past N days as new
 } {
-    if {[empty_string_p $folder_id]} {
+    if {$folder_id eq ""} {
 	set folder_id [get_root_folder -package_id [ad_conn package_id]]
     }
 
-    if {[empty_string_p $user_id]} {
+    if {$user_id eq ""} {
 	set user_id [acs_magic_object the_public]
     }
 
@@ -490,11 +492,11 @@ ad_proc -public fs::get_folder_contents_count {
     @param user_id The viewer of the contents (to make sure they have
 					       permission)
 } {
-    if {[empty_string_p $folder_id]} {
+    if {$folder_id eq ""} {
 	set folder_id [get_root_folder -package_id [ad_conn package_id]]
     }
 
-    if {[empty_string_p $user_id]} {
+    if {$user_id eq ""} {
 	set user_id [acs_magic_object the_public]
     }
 
@@ -509,8 +511,8 @@ ad_proc -public fs::publish_object_to_file_system {
 } {
     publish a file storage object to the file system
 } {
-    if {[empty_string_p $path]} {
-	set path [ns_tmpnam]
+    if {$path eq ""} {
+	set path [ad_tmpnam]
     }
 
     db_1row select_object_info {}
@@ -541,11 +543,11 @@ ad_proc -public fs::publish_folder_to_file_system {
 } {
     publish the contents of a file storage folder to the file system
 } {
-    if {[empty_string_p $path]} {
-	set path [ns_tmpnam]
+    if {$path eq ""} {
+	set path [ad_tmpnam]
     }
 
-    if {[empty_string_p $folder_name]} {
+    if {$folder_name eq ""} {
 	set folder_name [get_object_name -object_id $folder_id]
     }
     set folder_name [remove_special_file_system_characters -string $folder_name]
@@ -573,14 +575,14 @@ ad_proc -public fs::publish_url_to_file_system {
     publish a url object to the file system as a Windows shortcut
     (which at least KDE also knows how to handle)
 } {
-    if {[empty_string_p $path]} {
-	set path [ns_tmpnam]
+    if {$path eq ""} {
+	set path [ad_tmpnam]
 	file mkdir $path
     }
 
     db_1row select_object_metadata {}
 
-    if {[empty_string_p $file_name]} {
+    if {$file_name eq ""} {
 	set file_name $name
     }
     set file_name "${file_name}.url"
@@ -601,8 +603,8 @@ ad_proc -public fs::publish_versioned_object_to_file_system {
 } {
     publish an object to the file system
 } {
-    if {[empty_string_p $path]} {
-	set path [ns_tmpnam]
+    if {$path eq ""} {
+	set path [ad_tmpnam]
 	file mkdir $path
     }
 
@@ -613,18 +615,24 @@ ad_proc -public fs::publish_versioned_object_to_file_system {
 
     if { $like_filesystem_p } {
 	set file_name $title
-	if {[empty_string_p $file_name]} {
+	if {$file_name eq ""} {
 	    if {![info exists upload_file_name]} {
 		set file_name "unnamedfile"
 	    } else {
 		set file_name $file_upload_name
 	    }
-	} elseif { [item::get_mime_info [item::get_live_revision $object_id]] } {
+	} elseif {[content::item::get -item_id $object_id -array_name item_info]} {
 	    # We make sure that the file_name contains the file
 	    # extension at the end so that the users default
 	    # application for that file type can be used
-	    if { ![regexp "\.$mime_info(file_extension)$" $file_name match] } {
-		set file_name "${file_name}.$mime_info(file_extension)"
+	    
+	    set mime_type $item_info(mime_type)
+	    set file_extension [db_string get_extension {
+		select file_extension from cr_mime_types where mime_type = :mime_type
+	    }]
+
+	    if { ![regexp "\.$file_extension$" $file_name match] } {
+		set file_name "$file_name.$file_extension"
 	    }
 	}
     } else {
@@ -657,7 +665,21 @@ ad_proc -public fs::publish_versioned_object_to_file_system {
 	    set cr_path [cr_fs_path $storage_area_key]
 	    set cr_file_name [db_string select_file_name {}]
 
-	    file copy -- "${cr_path}${cr_file_name}" [file join ${path} ${file_name}]
+	    #
+	    # When there are multiple "unnamed files" in a directory,
+	    # the constructed full_name might exist already. This
+	    # would lead to an error in the "file copy"
+	    # operation. Therefore, generate a new name with an
+	    # alternate suffix in these cases.
+	    #
+            set full_name [file join $path $file_name]
+            set base_name $full_name
+            set count 0
+            while {[file exists $full_name]} { 
+               set full_name $base_name-[incr $count]
+            }
+
+            file copy -- "${cr_path}${cr_file_name}" $full_name 
 	}
     }
 
@@ -700,7 +722,7 @@ ad_proc -public fs::get_item_id {
 } {
     Get the item_id of a file
 } {
-    if {[empty_string_p $folder_id]} {
+    if {$folder_id eq ""} {
 	set package_id [ad_conn package_id]
 	set folder_id [fs_get_root_folder -package_id $package_id]
     }
@@ -734,7 +756,7 @@ ad_proc -public fs::add_file {
 	set indbp "f"
         set storage_type "file"
     }
-    if {[string equal "" $mime_type]} {
+    if {$mime_type eq ""} {
         set mime_type [cr_filename_to_mime_type -create -- $name]
     }
     # we have to do this here because we create the object before
@@ -765,7 +787,7 @@ ad_proc -public fs::add_file {
 			     -mime_type "text/plain"
 			    ]
 			     
-	    if {![empty_string_p $creation_user]} {
+	    if {$creation_user ne ""} {
 		permission::grant -party_id $creation_user -object_id $item_id -privilege admin
 	    }
 
@@ -848,22 +870,22 @@ ad_proc -public fs::add_created_file {
 	set indbp "f"
         set storage_type "file"
     }
-    if {![string equal "" $item_id]} {
+    if {$item_id ne ""} {
         set storage_type [db_string get_storage_type "select storage_type from cr_items where item_id=:item_id"]
     }
-    if {[empty_string_p $mime_type] } {
+    if {$mime_type eq "" } {
 	set mime_type "text/html"
     }
-    if { [empty_string_p $name] } {
+    if { $name eq "" } {
 	set name $title
     }
 
     set content_type "file_storage_object"
 
     db_transaction {
-	if {[empty_string_p $item_id] || ![db_string item_exists ""]} {
+	if {$item_id eq "" || ![db_string item_exists ""]} {
 	    set item_id [db_exec_plsql create_item ""]
-	    if {![empty_string_p $creation_user]} {
+	    if {$creation_user ne ""} {
 		permission::grant -party_id $creation_user -object_id $item_id -privilege admin
 	    }
 	    set do_notify_here_p "t"
@@ -914,20 +936,20 @@ ad_proc fs::add_created_version {
     Create a new version of a file storage item using the content passed in content_body
     @return revision_id
 } {
-    if {[empty_string_p $package_id]} {
+    if {$package_id eq ""} {
 	set package_id [ad_conn package_id]
     }
-    if {[empty_string_p $storage_type]} {
+    if {$storage_type eq ""} {
 	set storage_type [db_string get_storage_type ""]
     }
-    if {[empty_string_p $creation_user]} {
+    if {$creation_user eq ""} {
 	set creation_user [ad_conn user_id]
     }
-    if {[empty_string_p $creation_ip]} {
+    if {$creation_ip eq ""} {
 	set creation_ip [ns_conn peeraddr]
     }
     set parent_id [fs::get_parent -item_id $item_id]
-    if {[string equal "" $storage_type]} {
+    if {$storage_type eq ""} {
         set storage_type [db_string get_storage_type "select storage_type from cr_items where item_id=:item_id"]    
     }
     switch -- $storage_type {
@@ -955,6 +977,7 @@ ad_proc fs::add_created_version {
 			 -image_type "file_storage_object" \
 			 -title $title \
 			 -description $description \
+             -package_id $package_id \
 			 $parent_id \
 			 $tmp_filename \
 			 $tmp_size \
@@ -1004,10 +1027,10 @@ ad_proc fs::add_version {
     @return revision_id
 } {
     # always use the storage type of the existing item
-    if {[string equal "" $storage_type]} {
+    if {$storage_type eq ""} {
         set storage_type [db_string get_storage_type ""]
     }
-    if {[string equal "" $mime_type]} {
+    if {$mime_type eq ""} {
         set mime_type [cr_filename_to_mime_type -create -- $name]
     }
 
@@ -1022,6 +1045,7 @@ ad_proc fs::add_version {
 			 -image_type "file_storage_object" \
 			 -title $title \
 			 -description $description \
+             -package_id $package_id \
 			 $parent_id \
 			 $tmp_filename \
 			 $tmp_size \
@@ -1063,7 +1087,7 @@ ad_proc fs::delete_file {
 
     set version_name [get_object_name -object_id $item_id]
 
-    if {[empty_string_p $parent_id]} {
+    if {$parent_id eq ""} {
 	set parent_id [fs::get_parent -item_id $item_id]
     }
     
@@ -1102,7 +1126,7 @@ ad_proc fs::delete_folder {
 	}
     }
 
-    if {[empty_string_p $parent_id]} {
+    if {$parent_id eq ""} {
 	set parent_id [fs::get_parent -item_id $folder_id]
     }
 
@@ -1143,22 +1167,22 @@ ad_proc fs::webdav_url {
             item is not WebDAV enabled
 } {
 
-    if {  [ad_parameter "UseWebDavP"] == 0 } {
+    if {  [parameter::get -parameter "UseWebDavP"] == 0 } {
 	return "ho"
     }  
-    if {[empty_string_p $package_id]} {
+    if {$package_id eq ""} {
 	set package_id [ad_conn package_id]
     }
     
-    if {[empty_string_p $root_folder_id]} {
+    if {$root_folder_id eq ""} {
 	set root_folder_id [fs::get_root_folder -package_id $package_id]
     }
 
-    if {[string equal "t" [oacs_dav::folder_enabled -folder_id $root_folder_id]]} {
-	if {[string equal $root_folder_id $item_id]} {
+    if {"t" eq [oacs_dav::folder_enabled -folder_id $root_folder_id]} {
+	if {$root_folder_id eq $item_id} {
 	    set url_stub ""
 	} else {
-	    set url_stub [item::get_url -root_folder_id $root_folder_id $item_id]
+	    set url_stub [content::item::get_virtual_path -root_folder_id $root_folder_id -item_id $item_id]
 	}
 	set package_url [apm_package_url_from_id $package_id]
 
@@ -1193,21 +1217,21 @@ ad_proc -public fs::do_notifications {
 } {
     set package_and_root [fs::get_folder_package_and_root $folder_id]
     set root_folder [lindex $package_and_root 1]
-    if {[string equal "" $package_id]} {
+    if {$package_id eq ""} {
 	set package_id [lindex $package_and_root 0]
     }
 
-    if {[string equal $action "new_file"]} {
+    if {$action eq "new_file"} {
         set action_type "[_ file-storage.New_File_Uploaded]"
-    } elseif {[string equal $action "new_url"]} {
+    } elseif {$action eq "new_url"} {
         set action_type "[_ file-storage.New_URL_Uploaded]"
-    } elseif {[string equal $action "new_version"]} {
+    } elseif {$action eq "new_version"} {
         set action_type "[_ file-storage.lt_New_version_of_file_u]"
-    } elseif {[string equal $action "delete_file"]} {
+    } elseif {$action eq "delete_file"} {
         set action_type "[_ file-storage.File_deleted]"
-    } elseif {[string equal $action "delete_url"]} {
+    } elseif {$action eq "delete_url"} {
         set action_type "[_ file-storage.URL_deleted]"
-    } elseif {[string equal $action "delete_folder"]} {
+    } elseif {$action eq "delete_folder"} {
         set action_type "[_ file-storage.Folder_deleted]"
     } else {
         error "Unknown file-storage notification action: $action"
@@ -1217,10 +1241,10 @@ ad_proc -public fs::do_notifications {
     set new_content ""
     db_0or1row get_owner_name { }
 
-    if {[string equal $action "new_file"] || [string equal $action "new_url"] || [string equal $action "new_version"]} {
+    if {$action eq "new_file" || $action eq "new_url" || $action eq "new_version"} {
 
 
-        if {[string equal $action "new_version"]} {
+        if {$action eq "new_version"} {
             set sql "select description as description from cr_revisions 
                            where cr_revisions.revision_id = :item_id"
         } elseif {[string match "*folder" $action]} {
@@ -1241,7 +1265,7 @@ ad_proc -public fs::do_notifications {
     set folder_name [fs_get_folder_name $folder_id]
     append text_version "[_ file-storage.lt_File-Storage_folder_f]\n"
 
-    if {[string equal $action "new_version"]} {
+    if {$action eq "new_version"} {
         append text_version "[_ file-storage.lt_New_Version_Uploaded_]\n"
     } else {
         append text_version "[_ file-storage.lt_Name_of_the_action_ty]\n"
@@ -1302,9 +1326,13 @@ ad_proc -public fs::item_editable_info {
     # hardcoding it for now
     set editable_mime_types [list "text/html" "text/plain"]
 
-    item::get_mime_info [item::get_live_revision $item_id]
+    content::item::get -item_id $item_id -array_name item_info
+    set mime_info(mime_type) [set mime_type $item_info(mime_type)]
+    set mime_info(file_extension) [db_string get_extension {
+	select file_extension from cr_mime_types where mime_type = :mime_type
+    }]
 
-    if {[lsearch -exact $editable_mime_types [string tolower $mime_info(mime_type)]] != -1} {
+    if {[string tolower $mime_info(mime_type)] in $editable_mime_types} {
         set mime_info(editable_p) 1
     } else {
         set mime_info(editable_p) 0
@@ -1351,8 +1379,8 @@ ad_proc -public fs::get_object_info {
 
     set user_id [ad_conn user_id]
     set root_folder_id [fs::get_root_folder]
-    if {![exists_and_not_null revision_id]} {
-        set revision_id [item::get_live_revision $file_id]
+    if {(![info exists revision_id] || $revision_id eq "")} {
+        set revision_id [content::item::get_live_revision -item_id $file_id]
     }
 
     db_1row file_info {
@@ -1372,7 +1400,7 @@ ad_proc -public fs::get_object_info {
     set content [db_exec_plsql get_content {
     }]
 
-    if {[string equal $file_object_info(storage_type) file]} {
+    if {$file_object_info(storage_type) eq "file"} {
         set filename [cr_fs_path $file_object_info(storage_area_key)]
         append filename $content
         set fd [open $filename]
@@ -1386,7 +1414,7 @@ ad_proc -public fs::get_object_info {
 
 ad_proc -public fs::get_folder_package_and_root folder_id {
 
-    Returns a two-element tcl list containing the package_id
+    Returns a two-element Tcl list containing the package_id
     and root_folder_id for the passed-in folder_id.
 
     @author Andrew Grumet (aegrumet@alum.mit.edu)
@@ -1449,7 +1477,7 @@ ad_proc -public fs::file_copy {
 } {
     db_1row file_data {}
 
-    if {![empty_string_p $postfix]} {
+    if {$postfix ne ""} {
 	set name [lang::util::localize "[file rootname $name]_$postfix[file extension $name]"]
     }
 
@@ -1484,7 +1512,7 @@ ad_proc -public fs::file_copy {
 	set new_path [cr_create_content_file_path $new_file_id $new_file_rev_id]
 	cr_create_content_file $new_file_id $new_file_rev_id $file_path
 	
-	if {![empty_string_p $postfix]} {
+	if {$postfix ne ""} {
 	    # set postfixed new title
 	    db_dml update_title {}
 	}
@@ -1510,7 +1538,7 @@ ad_proc -public fs::file_copy {
 } {
     db_1row file_data {}
 
-    if {![empty_string_p $postfix]} {
+    if {$postfix ne ""} {
 	set name [lang::util::localize "[file rootname $name]_$postfix[file extension $name]"]
     }
 
@@ -1545,7 +1573,7 @@ ad_proc -public fs::file_copy {
 	set new_path [cr_create_content_file_path $new_file_id $new_file_rev_id]
 	cr_create_content_file $new_file_id $new_file_rev_id $file_path
 	
-	if {![empty_string_p $postfix]} {
+	if {$postfix ne ""} {
 	    # set postfixed new title
 	    db_dml update_title {}
 	}

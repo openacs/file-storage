@@ -4,7 +4,7 @@ ad_page_contract {
     @author Timo Hentschel (timo@timohentschel.de)
     @creation-date 2006-05-15
 } {
-    folder_id:integer
+    folder_id:naturalnum,notnull
     cancel_url
     return_url
 }

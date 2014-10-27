@@ -7,13 +7,13 @@ ad_page_contract {
     @version $Id$
 
 } -query {
-    {object_id:integer,optional}
+    {object_id:naturalnum,optional}
 }
 
-if {[exists_and_not_null object_id]} {
+if {([info exists object_id] && $object_id ne "")} {
     set download_name [fs::get_file_system_safe_object_name -object_id $object_id]
     set ext [fs::get_archive_extension]
-    if {![empty_string_p $ext]} {
+    if {$ext ne ""} {
         append download_name ".${ext}"
     }
 

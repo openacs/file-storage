@@ -8,7 +8,7 @@ ad_page_contract {
     
 } -query {
     object_id:notnull,integer,multiple
-    folder_id:integer,optional
+    folder_id:naturalnum,optional
     {return_url ""}
     {root_folder_id ""}
     {redirect_to_folder:boolean 0}
@@ -35,7 +35,7 @@ db_multirow -extend {move_message} move_objects get_move_objects "" {
 	set move_message ""
 	incr allowed_count
     } else {
-	set move_message [_ file_storage.Not_Allowed]
+	set move_message [_ file-storage.Not_Allowed]
 	incr not_allowed_count
     }
     if {$type eq "folder"} {
@@ -67,7 +67,7 @@ if {[info exists folder_id]} {
 	if {$copy_and_delete_p} {  
              # copy and delete file to move it
 	    db_transaction {
-		if {![string equal $type "folder"] } {  
+		if {$type ne "folder" } {  
 		    set file_rev_id [db_exec_plsql copy_item {}]  
 		    set file_id [content::revision::item_id -revision_id $file_rev_id]  
 		    callback fs::file_revision_new -package_id $package_id -file_id $file_id -parent_id $folder_id  
@@ -126,7 +126,7 @@ if {[info exists folder_id]} {
             }
         }
 
-    if {[empty_string_p $root_folder_id]} {
+    if {$root_folder_id eq ""} {
 	set root_folder_id [fs::get_root_folder]
     }
     set object_id $objects_to_move
@@ -134,10 +134,10 @@ if {[info exists folder_id]} {
     db_multirow -extend {move_url level} folder_tree get_folder_tree "" {
 	# teadams 2003-08-22 - change level to level num to avoid 
 	# Oracle issue with key words.
-        if {[lsearch [concat $not_allowed_parents $not_allowed_children] $folder_id] ne "-1" || 
-            [lsearch $not_allowed_children $parent_id] ne "-1" } {
-            
-            if {[lsearch $not_allowed_children $parent_id] ne "-1"} {
+        if {$folder_id in [concat $not_allowed_parents $not_allowed_children]
+	    || $parent_id in $not_allowed_children
+	} {
+            if {$parent_id in $not_allowed_children} {
                 lappend not_allowed_children $folder_id
             }
             set move_url ""

@@ -21,15 +21,6 @@ ad_proc -public -callback fs::folder_chunk::add_bulk_actions {
 } {
 }
 
-ad_proc -public -callback fs::file_delete {
-    {-package_id:required}
-    {-file_id:required}
-} {
-    Callback executed right before the file is deleted
-    This should make sure that any foreign key constraints to the file are removed
-} -
-
-
 ad_proc -public -callback fs::before_file_new {
     {-package_id:required}
     {-folder_id:required}
@@ -39,12 +30,6 @@ ad_proc -public -callback fs::before_file_new {
     this can be used to check for confirmation before upload to folder
 } -
 
-ad_proc -public -callback fs::file_new {
-    {-package_id:required}
-    {-file_id:required}
-} {
-}
-
 ad_proc -public -callback fs::file_revision_new {
     {-package_id:required}
     {-file_id:required}
@@ -53,11 +38,11 @@ ad_proc -public -callback fs::file_revision_new {
     {-creation_ip ""}
 } {
     Callback executed when a new file revision is created
-    @package_id Package_id of the file storage package
-    @file_id New file_id for the revision
-    @parent_id Usually the folder the file was uploaded to.
-    @creation_user User_id of the user creating the revision
-    @creation_ip IP Of the creation
+    @param package_id Package_id of the file storage package
+    @param file_id New file_id for the revision
+    @param parent_id Usually the folder the file was uploaded to.
+    @param creation_user User_id of the user creating the revision
+    @param creation_ip IP Of the creation
 } - 
 
 
@@ -67,7 +52,7 @@ ad_proc -public -callback search::datasource -impl file_storage_object {} {
 
     @author Dirk Gomez (openacs@dirkgomez.de)
     @author Jowell S. Sabino (jowellsabino@netscape.net)
-    @creation_date 2005-06-13
+    @creation-date 2005-06-13
 
     returns a datasource for the search package
     this is the content that will be indexed by the full text
@@ -122,12 +107,6 @@ ad_proc -public -callback datamanager::copy_folder -impl datamanager {
 
     return $new_folder_id
     
-}
-
-ad_proc -public -callback fs::folder_new {
-    {-package_id:required}
-    {-folder_id:required}
-} {
 }
 
 ad_proc -public -callback pm::project_new -impl file_storage {

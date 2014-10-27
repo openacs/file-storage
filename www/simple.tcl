@@ -5,11 +5,11 @@ ad_page_contract {
     @creation-date 2004-04-27
     @cvs-id $Id$
 } {
-    object_id:notnull
+    object_id:naturalnum,notnull
 }
 
 # check for write permission on the item
-ad_require_permission $object_id read
+permission::require_permission -object_id $object_id -privilege read
 set edit_p [permission::permission_p -object_id $object_id -privilege write]
 
 # Load up data 

@@ -6,6 +6,7 @@
   <msg key="Actions">Actions:</msg>
   <msg key="Actions_1">Actions</msg>
   <msg key="Add_Dup_As_New_File">If you upload a file with the same name as a file already in this folder, we will alter your new file's name by adding an incremental suffix (eg. &amp;quot;mydoc.doc&amp;quot; -&amp;gt; &amp;quot;mydoc-1.doc&amp;quot;) and making it a new, separate file. &lt;br&gt;&lt;br&gt;&lt;em&gt;Note that this is not the Title of the file, which you can specify as you like. This is the File Name, which must be unique in each folder.&lt;/em&gt;</msg>
+  <msg key="Add_Dup_As_Revision">If you upload a file with the same name as a file already in this folder, we will add this as a new revision of the existing file. </msg>
   <msg key="Add_File">Add File</msg>
   <msg key="Add_folder_from_fs">Add folder from file system</msg>
   <msg key="Add_pretty_name">Add %pretty_name%</msg>
@@ -149,6 +150,7 @@ delete, therefore you cannot delete it.</msg>
   <msg key="No_such_type">No such type</msg>
   <msg key="no_such_URL">no such URL</msg>
   <msg key="No_valid_destination_folders_exist">No valid destination folder exists</msg>
+  <msg key="Not_Allowed">Not Allowed</msg>
   <msg key="PDF">PDF</msg>
   <msg key="Permissions">Permissions</msg>
   <msg key="Please_select_at_least_one_item_to_copy.">Please select at least one item to copy.</msg>
