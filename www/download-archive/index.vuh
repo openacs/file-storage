@@ -35,14 +35,14 @@ if {$user_id == 0} {
 }
 
 # publish the object to the file system
-set in_path [ns_tmpnam]
+set in_path [ad_tmpnam]
 file mkdir $in_path
 
 set file [fs::publish_object_to_file_system -object_id $object_id -path $in_path -user_id $user_id]
 set file_name [file tail $file]
 
 # create a temp dir to put the archive in
-set out_path [ns_tmpnam]
+set out_path [ad_tmpnam]
 file mkdir $out_path
 
 set out_file [file join ${out_path} ${download_name}]
