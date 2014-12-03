@@ -20,11 +20,10 @@ select define_function_args('file_storage__get_root_folder','package_id');
     --
 CREATE OR REPLACE FUNCTION file_storage__get_root_folder(
    get_root_folder__package_id integer
-
-) RETURNS integer AS $$
--- fs_root_folders.folder_id%TYPE
+)
+RETURNS integer AS $$
 DECLARE
-        v_folder_id                  fs_root_folders.folder_id%TYPE;
+        v_folder_id  fs_root_folders.folder_id%TYPE;
 BEGIN
         select folder_id into v_folder_id 
         from fs_root_folders
@@ -45,8 +44,8 @@ select define_function_args('file_storage__get_package_id','item_id');
 --
 CREATE OR REPLACE FUNCTION file_storage__get_package_id(
    get_package_id__item_id integer
-) RETURNS integer AS $$
--- fs_root_folders.package_id%TYPE
+)
+RETURNS integer AS $$
 DECLARE
     v_package_id                fs_root_folders.package_id%TYPE;
     v_tree_sortkey              cr_items.tree_sortkey%TYPE;
@@ -91,55 +90,55 @@ CREATE OR REPLACE FUNCTION file_storage__new_root_folder(
    new_root_folder__folder_name varchar,
    new_root_folder__url varchar,
    new_root_folder__description varchar
-
-) RETURNS integer AS $$
+)
+RETURNS integer AS $$
 DECLARE
         v_folder_id                         fs_root_folders.folder_id%TYPE;
 BEGIN
         v_folder_id := content_folder__new (
             new_root_folder__url, -- name
             new_root_folder__folder_name, -- label
-	    new_root_folder__description, -- description
+            new_root_folder__description, -- description
             null,  -- parent_id (default)
-	    new_root_folder__package_id, --context_id
-	    null, --folder_id
-	    null, --creation_date
-	    null, --creation_user
-	    null, --creation_ip
+            new_root_folder__package_id, --context_id
+            null, --folder_id
+            null, --creation_date
+            null, --creation_user
+            null, --creation_ip
             new_root_folder__package_id --package_id
-	);
+        );
 
-        insert into fs_root_folders 
-        (package_id, folder_id)
-        values 
-        (new_root_folder__package_id, v_folder_id);
+        insert into fs_root_folders (package_id, folder_id)
+        values (new_root_folder__package_id, v_folder_id);
 
-        -- allow child items to be added
-        -- JS: Note that we need to set include_subtypes to 
-        -- JS: true since we created a new subtype.
+        --                
+        -- Register the needed content types
+        --
+        -- GN: Maybe, when someone decides to really implement the half-cooked
+        -- "image" content type, it should go in here as well.
+    
         PERFORM content_folder__register_content_type(
                 v_folder_id,            -- folder_id
-                'content_revision',   -- content_types
-                't'                   -- include_subtypes 
-                );
+                'file_storage_object',  -- content_types
+                'f');                   -- include_subtypes 
+        
         PERFORM content_folder__register_content_type(
                 v_folder_id,            -- folder_id
-                'content_folder',     -- content_types
-                't'                   -- include_subtypes 
-                );
-        PERFORM content_folder__register_content_type(
-                v_folder_id,            -- folder_id
-                'content_symlink',    -- content_types
-                't'                   -- include_subtypes 
-                );
+                'content_folder',    -- content_types
+                't');                   -- include_subtypes 
+
         PERFORM content_folder__register_content_type(
                 v_folder_id,            -- folder_id
                 'content_extlink',    -- content_types
-                't'                   -- include_subtypes 
-                );
+                't');                   -- include_subtypes 
+
+--        PERFORM content_folder__register_content_type(
+--                v_folder_id,            -- folder_id
+--                'content_symlink',      -- content_types
+--                't');                   -- include_subtypes 
+--                );
 
         return v_folder_id;
-
 END;
 $$ LANGUAGE plpgsql;
     
@@ -167,8 +166,8 @@ CREATE OR REPLACE FUNCTION file_storage__new_file(
    new_file__indb_p boolean,
    new_file__item_id integer,
    new_file__package_id integer
-
-) RETURNS integer AS $$
+)
+RETURNS integer AS $$
 DECLARE
         v_item_id                       integer;
 BEGIN
@@ -235,7 +234,8 @@ CREATE OR REPLACE FUNCTION file_storage__new_file(
    new_file__creation_ip varchar,
    new_file__indb_p boolean,
    new_file__package_id integer
-) RETURNS integer AS $$
+)
+RETURNS integer AS $$
 DECLARE
 BEGIN
         return file_storage__new_file(
@@ -266,8 +266,8 @@ select define_function_args('file_storage__delete_file','file_id');
     --
 CREATE OR REPLACE FUNCTION file_storage__delete_file(
    delete_file__file_id integer
-
-) RETURNS integer AS $$
+)
+RETURNS integer AS $$
 DECLARE
 BEGIN
 
@@ -292,8 +292,8 @@ select define_function_args('file_storage__rename_file','file_id,name');
 CREATE OR REPLACE FUNCTION file_storage__rename_file(
    rename_file__file_id integer,
    rename_file__name varchar
-
-) RETURNS integer AS $$
+)
+RETURNS integer AS $$
 DECLARE
 BEGIN
 
@@ -321,8 +321,8 @@ CREATE OR REPLACE FUNCTION file_storage__copy_file(
    copy_file__target_folder_id integer,
    copy_file__creation_user integer,
    copy_file__creation_ip varchar
-
-) RETURNS integer AS $$
+)
+RETURNS integer AS $$
 DECLARE
         v_name                       cr_items.name%TYPE;
         v_live_revision              cr_items.live_revision%TYPE;
@@ -443,9 +443,8 @@ CREATE OR REPLACE FUNCTION file_storage__move_file(
    move_file__target_folder_id integer,
    move_file__creation_user integer,
    move_file__creation_ip varchar
-
-) RETURNS integer AS $$
--- 0 for success
+)
+RETURNS integer AS $$
 DECLARE
 BEGIN
 
@@ -471,8 +470,8 @@ select define_function_args('file_storage__get_title','item_id');
 --
 CREATE OR REPLACE FUNCTION file_storage__get_title(
    get_title__item_id integer
-
-) RETURNS varchar AS $$
+)
+RETURNS varchar AS $$
 DECLARE
   v_title                            cr_revisions.title%TYPE;
   v_content_type                     cr_items.content_type%TYPE;
@@ -495,7 +494,7 @@ BEGIN
          select title into v_title
          from cr_revisions, cr_items
          where revision_id=live_revision
-	 and cr_items.item_id=get_title__item_id;
+     and cr_items.item_id=get_title__item_id;
        end if;
   end if;
 
@@ -507,7 +506,8 @@ select define_function_args('file_storage__get_parent_id','item_id');
 
 CREATE OR REPLACE FUNCTION file_storage__get_parent_id (
         get_parent_id__item_id integer 
-) RETURNS integer AS $$
+)
+RETURNS integer AS $$
      declare 
          v_parent_id          cr_items.item_id%TYPE;
      begin
@@ -534,7 +534,8 @@ select define_function_args('file_storage__get_content_type','file_id');
 
 CREATE OR REPLACE FUNCTION file_storage__get_content_type(
    get_content_type__file_id integer
-) RETURNS varchar AS $$
+)
+RETURNS varchar AS $$
 DECLARE
 BEGIN
         return content_item__get_content_type(
@@ -556,13 +557,11 @@ select define_function_args('file_storage__get_folder_name','folder_id');
 --
 CREATE OR REPLACE FUNCTION file_storage__get_folder_name(
    get_folder_name__folder_id integer
-
-) RETURNS varchar AS $$
+)
+RETURNS varchar AS $$
 DECLARE
 BEGIN
-        return content_folder__get_label(
-                          get_folder_name__folder_id
-                          );
+        return content_folder__get_label(get_folder_name__folder_id);
 END;
 $$ LANGUAGE plpgsql;  
 
@@ -587,8 +586,8 @@ CREATE OR REPLACE FUNCTION file_storage__new_version(
    new_version__item_id integer,
    new_version__creation_user integer,
    new_version__creation_ip varchar
-
-) RETURNS integer AS $$
+)
+RETURNS integer AS $$
 DECLARE
         v_revision_id                   cr_revisions.revision_id%TYPE;
         v_folder_id                     cr_items.parent_id%TYPE;
@@ -617,7 +616,7 @@ BEGIN
         where cr_items.item_id = new_version__item_id;
 
         perform acs_object__update_last_modified(v_folder_id,new_version__creation_user,new_version__creation_ip);
-    	perform acs_object__update_last_modified(new_version__item_id,new_version__creation_user,new_version__creation_ip);
+        perform acs_object__update_last_modified(new_version__item_id,new_version__creation_user,new_version__creation_ip);
 
         return v_revision_id;
 
@@ -627,21 +626,20 @@ $$ LANGUAGE plpgsql;
 
 
 
--- added
-select define_function_args('file_storage__delete_version','file_id,version_id');
-
 --
 -- procedure file_storage__delete_version/2
 --
-    --
-    -- Delete a version of a file
-    --
+select define_function_args('file_storage__delete_version','file_id,version_id');
+
+--
+-- Delete a version of a file
+--
 
 CREATE OR REPLACE FUNCTION file_storage__delete_version(
    delete_version__file_id integer,
    delete_version__version_id integer
-
-) RETURNS integer AS $$
+)
+RETURNS integer AS $$
 DECLARE
         v_parent_id                     cr_items.parent_id%TYPE;
         v_deleted_last_version_p        boolean;
@@ -674,22 +672,21 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-
-
--- added
-select define_function_args('file_storage__new_folder','name,folder_name,parent_id,creation_user,creation_ip');
-
 --
 -- procedure file_storage__new_folder/5
 --
+
+select define_function_args('file_storage__new_folder','name,folder_name,parent_id,creation_user,creation_ip');
+
+
 CREATE OR REPLACE FUNCTION file_storage__new_folder(
    new_folder__name varchar,
    new_folder__folder_name varchar,
    new_folder__parent_id integer,
    new_folder__creation_user integer,
    new_folder__creation_ip varchar
-
-) RETURNS integer AS $$
+)
+RETURNS integer AS $$
 DECLARE
         v_folder_id                   cr_folders.folder_id%TYPE;
         v_package_id                  acs_objects.package_id%TYPE;
@@ -710,31 +707,31 @@ BEGIN
                             v_package_id                -- package_id
                             );
 
-        -- register the standard content types
-        -- JS: Note that we need to set include_subtypes 
-        -- JS: to true since we created a new subtype.
+        --                
+        -- Register the needed content types
+        --
+        -- maybe, when someone decides to really implement the half-cooked
+        -- "image" content type, it should go in here as well
+    
         PERFORM content_folder__register_content_type(
-                        v_folder_id,            -- folder_id
-                        'content_revision',   -- content_type
-                        't');                 -- include_subtypes (default)
+                        v_folder_id,             -- folder_id
+                        'file_storage_object',   -- content_type
+                        't');                    -- include_subtypes (default)
+    
+        PERFORM content_folder__register_content_type(
+                        v_folder_id,        -- folder_id
+                        'content_folder',       -- content_type
+                        't');                   -- include_subtypes (default)
 
         PERFORM content_folder__register_content_type(
-                        v_folder_id,            -- folder_id
-                        'content_folder',     -- content_type
-                        't'                   -- include_subtypes (default)
-                        );                      
+                    v_folder_id,            -- folder_id
+                'content_extlink',        -- content_types
+            't');                   -- include_subtypes 
 
-        PERFORM content_folder__register_content_type(
-                v_folder_id,            -- folder_id
-                'content_extlink',    -- content_types
-                't'                   -- include_subtypes 
-                );
-
-        PERFORM content_folder__register_content_type(
-                v_folder_id,            -- folder_id
-                'content_symlink',    -- content_types
-                't'                   -- include_subtypes 
-                );
+--        PERFORM content_folder__register_content_type(
+--            v_folder_id,            -- folder_id
+--                    'content_symlink',    -- content_types
+--                    't');                   -- include_subtypes 
 
         -- Give the creator admin privileges on the folder
         PERFORM acs_permission__grant_permission (
@@ -762,15 +759,13 @@ $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION file_storage__delete_folder(
    delete_folder__folder_id integer
-
-) RETURNS integer AS $$
+)
+RETURNS integer AS $$
 DECLARE
 BEGIN
-
         return file_storage__delete_folder(
                     delete_folder__folder_id,  -- folder_id
-                    'f'
-                    );
+                    'f');
 
 END;
 $$ LANGUAGE plpgsql;
@@ -789,8 +784,8 @@ select define_function_args('file_storage__delete_folder','folder_id,cascade_p')
 CREATE OR REPLACE FUNCTION file_storage__delete_folder(
    delete_folder__folder_id integer,
    delete_folder__cascade_p boolean
-
-) RETURNS integer AS $$
+)
+RETURNS integer AS $$
 DECLARE
 BEGIN
         return content_folder__delete(
@@ -809,9 +804,9 @@ $$ LANGUAGE plpgsql;
 -- procedure fs_package_items_delete_trig/0
 --
 CREATE OR REPLACE FUNCTION fs_package_items_delete_trig (
-) RETURNS trigger AS $$
+)
+RETURNS trigger AS $$
 DECLARE
-
         v_rec   record;
 BEGIN
 
