@@ -357,6 +357,9 @@ ad_proc -public fs::object_p {
 } {
     is this a file storage object
 } {
+    if {![string is integer -strict $object_id]} {
+	return 0
+    }
     return [db_string select_object_p {}]
 }
 
