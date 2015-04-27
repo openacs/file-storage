@@ -311,8 +311,14 @@ ad_proc -public fs::new_folder {
 	}
     }
 
-    
-    set folder_id [content::folder::new -name $name -label $pretty_name -parent_id $parent_id -creation_user $creation_user -creation_ip $creation_ip -description $description -package_id $package_id]
+    set folder_id [content::folder::new \
+		       -name $name \
+		       -label $pretty_name \
+		       -parent_id $parent_id \
+		       -creation_user $creation_user \
+		       -creation_ip $creation_ip \
+		       -description $description \
+		       -package_id $package_id]
     permission::grant -party_id $creation_user -object_id $folder_id -privilege "admin"
 
     if {!$no_callback_p} {
@@ -351,6 +357,9 @@ ad_proc -public fs::object_p {
 } {
     is this a file storage object
 } {
+    if {![string is integer -strict $object_id]} {
+	return 0
+    }
     return [db_string select_object_p {}]
 }
 
