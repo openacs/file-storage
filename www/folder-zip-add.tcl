@@ -11,7 +11,7 @@ ad_page_contract {
     return_url:optional
     upload_file.tmpfile:tmpfile,optional
     {title ""}
-    {lock_title_p 0}
+    {lock_title_p:boolean 0}
 
 } -properties {
     folder_id:onevalue

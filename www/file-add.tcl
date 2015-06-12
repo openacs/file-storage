@@ -12,7 +12,7 @@ ad_page_contract {
     upload_file.tmpfile:tmpfile,optional
     content_body:optional
     {title ""}
-    {lock_title_p 0}
+    {lock_title_p:boolean 0}
     {name ""}
 
 } -properties {
