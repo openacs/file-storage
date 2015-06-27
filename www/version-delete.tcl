@@ -38,7 +38,7 @@ db_1row version_name "
 set context [fs_context_bar_list -final [_ file-storage.Delete_Version] $item_id]
 
 set delete_message [_ file-storage.lt_Are_you_sure_that_you]
-ad_form -export version_id -cancel_url "file?[export_vars {{file_id $item_id}}]" -form {
+ad_form -export version_id -cancel_url [export_vars -base file {{file_id $item_id}}] -form {
     {delete_message:text(inform) {label $delete_message}}
 } -on_submit {
 

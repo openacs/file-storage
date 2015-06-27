@@ -118,7 +118,7 @@ ad_form -extend -name file_add -form {} -new_data {
         set upload_tmpfiles [list [template::util::file::get_property tmp_filename $upload_file]]
     }
     
-    if { [empty_string_p [lindex $upload_files 0]]} {
+    if { [lindex $upload_files 0] eq ""} {
         ad_return_complaint 1 "<li>You have to upload a file"
         ad_script_abort
     }
@@ -222,7 +222,7 @@ ad_form -extend -name file_add -form {} -new_data {
     if {([info exists return_url] && $return_url ne "")} {
 	ad_returnredirect $return_url
     } else {
-	ad_returnredirect "./?[export_vars -url {folder_id}]"
+	ad_returnredirect [export_vars -base ./ {folder_id}]
     }
     ad_script_abort
     
