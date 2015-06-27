@@ -97,7 +97,7 @@ lassign [fs::get_folder_package_and_root $folder_id]  package_id root_folder_id
 	    }
 	    url {
 		set properties_link "properties"
-		set properties_url "${fs_url}simple?[export_vars {object_id return_url}]"
+		set properties_url [export_vars -base ${fs_url}simple {object_id return_url}]
 		set icon "/resources/acs-subsite/url-button.gif"
 		set file_url ${url}
 		set download_url $file_url
@@ -105,10 +105,10 @@ lassign [fs::get_folder_package_and_root $folder_id]  package_id root_folder_id
 	    default {
 
 		set properties_link [_ file-storage.properties]
-		set properties_url "${fs_url}file?[export_vars {{file_id $object_id} return_url}]"
+		set properties_url [export_vars -base ${fs_url}file {{file_id $object_id} return_url}]
 		set icon "/resources/file-storage/file.gif"
 		set file_url "${base_url}${file_url}"
-		set download_url "${fs_url}download/?[export_vars {{file_id $object_id}}]"                
+		set download_url [export_vars -base ${fs_url}download {{file_id $object_id}}]
 	    }
 	}
 

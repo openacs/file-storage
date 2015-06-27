@@ -173,8 +173,8 @@ ad_form -extend -form {} -select_query_name {get_file} -new_data {
 	set upload_tmpfiles [list [template::util::file::get_property tmp_filename $upload_file]]
     }
     set mime_type ""
-    if { [empty_string_p [lindex $upload_files 0]]} {
-        if {[parameter::get -parameter AllowTextEdit -default 0] && [empty_string_p [template::util::richtext::get_property html_value $content_body]] } {
+    if { [lindex $upload_files 0] eq ""} {
+        if {[parameter::get -parameter AllowTextEdit -default 0] && [template::util::richtext::get_property html_value $content_body] eq "" } {
             ad_return_complaint 1 "You have to upload a file or create a new one"
             ad_script_abort
         }
@@ -281,7 +281,7 @@ ad_form -extend -form {} -select_query_name {get_file} -new_data {
     if {([info exists return_url] && $return_url ne "")} {
 	ad_returnredirect $return_url
     } else {
-	ad_returnredirect "./?[export_vars -url {folder_id}]"
+	ad_returnredirect [export_vars -base ./ {folder_id}]
     }
     ad_script_abort
 

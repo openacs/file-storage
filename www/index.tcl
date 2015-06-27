@@ -8,7 +8,7 @@ ad_page_contract {
 } {
     {folder_id:naturalnum,notnull [fs_get_root_folder]}
     {n_past_days:integer "99999"}
-    {orderby:optional}
+    {orderby:token,optional}
     {category_id:naturalnum ""}
     {return_url ""}
 } -validate {

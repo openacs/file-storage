@@ -38,7 +38,7 @@ ad_form -extend -edit_request {
 								       -container_object_id $package_id \
 								       -element_name category_id]
     }
-    ad_returnredirect "?[export_vars folder_id]"
+    ad_returnredirect [export_vars -base . folder_id]
 }
 
 set pretty_name "$name"

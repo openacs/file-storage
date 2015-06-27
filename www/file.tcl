@@ -51,7 +51,7 @@ if { $show_all_versions_p } {
 set not_show_all_versions_p [expr {!$show_all_versions_p}]
 set show_versions_url [export_vars -base file {file_id {show_all_versions_p $not_show_all_versions_p}}]
 
-set return_url [ad_conn url]?[export_vars file_id]
+set return_url [export_vars -base [ad_conn url] file_id]
 
 set categories_p [parameter::get -parameter CategoriesP -package_id [ad_conn package_id] -default 0]
 if { $categories_p } {
@@ -60,14 +60,18 @@ if { $categories_p } {
     set rename_name [_ file-storage.Rename_File]
 }
 
-set actions [list "[_ file-storage.Upload_Revision]" file-add?[export_vars [list file_id return_url]] "Upload a new version of this file" \
-                 "$rename_name" file-edit?[export_vars file_id] "Rename file" \
-                 "[_ file-storage.Copy_File]" [export_vars -base copy {{object_id $file_id} return_url}] "Copy file" \
-                 "[_ file-storage.Move_File]" [export_vars -base move {{object_id $file_id} {return_url $folder_view_url}}] "Move file" \
-                 "[_ file-storage.Delete_File]" [export_vars -base delete {{object_id $file_id} {return_url $folder_view_url}}] "Delete file"]
+set actions [list \
+		 [_ file-storage.Upload_Revision] [export_vars -base file-add {file_id return_url}] "Upload a new version of this file" \
+                 $rename_name                 [export_vars -base file-edit file_id] "Rename file" \
+                 [_ file-storage.Copy_File]   [export_vars -base copy {{object_id $file_id} return_url}] "Copy file" \
+                 [_ file-storage.Move_File]   [export_vars -base move {{object_id $file_id} {return_url $folder_view_url}}] "Move file" \
+                 [_ file-storage.Delete_File] [export_vars -base delete {{object_id $file_id} {return_url $folder_view_url}}] "Delete file"]
 
 if {$delete_p == "t"} {
-    lappend actions [_ file-storage.Set_Permissions] [export_vars -base permissions {{object_id $file_id}}] [_ file-storage.lt_Modify_permissions_on]
+    lappend actions \
+	[_ file-storage.Set_Permissions] \
+	[export_vars -base permissions {{object_id $file_id}}] \
+	[_ file-storage.lt_Modify_permissions_on]
 }
 
 template::list::create \
@@ -121,7 +125,7 @@ db_multirow -unclobber -extend { author_link last_modified_pretty content_size_p
         set version_url [export_vars -base "download/$title" {file_id}]
     }
     set version_delete [_ file-storage.Delete_Version]
-    set version_delete_url "version-delete?[export_vars version_id]"
+    set version_delete_url [export_vars -base version-delete version_id]
     set author_link [acs_community_member_link -user_id $author_id -label $author]
 }
 
