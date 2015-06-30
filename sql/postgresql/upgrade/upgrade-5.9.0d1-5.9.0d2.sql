@@ -1,0 +1,16 @@
+select define_function_args('file_storage__copy_file','file_id,target_folder_id,creation_user,creation_ip');
+select define_function_args('file_storage__delete_file','file_id');
+select define_function_args('file_storage__delete_folder','folder_id,cascade_p');
+select define_function_args('file_storage__delete_version','file_id,version_id');
+select define_function_args('file_storage__get_content_type','file_id');
+select define_function_args('file_storage__get_folder_name','folder_id');
+select define_function_args('file_storage__get_package_id','item_id');
+select define_function_args('file_storage__get_parent_id','item_id');
+select define_function_args('file_storage__get_root_folder','package_id');
+select define_function_args('file_storage__get_title','item_id');
+select define_function_args('file_storage__move_file','file_id,target_folder_id,creation_user,creation_ip');
+select define_function_args('file_storage__new_file','name,folder_id,user_id,creation_ip,indb_p,item_id,package_id');
+select define_function_args('file_storage__new_folder','name,folder_name,parent_id,creation_user,creation_ip');
+select define_function_args('file_storage__new_root_folder','package_id,folder_name,url,description');
+select define_function_args('file_storage__new_version','filename,description,mime_type,item_id,creation_user,creation_ip');
+select define_function_args('file_storage__rename_file','file_id,name');
