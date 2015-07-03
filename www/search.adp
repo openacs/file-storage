@@ -1,6 +1,6 @@
 <master>
 <property name="doc(title)">#file-storage.Search_Results#</property>
-<property name="context">@context;noquote@</property>
+<property name="context">@context;literal@</property>
 
 <if @results:rowcount@ eq 0>
 <p>#file-storage.lt_Your_search_on_query_#

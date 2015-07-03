@@ -1,8 +1,8 @@
 <master>
-<property name="doc(title)">@title;noquote@</property>
-<property name="header">@title;noquote@</property>
-<property name="context">@context;noquote@</property>
-<property name="displayed_object_id">@file_id;noquote@</property>
+<property name="doc(title)">@title;literal@</property>
+<property name="header">@title;literal@</property>
+<property name="context">@context;literal@</property>
+<property name="displayed_object_id">@file_id;literal@</property>
 
 <h1>@title;noquote@ - #file-storage.properties#</h1>
 

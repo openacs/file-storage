@@ -1,7 +1,7 @@
 <master>
 <property name="doc(title)">Configure RSS for @folder_name@</property>
 <property name="header">Configure RSS for @folder_name@</property>
-<property name="context">@context;noquote@</property>
+<property name="context">@context;literal@</property>
 
 <if @rebuild_short_name@ not nil>
 <p>*Rebuilt feed: @rebuild_short_name@</p>
