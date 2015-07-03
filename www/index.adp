@@ -1,8 +1,8 @@
 <master>
-<property name="doc(title)">@folder_name@</property>
-<property name="header">@folder_name@</property>
-<property name="context">@context;noquote@</property>
-<property name="displayed_object_id">@folder_id;noquote@</property>
+<property name="doc(title)">@folder_name;literal@</property>
+<property name="header">@folder_name;literal@</property>
+<property name="context">@context;literal@</property>
+<property name="displayed_object_id">@folder_id;literal@</property>
 
 <if @up_url@ not nil or  @project_url@ not nil>
 	<div class="list-button-bar-top">
