@@ -4,7 +4,7 @@
 <master>
 
 <body>
-<h2>File-Storage Documentation</h2><ul>
+<h1>File-Storage Documentation</h1><ul>
 <li><a href="requirements">Requirements</a></li><li><a href="design">Design</a></li>
-</ul><hr><a href="mailto:kevin\@arsdigita.com"></a><address>kevin\@arsdigita.com</address>
+</ul><h2>Release Notes</h2><p>Please file bugs in the <a href="http://openacs.org/bugtracker/openacs/">Bug Tracker</a>.</p><hr><a href="mailto:kevin\@arsdigita.com"></a><address>kevin\@arsdigita.com</address>
 </body>
