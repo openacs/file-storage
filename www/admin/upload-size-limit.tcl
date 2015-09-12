@@ -46,3 +46,9 @@ ad_form -name upload_limit_size -export folder_id -form {
 
 
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

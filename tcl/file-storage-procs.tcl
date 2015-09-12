@@ -1628,3 +1628,9 @@ ad_proc -private fs::category_links {
     }
     return [join $categories $joinwith]
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

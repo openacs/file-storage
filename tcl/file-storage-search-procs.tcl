@@ -60,3 +60,9 @@ ad_proc fs__url {
     return "${url_stub}download/index?version_id=$revision_id"
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

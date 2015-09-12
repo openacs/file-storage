@@ -400,3 +400,9 @@ if {$content_size_total > 0} {
     set compressed_url [export_vars -base ${fs_url}download-zip -url {{object_id $folder_id}}]
 }
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

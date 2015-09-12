@@ -20,3 +20,8 @@ ad_proc -public fs::torrent::get_hashsum {
     close $file_stream
     return [ns_sha1 $file_contents]
 }
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

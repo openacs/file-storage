@@ -152,3 +152,9 @@ if {[info exists folder_id]} {
 
 set context [list "\#file-storage.Move\#"]
 set title "\#file-storage.Move\#"
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -24,3 +24,9 @@ if { $categories_p } {
     set category_links [fs::category_links -object_id $object_id -folder_id $folder_id]
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

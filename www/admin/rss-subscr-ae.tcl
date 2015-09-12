@@ -83,3 +83,9 @@ if { ![ad_form_new_p -key subscr_id] } {
 
 set root_folder_id [fs_get_root_folder -package_id [ad_conn package_id]]
 set context [fs_context_bar_list -root_folder_id $root_folder_id $folder_id]
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

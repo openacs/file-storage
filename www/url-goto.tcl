@@ -19,3 +19,9 @@ if {$url ne ""} {
 } else {
     return -code error [_ file-storage.no_such_URL]
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

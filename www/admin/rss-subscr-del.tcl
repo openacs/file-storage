@@ -23,3 +23,8 @@ ad_form -name del -form {
     ad_returnredirect rss-subscrs?folder_id=$folder_id
     ad_script_abort
 } -cancel_url rss-subscrs?folder_id=$folder_id
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:
