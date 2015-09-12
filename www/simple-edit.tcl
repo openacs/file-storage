@@ -46,3 +46,9 @@ set context [fs_context_bar_list -final "[_ file-storage.Edit_URL]" $folder_id]
 set page_title [_ file-storage.file_edit_page_title_1]
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

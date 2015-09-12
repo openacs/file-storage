@@ -131,3 +131,9 @@ if {[info exists folder_id]} {
 
 set context [list "\#file-storage.Copy\#"]
 set title "\#file-storage.Copy\#"
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

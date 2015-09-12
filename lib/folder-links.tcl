@@ -119,3 +119,9 @@ lassign [fs::get_folder_package_and_root $folder_id]  package_id root_folder_id
     }
 
     ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

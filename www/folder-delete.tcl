@@ -95,3 +95,8 @@ if { $confirmed_p == "t" && $blocked_p == "f" } {
 
 # Message lookup uses variable folder_name
 set page_title [_ file-storage.folder_delete_page_title]
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

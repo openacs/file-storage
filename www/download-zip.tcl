@@ -59,3 +59,9 @@ ns_returnfile 200 application/octet-stream $out_file
 # clean everything up
 file delete -force $in_path
 file delete -force $out_path
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

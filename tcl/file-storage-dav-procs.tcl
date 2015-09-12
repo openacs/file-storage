@@ -169,3 +169,9 @@ ad_proc fs::impl::dav_mkcol_type::get_type {} {
     return "file_storage_object"
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -140,3 +140,9 @@ if { [apm_package_installed_p "general-comments"] && [parameter::get -parameter 
 if { $categories_p } {
     set category_links [fs::category_links -object_id $file_id -folder_id $folder_id]
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

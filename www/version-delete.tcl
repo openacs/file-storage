@@ -75,3 +75,9 @@ ad_form -export version_id -cancel_url [export_vars -base file {{file_id $item_i
 
 # Message lookup uses variable version_name
 set page_title [_ file-storage.version_delete_page_title]
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

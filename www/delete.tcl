@@ -82,3 +82,9 @@ ad_form -extend -name delete_confirm -on_submit {
 set title "\#file-storage.Delete\#"
 set context [list "\#file-storage.Delete\#"]
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -38,3 +38,9 @@ fs::do_notifications -folder_id $folder_id -filename $url -item_id $item_id -act
 
 ad_returnredirect "?folder_id=$folder_id"
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

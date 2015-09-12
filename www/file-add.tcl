@@ -301,3 +301,9 @@ if { [parameter::get -parameter "BehaveLikeFilesystemP" -package_id [ad_conn pac
 set unpack_available_p [expr {[string trim [parameter::get -parameter UnzipBinary]] ne ""}]
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:
