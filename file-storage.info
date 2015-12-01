@@ -18,11 +18,11 @@
         <package_instance_name>#file-storage.file-storage#</package_instance_name>
 
         <provides url="file-storage" version="5.9.0b2"/>
-	<requires url="acs-kernel" version="5.9.0b2"/>
-        <requires url="acs-content-repository" version="5.9.0b2"/>
+	<requires url="acs-kernel" version="5.9.0"/>
+        <requires url="acs-content-repository" version="5.9.0"/>
         
         <requires url="categories" version="1.1.2d3"/>
-        <requires url="notifications" version="5.9.0b2"/>
+        <requires url="notifications" version="5.9.0"/>
         <requires url="oacs-dav" version="1.1b1"/>
         <requires url="rss-support" version="0.3"/>
 
