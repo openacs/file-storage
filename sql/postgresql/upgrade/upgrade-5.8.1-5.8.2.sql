@@ -1,13 +1,28 @@
 
 
+-- delete from cr_folder_type_map
+--       where content_type not in ( 'file_storage_object', 'content_folder', 'content_extlink')
+--       and folder_id in (
+--       select o2.object_id as folder_id  from acs_objects o1, acs_objects o2
+--       where o1.object_id in (select folder_id from fs_root_folders)
+--                and o2.tree_sortkey between o1.tree_sortkey
+--         and tree_right(o1.tree_sortkey)
+--         and o2.object_type = 'content_folder');
+
+--
+-- The query above reformulated as recursive query to avoid the
+-- dependency on acs_objects.tree_sortkey
+--
 delete from cr_folder_type_map
-       where content_type not in ( 'file_storage_object', 'content_folder', 'content_extlink')
-       and folder_id in (
-       select o2.object_id as folder_id  from acs_objects o1, acs_objects o2
-       where o1.object_id in (select folder_id from fs_root_folders)
-                and o2.tree_sortkey between o1.tree_sortkey
-         and tree_right(o1.tree_sortkey)
-         and o2.object_type = 'content_folder');
+   where content_type not in ( 'file_storage_object', 'content_folder', 'content_extlink')
+   and folder_id in (
+      with recursive folders as (
+         select folder_id from fs_root_folders
+      union all
+         select i.item_id as folder_id from folders, cr_items i, acs_objects o
+         where folders.folder_id = i.parent_id and o.object_id = i.item_id
+         and o.object_type = 'content_folder'
+      ) select * from folders);
 
 
 --- from file-storage-package-create.sql
