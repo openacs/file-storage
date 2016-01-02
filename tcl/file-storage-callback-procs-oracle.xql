@@ -22,26 +22,4 @@
       </querytext>
 </fullquery>
 
-<fullquery name="fs_get_package_id">
-      <querytext>
-	select f.package_id as package_id
-	  from fs_root_folders f,
-       	  (select i2.parent_id
-	     from cr_items i1, cr_items i2, cr_revisions r
-	    where i1.item_id = r.item_id
-	      and r.revision_id = :revision_id
-              and i2.tree_sortkey <= i1.tree_sortkey
-	      and i1.tree_sortkey i2.tree_sortkey and tree_right(i2.tree_sortkey)) as i
-  	  where f.folder_id = i.parent_id
-       </querytext>
-</fullquery>
-
-<fullquery name="fs_get_url_stub">
-      <querytext>
-        select site_node.url(node_id) as url_stub
-        from site_nodes
-        where object_id=:package_id
-      </querytext>
-</fullquery>
-
 </queryset> 

@@ -26,20 +26,6 @@
         </querytext>
     </fullquery>
 
-    <fullquery name="fs::new_folder.new_folder">
-        <querytext>
-            begin
-                :1 := file_storage.new_folder(
-                    name => :name,
-                    folder_name => :pretty_name,
-                    parent_id => :parent_id,
-                    creation_user => :creation_user,
-                    creation_ip => :creation_ip
-                );
-            end;
-        </querytext>
-    </fullquery>
-
     <fullquery name="fs::rename_folder.rename_folder">
         <querytext>
             begin

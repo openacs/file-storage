@@ -71,7 +71,7 @@ ad_form -html { enctype multipart/form-data } -export { folder_id lock_title_p n
 
 if {[parameter::get -parameter AllowTextEdit -default 0]} {
     if {[ad_form_new_p -key file_id]} { 
-            
+        
         # To allow the creation of files
         ad_form -extend -form {
             {content_body:richtext(richtext),optional 
@@ -83,7 +83,9 @@ if {[parameter::get -parameter AllowTextEdit -default 0]} {
     } else {
         # To make content editable
         set revision_id [content::item::get_live_revision -item_id $file_id]
-        set mime_type [db_string get_mime_type "select mime_type from cr_revisions where revision_id = :revision_id"]
+        set mime_type [db_string get_mime_type {
+            select mime_type from cr_revisions where revision_id = :revision_id
+        }]
         if {$mime_type eq "text/html"} {
             ad_form -extend -form {
                 {edit_content:richtext(richtext),optional 
@@ -110,7 +112,7 @@ if {$lock_title_p} {
 	{title:text(hidden) {value $title}}
     }
 } else { 
-   ad_form -extend -form {
+    ad_form -extend -form {
 	{title:text,optional {label \#file-storage.Title\#} {html {size 30}} }
     }
 }
@@ -120,9 +122,9 @@ ad_form -extend -form {
 }
 
 if [catch {set binary [exec $unpack_binary]} errormsg] {
-      set unpack_bin_installed 0
+    set unpack_bin_installed 0
 } else {
-        set unpack_bin_installed 1
+    set unpack_bin_installed 1
 }
 
 if {([ad_form_new_p -key file_id]) && $unpack_bin_installed } { 
@@ -131,40 +133,43 @@ if {([ad_form_new_p -key file_id]) && $unpack_bin_installed } {
     }
 }
 if { [parameter::get -parameter CategoriesP -package_id $package_id -default 0] } {
-     if { ([info exists file_id] && $file_id ne "") } {
-	 set categorized_object_id $file_id
-     } else {
-	 # pre-populate with categories from the folder
-	 set categorized_object_id $folder_id
-     }
+    if { ([info exists file_id] && $file_id ne "") } {
+        set categorized_object_id $file_id
+    } else {
+        # pre-populate with categories from the folder
+        set categorized_object_id $folder_id
+    }
     
     category::ad_form::add_widgets \
-	 -container_object_id $package_id \
-	 -categorized_object_id $categorized_object_id \
-	 -form_name file-add
+        -container_object_id $package_id \
+        -categorized_object_id $categorized_object_id \
+        -form_name file-add
 }
 
-ad_form -extend -form {} -select_query_name {get_file} -new_data {
+ad_form -extend -form {} -select_query_name get_file -new_data {
     
-  if {(![info exists unpack_p] || $unpack_p eq "")} {
-      set unpack_p f
-  }
-  if { $unpack_p && $unpack_binary ne "" && [file extension [template::util::file::get_property filename $upload_file]] eq ".zip"  } {
+    if {(![info exists unpack_p] || $unpack_p eq "")} {
+        set unpack_p f
+    }
+    if { $unpack_p
+         && $unpack_binary ne ""
+         && [file extension [template::util::file::get_property filename $upload_file]] eq ".zip"
+     } {
 	
-	set path [ad_tmpnam]
-	file mkdir $path
+        set path [ad_tmpnam]
+        file mkdir $path
 	
 	
-	catch { exec $unpack_binary -jd $path ${upload_file.tmpfile} } errmsg
+        catch { exec $unpack_binary -jd $path ${upload_file.tmpfile} } errmsg
 	
-	# More flexible parameter design could be:
-	# zip {unzip -jd {out_path} {in_file}} tar {tar xf {in_file} {out_path}} tgz {tar xzf {in_file} {out_path}} 
+        # More flexible parameter design could be:
+        # zip {unzip -jd {out_path} {in_file}} tar {tar xf {in_file} {out_path}} tgz {tar xzf {in_file} {out_path}} 
 
-	set upload_files [list]
-	set upload_tmpfiles [list]
+        set upload_files [list]
+        set upload_tmpfiles [list]
 	
-	foreach file [glob -nocomplain "$path/*"] {
-	    lappend upload_files [file tail $file]
+        foreach file [glob -nocomplain "$path/*"] {
+            lappend upload_files [file tail $file]
 	    lappend upload_tmpfiles $file
 	}
 	
@@ -260,7 +265,7 @@ ad_form -extend -form {} -select_query_name {get_file} -new_data {
     if {$this_title eq ""} {
 	set this_title $filename
     }
-	
+    
     fs::add_version \
 	-name $filename \
 	-tmp_filename [template::util::file::get_property tmp_filename $upload_file] \
@@ -270,7 +275,7 @@ ad_form -extend -form {} -select_query_name {get_file} -new_data {
 	-title $this_title \
 	-description $description \
 	-package_id $package_id
-	
+    
     if { [parameter::get -parameter CategoriesP -package_id $package_id -default 0] } {
 	category::map_object -remove_old -object_id $file_id [category::ad_form::get_categories \
 								  -container_object_id $package_id \
