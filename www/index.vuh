@@ -1,4 +1,4 @@
-# 
+# -*- tcl -*- 
 #
 # Redirect to download files by URL
 # enables WebDAV as well as just making it easier to download stuff

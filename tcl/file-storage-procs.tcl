@@ -63,10 +63,11 @@ ad_proc fs_file_p {
     Returns 1 if the file_id corresponds to a file in the file-storage
     system.  Returns 0 otherwise.
 } {
-    if {[db_string object_type "
-    select object_type 
-    from   acs_objects
-    where  object_id = :file_id" -default ""] eq "content_item"} {
+    if {[db_string object_type {
+        select object_type 
+        from   acs_objects
+        where  object_id = :file_id
+    } -default ""] eq "content_item"} {
 	return 1
     } else {
 	return 0
@@ -79,10 +80,11 @@ ad_proc fs_version_p {
     Returns 1 if the version_id corresponds to a version in the file-storage
     system.  Returns 0 otherwise.
 } {
-    if {[db_string object_type "
-    select object_type 
-    from   acs_objects
-    where  object_id = :version_id" -default ""] eq "file_storage_object"} {
+    if {[db_string object_type {
+        select object_type 
+        from   acs_objects
+        where  object_id = :version_id
+    } -default ""] eq "file_storage_object"} {
 	return 1
     } else {
 	return 0
@@ -110,28 +112,12 @@ ad_proc children_have_permission_p {
 
     # This only gets child folders and items
 
-    set num_wo_perm [db_string child_perms "
-    select count(*)
-    from   cr_items
-    where  item_id in (select item_id
-                       from   cr_items
-                       connect by prior item_id = parent_id
-                       start with item_id = :item_id)
-    and    acs_permission.permission_p(item_id,:user_id,:privilege) = 'f'"]
+    set num_wo_perm [db_string child_perms {}]
 
     # now check revisions
 
-    db_foreach child_items {
-	select item_id as child_item_id
-	from   cr_items
-	connect by prior item_id = parent_id
-	start with item_id = :item_id
-    } {
-	incr num_wo_perm [db_string revision_perms "
-	select count(*)
-	from   cr_revisions
-	where  item_id = :child_item_id
-	and    acs_permission.permission_p(revision_id,:user_id,:privilege) = 'f'"]
+    db_foreach child_items {} {
+	incr num_wo_perm [db_string revision_perms {}]
     }
 
     if { $num_wo_perm > 0 } {
@@ -169,8 +155,9 @@ ad_proc fs_context_bar_list {
     } {
         # don't get title for last element if we are in the
         # root folder
-        set start_id [db_string parent_id "
-    select parent_id from cr_items where item_id = :item_id"]
+        set start_id [db_string parent_id {
+            select parent_id from cr_items where item_id = :item_id
+        }]
         set final [db_exec_plsql title "begin
         :1 := file_storage.get_title(:item_id);
     end;"]
@@ -264,7 +251,7 @@ ad_proc -public fs::get_parent {
 } {
     Get the parent of a given item.
 } {
-    return [db_string get_parent_id ""]
+    return [db_string get_parent_id {}]
 }
 
 
@@ -349,7 +336,7 @@ ad_proc -public fs::set_folder_description {
 } {
     sets the description for the given folder in cr_folders. Perhaps this shoudl be a CR proc?
 } {
-    db_dml set_folder_description { *SQL* }
+    db_dml set_folder_description {}
 }
 
 ad_proc -public fs::object_p {
@@ -597,12 +584,12 @@ ad_proc -public fs::publish_url_to_file_system {
     set file_name "${file_name}.url"
     set file_name [remove_special_file_system_characters -string $file_name]
 
-    set fp [open [file join ${path} ${file_name}] w]
+    set fp [open [file join $path $file_name] w]
     puts $fp {[InternetShortcut]}
     puts $fp URL=$url
     close $fp
 
-    return [file join ${path} ${file_name}]
+    return [file join $path $file_name]
 }
 
 ad_proc -public fs::publish_versioned_object_to_file_system {
@@ -782,7 +769,7 @@ ad_proc -public fs::add_file {
     }
 
     db_transaction {
-	if {![db_string item_exists ""]} {
+	if {![db_string item_exists {}]} {
 	    
 	    set item_id [content::item::new \
 			     -item_id $item_id \
@@ -880,7 +867,9 @@ ad_proc -public fs::add_created_file {
         set storage_type "file"
     }
     if {$item_id ne ""} {
-        set storage_type [db_string get_storage_type "select storage_type from cr_items where item_id=:item_id"]
+        set storage_type [db_string get_storage_type {
+            select storage_type from cr_items where item_id=:item_id
+        }]
     }
     if {$mime_type eq "" } {
 	set mime_type "text/html"
@@ -892,7 +881,7 @@ ad_proc -public fs::add_created_file {
     set content_type "file_storage_object"
 
     db_transaction {
-	if {$item_id eq "" || ![db_string item_exists ""]} {
+	if {$item_id eq "" || ![db_string item_exists {}]} {
 	    set item_id [db_exec_plsql create_item ""]
 	    if {$creation_user ne ""} {
 		permission::grant -party_id $creation_user -object_id $item_id -privilege admin
@@ -949,7 +938,7 @@ ad_proc fs::add_created_version {
 	set package_id [ad_conn package_id]
     }
     if {$storage_type eq ""} {
-	set storage_type [db_string get_storage_type ""]
+	set storage_type [db_string get_storage_type {}]
     }
     if {$creation_user eq ""} {
 	set creation_user [ad_conn user_id]
@@ -959,11 +948,13 @@ ad_proc fs::add_created_version {
     }
     set parent_id [fs::get_parent -item_id $item_id]
     if {$storage_type eq ""} {
-        set storage_type [db_string get_storage_type "select storage_type from cr_items where item_id=:item_id"]    
+        set storage_type [db_string get_storage_type {
+            select storage_type from cr_items where item_id=:item_id
+        }]
     }
     switch -- $storage_type {
         file {
-            set revision_id [db_exec_plsql new_file_revision { }]
+            set revision_id [db_exec_plsql new_file_revision {}]
 
             set cr_file [cr_create_content_file_from_string $item_id $revision_id $content_body]
 
@@ -971,7 +962,7 @@ ad_proc fs::add_created_version {
             set file_size [cr_file_size $cr_file]
 
             # update the file path in the CR and the size on cr_revisions
-            db_dml update_revision { }
+            db_dml update_revision {}
         }
         lob {
             # if someone stored file storage content in the database
@@ -1037,7 +1028,7 @@ ad_proc fs::add_version {
 } {
     # always use the storage type of the existing item
     if {$storage_type eq ""} {
-        set storage_type [db_string get_storage_type ""]
+        set storage_type [db_string get_storage_type {}]
     }
     if {$mime_type eq ""} {
         set mime_type [cr_filename_to_mime_type -create -- $name]
@@ -1154,7 +1145,7 @@ ad_proc fs::delete_version {
     Deletes a revision. If it was the last revision, it deletes
     the file as well.
 } {
-    set parent_id [db_exec_plsql delete_version ""]
+    set parent_id [db_exec_plsql delete_version {}]
     
     if {$parent_id > 0} {
 	delete_file -item_id $item_id -parent_id $parent_id
@@ -1248,7 +1239,7 @@ ad_proc -public fs::do_notifications {
 
     set url "[ad_url]"
     set new_content ""
-    db_0or1row get_owner_name { }
+    db_0or1row get_owner_name {}
 
     if {$action eq "new_file" || $action eq "new_url" || $action eq "new_version"} {
 
@@ -1303,8 +1294,9 @@ ad_proc -public fs::do_notifications {
 
     # walk through all folders up to the root folder
     while {$folder_id != $root_folder} {
-        set parent_id [db_string parent_id "
-	            select parent_id from cr_items where item_id = :folder_id"]
+        set parent_id [db_string parent_id {
+            select parent_id from cr_items where item_id = :folder_id
+        }]
         notification::new \
             -type_id [notification::type::get_type_id \
                           -short_name fs_fs_notif] \
@@ -1406,8 +1398,8 @@ ad_proc -public fs::get_object_info {
 	and r.revision_id = o.object_id
     } -column_array file_object_info
 
-    set content [db_exec_plsql get_content {
-    }]
+    # GN: this query was probably never defined in CVS
+    #set content [db_exec_plsql get_content {}]
 
     if {$file_object_info(storage_type) eq "file"} {
         set filename [cr_fs_path $file_object_info(storage_area_key)]

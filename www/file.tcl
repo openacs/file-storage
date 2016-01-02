@@ -37,7 +37,7 @@ set root_folder_id [fs::get_root_folder]
 db_1row file_info ""
 
 # get folder id so we can implement a back link
-set folder_id [db_string get_folder ""]
+set folder_id [db_string get_folder {}]
 
 set folder_view_url [export_vars -base index {folder_id}]
 

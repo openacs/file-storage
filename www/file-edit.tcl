@@ -26,10 +26,9 @@ permission::require_permission -object_id $file_id -privilege write
 set context [fs_context_bar_list -final "[_ file-storage.Rename]" $file_id]
 
 # Variable title used by message lookup
-db_1row file_info ""
+db_1row file_info {}
 
 set page_title [_ file-storage.file_edit_page_title]
-
 set title_help [_ file-storage.lt_Please_enter_the_new_]
 
 ad_form -export file_id -form {

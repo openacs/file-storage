@@ -26,13 +26,7 @@ regsub -all {\*} $query {%} query
 set query "%${query}%"
 regsub -all {%+} $query {%} query
 
-db_multirow results results {
-    select item_id as file_id,
-           content_item.get_title(item_id) as title
-    from   cr_items
-    where  lower(content_item.get_title(item_id)) like :query
-    and    acs_permission.permission_p(item_id,:user_id,'read') = 't'
-}
+db_multirow results results {}
 
 # get the (lowercased) original back to feed to the template
 

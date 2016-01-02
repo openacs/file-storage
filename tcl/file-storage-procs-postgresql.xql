@@ -20,18 +20,6 @@
         </querytext>
     </fullquery>
 
-    <fullquery name="fs::new_folder.new_folder">
-        <querytext>
-            select file_storage__new_folder(
-                :name,
-                :pretty_name,
-                :parent_id,
-                :creation_user,
-                :creation_ip
-            );
-        </querytext>
-    </fullquery>
-
     <fullquery name="fs::rename_folder.rename_folder">
         <querytext>
             select content_folder__edit_name(
@@ -55,38 +43,6 @@
 
         </querytext>
     </fullquery>
-
-    <fullquery name="fs::get_folder_contents.select_folder_contents">
-        <querytext>
-
-            select fs_objects.object_id,
-                   fs_objects.name,
-                   fs_objects.title,
-                   fs_objects.live_revision,
-                   fs_objects.type,
-                   to_char(fs_objects.last_modified, 'YYYY-MM-DD HH24:MI:SS') as last_modified_ansi,
-                   fs_objects.content_size,
-                   fs_objects.url,
-                   fs_objects.key,
-                   fs_objects.sort_key,
-                   fs_objects.file_upload_name,
-                   fs_objects.title,
-                   case when fs_objects.last_modified >= (now() - interval '$n_past_days days') then 1 else 0 end as new_p,
-                   acs_permission__permission_p(fs_objects.object_id, :user_id, 'admin') as admin_p,
-                   acs_permission__permission_p(fs_objects.object_id, :user_id, 'delete') as delete_p,
-                   acs_permission__permission_p(fs_objects.object_id, :user_id, 'write') as write_p
-            from fs_objects
-            where fs_objects.parent_id = :folder_id
-              and exists (select 1
-                   from acs_object_party_privilege_map m
-                   where m.object_id = fs_objects.object_id
-                     and m.party_id = :user_id
-                     and m.privilege = 'read')
-            order by fs_objects.sort_key, fs_objects.name
-
-        </querytext>
-    </fullquery>
-
 
     <fullquery name="fs::get_folder_contents.select_folder_contents">
         <rdbms><type>postgresql</type><version>8.4</version></rdbms>
@@ -337,25 +293,6 @@
 	      null,	
 	      :package_id	-- package_id
 	)
-    </querytext>
-  </fullquery>
-
-  <fullquery name="fs::add_created_version.new_lob_revision">
-    <querytext>
-         select content_revision__new (
-            /* title         => */ :title,
-            /* description   => */ :description,
-            /* publish_date  => */ current_timestamp,
-            /* mime_type     => */ :mime_type,
-            /* nls_language  => */ null,
-            /* data          => */ null,
-            /* item_id       => */ :item_id,
-            /* revision_id   => */ :revision_id,
-            /* creation_date => */ current_timestamp,
-            /* creation_user => */ :creation_user,
-            /* creation_ip   => */ :creation_ip,
-            /* package_id    => */ :package_id
-    )
     </querytext>
   </fullquery>
 
