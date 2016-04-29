@@ -26,7 +26,7 @@ ad_proc file_storage:::twt::create_file { f_name }  {
 ad_proc file_storage:::twt::delete_file { file_name }  {
 
     # Delete a file name
-    exec rm -rf $file_name
+    file delete -force -- $file_name
 }
 
 ad_proc file_storage::twt::create_new_folder { folder_name folder_description }  {
