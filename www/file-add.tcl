@@ -30,7 +30,7 @@ ad_page_contract {
 		return
 	    }
 	}
-	if {![fs_folder_p $folder_id]} {
+        if {![info exists folder_id] || ![fs_folder_p $folder_id]} {
 	    ad_complain "The specified parent folder is not valid."
 	}
     }
