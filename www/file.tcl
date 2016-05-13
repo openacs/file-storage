@@ -6,7 +6,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     file_id:naturalnum,notnull
-    {show_all_versions_p:boolean "f"}
+    {show_all_versions_p:boolean,notnull "f"}
 } -validate {
     valid_file -requires {file_id} {
 	if {![fs_file_p $file_id]} {
