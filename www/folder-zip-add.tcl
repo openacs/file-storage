@@ -7,7 +7,7 @@ ad_page_contract {
 } {
     file_id:naturalnum,optional,notnull
     folder_id:naturalnum,optional,notnull
-    upload_file:trim,optional
+    upload_file:trim,optional,notnull
     return_url:optional
     upload_file.tmpfile:tmpfile,optional
     {title ""}
@@ -26,7 +26,7 @@ ad_page_contract {
                 select parent_id as folder_id from cr_items where item_id=:file_id
             } -default ""]
         }
-        if {![fs_folder_p $folder_id]} {
+        if {![info exists folder_id] || ![fs_folder_p $folder_id]} {
             ad_complain "The specified parent folder is not valid."
         }
     }
