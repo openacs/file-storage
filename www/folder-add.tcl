@@ -7,7 +7,7 @@ ad_page_contract {
 } {
     folder_id:naturalnum,optional,notnull
     upload_folder:trim,optional
-    return_url:optional
+    return_url:localurl,optional
     {lock_title_p:boolean 0}
 
 } -properties {

@@ -3,7 +3,7 @@ ad_page_contract {
 } {
     object_id:multiple,naturalnum,notnull
     {confirm_p:optional,boolean 0}
-    {return_url ""}
+    {return_url:localurl ""}
 }
 
 

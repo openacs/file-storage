@@ -6,7 +6,7 @@ ad_page_contract {
 } {
     folder_id:naturalnum,notnull
     cancel_url
-    return_url
+    return_url:localurl
 }
 
 set package_id [ad_conn package_id]

@@ -8,7 +8,7 @@ ad_page_contract {
     file_id:naturalnum,optional,notnull
     folder_id:naturalnum,optional,notnull
     upload_file:trim,optional
-    return_url:optional
+    return_url:localurl,optional
     upload_file.tmpfile:tmpfile,optional
     content_body:optional
     {title ""}
