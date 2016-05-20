@@ -8,9 +8,9 @@ ad_page_contract {
 } {
     {folder_id:naturalnum,notnull [fs_get_root_folder]}
     {n_past_days:integer "99999"}
-    {orderby:token,optional}
-    {category_id:naturalnum ""}
-    {return_url ""}
+    {orderby:token,notnull,optional}
+    {category_id:naturalnum,notnull ""}
+    {return_url:localurl ""}
 } -validate {
     valid_folder -requires {folder_id:integer} {
 	if {![fs_folder_p $folder_id]} {

@@ -8,7 +8,7 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
-    {return_url ""}
+    {return_url:localurl ""}
 } 
 
 set max_size [ns_config "ns/server/[ns_info server]/module/nssock" maxinput]
