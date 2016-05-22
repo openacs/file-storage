@@ -13,14 +13,14 @@ ad_page_contract {
     page_num
 }
 
-if {(![info exists folder_id] || $folder_id eq "")} {
+if {![info exists folder_id] || $folder_id eq ""} {
     ad_return_complaint 1 [_ file-storage.lt_bad_folder_id_folder_]
     ad_script_abort
 }
-if {(![info exists allow_bulk_actions] || $allow_bulk_actions eq "")} {
+if {![info exists allow_bulk_actions] || $allow_bulk_actions eq ""} {
     set allow_bulk_actions "0"
 }
-if { (![info exists category_id] || $category_id eq "") } {
+if { ![info exists category_id] || $category_id eq "" } {
     set category_id ""
 }
 set viewing_user_id [ad_conn user_id]
@@ -50,7 +50,7 @@ set folder_name [lang::util::localize [fs::get_object_name -object_id  $folder_i
 
 set content_size_total 0
 
-if {(![info exists format] || $format eq "")} {
+if {![info exists format] || $format eq ""} {
     set format table
 }
 
@@ -181,7 +181,7 @@ if {[apm_package_installed_p views]} {
     concat $elements [list views [list label "Views"]]
 }
 
-if {(![info exists return_url] || $return_url eq "")} {
+if {![info exists return_url] || $return_url eq ""} {
     set return_url [export_vars -base "index" {folder_id}]
 }
 set vars_to_export [list return_url]
