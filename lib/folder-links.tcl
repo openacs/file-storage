@@ -3,23 +3,23 @@
 # @param base_url URL to prepend to the relative URL from file-storage
 #                 used to deliver content from another index.vuh than
 #                 file-storage/view/ 
-if {(![info exists base_url] || $base_url eq "")} {
+if {![info exists base_url] || $base_url eq ""} {
     set base_url "/view/"
 }
 # @param object_list restrict results to object_ids in object_list
-if {(![info exists object_list] || $object_list eq "")} {
+if {![info exists object_list] || $object_list eq ""} {
     set object_list {}
 }
 # @param show_all_p include subfolders and contents? default 0
-if {(![info exists show_all_p] || $show_all_p eq "")} {
+if {![info exists show_all_p] || $show_all_p eq ""} {
     set show_all_p 0
 }
 # @param admin_p show links to properties page for a file? default 0
-if {(![info exists admin_p] || $admin_p eq "")} {
+if {![info exists admin_p] || $admin_p eq ""} {
     set admin_p 0
 }
 # @param return_url URL to add to admin links
-if {(![info exists return_url] || $return_url eq "")} {
+if {![info exists return_url] || $return_url eq ""} {
     set return_url [ad_return_url]
 }
 
