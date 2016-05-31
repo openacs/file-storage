@@ -29,7 +29,7 @@ ad_page_contract {
 set user_id [ad_conn user_id]
 set package_id [ad_conn package_id]
 # check that they have write permission on the parent folder or this folder if its an edit.
-if { ([info exists parent_id] && $parent_id ne "") } {
+if { [info exists parent_id] && $parent_id ne "" } {
     permission::require_permission \
 	    -object_id $parent_id \
 	    -party_id $user_id \
@@ -43,9 +43,11 @@ if {![ad_form_new_p -key folder_id]} {
 	    -party_id $user_id \
 	    -privilege "write"
     set context [fs_context_bar_list -final "[_ file-storage.Edit_Folder]" $folder_id]
-} else {
+} elseif {[info exists parent_id]} {
     #adding a new folder
     set context [fs_context_bar_list -final "[_ file-storage.Create_New_Folder]" $parent_id]
+} else {
+    set context ""
 }
 
 ad_form -name "folder-ae" -html { enctype multipart/form-data } -export { parent_id } -form {
@@ -56,9 +58,9 @@ ad_form -name "folder-ae" -html { enctype multipart/form-data } -export { parent
 
 set package_id [ad_conn package_id]
 if { [parameter::get -parameter CategoriesP -package_id $package_id -default 0] } {
-    if { ([info exists folder_id] && $folder_id ne "") } {
+    if { [info exists folder_id] && $folder_id ne "" } {
 	set categorized_object_id $folder_id
-    } elseif { ([info exists parent_id] && $parent_id ne "") } {
+    } elseif { [info exists parent_id] && $parent_id ne "" } {
 	set categorized_object_id $parent_id
     } else {
 	set categorized_object_id ""
