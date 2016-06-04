@@ -37,17 +37,22 @@ if { [info exists parent_id] && $parent_id ne "" } {
 }
 
 if {![ad_form_new_p -key folder_id]} {
-    #editing an existing folder
+    #
+    # editing an existing folder
+    #
     permission::require_permission \
 	    -object_id $folder_id \
 	    -party_id $user_id \
 	    -privilege "write"
     set context [fs_context_bar_list -final "[_ file-storage.Edit_Folder]" $folder_id]
 } elseif {[info exists parent_id]} {
-    #adding a new folder
+    #
+    # adding a new folder
+    #
     set context [fs_context_bar_list -final "[_ file-storage.Create_New_Folder]" $parent_id]
 } else {
-    set context ""
+    ad_return_complaint 1 "invalid parent_id"
+    ad_script_abort
 }
 
 ad_form -name "folder-ae" -html { enctype multipart/form-data } -export { parent_id } -form {
