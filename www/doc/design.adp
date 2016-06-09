@@ -29,7 +29,7 @@ browsers (potentially SSL-encrypted)</li><li>Grab files that are served bit-for-
 any risk that a cracker-uploaded file will be executed as code</li><li>Retrieve historical versions of a file</li>
 </ul>
 <p>We want something that is relatively secure, and can be extended
-and maintained by any ArsDigita programmer, <i>i.e.</i>, something
+and maintained by any ArsDigita programmer, <em>i.e.</em>, something
 that requires only AOLserver Tcl and Oracle skills.</p>
 <p>In ACS 4, File Storage can be implemented on top of the Content
 Repository. Thus, there is no data model associated with File
@@ -64,7 +64,7 @@ of a given type, or searching through specified file types).</p>
 permissions. (However they did have a concept of private group
 trees.) The reasons for this were to simplify the code and the user
 experience. However, this system actually caused some confusion
-(<i>e.g.</i>, explicitly granting permission to an outsider on a
+(<em>e.g.</em>, explicitly granting permission to an outsider on a
 file in a group's private tree did not actually give that person
 access to the file) and was not as flexible as people desired. The
 ACS 4 version includes folder read, write and delete
@@ -170,104 +170,104 @@ file_storage PL/SQL package</a>
 <h4>Tcl API</h4>
 <table width="100%"><tr><td bgcolor="#E4E4E4">
 <h3><a href="/api-doc/proc-view?proc=children%5fhave%5fpermission%5fp">children_have_permission_p</a></h3><pre>
-children_have_permission_p [ -user_id <i>user_id</i> ] <i>item_id</i><i>privilege</i>
+children_have_permission_p [ -user_id <em>user_id</em> ] <em>item_id</em><em>privilege</em>
 </pre><blockquote>This procedure, given a content item and a privilege,
 checks to see if there are any children of the item on which the
 user does not have that privilege.
 <dl>
-<dt><b>Switches:</b></dt><dd>
-<b>-user_id</b> (optional)<br>
-</dd><dt><b>Parameters:</b></dt><dd>
-<b>item_id</b><br><b>privilege</b><br>
+<dt><strong>Switches:</strong></dt><dd>
+<strong>-user_id</strong> (optional)<br>
+</dd><dt><strong>Parameters:</strong></dt><dd>
+<strong>item_id</strong><br><strong>privilege</strong><br>
 </dd>
 </dl>
 </blockquote>
 </td></tr></table>
 <table width="100%"><tr><td bgcolor="#E4E4E4">
 <h3><a href="/api-doc/proc-view?proc=fs%5fcontext%5fbar%5flist">fs_context_bar_list</a></h3><pre>
-fs_context_bar_list [ -final <i>final</i> ] <i>item_id</i>
+fs_context_bar_list [ -final <em>final</em> ] <em>item_id</em>
 </pre><blockquote>Constructs the list to be fed to ad_context_bar
 appropriate for item_id. If -final is specified, that string will
 be the last item in the context bar. Otherwise, the name
 corresponding to item_id will be used.
 <dl>
-<dt><b>Switches:</b></dt><dd>
-<b>-final</b> (optional)<br>
-</dd><dt><b>Parameters:</b></dt><dd>
-<b>item_id</b><br>
+<dt><strong>Switches:</strong></dt><dd>
+<strong>-final</strong> (optional)<br>
+</dd><dt><strong>Parameters:</strong></dt><dd>
+<strong>item_id</strong><br>
 </dd>
 </dl>
 </blockquote>
 </td></tr></table>
 <table width="100%"><tr><td bgcolor="#E4E4E4">
 <h3><a href="/api-doc/proc-view?proc=fs%5ffile%5fdownloader">fs_file_downloader</a></h3><pre>
-fs_file_downloader <i>conn</i><i>key</i>
+fs_file_downloader <em>conn</em><em>key</em>
 </pre><blockquote>Sends the requested file to the user. Note that the
 path has the original file name, so the browser will have a
 sensible name if you save the file. Version downloads are supported
 by looking for the form variable version_id. We don't actually
 check that the version_id matches the path, we just serve it up.
 <dl>
-<dt><b>Parameters:</b></dt><dd>
-<b>conn</b><br><b>key</b><br>
+<dt><strong>Parameters:</strong></dt><dd>
+<strong>conn</strong><br><strong>key</strong><br>
 </dd>
 </dl>
 </blockquote>
 </td></tr></table>
 <table width="100%"><tr><td bgcolor="#E4E4E4">
 <h3><a href="/api-doc/proc-view?proc=fs%5ffile%5fp">fs_file_p</a></h3><pre>
-fs_file_p <i>file_id</i>
+fs_file_p <em>file_id</em>
 </pre><blockquote>Returns 1 if the file_id corresponds to a file in the
 file-storage system. Returns 0 otherwise.
 <dl>
-<dt><b>Parameters:</b></dt><dd>
-<b>file_id</b><br>
+<dt><strong>Parameters:</strong></dt><dd>
+<strong>file_id</strong><br>
 </dd>
 </dl>
 </blockquote>
 </td></tr></table>
 <table width="100%"><tr><td bgcolor="#E4E4E4">
 <h3><a href="/api-doc/proc-view?proc=fs%5ffolder%5fp">fs_folder_p</a></h3><pre>
-fs_folder_p <i>folder_id</i>
+fs_folder_p <em>folder_id</em>
 </pre><blockquote>Returns 1 if the folder_id corresponds to a folder in
 the file-storage system. Returns 0 otherwise.
 <dl>
-<dt><b>Parameters:</b></dt><dd>
-<b>folder_id</b><br>
+<dt><strong>Parameters:</strong></dt><dd>
+<strong>folder_id</strong><br>
 </dd>
 </dl>
 </blockquote>
 </td></tr></table>
 <table width="100%"><tr><td bgcolor="#E4E4E4">
 <h3><a href="/api-doc/proc-view?proc=fs%5fget%5ffolder%5fname">fs_get_folder_name</a></h3><pre>
-fs_get_folder_name <i>folder_id</i>
+fs_get_folder_name <em>folder_id</em>
 </pre><blockquote>Returns the name of a folder.
 <dl>
-<dt><b>Parameters:</b></dt><dd>
-<b>folder_id</b><br>
+<dt><strong>Parameters:</strong></dt><dd>
+<strong>folder_id</strong><br>
 </dd>
 </dl>
 </blockquote>
 </td></tr></table>
 <table width="100%"><tr><td bgcolor="#E4E4E4">
 <h3><a href="/api-doc/proc-view?proc=fs%5froot%5ffolder">fs_root_folder</a></h3><pre>
-fs_root_folder [ -package_id <i>package_id</i> ]
+fs_root_folder [ -package_id <em>package_id</em> ]
 </pre><blockquote>Returns the root folder for the file storage system.
 <dl>
-<dt><b>Switches:</b></dt><dd>
-<b>-package_id</b> (optional)<br>
+<dt><strong>Switches:</strong></dt><dd>
+<strong>-package_id</strong> (optional)<br>
 </dd>
 </dl>
 </blockquote>
 </td></tr></table>
 <table width="100%"><tr><td bgcolor="#E4E4E4">
 <h3><a href="/api-doc/proc-view?proc=fs%5fversion%5fp">fs_version_p</a></h3><pre>
-fs_version_p <i>version_id</i>
+fs_version_p <em>version_id</em>
 </pre><blockquote>Returns 1 if the version_id corresponds to a version in
 the file-storage system. Returns 0 otherwise.
 <dl>
-<dt><b>Parameters:</b></dt><dd>
-<b>version_id</b><br>
+<dt><strong>Parameters:</strong></dt><dd>
+<strong>version_id</strong><br>
 </dd>
 </dl>
 </blockquote>
