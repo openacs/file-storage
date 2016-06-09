@@ -29,3 +29,8 @@ if {[apm_package_installed_p views]} {
 
 
 cr_write_content -revision_id $file_live_revision
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:
