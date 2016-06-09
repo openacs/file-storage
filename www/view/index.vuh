@@ -81,3 +81,9 @@ if {[parameter::get -parameter BehaveLikeFilesystemP -default 0] || [catch {set 
     rp_internal_redirect -absolute_path $file
 
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:
