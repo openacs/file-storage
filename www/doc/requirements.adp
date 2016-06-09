@@ -30,8 +30,8 @@ interface that allows individuals to manage their file-storage
 folder(s) and to see other people's publicly accessible files.</p>
 <h3>IV. Use Case and User Scenarios</h3>
 <h4>Using File-Storage to Run a Project</h4>
-<p>In the course of her job at Acme Publishing Company, <b>Ursula
-User</b> is working with people from several different offices with
+<p>In the course of her job at Acme Publishing Company, <strong>Ursula
+User</strong> is working with people from several different offices with
 whom she needs to exchange pictures and Excel spreadsheets
 detailing cost estimates, and collaboratively write contracts using
 Word. At any time, she and the other people she works with need to
@@ -61,7 +61,7 @@ the canonical version of all the documents to her local machine and
 deleting the files from the server.</p>
 <h4>Administer File-Storage</h4>
 <p>
-<b>Annie Admin</b> primarily has the job of periodically
+<strong>Annie Admin</strong> primarily has the job of periodically
 cleaning up after users. If disk space is tight on the server, she
 may want to look for files that haven't been accessed in a long
 time and either encourage the owners of those files to delete
@@ -75,57 +75,57 @@ accidentally revokes their own permission to access the file.</p>
 <li><a href="design">Design Document</a></li><li><a href="index">System Overview Document</a></li>
 </ul>
 <h3>VI.A. Requirements: Data Model</h3>
-<p><b>10 The Data Model</b></p>
+<p><strong>10 The Data Model</strong></p>
 <p>
-<b>10.1</b> each file should have a unique identifier</p>
+<strong>10.1</strong> each file should have a unique identifier</p>
 <p>
-<b>10.2</b> each version of a file should have a unique
+<strong>10.2</strong> each version of a file should have a unique
 identifier</p>
 <p>
-<b>10.3</b> each file should have an associated owner</p>
+<strong>10.3</strong> each file should have an associated owner</p>
 <p>
-<b>10.4</b> each version should have an associated owner</p>
+<strong>10.4</strong> each version should have an associated owner</p>
 <p>
-<b>10.5</b> files will be organized in a hierarchical set of
+<strong>10.5</strong> files will be organized in a hierarchical set of
 folders</p>
 <p>
-<b>10.6</b> each version of each file will have individual read,
+<strong>10.6</strong> each version of each file will have individual read,
 write, delete, comment, and administer permissions associated with
 it</p>
 <h3>VI.B. Requirements: Administrator Interface</h3>
-<p><b>20 Administrator Interface</b></p>
+<p><strong>20 Administrator Interface</strong></p>
 <p>
-<b>20.1</b> the administrator should be able to view all files
+<strong>20.1</strong> the administrator should be able to view all files
 in the file-storage system</p>
 <p>
-<b>20.2</b> the administrator should be able to edit, delete, or
+<strong>20.2</strong> the administrator should be able to edit, delete, or
 alter permissions for any file belonging to any user</p>
 <h3>VI.C. Requirements: User Interface</h3>
-<p><b>30 User Interface</b></p>
+<p><strong>30 User Interface</strong></p>
 <p>
-<b>30.1</b> a user should be able to create folders and
+<strong>30.1</strong> a user should be able to create folders and
 subfolders in which he can place his files</p>
 <p>
-<b>30.2</b> a user should be able to add new files and new
+<strong>30.2</strong> a user should be able to add new files and new
 versions of files</p>
 <p>
-<b>30.3</b> a user should be able to move files to different
+<strong>30.3</strong> a user should be able to move files to different
 folders or sub-folders</p>
 <p>
-<b>30.4</b> a user should be able to delete folders and
+<strong>30.4</strong> a user should be able to delete folders and
 individual files</p>
 <p>
-<b>30.5</b> a user should be able to specify permissions for any
+<strong>30.5</strong> a user should be able to specify permissions for any
 user or group on any folder, file, or version.</p>
 <p>
-<b>30.6</b> a user should be able to download any version which
+<strong>30.6</strong> a user should be able to download any version which
 is accessible to him</p>
 <p>
-<b>30.7</b> a user should be able to view and/or edit other
+<strong>30.7</strong> a user should be able to view and/or edit other
 user's files if the user has been granted individual or group
 permission with access to the files</p>
 <p>
-<b>30.8</b> a user should be able to search the text of the
+<strong>30.8</strong> a user should be able to search the text of the
 documents stored in the file-storage system (requires full-text
 search capability from the database - in the case of Oracle,
 requires InterMedia)</p>
