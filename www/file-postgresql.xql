@@ -45,12 +45,9 @@
 	where o.object_id = r.revision_id
 	  and r.item_id = i.item_id
 	  and r.item_id = :file_id
-          and exists (select 1
-                      from acs_object_party_privilege_map m
-                      where m.object_id = r.revision_id
-                        and m.party_id = :user_id
-                        and m.privilege = 'read')
-	$show_versions order by last_modified desc
+	  and acs_permission__permission_p(r.revision_id, :user_id, 'read')
+
+	  $show_versions order by last_modified desc
 
       </querytext>
 </fullquery> 
