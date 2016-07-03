@@ -32,14 +32,12 @@
     </fullquery>
 
     <fullquery name="fs::get_folder_objects.select_folder_contents">
-        <rdbms><type>postgresql</type><version>8.4</version></rdbms>
         <querytext>
 
-          select cr_items.item_id as object_id,
-          cr_items.name
-          from cr_items
-          where cr_items.parent_id = :folder_id
-          and acs_permission__permission_p(cr_items.item_id, :user_id, 'read')
+          select cr_items.item_id as object_id, cr_items.name
+          from   cr_items
+          where  cr_items.parent_id = :folder_id
+          and    acs_permission__permission_p(cr_items.item_id, :user_id, 'read')
 
         </querytext>
     </fullquery>
@@ -351,4 +349,5 @@
             where object_id = :object_id
         </querytext>
     </fullquery>
+
 </queryset>
