@@ -23,27 +23,16 @@ if {![info exists return_url] || $return_url eq ""} {
     set return_url [ad_return_url]
 }
 
-if {$show_all_p} {
-    set parent_context_where [db_map parent_context_all] 
-} else {
-    set parent_context_where " fs_objects.parent_id = :folder_id"
-}
-
 set object_list_where ""
 
 set viewing_user_id [ad_conn user_id]
-set permission_clause " and exists (select 1
-                   from acs_object_party_privilege_map m
-                   where m.object_id = fs_objects.object_id
-                     and m.party_id = :viewing_user_id
-                     and m.privilege = 'read')"
 if {[info exists permission_check] && $permission_check eq 0 } {
     set permission_p 1
-    set permission_clause ""
+    set permission_clause [db_map permission_clause] 
 } else {
     set permission_p [permission::permission_p -party_id $viewing_user_id -object_id $folder_id -privilege "read"]
+    set permission_clause ""
 }
-
 
 set folder_name [lang::util::localize [fs::get_object_name -object_id  $folder_id]]
 

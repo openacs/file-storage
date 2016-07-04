@@ -3,14 +3,16 @@
 <queryset>
    <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
-  <partialquery name="parent_context_all">
+  <partialquery name="permission_clause">
     <querytext>
-      fs_objects.object_id in (select item_id from cr_items
-      connect by prior parent_id=item_id
-      start with parent_id=:folder_id)
+    and exists (select 1
+                   from acs_object_party_privilege_map m
+                   where m.object_id = fs_objects.object_id
+                     and m.party_id = :viewing_user_id
+                     and m.privilege = 'read')
     </querytext>
   </partialquery>
-
+  
   <fullquery name="select_folder_contents">
         <querytext>
 

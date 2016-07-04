@@ -1,16 +1,14 @@
 <?xml version="1.0"?>
 
 <queryset>
-   <rdbms><type>postgresql</type><version>7.3</version></rdbms>D
-  <partialquery name="parent_context_all">
+  <rdbms><type>postgresql</type><version>7.3</version></rdbms>
+  
+  <partialquery name="permission_clause">
     <querytext>
-      fs_objects.object_id in (select item_id from cr_items where
-      tree_sortkey between (select tree_sortkey from cr_items where
-      item_id = :folder_id) and (select tree_right(tree_sortkey) from
-      cr_items where item_id = :folder_id)
+    and acs_permission__permission_p(fs_objects.object_id, :viewing_user_id, 'read')
     </querytext>
   </partialquery>
-    
+  
   <fullquery name="select_folder_contents">
         <querytext>
 
