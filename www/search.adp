@@ -17,7 +17,7 @@
 
 <form method=POST action=search>
 #file-storage.Search_again#
-<input type=text size=30 name=query>
+<input type="text" size="30" name="query">
 </form>
 
 
