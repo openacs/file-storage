@@ -64,10 +64,12 @@ if {![ad_form_new_p -key file_id]} {
     set context [fs_context_bar_list -final "[_ file-storage.Add_File]" $folder_id]
 }
 
-ad_form -html { enctype multipart/form-data } -export { folder_id lock_title_p name } -form {
-    file_id:key
-    {upload_file:file {label \#file-storage.Upload_a_file\#} {html "size 30"}}
-}
+ad_form -html { enctype multipart/form-data } \
+    -export { folder_id lock_title_p name } \
+    -form {
+        file_id:key
+        {upload_file:file {label \#file-storage.Upload_a_file\#} {html "size 30"}}
+    }
 
 if {[parameter::get -parameter AllowTextEdit -default 0]} {
     if {[ad_form_new_p -key file_id]} { 
@@ -116,7 +118,6 @@ if {$lock_title_p} {
 	{title:text,optional {label \#file-storage.Title\#} {html {size 30}} }
     }
 }
-
 ad_form -extend -form {
     {description:text(textarea),optional {label \#file-storage.Description\#} {html "rows 5 cols 35"}}
 }
@@ -127,13 +128,18 @@ if [catch {set binary [exec $unpack_binary]} errormsg] {
     set unpack_bin_installed 1
 }
 
-if {([ad_form_new_p -key file_id]) && $unpack_bin_installed } { 
+if {[ad_form_new_p -key file_id] && $unpack_bin_installed } {
+
+    #{html {onclick "javascript:UnpackChanged(this);"}} {options { {\#file-storage.lt_This_is_a_ZIP\# t} }}
     ad_form -extend -form {
-	{unpack_p:boolean(checkbox),optional {label \#file-storage.Multiple_files\#} {html {onclick "javascript:UnpackChanged(this);"}} {options { {\#file-storage.lt_This_is_a_ZIP\# t} }} }
+	{unpack_p:boolean(checkbox),optional \
+             {label \#file-storage.Multiple_files\#} \
+             {options { {\#file-storage.lt_This_is_a_ZIP\# t} }}
+        }
     }
 }
 if { [parameter::get -parameter CategoriesP -package_id $package_id -default 0] } {
-    if { ([info exists file_id] && $file_id ne "") } {
+    if { [info exists file_id] && $file_id ne "" } {
         set categorized_object_id $file_id
     } else {
         # pre-populate with categories from the folder
@@ -148,7 +154,7 @@ if { [parameter::get -parameter CategoriesP -package_id $package_id -default 0] 
 
 ad_form -extend -form {} -select_query_name get_file -new_data {
     
-    if {(![info exists unpack_p] || $unpack_p eq "")} {
+    if {![info exists unpack_p] || $unpack_p eq ""} {
         set unpack_p f
     }
     if { $unpack_p
@@ -283,7 +289,7 @@ ad_form -extend -form {} -select_query_name get_file -new_data {
     }
 } -after_submit {
 
-    if {([info exists return_url] && $return_url ne "")} {
+    if {[info exists return_url] && $return_url ne ""} {
 	ad_returnredirect $return_url
     } else {
 	ad_returnredirect [export_vars -base ./ {folder_id}]
@@ -298,12 +304,36 @@ if {$title eq ""} {
 }
 
 if { [parameter::get -parameter "BehaveLikeFilesystemP" -package_id [ad_conn package_id]] } {
-    set instructions "[_ file-storage.Add_Dup_As_Revision]"
+    set instructions [_ file-storage.Add_Dup_As_Revision]
 } else {
-    set instructions "[_ file-storage.Add_Dup_As_New_File]"
+    set instructions [_ file-storage.Add_Dup_As_New_File]
 }
 
 set unpack_available_p [expr {[string trim [parameter::get -parameter UnzipBinary]] ne ""}]
+if {$unpack_available_p} {
+    template::add_body_script -script {
+        function UnpackChanged(elm) {
+            var form_name = "file-add";
+
+            if (elm == null) return;
+            if (document.forms == null) return;
+            if (document.forms[form_name] == null) return;
+
+            if (elm.checked == true) {
+                document.forms[form_name].elements["title"].disabled = true;   
+                //document.getElementById('fs_title_msg').innerHTML= 'The title you entered will not be used if you upload multiple files at once';
+                
+            } else {
+                document.forms[form_name].elements["title"].disabled = false;
+                //document.getElementById('fs_title_msg').innerHTML= '';
+            }
+        };
+        document.getElementById('file-add:elements:unpack_p:t').addEventListener('click', function (event) {
+            UnpackChanged(this);
+        }, false);
+    }
+}
+
 
 ad_return_template
 
