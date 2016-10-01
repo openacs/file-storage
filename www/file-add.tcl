@@ -130,7 +130,6 @@ if [catch {set binary [exec $unpack_binary]} errormsg] {
 
 if {[ad_form_new_p -key file_id] && $unpack_bin_installed } {
 
-    #{html {onclick "javascript:UnpackChanged(this);"}} {options { {\#file-storage.lt_This_is_a_ZIP\# t} }}
     ad_form -extend -form {
 	{unpack_p:boolean(checkbox),optional \
              {label \#file-storage.Multiple_files\#} \
