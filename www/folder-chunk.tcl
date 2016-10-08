@@ -132,7 +132,7 @@ if { $categories_p } {
 set elements [list \
                   type \
                   [list label [_ file-storage.Type] \
-                             display_template {<img src="@contents.icon@"  style="border: 0;" alt="@contents.alt_icon@">@contents.pretty_type@} \
+                             display_template {<img src="@contents.icon@"  style="border: 0;" alt="@contents.alt_icon@" width="16" height="16">@contents.pretty_type@} \
                              orderby_desc {sort_key_desc,fs_objects.pretty_type desc} \
                              orderby_asc {fs_objects.sort_key, fs_objects.pretty_type asc}] \
                   name \
