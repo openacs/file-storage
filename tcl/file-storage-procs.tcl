@@ -752,9 +752,15 @@ ad_proc -public fs::add_file {
 	set indbp "f"
         set storage_type "file"
     }
-    if {$mime_type eq ""} {
-        set mime_type [cr_filename_to_mime_type -create -- $name]
-    }
+    
+    # This check also happens in content repository, but as something
+    # similar was already here and mimetype coming from this was used
+    # afterwards, we kept this behavior.
+    set mime_type [cr_check_mime_type \
+                       -filename  $name \
+                       -mime_type $mime_type \
+                       -file      $tmp_filename]
+    
     # we have to do this here because we create the object before
     # calling cr_import_content
     
@@ -1030,9 +1036,14 @@ ad_proc fs::add_version {
     if {$storage_type eq ""} {
         set storage_type [db_string get_storage_type {}]
     }
-    if {$mime_type eq ""} {
-        set mime_type [cr_filename_to_mime_type -create -- $name]
-    }
+
+    # This check also happens in content repository, but as something
+    # similar was already here and mimetype coming from this was used
+    # afterwards, we kept this behavior.
+    set mime_type [cr_check_mime_type \
+                       -filename  $name \
+                       -mime_type $mime_type \
+                       -file      $tmp_filename]
 
     set tmp_size [file size $tmp_filename]
     set parent_id [fs::get_parent -item_id $item_id]
