@@ -60,8 +60,8 @@ ad_proc -public -callback search::datasource -impl file_storage_object {} {
 
 } {
     # We probably don't need the whole big query here. TODO: Review.
-    db_0or1row fs_datasource {} -column_array datasource
-
+    db_0or1row dbqd.file-storage.tcl.file-storage-callback-procs.fs_datasource {} -column_array datasource
+    
     return [list object_id $object_id \
                 title $datasource(title) \
                 content $datasource(content) \
