@@ -18,7 +18,7 @@
 	        i.storage_type as storage_type
 	from cr_items i, cr_revisions r
 	where r.item_id = i.item_id
-	and   r.revision_id = :revision_id
+	and   r.revision_id = :object_id
       </querytext>
 </fullquery>
 
