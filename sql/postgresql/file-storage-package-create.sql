@@ -604,7 +604,9 @@ BEGIN
                           null,                         -- revision_id
                           now(),                        -- creation_date
                           new_version__creation_user,   -- creation_user
-                          new_version__creation_ip      -- creation_ip
+                          new_version__creation_ip,     -- creation_ip
+			  null,                         -- content_length
+			  null                          -- package_id
                           );
 
         -- Make live the newly created revision
