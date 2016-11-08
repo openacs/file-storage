@@ -38,11 +38,11 @@ if {!$delete_p} {
     set delete_p [permission::permission_p -party_id $viewing_user_id -object_id $folder_id -privilege "delete"]
 }
 
-if {(![info exists n_past_days] || $n_past_days eq "")} {
+if {![info exists n_past_days] || $n_past_days eq ""} {
     set n_past_days 99999
 }
 
-if {(![info exists fs_url] || $fs_url eq "")} {
+if {![info exists fs_url] || $fs_url eq ""} {
     set fs_url [ad_conn package_url]
 }
 
