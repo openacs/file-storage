@@ -122,7 +122,7 @@ ad_form -extend -form {
     {description:text(textarea),optional {label \#file-storage.Description\#} {html "rows 5 cols 35"}}
 }
 
-if [catch {set binary [exec $unpack_binary]} errormsg] {
+if {[catch {set binary [exec $unpack_binary]} errormsg]} {
     set unpack_bin_installed 0
 } else {
     set unpack_bin_installed 1
