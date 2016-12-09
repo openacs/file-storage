@@ -151,7 +151,7 @@
   <msg key="Size">Größe</msg>
   <msg key="Size_bytes">Größe (Bytes)</msg>
   <msg key="this_may_take_a_while">&lt;strong&gt;Hinweis:&lt;/strong&gt; Dieser Vorgang kann einige Minuten dauern. </msg>
-  <msg key="Title">Name:</msg>
+  <msg key="Title">Name</msg>
   <msg key="Title_">Name:</msg>
   <msg key="Type">Typ</msg>
   <msg key="untitled">Ohne Angabe</msg>

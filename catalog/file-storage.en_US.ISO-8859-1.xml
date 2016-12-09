@@ -171,7 +171,7 @@ delete, therefore you cannot delete it.</msg>
   <msg key="Size_bytes">Size (bytes)</msg>
   <msg key="this_may_take_a_while">&lt;strong&gt;Note:&lt;/strong&gt; This may take a while, please be patient.</msg>
   <msg key="Title">Title</msg>
-  <msg key="Title_">Title :</msg>
+  <msg key="Title_">Title:</msg>
   <msg key="Type">Type</msg>
   <msg key="untitled">untitled</msg>
   <msg key="Update">Update</msg>
