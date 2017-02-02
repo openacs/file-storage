@@ -5,7 +5,7 @@ ad_page_contract {
     @creation-date Feb 22, 2002
     @cvs-id $Id$
 } -query {
-    {orderby:optional}
+    {orderby:token,optional}
 } -properties {
     folder_name:onevalue
     contents:multirow

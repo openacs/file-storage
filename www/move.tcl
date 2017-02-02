@@ -9,8 +9,8 @@ ad_page_contract {
 } -query {
     object_id:notnull,integer,multiple
     folder_id:naturalnum,optional
-    {return_url ""}
-    {root_folder_id ""}
+    {return_url:localurl ""}
+    {root_folder_id:integer ""}
     {redirect_to_folder:boolean 0}
     {show_items:boolean 0}
 } -errors {object_id:,notnull,integer,multiple {Please select at least one item to move.}
