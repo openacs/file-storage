@@ -7,17 +7,17 @@
     <initial-install-p>f</initial-install-p>
     <singleton-p>f</singleton-p>
     
-    <version name="5.9.1b1" url="http://openacs.org/repository/download/apm/file-storage-5.9.1b1.apm">
+    <version name="5.9.1b3" url="http://openacs.org/repository/download/apm/file-storage-5.9.1b3.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Collaborative document storage</summary>
-        <release-date>2016-11-01</release-date>
+        <release-date>2017-02-27</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/plain">Provides a versioned document store with storage in the filesystem or database (depending on configuration).  Documents and folders can be permissioned and folders downloaded.</description>
         <license>GPL version 2</license>
         <maturity>2</maturity>
         <package_instance_name>#file-storage.file-storage#</package_instance_name>
 
-        <provides url="file-storage" version="5.9.1b1"/>
+        <provides url="file-storage" version="5.9.1b3"/>
 	<requires url="acs-kernel" version="5.9.1b1"/>
 	<requires url="acs-tcl" version="5.9.1b1"/>
         <requires url="acs-content-repository" version="5.9.1b1"/>
