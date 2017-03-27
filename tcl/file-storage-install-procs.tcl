@@ -133,7 +133,7 @@ ad_proc -private fs::install::upgrade {
 		fs::install::package_install
 		# delete the tcl file for the /view template created
 		# by content::init so it can be recreated
-		file delete [file join [acs_root_dir] templates "file-storage-default.tcl"]
+		file delete -- [file join [acs_root_dir] templates "file-storage-default.tcl"]
 	    }
 	    5.1.0a10 5.1.0a11 {
 		set spec {

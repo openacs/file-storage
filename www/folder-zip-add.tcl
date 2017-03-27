@@ -190,7 +190,7 @@ ad_form -extend -name file_add -form {} -new_data {
 			-title $this_title \
 			-package_id $package_id]
 	
-	file delete $tmpfile
+	file delete -- $tmpfile
 	incr i
 
 	if {$rev_id ne ""} {
@@ -207,9 +207,9 @@ ad_form -extend -name file_add -form {} -new_data {
 	
     }
     if {$unzip_path ne ""} {
-	file delete -force $unzip_path
+	file delete -force -- $unzip_path
     }
-    file delete $upload_file.tmpfile
+    file delete -- $upload_file.tmpfile
 } -edit_data {
     fs::add_version \
 	-name [template::util::file::get_property filename $upload_file] \

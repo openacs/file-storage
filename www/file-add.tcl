@@ -257,13 +257,13 @@ ad_form -extend -form {} -select_query_name get_file -new_data {
 									   -element_name category_id]
         }
 
-        file delete $tmpfile
+        file delete -- $tmpfile
         incr i
         if {$i < $number_upload_files} {
             set file_id [db_nextval "acs_object_id_seq"]
         }
     }
-    file delete $upload_file.tmpfile
+    file delete -- $upload_file.tmpfile
 } -edit_data {
     set this_title $title
     set filename [template::util::file::get_property filename $upload_file]
