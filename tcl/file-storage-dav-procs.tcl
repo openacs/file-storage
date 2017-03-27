@@ -75,7 +75,7 @@ ad_proc fs::impl::fs_object::put {} {
 	
 	set response [list 204]
     }
-    file delete $tmp_filename
+    file delete -- $tmp_filename
     return $response
 
 }
