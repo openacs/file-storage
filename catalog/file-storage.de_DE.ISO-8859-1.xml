@@ -8,7 +8,7 @@
   <msg key="Add_Dup_As_New_File">Wenn Sie eine Datei mit demselben Namen hochladen, wird dem Dateinamen zur Unterscheidung ein Suffix angehängt. Bitte beachten Sie, dass es sich hierbei nicht um einen Titel für die Datei handelt. Diesen können Sie beliebig wählen. Der Dateiname hingegen muß immer eindeutig sein.</msg>
   <msg key="Add_Dup_As_Revision">Wenn Sie eine Datei mit einem Namen hochladen, der bereits in diesem Ordner existiert, wird eine neue Revision der vorhandenen Datei hinzugefügt.</msg>
   <msg key="Add_File">Datei hochladen</msg>
-  <msg key="Add_folder_from_fs">Ordner aus dem Dateisystem hinzufügen</msg>
+  <msg key="Add_folder_from_fs">Ordner aus dem Dateiablage hinzufügen</msg>
   <msg key="Add_pretty_name">%pretty_name% hinzufügen</msg>
   <msg key="Add_Revision">Revision hinzufügen</msg>
   <msg key="Author">Autor</msg>
@@ -150,7 +150,7 @@
   <msg key="PDF">PDF</msg>
   <msg key="Permissions">Berechtigungen</msg>
   <msg key="Please_select_at_least_one_item_to_copy.">Bitte wählen Sie mindestens ein zu kopierendes Element</msg>
-  <msg key="pretty_name">Dateisystem</msg>
+  <msg key="pretty_name">Dateiablage</msg>
   <msg key="properties">Eigenschaften</msg>
   <msg key="Rename">Umbenennen</msg>
   <msg key="Rename_File">Datei umbenennen</msg>
@@ -175,7 +175,7 @@
   <msg key="Upload_a_file">Neue Datei hochladen</msg>
   <msg key="Upload_a_folder">Ordner hochladen</msg>
   <msg key="Upload_a_new_version">Neue Version hochladen</msg>
-  <msg key="Upload_folder_help">Einen Ordner aus dem Dateisystem hochladen</msg>
+  <msg key="Upload_folder_help">Einen Ordner aus dem Dateiablage hochladen</msg>
   <msg key="Upload_Limit">Größenbeschränkung (Bytes)</msg>
   <msg key="Upload_limit_error">Die Dateigrößenbeschränkung darf nicht höher liegen als</msg>
   <msg key="Upload_limit_error_2">Bytes. Bitte erhöhen Sie die Größenbeschränkung in der Tcl Konfigurations Datei Ihres AOLserver.</msg>
