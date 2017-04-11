@@ -17,8 +17,10 @@ permission::require_permission -object_id $object_id -privilege delete
 db_transaction {
 
     fs::do_notifications -folder_id $folder_id -filename [content::extlink::name -item_id $object_id] -item_id $object_id -action "delete_url"
-
-    content::extlink::delete -extlink_id $object_id
+    
+    fs::delete_file \
+        -item_id $object_id \
+        -parent_id $folder_id
 
 }
 
