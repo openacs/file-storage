@@ -60,19 +60,37 @@ if { $categories_p } {
     set rename_name [_ file-storage.Rename_File]
 }
 
-set actions [list \
-		 [_ file-storage.Upload_Revision] [export_vars -base file-add {file_id return_url}] "Upload a new version of this file" \
-                 $rename_name                 [export_vars -base file-edit file_id] "Rename file" \
-                 [_ file-storage.Copy_File]   [export_vars -base copy {{object_id $file_id} return_url}] "Copy file" \
-                 [_ file-storage.Move_File]   [export_vars -base move {{object_id $file_id} {return_url $folder_view_url}}] "Move file" \
-                 [_ file-storage.Delete_File] [export_vars -base delete {{object_id $file_id} {return_url $folder_view_url}}] "Delete file"]
 
-if {$delete_p == "t"} {
+set actions {}
+
+if {$write_p} {
     lappend actions \
-	[_ file-storage.Set_Permissions] \
-	[export_vars -base permissions {{object_id $file_id}}] \
-	[_ file-storage.lt_Modify_permissions_on]
+        [_ file-storage.Upload_Revision] \
+        [export_vars -base file-add {file_id return_url}] \
+        "Upload a new version of this file" \
+        $rename_name \
+        [export_vars -base file-edit file_id] \
+        "Rename file"
 }
+
+lappend actions \
+    [_ file-storage.Copy_File] \
+    [export_vars -base copy {{object_id $file_id} return_url}] \
+    "Copy file" \
+    [_ file-storage.Move_File] \
+    [export_vars -base move {{object_id $file_id} {return_url $folder_view_url}}] \
+    "Move file"
+
+if {$delete_p} {
+    lappend actions \
+        [_ file-storage.Delete_File] \
+        [export_vars -base delete {{object_id $file_id} {return_url $folder_view_url}}] \
+        "Delete file" \
+        [_ file-storage.Set_Permissions] \
+        [export_vars -base permissions {{object_id $file_id}}] \
+        [_ file-storage.lt_Modify_permissions_on]
+}
+
 
 template::list::create \
     -name version \
@@ -124,8 +142,10 @@ db_multirow -unclobber -extend { author_link last_modified_pretty content_size_p
     } else {
         set version_url [export_vars -base "download/$title" {file_id}]
     }
-    set version_delete [_ file-storage.Delete_Version]
-    set version_delete_url [export_vars -base version-delete version_id]
+    if {$delete_p} {
+        set version_delete [_ file-storage.Delete_Version]
+        set version_delete_url [export_vars -base version-delete version_id]
+    }
     set author_link [acs_community_member_link -user_id $author_id -label $author]
 }
 

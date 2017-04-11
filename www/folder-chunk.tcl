@@ -76,18 +76,20 @@ set actions [list]
 set cancel_url "[ad_conn url]?[ad_conn query]"
 set add_url [export_vars -base "${fs_url}file-add" {folder_id}]
 
-lappend actions "#file-storage.Add_File#" \
-    [export_vars -base "${fs_url}file-upload-confirm" {folder_id cancel_url {return_url $add_url}}] \
-    [_ file-storage.lt_Upload_a_file_in_this] \
-    "#file-storage.Create_a_URL#" \
-    [export_vars -base "${fs_url}simple-add" {folder_id}] \
-    [_ file-storage.lt_Add_a_link_to_a_web_p] \
-    "#file-storage.New_Folder#" \
-    [export_vars -base "${fs_url}folder-create" {{parent_id $folder_id}}] \
-    "#file-storage.Create_a_new_folder#" \
-    [_ file-storage.lt_Upload_compressed_fol] \
-    [export_vars -base "${fs_url}folder-zip-add" {folder_id}] \
-    [_ file-storage.lt_Upload_a_compressed_f]
+if {$write_p} {
+    lappend actions "#file-storage.Add_File#" \
+        [export_vars -base "${fs_url}file-upload-confirm" {folder_id cancel_url {return_url $add_url}}] \
+        [_ file-storage.lt_Upload_a_file_in_this] \
+        "#file-storage.Create_a_URL#" \
+        [export_vars -base "${fs_url}simple-add" {folder_id}] \
+        [_ file-storage.lt_Add_a_link_to_a_web_p] \
+        "#file-storage.New_Folder#" \
+        [export_vars -base "${fs_url}folder-create" {{parent_id $folder_id}}] \
+        "#file-storage.Create_a_new_folder#" \
+        [_ file-storage.lt_Upload_compressed_fol] \
+        [export_vars -base "${fs_url}folder-zip-add" {folder_id}] \
+        [_ file-storage.lt_Upload_a_compressed_f]
+}
 
 set expose_rss_p [parameter::get -parameter ExposeRssP -package_id $package_id -default 0]
 set like_filesystem_p [parameter::get -parameter BehaveLikeFilesystemP -package_id $package_id -default 1]
@@ -106,11 +108,14 @@ if {$delete_p} {
 	"#file-storage.Delete_this_folder#"
 }
 if {$admin_p} {
+    if { $root_folder_id ne $folder_id } {
+        lappend actions \
+            "#file-storage.Edit_Folder#" \
+            [export_vars -base "${fs_url}folder-edit" {folder_id}] \
+            "#file-storage.Rename_this_folder#"
+    }
     lappend actions \
-	"#file-storage.Edit_Folder#" \
-	[export_vars -base "${fs_url}folder-edit" {folder_id}] \
-	"#file-storage.Rename_this_folder#" \
-	"#file-storage.lt_Modify_permissions_on_1#" \
+        "#file-storage.lt_Modify_permissions_on_1#" \
 	[export_vars -base "${fs_url}permissions" -override {{object_id $folder_id}} {{return_url "[ad_conn url]"}}] \
 	"#file-storage.lt_Modify_permissions_on_1#"
     if { $expose_rss_p } {
@@ -186,26 +191,27 @@ if {![info exists return_url] || $return_url eq ""} {
 }
 set vars_to_export [list return_url]
 
+
+set bulk_actions {}
 if {$allow_bulk_actions} {
-    set bulk_actions [list [_ file-storage.Move] \
-			  ${fs_url}move \
-			  [_ file-storage.lt_Move_Checked_Items_to] \
-			  [_ file-storage.Copy] \
-			  ${fs_url}copy \
-			  [_ file-storage.lt_Copy_Checked_Items_to] \
-			  [_ file-storage.Delete] \
-			  ${fs_url}delete \
-			  [_ file-storage.Delete_Checked_Items] \
-			  [_ file-storage.Download_ZIP] \
-			  ${fs_url}download-zip \
-			  [_ file-storage.Download_ZIP_Checked_Items]]
+    lappend bulk_actions \
+        [_ file-storage.Move] ${fs_url}move [_ file-storage.lt_Move_Checked_Items_to] \
+        [_ file-storage.Copy] ${fs_url}copy [_ file-storage.lt_Copy_Checked_Items_to]
+
+    if {$delete_p} {
+        lappend bulk_actions \
+            [_ file-storage.Delete] ${fs_url}delete [_ file-storage.Delete_Checked_Items]
+    }
+
+    lappend bulk_actions \
+        [_ file-storage.Download_ZIP] ${fs_url}download-zip [_ file-storage.Download_ZIP_Checked_Items]
+
     callback fs::folder_chunk::add_bulk_actions \
         -bulk_variable "bulk_actions" \
         -folder_id $folder_id \
         -var_export_list "vars_to_export"
-} else {
-    set bulk_actions ""
 }
+
 
 if {$format eq "list"} { 
     set actions {}
@@ -353,8 +359,11 @@ db_multirow \
         default {
             set properties_link [_ file-storage.properties]
             set properties_url [export_vars -base ${fs_url}file {{file_id $object_id}}]
-            set new_version_link [_ acs-kernel.common_New]
-            set new_version_url [export_vars -base ${fs_url}file-add {{file_id $object_id}}]
+            if { [permission::permission_p \
+                      -object_id $object_id -privilege "write"] } {
+                set new_version_link [_ acs-kernel.common_New]
+                set new_version_url [export_vars -base ${fs_url}file-add {{file_id $object_id}}]
+            }
             set icon "/resources/file-storage/file.gif"
             set alt_icon "#file-storage.file#"
             set download_link [_ file-storage.Download]
