@@ -194,9 +194,17 @@ set vars_to_export [list return_url]
 
 set bulk_actions {}
 if {$allow_bulk_actions} {
-    lappend bulk_actions \
-        [_ file-storage.Move] ${fs_url}move [_ file-storage.lt_Move_Checked_Items_to] \
-        [_ file-storage.Copy] ${fs_url}copy [_ file-storage.lt_Copy_Checked_Items_to]
+    set user_id [ad_conn user_id]
+    # add button only when available folders for move exist
+    if {[db_list_of_lists dbqd.file-storage.www.move.get_folder_tree {}] ne ""} {
+        lappend bulk_actions \
+            [_ file-storage.Move] ${fs_url}move [_ file-storage.lt_Move_Checked_Items_to]
+    }
+    # add button only when available folders for copy exist
+    if {[db_list_of_lists dbqd.file-storage.www.copy.get_folder_tree {}] ne ""} {
+        lappend bulk_actions \
+            [_ file-storage.Copy] ${fs_url}copy [_ file-storage.lt_Copy_Checked_Items_to]
+    }
 
     if {$delete_p} {
         lappend bulk_actions \
