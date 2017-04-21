@@ -334,7 +334,7 @@ ad_proc -public fs::set_folder_description {
     {-folder_id:required}
     {-description ""}
 } {
-    sets the description for the given folder in cr_folders. Perhaps this shoudl be a CR proc?
+    sets the description for the given folder in cr_folders. Perhaps this should be a CR proc?
 } {
     db_dml set_folder_description {}
 }
@@ -794,7 +794,7 @@ ad_proc -public fs::add_file {
 	    }
 
 	    # Deal with notifications. Usually send out the notification
-	    # But surpress it if the parameter is given
+	    # But suppress it if the parameter is given
 	    if {$no_notification_p} {
 		set do_notify_here_p "f"
 	    } else {

@@ -23,7 +23,7 @@ if {[llength $object_id] == 1} {
 append download_name ".zip"
 
 foreach fs_object_id $object_id {
-    # The minimal requirment is that the object exists. Don't throw
+    # The minimal requirement is that the object exists. Don't throw
     # hard errors on following outdated links. We could test for
     # supported object_types.
     if {![acs_object::object_p -id $fs_object_id]} {

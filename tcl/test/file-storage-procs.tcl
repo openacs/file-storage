@@ -26,7 +26,7 @@ aa_register_case \
                 select 1 from fs_root_folders where folder_id = :folder_id
             } -default "0"]
 	    
-            aa_equals "folder was created succesfully" $success_p 1
+            aa_equals "folder was created successfully" $success_p 1
         }
     }
 
