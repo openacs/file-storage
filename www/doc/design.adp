@@ -283,7 +283,7 @@ between package instances and the corresponding root folders in the
 Content Repository.</p>
 <p>Inserting a row into the table fs_root_folders occurs the first
 time the package instance is visited. The reason is that there is
-no facility in APM to insert a row in the database everytime a
+no facility in APM to insert a row in the database every time a
 package instance is created (technically, there is no "on
 insert" trigger imposed by APM on Content Repository, since
 they are separate packages even though they are both part of the
