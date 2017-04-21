@@ -37,7 +37,7 @@ db_multirow -extend {copy_message} copy_objects get_copy_objects "" {
     }
     if {$type eq "folder"} {
         lappend not_allowed_children $object_id
-        lappend not_allowed_parents $parent_id
+        # lappend not_allowed_parents $parent_id
     }
   
 }
@@ -61,9 +61,25 @@ if {[info exists folder_id]} {
      set error_items [list]      
     template::multirow foreach copy_objects {
         db_transaction {
+            # Allow to copy files into folders that already contain
+            # one with the same name by appending a numeric suffix
+            set suffix 1
+            set orig_file_upload_name $file_upload_name
+            set orig_name $name
+            while {[content::item::get_id_by_name \
+                        -name $file_upload_name \
+                        -parent_id $folder_id] ne ""} {
+                set file_upload_name ${orig_file_upload_name}-${suffix}
+                set name ${orig_name}-${suffix}
+                incr suffix
+            }
+            
             if {$type ne "folder" } {
                 set file_rev_id [db_exec_plsql copy_item {}]
-		callback fs::file_revision_new -package_id $package_id -file_id $object_id -parent_id $folder_id
+		callback fs::file_revision_new \
+                    -package_id $package_id \
+                    -file_id    $object_id \
+                    -parent_id  $folder_id
             } else {
                 db_exec_plsql copy_folder {}
             }

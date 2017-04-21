@@ -15,7 +15,7 @@
   
   <fullquery name="get_copy_objects">
     <querytext>
-      select fs.object_id, fs.name, fs.parent_id,
+      select fs.object_id, fs.name, fs.parent_id, fs.file_upload_name,
       acs_permission.permission_p(fs.object_id, :user_id, 'read') as copy_p, fs.type
       from fs_objects fs
       where fs.object_id in ([template::util::tcl_to_sql_list $object_id])
@@ -30,7 +30,9 @@
            :object_id,
            :folder_id,
 	   :user_id,
-           :peer_addr);
+           :peer_addr,
+	   :file_upload_name,
+	   :name);
 	end;
     </querytext>
   </fullquery>
@@ -42,7 +44,9 @@
            :object_id,
            :folder_id,
 	   :user_id,
-           :peer_addr );
+           :peer_addr,
+	   :file_upload_name,
+	   :name);
         end;
     </querytext>
   </fullquery>
