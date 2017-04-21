@@ -306,12 +306,11 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-
 -- added
-select define_function_args('file_storage__copy_file','file_id,target_folder_id,creation_user,creation_ip');
+select define_function_args('file_storage__copy_file','file_id,target_folder_id,creation_user,creation_ip,name;null,title;null');
 
 --
--- procedure file_storage__copy_file/4
+-- procedure file_storage__copy_file/6
 --
     --
     -- Copy a file, but only copy the live_revision
@@ -320,7 +319,9 @@ CREATE OR REPLACE FUNCTION file_storage__copy_file(
    copy_file__file_id integer,
    copy_file__target_folder_id integer,
    copy_file__creation_user integer,
-   copy_file__creation_ip varchar
+   copy_file__creation_ip varchar,
+   copy_file__name cr_items.name%TYPE default null, 
+   copy_file__title cr_revisions.title%TYPE default null
 )
 RETURNS integer AS $$
 DECLARE
@@ -334,7 +335,7 @@ DECLARE
         v_new_lob_id                 cr_revisions.lob%TYPE;
         v_file_path                  cr_revisions.content%TYPE;
         v_new_file_id                cr_items.item_id%TYPE;
-        v_new_version_id                     cr_revisions.revision_id%TYPE;
+        v_new_version_id             cr_revisions.revision_id%TYPE;
         v_indb_p                     boolean;
         v_isurl                      boolean;
         v_content_type               cr_items.content_type%TYPE;
@@ -364,8 +365,11 @@ BEGIN
 
           select package_id into v_package_id from acs_objects where object_id = copy_file__file_id;
 
+	  v_name     := coalesce(copy_file__name, v_name);
+	  v_filename := coalesce(copy_file__title, v_filename);
+
           v_new_file_id := file_storage__new_file(
-                             v_name,                     -- name
+                             v_name,                      -- name
                              copy_file__target_folder_id, -- folder_id
                              copy_file__creation_user,    -- creation_user
                              copy_file__creation_ip,      -- creation_ip
@@ -424,7 +428,6 @@ BEGIN
 
 END;
 $$ LANGUAGE plpgsql;
-
 
 
 -- added
