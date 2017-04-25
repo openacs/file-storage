@@ -81,15 +81,14 @@ if {[db_list_of_lists dbqd.file-storage.www.copy.get_folder_tree {}] ne ""} {
         "Copy file"
 }
 
-# add button only when available folders for move exist
-if {[db_list_of_lists dbqd.file-storage.www.move.get_folder_tree {}] ne ""} {
+if {$delete_p} {
+    # add button only when available folders for move exist.  We
+    # lazily check for deletion, as a proper check of a suitable
+    # destination for moving would be too much effort
     lappend actions \
         [_ file-storage.Move_File] \
         [export_vars -base move {{object_id $file_id} {return_url $folder_view_url}}] \
         "Move file"
-}
-
-if {$delete_p} {
     lappend actions \
         [_ file-storage.Delete_File] \
         [export_vars -base delete {{object_id $file_id} {return_url $folder_view_url}}] \

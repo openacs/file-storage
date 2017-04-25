@@ -195,8 +195,16 @@ set vars_to_export [list return_url]
 set bulk_actions {}
 if {$allow_bulk_actions} {
     set user_id [ad_conn user_id]
-    # add button only when available folders for move exist
-    if {[db_list_of_lists dbqd.file-storage.www.move.get_folder_tree {}] ne ""} {
+    set bulk_delete_p [db_string some_deletables {
+        select exists (select 1 from fs_objects
+                       where parent_id = :folder_id
+                       and acs_permission__permission_p(object_id, :viewing_user_id, 'delete'))
+    }]
+    
+    # add button only when available folders for move exist.  We
+    # lazily check for deletion, as a proper check of a suitable
+    # destination for moving would be too much effort
+    if {$bulk_delete_p} {
         lappend bulk_actions \
             [_ file-storage.Move] ${fs_url}move [_ file-storage.lt_Move_Checked_Items_to]
     }
@@ -206,7 +214,7 @@ if {$allow_bulk_actions} {
             [_ file-storage.Copy] ${fs_url}copy [_ file-storage.lt_Copy_Checked_Items_to]
     }
 
-    if {$delete_p} {
+    if {$bulk_delete_p} {        
         lappend bulk_actions \
             [_ file-storage.Delete] ${fs_url}delete [_ file-storage.Delete_Checked_Items]
     }
