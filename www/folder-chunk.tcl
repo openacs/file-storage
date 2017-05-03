@@ -200,6 +200,8 @@ if {$allow_bulk_actions} {
                        where parent_id = :folder_id
                        and acs_permission__permission_p(object_id, :viewing_user_id, 'delete'))
     }]
+    set bulk_copy_p [permission::permission_p -object_id $folder_id -privilege write]
+
     
     # add button only when available folders for move exist.  We
     # lazily check for deletion, as a proper check of a suitable
@@ -208,8 +210,10 @@ if {$allow_bulk_actions} {
         lappend bulk_actions \
             [_ file-storage.Move] ${fs_url}move [_ file-storage.lt_Move_Checked_Items_to]
     }
-    # add button only when available folders for copy exist
-    if {[db_list_of_lists dbqd.file-storage.www.copy.get_folder_tree {}] ne ""} {
+    # add button only when available folders for copy exist. We settle for
+    # a lazy check on write permissions for folder because a rigorous
+    # check of available destinations would not be performant.
+    if {$bulk_copy_p} {
         lappend bulk_actions \
             [_ file-storage.Copy] ${fs_url}copy [_ file-storage.lt_Copy_Checked_Items_to]
     }
