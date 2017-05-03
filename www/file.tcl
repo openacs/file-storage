@@ -38,6 +38,7 @@ db_1row file_info ""
 
 # get folder id so we can implement a back link
 set folder_id [db_string get_folder {}]
+set folder_write_p [permission::permission_p -object_id $folder_id -privilege write]
 
 set folder_view_url [export_vars -base index {folder_id}]
 
@@ -73,8 +74,10 @@ if {$write_p} {
         "Rename file"
 }
 
-# add button only when available folders for copy exist
-if {[db_list_of_lists dbqd.file-storage.www.copy.get_folder_tree {}] ne ""} {    
+# add button only when available folders for copy exist. We settle for
+# a lazy check on write permissions for folder because a rigorous
+# check of available destinations would not be performant.
+if {$folder_write_p} {    
     lappend actions \
         [_ file-storage.Copy_File] \
         [export_vars -base copy {{object_id $file_id} return_url}] \
