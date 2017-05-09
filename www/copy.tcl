@@ -58,19 +58,24 @@ if {[info exists folder_id]} {
     # check for WRTIE permission on each object to be copyd
     # DaveB: I think it should be DELETE instead of WRITE
     # but the existing file-copy page checks for WRITE
-     set error_items [list]      
+    set error_items [list]      
     template::multirow foreach copy_objects {
         db_transaction {
             # Allow to copy files into folders that already contain
             # one with the same name by appending a numeric suffix
             set suffix 1
-            set orig_file_upload_name $file_upload_name
-            set orig_name $name
+            set orig_title $title
+            set orig_name  $name
             while {[content::item::get_id_by_name \
-                        -name $file_upload_name \
+                        -name $name \
                         -parent_id $folder_id] ne ""} {
-                set file_upload_name ${orig_file_upload_name}-${suffix}
-                set name ${orig_name}-${suffix}
+                set title ${orig_title}-${suffix}
+                # for name, put the suffix just before the extension,
+                # so browser can keep guessing the correct filetype at
+                # download
+                set name_ext [file extension $name]
+                set name [string range ${orig_name} 0 end-[string length $name_ext]]
+                set name ${name}-${suffix}${name_ext}
                 incr suffix
             }
             
@@ -83,9 +88,10 @@ if {[info exists folder_id]} {
             } else {
                 db_exec_plsql copy_folder {}
             }
-        } on_error {
-	    lappend error_items $name
-	}
+        }
+        # on_error {
+	#     lappend error_items $name
+	# }
     }
      if {[llength $error_items]} {
 	 set message "[_ file-storage.There_was_a_problem_copying_the_following_items]: [join $error_items ", "]"
