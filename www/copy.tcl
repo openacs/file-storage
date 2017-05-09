@@ -88,9 +88,9 @@ if {[info exists folder_id]} {
 	}
     }
      if {[llength $error_items]} {
-	 set message "There was a problem copying the following items: [join $error_items ", "]"
+	 set message "[_ file-storage.There_was_a_problem_copying_the_following_items]: [join $error_items ", "]"
      } else {
-	 set message "Selected items copied."
+	 set message [_ file-storage.Selected_items_have_been_copied]
      }
      ad_returnredirect -message $message $return_url
      ad_script_abort

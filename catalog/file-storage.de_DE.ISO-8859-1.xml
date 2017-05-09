@@ -159,12 +159,14 @@
   <msg key="Search">Suchen</msg>
   <msg key="Search_again">Erneut suchen:</msg>
   <msg key="Search_Results">Suchergebnisse</msg>
+  <msg key="Selected_items_have_been_copied">Ausgewählte Dateien wurden kopiert.</msg>
   <msg key="Set_Permissions">Berechtigungen erteilen</msg>
   <msg key="show_all_versions">Alle Versionen anzeigen</msg>
   <msg key="show_version_title">%version.title% anzeigen</msg>
   <msg key="simple_add_page_title">%pretty_name%  erstellen</msg>
   <msg key="Size">Größe</msg>
   <msg key="Size_bytes">Größe (Bytes)</msg>
+  <msg key="There_was_a_problem_copying_the_following_items">Beim Kopieren der folgenden Dateien ist ein Fehler aufgetreten</msg>
   <msg key="this_may_take_a_while">&lt;strong&gt;Hinweis:&lt;/strong&gt; Dieser Vorgang kann einige Minuten dauern. </msg>
   <msg key="Title">Name:</msg>
   <msg key="Title_">Name:</msg>
