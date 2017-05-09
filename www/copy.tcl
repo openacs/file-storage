@@ -88,10 +88,9 @@ if {[info exists folder_id]} {
             } else {
                 db_exec_plsql copy_folder {}
             }
-        }
-        # on_error {
-	#     lappend error_items $name
-	# }
+        } on_error {
+            lappend error_items $name
+	}
     }
      if {[llength $error_items]} {
 	 set message "[_ file-storage.There_was_a_problem_copying_the_following_items]: [join $error_items ", "]"
