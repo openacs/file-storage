@@ -40,9 +40,10 @@ db_multirow -extend {move_message} move_objects get_move_objects "" {
     }
     if {$type eq "folder"} {
         lappend not_allowed_children $object_id
-        lappend not_allowed_parents $parent_id
     }
-  
+    # prevent people from selecting source folder as destination
+    # folder
+    lappend not_allowed_parents $parent_id
 }
 
 set total_count [template::multirow size move_objects]
@@ -59,40 +60,40 @@ if {[info exists folder_id]} {
  	-privilege "write"
 
 
-    # check for WRTIE permission on each object to be moved
-    # DaveB: I think it should be DELETE instead of WRITE
-    # but the existing file-move page checks for WRITE
-     set error_items [list]
-    template::multirow foreach move_objects {
-	if {$copy_and_delete_p} {  
+     # check for WRTIE permission on each object to be moved
+     # DaveB: I think it should be DELETE instead of WRITE
+     # but the existing file-move page checks for WRITE
+     set error_items {}
+     template::multirow foreach move_objects {
+         if {$copy_and_delete_p} {  
              # copy and delete file to move it
-	    db_transaction {
-		if {$type ne "folder" } {  
-		    set file_rev_id [db_exec_plsql copy_item {}]  
-		    set file_id [content::revision::item_id -revision_id $file_rev_id]  
-		    callback fs::file_revision_new -package_id $package_id -file_id $file_id -parent_id $folder_id  
-		    fs::delete_file -item_id $object_id -parent_id $parent_id  
-		} else {  
-		    db_exec_plsql copy_folder {}  
-		    fs::delete_folder -folder_id $object_id -parent_id $parent_id  
-		}
-	    } on_error {
-		lappend error_items $name
-	    }
-	} else {
-	    # execute move command  
-	    db_transaction {  
-		db_exec_plsql move_item {}
-	    } on_error {
-		lappend error_items $name
-	    }
-	}    
-    }
-     
+             db_transaction {
+                 if {$type ne "folder" } {  
+                     set file_rev_id [db_exec_plsql copy_item {}]  
+                     set file_id [content::revision::item_id -revision_id $file_rev_id]  
+                     callback fs::file_revision_new -package_id $package_id -file_id $file_id -parent_id $folder_id  
+                     fs::delete_file -item_id $object_id -parent_id $parent_id  
+                 } else {  
+                     db_exec_plsql copy_folder {}  
+                     fs::delete_folder -folder_id $object_id -parent_id $parent_id  
+                 }
+             } on_error {
+                 lappend error_items $name
+             }
+         } else {
+             # execute move command  
+             db_transaction {  
+                 db_exec_plsql move_item {}
+             } on_error {
+                 lappend error_items $name
+             }
+         }    
+     }
+
      if {[llength $error_items]} {
-	 set message "There was a problem moving the following items: [join $error_items ", "]"
+         set message "[_ file-storage.There_was_a_problem_moving_the_following_items]: [join $error_items ", "]"
      } else {
-	 set message "Selected items moved"
+         set message [_ file-storage.Selected_items_have_been_moved]
      }
      ad_returnredirect -message $message $return_url
      ad_script_abort
