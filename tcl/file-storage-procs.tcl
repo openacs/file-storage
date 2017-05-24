@@ -1471,6 +1471,7 @@ ad_proc -public fs::notification::get_url {
     @creation-date 2005-02-28
 } { 
     set folder_id $object_id
+    set package_id [lindex [fs::get_folder_package_and_root $folder_id] 0]
     return "[ad_url][db_string select_fs_package_url {}]index?folder_id=$folder_id"
 }
 
