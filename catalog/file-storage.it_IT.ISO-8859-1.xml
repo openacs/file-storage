@@ -159,6 +159,7 @@
   <msg key="Search_again">Cerca Ancora</msg>
   <msg key="Search_Results">Risultati della Ricerca</msg>
   <msg key="Selected_items_have_been_copied">Gli oggetti selezionati sono stati copiati.</msg>
+  <msg key="Selected_items_have_been_moved">Gli oggetti selezionati sono stati spostati.</msg>
   <msg key="Set_Permissions">Definisci Permessi</msg>
   <msg key="show_all_versions">mostra tutte le versioni</msg>
   <msg key="show_version_title">Mostra %version.title%</msg>
@@ -166,6 +167,7 @@
   <msg key="Size">Dimensione</msg>
   <msg key="Size_bytes">Dimensione (bytes)</msg>
   <msg key="There_was_a_problem_copying_the_following_items">Si è verificato un problema nel copiare i seguenti oggetti</msg>
+  <msg key="There_was_a_problem_moving_the_following_items">Si è verificato un problema nello spostare i seguenti oggetti</msg>
   <msg key="this_may_take_a_while">&lt;strong&gt;Nota:&lt;/strong&gt; Può richiedere qualche istante, attendi per favore. </msg>
   <msg key="Title">Titolo:</msg>
   <msg key="Title_">Titolo :</msg>
