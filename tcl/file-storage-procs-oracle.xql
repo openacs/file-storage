@@ -242,20 +242,6 @@
     </querytext>
   </fullquery>
 
-  <fullquery name="fs::notification::get_url.select_fs_package_url">
-    <querytext>
-      select site_node.url(node_id) 
-      from site_nodes
-      where object_id = (select r.package_id
-	from fs_root_folders r,
-	     (select item_id as folder_id
-              from cr_items
-              connect by prior parent_id = item_id 
-              start with item_id = :folder_id) t
-        where r.folder_id = t.folder_id)
-    </querytext>
-  </fullquery>
-
     <fullquery name="fs::get_object_prettyname.select_object_prettyname">
         <querytext>
             select nvl(title,name) as prettyname
