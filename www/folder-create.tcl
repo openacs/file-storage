@@ -97,7 +97,14 @@ ad_form -extend -name "folder-ae" -edit_request {
     # strip out spaces from the name
     # use - instead of _ which can get URLencoded
     set name [string tolower [util_text_to_url -text $folder_name]]
-    #I want the transaction here for the error message. But fs::new_folder should not be used without a transaction if you are going to set the description.
+
+    # check folder name does not exist already
+    if {[content::item::get_id_by_name \
+             -name $name -parent_id $parent_id] ne ""} {
+        set folder_link [_ file-storage.folder]
+        template::form::set_error folder-ae folder_name [_ file-storage.lt_The_folder_link_you_s]
+        break
+    }
 
     db_transaction {
 	set folder_id [fs::new_folder \
@@ -108,10 +115,9 @@ ad_form -extend -name "folder-ae" -edit_request {
 	    -creation_ip [ad_conn peeraddr] \
 	    -description $description]
     } on_error {
-	ns_log notice "AIGH! something bad happened! $errmsg"
-	ad_return_complaint 1 [_ file-storage.lt_Either_there_is_alrea [list folder_name $folder_name directory_url "index?folder_id=$parent_id"]]
-    
-     ad_script_abort
+        ns_log error $errmsg
+	ad_return_complaint 1 "[_ acs-subsite.lt_Heres_what_the_databa] $errmsg"
+        ad_script_abort
     }
 
     if { [parameter::get -parameter CategoriesP -package_id $package_id -default 0] } {
@@ -120,9 +126,8 @@ ad_form -extend -name "folder-ae" -edit_request {
 								       -element_name category_id]
     }
 
-    ad_returnredirect "?folder_id=$folder_id"
-    ad_script_abort
 } -edit_data {
+    
     db_transaction {
 	fs::rename_folder -folder_id $folder_id -name $folder_name
 	fs::set_folder_description -folder_id $folder_id -description $description
@@ -132,6 +137,8 @@ ad_form -extend -name "folder-ae" -edit_request {
 								       -container_object_id $package_id \
 								       -element_name category_id]
     }
+    
+} -after_submit {   
     ad_returnredirect "?folder_id=$folder_id"
     ad_script_abort
 }
