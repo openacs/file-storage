@@ -300,8 +300,6 @@ db_multirow \
 
     }
 
-    set file_upload_name [fs::remove_special_file_system_characters -string $file_upload_name]
-
     if { $content_size ne "" } {
         incr content_size_total $content_size
     }

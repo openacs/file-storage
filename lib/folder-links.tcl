@@ -73,7 +73,6 @@ db_multirow -extend {
 
     }
 
-    set file_upload_name [fs::remove_special_file_system_characters -string $file_upload_name]
     set name [lang::util::localize $name]
 
     if {![info exists download_base_url] } {

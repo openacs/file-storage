@@ -96,7 +96,10 @@ ad_form -extend -name "folder-ae" -edit_request {
 
     # strip out spaces from the name
     # use - instead of _ which can get URLencoded
-    set name [string tolower [util_text_to_url -text $folder_name]]
+    set name [ad_sanitize_filename \
+                  -collapse_spaces \
+                  -tolower \
+                  $folder_name]
 
     # check folder name does not exist already
     if {[content::item::get_id_by_name \

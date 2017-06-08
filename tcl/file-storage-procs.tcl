@@ -372,10 +372,13 @@ ad_proc -public fs::get_file_system_safe_object_name {
     get the name of a file storage object and make it safe for writing to
     the file system
 } {
-    return [remove_special_file_system_characters -string [get_object_name -object_id $object_id]]
+    return [ad_sanitize_filename \
+                -collapse_spaces \
+                -tolower \
+                [get_object_name -object_id $object_id]]
 }
 
-ad_proc -public fs::remove_special_file_system_characters {
+ad_proc -deprecated -public fs::remove_special_file_system_characters {
     {-string:required}
 } {
     remove unsafe file system characters. useful if you want to use $string
@@ -546,18 +549,25 @@ ad_proc -public fs::publish_folder_to_file_system {
     if {$folder_name eq ""} {
 	set folder_name [get_object_name -object_id $folder_id]
     }
-    set folder_name [remove_special_file_system_characters -string $folder_name]
+    set folder_name [ad_sanitize_filename \
+                         -collapse_spaces \
+                         -tolower \
+                         $folder_name]
     
     set dir "[file join ${path} "${folder_name}"]"
     # set dir "[file join ${path} "download"]"
     file mkdir $dir
 
     foreach object [get_folder_contents -folder_id $folder_id -user_id $user_id] {
+        set file_name [ad_sanitize_filename \
+                           -collapse_spaces \
+                           -tolower \
+                           [ns_set get $object name]]
 	publish_object_to_file_system \
 	    -object_id [ns_set get $object object_id] \
 	    -path $dir \
-	    -file_name [remove_special_file_system_characters -string [ns_set get $object name]] \
-	    -user_id $user_id
+	    -file_name $file_name \
+            -user_id $user_id
     }
 
     return $dir
@@ -582,7 +592,10 @@ ad_proc -public fs::publish_url_to_file_system {
 	set file_name $name
     }
     set file_name "${file_name}.url"
-    set file_name [remove_special_file_system_characters -string $file_name]
+    set file_name [ad_sanitize_filename \
+                       -collapse_spaces \
+                       -tolower \
+                       $file_name]
 
     set fp [open [file join $path $file_name] w]
     puts $fp {[InternetShortcut]}
@@ -635,7 +648,10 @@ ad_proc -public fs::publish_versioned_object_to_file_system {
 	set file_name $file_upload_name
     }
 
-    set file_name [remove_special_file_system_characters -string $file_name]
+    set file_name [ad_sanitize_filename \
+                       -collapse_spaces \
+                       -tolower \
+                       $file_name]
 
     switch $storage_type {
 	lob {
