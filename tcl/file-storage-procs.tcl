@@ -22,10 +22,7 @@ ad_proc fs_get_folder_name {
 } {
     Returns the name of a folder. 
 } {
-    return [db_exec_plsql folder_name "
-    begin
-        :1 := file_storage.get_folder_name(:folder_id);
-    end;"]
+    return [db_string folder_name {}]
 }
 
 #
@@ -1488,7 +1485,8 @@ ad_proc -public fs::notification::get_url {
 } { 
     set folder_id $object_id
     set package_id [lindex [fs::get_folder_package_and_root $folder_id] 0]
-    return "[ad_url][db_string select_fs_package_url {}]index?folder_id=$folder_id"
+    set fs_package_url [lindex [site_node::get_url_from_object_id -object_id $package_id] 0]
+    return "[ad_url]${fs_package_url}index?folder_id=$folder_id"
 }
 
 ad_proc -public fs::file_copy {

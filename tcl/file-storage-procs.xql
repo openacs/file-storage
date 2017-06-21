@@ -224,12 +224,4 @@
          </querytext>
    </fullquery>
 
-   <fullquery name="fs::notification::get_url.select_fs_package_url">
-    <querytext>
-      select site_node__url(node_id) 
-      from site_nodes
-      where object_id = :package_id
-    </querytext>
-  </fullquery>
-
 </queryset>
