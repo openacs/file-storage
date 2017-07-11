@@ -16,15 +16,16 @@ if {$file_item_id eq ""} {
 	ns_return 404 text/plain "File Not Found"
 	ad_script_abort
 }
+set user_id [ad_conn user_id]
 permission::require_permission \
     -object_id $file_item_id \
     -privilege read \
--party_id [ad_conn user_id]
+    -party_id $user_id
 
 set file_live_revision [content::item::get_live_revision -item_id $file_item_id]
 
 if {[apm_package_installed_p views]} {
-	views::record_view -object_id $file_item_id -viewer_id $user_id
+    views::record_view -object_id $file_item_id -viewer_id $user_id
 }
 
 
