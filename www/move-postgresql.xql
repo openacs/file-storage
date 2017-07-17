@@ -85,5 +85,13 @@
        ) 	 
      </querytext> 	 
    </fullquery>
-  
+
+   <fullquery name="item_exists_already_in_target_folder">
+     <querytext>
+      select count(*) from cr_items
+      where name=:name
+      and parent_id=:folder_id
+     </querytext>
+   </fullquery>
+
 </queryset>
