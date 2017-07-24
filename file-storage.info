@@ -7,7 +7,7 @@
     <initial-install-p>f</initial-install-p>
     <singleton-p>f</singleton-p>
     
-    <version name="5.9.1b4" url="http://openacs.org/repository/download/apm/file-storage-5.9.1b4.apm">
+    <version name="5.9.1b9" url="http://openacs.org/repository/download/apm/file-storage-5.9.1b9.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Collaborative document storage</summary>
         <release-date>2017-02-27</release-date>
@@ -17,13 +17,13 @@
         <maturity>2</maturity>
         <package_instance_name>#file-storage.file-storage#</package_instance_name>
 
-        <provides url="file-storage" version="5.9.1b4"/>
-	<requires url="acs-kernel" version="5.9.1b1"/>
-	<requires url="acs-tcl" version="5.9.1b1"/>
-        <requires url="acs-content-repository" version="5.9.1b5"/>
+        <provides url="file-storage" version="5.9.1b9"/>
+	<requires url="acs-kernel" version="5.9.1b9"/>
+	<requires url="acs-tcl" version="5.9.1b9"/>
+        <requires url="acs-content-repository" version="5.9.1b9"/>
         
         <requires url="categories" version="1.1.2d3"/>
-        <requires url="notifications" version="5.9.1b1"/>
+        <requires url="notifications" version="5.9.1b9"/>
         <requires url="oacs-dav" version="1.1b1"/>
         <requires url="rss-support" version="0.3"/>
 
