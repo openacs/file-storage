@@ -158,12 +158,16 @@
   <msg key="Search">Buscar</msg>
   <msg key="Search_again">Buscar de nuevo:</msg>
   <msg key="Search_Results">Resultados de búsqueda</msg>
+  <msg key="Selected_items_have_been_copied">Los archivos seleccionados han sido copiados.</msg>
+  <msg key="Selected_items_have_been_moved">Los archivos seleccionados han sido movidos.</msg>
   <msg key="Set_Permissions">Establecer Permisos</msg>
   <msg key="show_all_versions">mostrar todas las versiones</msg>
   <msg key="show_version_title">Mostrar %version.title%</msg>
   <msg key="simple_add_page_title">Crear %pretty_name%</msg>
   <msg key="Size">Tamaño</msg>
   <msg key="Size_bytes">Tamaño (bytes)</msg>
+  <msg key="There_was_a_problem_copying_the_following_items">Ha habido un problema copiando los siguientes archivos</msg>
+  <msg key="There_was_a_problem_moving_the_following_items">Ha habido un problema moviendo los siguientes archivos</msg>
   <msg key="this_may_take_a_while">&lt;strong&gt;Nota:&lt;/strong&gt; Esta operación puede tardar, por favor, sea paciente.</msg>
   <msg key="Title">Título</msg>
   <msg key="Title_">Título :</msg>
