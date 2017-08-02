@@ -23,6 +23,7 @@ if {[fs_file_p $object_id]} {
     set page_title [fs_get_folder_name $object_id]
     set context [fs_context_bar_list -final [_ acs-subsite.Permissions] -root_folder_id $root_folder_id $object_id]
 }
+set return_url [ad_return_url]
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
