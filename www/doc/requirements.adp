@@ -150,5 +150,5 @@ Oracle, requires InterMedia)</p>
 <hr>
 <address><a href="mailto:kevin\@arsdigita.com">kevin\@arsdigita.com</a></address>
 
-Last Modified: $&zwnj;Id: requirements.html,v 1.3 2005/05/26 08:28:46
-maltes Exp $
+Last Modified: $&zwnj;Id: requirements.html,v 1.3.10.1 2016/07/16
+17:36:38 gustafn Exp $
