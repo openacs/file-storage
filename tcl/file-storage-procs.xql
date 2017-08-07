@@ -54,22 +54,6 @@
         </querytext>
     </fullquery>
 
-    <fullquery name="fs::get_folder_objects.select_folder_contents">
-        <querytext>
-
-           select cr_items.item_id as object_id,
-             cr_items.name
-           from cr_items
-           where cr_items.parent_id = :folder_id
-            and exists (select 1
-                        from acs_object_party_privilege_map m
-                        where m.object_id = cr_items.item_id
-                          and m.party_id = :user_id
-                          and m.privilege = 'read')
-
-        </querytext>
-    </fullquery>
-
     <fullquery name="fs::get_folder_contents_count.select_folder_contents_count">
         <querytext>
             select count(*)
@@ -162,15 +146,6 @@
       where object_id = :file_id
     </querytext>
   </fullquery>
-
-<fullquery name="fs::add_file.image_type_p">
-    <querytext>
-        select 1
-        from cr_content_mime_type_map
-        where mime_type = :mime_type
-        and content_type = 'image'
-    </querytext>
-</fullquery>
 
 <fullquery name="fs::add_created_version.get_storage_type">
   <querytext>

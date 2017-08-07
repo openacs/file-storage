@@ -30,13 +30,10 @@
                    end as new_p
             from fs_objects
             where fs_objects.parent_id = :folder_id
-              and exists (select 1
-                   from acs_object_party_privilege_map m
-                   where m.object_id = fs_objects.object_id
-                     and m.party_id = :viewing_user_id
-                     and m.privilege = 'read')
-                $categories_limitation
-		$orderby
+	    and   acs_permission__permission_p(fs_objects.object_id, :viewing_user_id, 'read')
+
+            $categories_limitation
+	    $orderby
         </querytext>
     </fullquery>
 

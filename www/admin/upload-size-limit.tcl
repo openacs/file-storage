@@ -8,7 +8,7 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
-    {return_url ""}
+    {return_url:localurl ""}
 } 
 
 set max_size [ns_config "ns/server/[ns_info server]/module/nssock" maxinput]
@@ -46,3 +46,9 @@ ad_form -name upload_limit_size -export folder_id -form {
 
 
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

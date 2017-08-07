@@ -37,9 +37,8 @@ permission::require_permission -object_id $folder_id -privilege delete
 # contents at all.)
 set blocked_p [ad_decode [children_have_permission_p $folder_id delete] 0 t f]
 
-set folder_name [db_string folder_name ""]
-
-set child_count [db_string child_count ""]
+set folder_name [db_string folder_name {}]
+set child_count [db_string child_count {}]
 
 # TODO add child_count to message key
 
@@ -87,11 +86,20 @@ if { $confirmed_p == "t" && $blocked_p == "f" } {
 } else {
     # they still need to confirm
 
-    set folder_name [db_string folder_name "
-    select label from cr_folders where folder_id = :folder_id"]
-    set child_count [db_string child_count "select count(ci.item_id) from (select item_id from cr_items connect by prior item_id=parent_id start with item_id=:folder_id) ci"]
+    set folder_name [db_string folder_name {
+        select label from cr_folders where folder_id = :folder_id
+    }]
+    set child_count [db_string child_count {
+        select count(ci.item_id) from
+        (select item_id from cr_items connect by prior item_id=parent_id start with item_id=:folder_id) ci
+    }]
     set context [fs_context_bar_list -final "[_ file-storage.Delete]" $folder_id]
 }
 
 # Message lookup uses variable folder_name
 set page_title [_ file-storage.folder_delete_page_title]
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

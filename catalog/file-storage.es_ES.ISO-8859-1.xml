@@ -5,7 +5,8 @@
   <msg key="Action">Opciones</msg>
   <msg key="Actions">Opciones:</msg>
   <msg key="Actions_1">Opciones</msg>
-  <msg key="Add_Dup_As_New_File">Si sube un documento con el mismo nombre que otro documento ya existente en esta carpeta, se añadirá al nombre de su documento un sufijo incremental (p.e. &quot;mydoc.doc&quot; -&amp;gt; &quot;mydoc-1.doc&quot;). Notese que el título del documento no será cambiado. Es el nombre de documento el que debe ser único en cada carpeta.</msg>
+  <msg key="Add_Dup_As_New_File">Si sube un documento con el mismo nombre que otro documento ya existente en esta carpeta, se añadirá al nombre de su documento un sufijo incremental (p.e. &#34;mydoc.doc&#34; -&amp;gt; &#34;mydoc-1.doc&#34;). Notese que el título del documento no será cambiado. Es el nombre de documento el que debe ser único en cada carpeta.</msg>
+  <msg key="Add_Dup_As_Revision">Si carga un archivo con el mismo nombre que un archivo que ya está en esta carpeta, se agregará como una nueva revisión del archivo existente.</msg>
   <msg key="Add_File">Añadir archivo</msg>
   <msg key="Add_folder_from_fs">Añadir una carpeta desde sistema de ficheros</msg>
   <msg key="Add_pretty_name">Añadir %pretty_name%</msg>
@@ -73,24 +74,24 @@
   <msg key="link">Enlace </msg>
   <msg key="lt_Add_a_link_to_a_web_p">Añadir un enlace en esta carpeta</msg>
   <msg key="lt_administer_permission">Administrar permisos</msg>
-  <msg key="lt_All_Versions_of_title">Todas las versiones de &quot;%title%&quot;</msg>
-  <msg key="lt_Are_you_sure_that_you">¿Desea realmente borrar la versión &quot;%version_name%&quot; de &quot;%title%&quot;? No se podrá recuperar.</msg>
+  <msg key="lt_All_Versions_of_title">Todas las versiones de &#34;%title%&#34;</msg>
+  <msg key="lt_Are_you_sure_that_you">¿Desea realmente borrar la versión &#34;%version_name%&#34; de &#34;%title%&#34;? No se podrá recuperar.</msg>
   <msg key="lt_bad_folder_id_folder_">Falta identificador de carpeta</msg>
   <msg key="lt_Comments_on_this_file">Comentarios sobre este fichero:</msg>
   <msg key="lt_contentscontent_size_">%contents.content_size_pretty% bytes</msg>
   <msg key="lt_Copy_Checked_Items_to">Copiar elementos seleccionados a otra carpeta</msg>
-  <msg key="lt_delete_file">¿Desea realmente borrar el archivo &quot;%title%&quot; y todas sus versiones? No se podrá recuperar.</msg>
-  <msg key="lt_delete_folder">¿Desea realmente borrar la carpeta &quot;%folder_name%&quot; y todo su contenido? No se podrá recuperar.</msg>
+  <msg key="lt_delete_file">¿Desea realmente borrar el archivo &#34;%title%&#34; y todas sus versiones? No se podrá recuperar.</msg>
+  <msg key="lt_delete_folder">¿Desea realmente borrar la carpeta &#34;%folder_name%&#34; y todo su contenido? No se podrá recuperar.</msg>
   <msg key="lt_Delete_this_file_incl">Borrar este archivo (y todas sus versiones)</msg>
   <msg key="lt_Do_you_want_to_delete">¿Desea borrar los archivos listados?</msg>
   <msg key="lt_Download_an_archive_o">Descargar un archivo con los contenidos de esta carpeta</msg>
-  <msg key="lt_Either_there_is_alrea">O ya existe una carpeta con el nombre &quot;%folder_name%&quot;, o ha pulsado el botón más de una vez. Utilice el botón Atrás de su navegador y elija otro nombre, o &lt;a href=&quot;%directory_url%&quot;&gt;vuelva al listado&lt;/a&gt; para comprobar la carpeta.</msg>
+  <msg key="lt_Either_there_is_alrea">O ya existe una carpeta con el nombre &#34;%folder_name%&#34;, o ha pulsado el botón más de una vez. Utilice el botón Atrás de su navegador y elija otro nombre, o &lt;a href=&#34;%directory_url%&#34;&gt;vuelva al listado&lt;/a&gt; para comprobar la carpeta.</msg>
   <msg key="lt_File-Storage_folder_f">Carpeta de documentos: %folder_name%</msg>
   <msg key="lt_File_Storage_Notifica">Notificación de Documentos</msg>
   <msg key="lt_Folder_folder_name_is">La carpeta %folder_name% está vacía.</msg>
   <msg key="lt_It_appears_that_there">Parece que ya existe un archivo con este nombre en esta carpeta (también es posible que haya pulsado varias veces el botón).</msg>
   <msg key="lt_Leave_blank_for_linked_documents">Dejar el título en blanco cuando subas al servidor múltiples documentos referenciados entre sí.</msg>
-  <msg key="lt_Live_version_of_title">Versión actual de &quot;%title%&quot;</msg>
+  <msg key="lt_Live_version_of_title">Versión actual de &#34;%title%&#34;</msg>
   <msg key="lt_Modify_permissions_on">Modificar permisos de este archivo</msg>
   <msg key="lt_Modify_permissions_on_1">Modificar permisos de esta carpeta</msg>
   <msg key="lt_Move_Checked_Items_to">Mover elementos seleccionados a otra carpeta</msg>
@@ -102,8 +103,8 @@
   <msg key="lt_not_allowed_count_ite">%not_allowed_count% archivos no pueden ser movidos</msg>
   <msg key="lt_Notification_for_File">Notificación para Documentos: %action_type%</msg>
   <msg key="lt_Please_enter_the_new_">Por favor, introduzca el nuevo nombre del archivo:</msg>
-  <msg key="lt_Select_the_folder_tha">Seleccione la carpeta que quiere copiar en &quot;%file_name%</msg>
-  <msg key="lt_Select_the_folder_tha_1">Seleccione la carpeta donde quiere mover poner &quot;%file_name%&quot;</msg>
+  <msg key="lt_Select_the_folder_tha">Seleccione la carpeta que quiere copiar en &#34;%file_name%</msg>
+  <msg key="lt_Select_the_folder_tha_1">Seleccione la carpeta donde quiere mover poner &#34;%file_name%&#34;</msg>
   <msg key="lt_Show_files_modified_i">Mostrar archivos modificados en</msg>
   <msg key="lt_show_only_live_versio">Mostrar sólo última versión</msg>
   <msg key="lt_The_folder_link_you_s">La %folder_link% seleccionada ya contiene un archivo con este nombre.</msg>
@@ -118,7 +119,7 @@
   <msg key="lt_Upload_a_compressed_f">Subir un archivo comprimido para ser descomprimido</msg>
   <msg key="lt_Upload_a_file_in_this">Subir un documento en esta carpeta</msg>
   <msg key="lt_Upload_compressed_fol">Subir un archivo comprimido</msg>
-  <msg key="lt_Use_the_Browse_button">Pulse &quot;Examinar...&quot; para seleccionar el archivo</msg>
+  <msg key="lt_Use_the_Browse_button">Pulse &#34;Examinar...&#34; para seleccionar el archivo</msg>
   <msg key="lt_version_not_valid">La versión especificada no es válida.</msg>
   <msg key="lt_Version_Notes_descrip">Notas de la Versión: %description%</msg>
   <msg key="lt_View_folder_contents_">Ver contenido de la carpeta: %url_version%</msg>
@@ -129,8 +130,8 @@
   <msg key="lt_You_probably_clicked_">Es probable que haya pulsado el botón Añadir más de una vez. Compruebe que el archivo haya sido subido en la %folder_link% que deseaba, o bien utilice le botón Atrás de su navegador para volver.</msg>
   <msg key="lt_Your_file_is_larger_t">Su archivo supera el tamaño máximo permitido (%number_of_bytes% bytes)</msg>
   <msg key="lt_Your_file_is_larger_t_1">Su fichero es mayor que el tamaño máximo permitido en este sistema (%max_number_of_bytes% bytes)</msg>
-  <msg key="lt_Your_search_on_query_">La búsqueda de &quot;%query%&quot; no devolvió ningún resultado.</msg>
-  <msg key="lt_Your_search_on_query__1">La búsqueda de &quot;%query%&quot; devolvió los siguientes ficheros:</msg>
+  <msg key="lt_Your_search_on_query_">La búsqueda de &#34;%query%&#34; no devolvió ningún resultado.</msg>
+  <msg key="lt_Your_search_on_query__1">La búsqueda de &#34;%query%&#34; devolvió los siguientes ficheros:</msg>
   <msg key="Modified">Modificado</msg>
   <msg key="Move">Mover</msg>
   <msg key="Move_File">Mover Archivo</msg>
@@ -144,6 +145,7 @@
   <msg key="No_such_type">Tipo no encontrado</msg>
   <msg key="no_such_URL">URL no encontrada</msg>
   <msg key="No_valid_destination_folders_exist">Ninguna carpeta destino válida</msg>
+  <msg key="Not_Allowed">No permitido</msg>
   <msg key="PDF">PDF</msg>
   <msg key="Permissions">Permisos</msg>
   <msg key="Please_select_at_least_one_item_to_copy.">Por favor, selecciona un archivo para copiar.</msg>
@@ -156,12 +158,16 @@
   <msg key="Search">Buscar</msg>
   <msg key="Search_again">Buscar de nuevo:</msg>
   <msg key="Search_Results">Resultados de búsqueda</msg>
+  <msg key="Selected_items_have_been_copied">Los archivos seleccionados han sido copiados.</msg>
+  <msg key="Selected_items_have_been_moved">Los archivos seleccionados han sido movidos.</msg>
   <msg key="Set_Permissions">Establecer Permisos</msg>
   <msg key="show_all_versions">mostrar todas las versiones</msg>
   <msg key="show_version_title">Mostrar %version.title%</msg>
   <msg key="simple_add_page_title">Crear %pretty_name%</msg>
   <msg key="Size">Tamaño</msg>
   <msg key="Size_bytes">Tamaño (bytes)</msg>
+  <msg key="There_was_a_problem_copying_the_following_items">Ha habido un problema copiando los siguientes archivos</msg>
+  <msg key="There_was_a_problem_moving_the_following_items">Ha habido un problema moviendo los siguientes archivos</msg>
   <msg key="this_may_take_a_while">&lt;strong&gt;Nota:&lt;/strong&gt; Esta operación puede tardar, por favor, sea paciente.</msg>
   <msg key="Title">Título</msg>
   <msg key="Title_">Título :</msg>

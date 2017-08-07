@@ -1,3 +1,4 @@
+# -*- tcl -*-
 ################## KLUDGE BY STAS ###############
 # Try and look up the item in the content repository
 #################################################
@@ -18,7 +19,7 @@ set content_type "content_revision"
 
 # Get the IDs
 set content_root [fs::get_root_folder]
-set template_root [db_string template_root ""]
+set template_root [db_string template_root {}]
 set file_id [::content::item::get_id -item_path $the_url \
                  -root_folder_id $content_root \
                  -resolve_index "f"]
@@ -80,3 +81,9 @@ if {[parameter::get -parameter BehaveLikeFilesystemP -default 0] || [catch {set 
     rp_internal_redirect -absolute_path $file
 
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

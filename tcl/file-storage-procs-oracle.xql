@@ -26,20 +26,6 @@
         </querytext>
     </fullquery>
 
-    <fullquery name="fs::new_folder.new_folder">
-        <querytext>
-            begin
-                :1 := file_storage.new_folder(
-                    name => :name,
-                    folder_name => :pretty_name,
-                    parent_id => :parent_id,
-                    creation_user => :creation_user,
-                    creation_ip => :creation_ip
-                );
-            end;
-        </querytext>
-    </fullquery>
-
     <fullquery name="fs::rename_folder.rename_folder">
         <querytext>
             begin
@@ -256,20 +242,6 @@
     </querytext>
   </fullquery>
 
-  <fullquery name="fs::notification::get_url.select_fs_package_url">
-    <querytext>
-      select site_node.url(node_id) 
-      from site_nodes
-      where object_id = (select r.package_id
-	from fs_root_folders r,
-	     (select item_id as folder_id
-              from cr_items
-              connect by prior parent_id = item_id 
-              start with item_id = :folder_id) t
-        where r.folder_id = t.folder_id)
-    </querytext>
-  </fullquery>
-
     <fullquery name="fs::get_object_prettyname.select_object_prettyname">
         <querytext>
             select nvl(title,name) as prettyname
@@ -278,4 +250,21 @@
         </querytext>
     </fullquery>
 
+    <fullquery name="fs::get_folder_objects.select_folder_contents">
+        <querytext>
+
+           select cr_items.item_id as object_id,
+             cr_items.name
+           from cr_items
+           where cr_items.parent_id = :folder_id
+            and exists (select 1
+                        from acs_object_party_privilege_map m
+                        where m.object_id = cr_items.item_id
+                          and m.party_id = :user_id
+                          and m.privilege = 'read')
+
+        </querytext>
+    </fullquery>
+
+    
 </queryset>
