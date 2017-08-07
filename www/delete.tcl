@@ -3,7 +3,7 @@ ad_page_contract {
 } {
     object_id:multiple,naturalnum,notnull
     {confirm_p:optional,boolean 0}
-    {return_url ""}
+    {return_url:localurl ""}
 }
 
 
@@ -82,3 +82,9 @@ ad_form -extend -name delete_confirm -on_submit {
 set title "\#file-storage.Delete\#"
 set context [list "\#file-storage.Delete\#"]
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

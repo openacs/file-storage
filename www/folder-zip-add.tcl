@@ -7,8 +7,8 @@ ad_page_contract {
 } {
     file_id:naturalnum,optional,notnull
     folder_id:naturalnum,optional,notnull
-    upload_file:trim,optional
-    return_url:optional
+    upload_file:trim,optional,notnull
+    return_url:localurl,optional
     upload_file.tmpfile:tmpfile,optional
     {title ""}
     {lock_title_p:boolean 0}
@@ -20,10 +20,13 @@ ad_page_contract {
     lock_title_p:onevalue
 } -validate {
     file_id_or_folder_id {
-        if {([info exists file_id] && $file_id ne "") && (![info exists folder_id] || $folder_id eq "")} {
-            set folder_id [db_string get_folder_id "select parent_id as folder_id from cr_items where item_id=:file_id" -default ""]
+        if {[info exists file_id] && $file_id ne ""
+            && (![info exists folder_id] || $folder_id eq "")} {
+            set folder_id [db_string get_folder_id {
+                select parent_id as folder_id from cr_items where item_id=:file_id
+            } -default ""]
         }
-        if {![fs_folder_p $folder_id]} {
+        if {![info exists folder_id] || ![fs_folder_p $folder_id]} {
             ad_complain "The specified parent folder is not valid."
         }
     }
@@ -187,7 +190,7 @@ ad_form -extend -name file_add -form {} -new_data {
 			-title $this_title \
 			-package_id $package_id]
 	
-	file delete $tmpfile
+	file delete -- $tmpfile
 	incr i
 
 	if {$rev_id ne ""} {
@@ -204,9 +207,9 @@ ad_form -extend -name file_add -form {} -new_data {
 	
     }
     if {$unzip_path ne ""} {
-	file delete -force $unzip_path
+	file delete -force -- $unzip_path
     }
-    file delete $upload_file.tmpfile
+    file delete -- $upload_file.tmpfile
 } -edit_data {
     fs::add_version \
 	-name [template::util::file::get_property filename $upload_file] \
@@ -231,3 +234,9 @@ ad_form -extend -name file_add -form {} -new_data {
 set unpack_available_p [expr {[string trim [parameter::get -parameter UnzipBinary]] ne ""}]
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

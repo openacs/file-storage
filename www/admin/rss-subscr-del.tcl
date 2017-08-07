@@ -18,8 +18,13 @@ ad_form -name del -form {
 } -edit_data {
     #here's where we actually do the delete.
     db_exec_plsql delete_subscr {}
-    file delete [rss_gen_report_file -summary_context_id $subscr_id -impl_name fs_rss]
+    file delete -- [rss_gen_report_file -summary_context_id $subscr_id -impl_name fs_rss]
 } -after_submit {
     ad_returnredirect rss-subscrs?folder_id=$folder_id
     ad_script_abort
 } -cancel_url rss-subscrs?folder_id=$folder_id
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

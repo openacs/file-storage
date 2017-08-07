@@ -3,7 +3,7 @@ ad_page_contract {
 } {
     object_id:naturalnum,notnull,multiple
     {confirm_p:optional,boolean 0}
-    {return_url ""}
+    {return_url:localurl ""}
 } -errors {object_id:,notnull,integer,multiple {Please select at least one item to download.}
 }
 
@@ -23,12 +23,12 @@ if {[llength $object_id] == 1} {
 append download_name ".zip"
 
 foreach fs_object_id $object_id {
-    # The minimal requirment is that the object exists. Don't throw
+    # The minimal requirement is that the object exists. Don't throw
     # hard errors on following outdated links. We could test for
     # supported object_types.
     if {![acs_object::object_p -id $fs_object_id]} {
 	ns_returnnotfound
-	file delete -force $in_path
+	file delete -force -- $in_path
 	ad_script_abort 
     }
     set file [fs::publish_object_to_file_system -object_id $fs_object_id -path $in_path -user_id $user_id]
@@ -45,8 +45,8 @@ with_catch errmsg {
     util::zip -source $in_path -destination $out_file
 } {
     # some day we'll do something useful here
-    file delete -force $in_path
-    file delete -force $out_path
+    file delete -force -- $in_path
+    file delete -force -- $out_path
     error $errmsg
 }
 
@@ -57,5 +57,11 @@ ns_set put [ad_conn outputheaders] Content-Size "[file size $out_file]"
 ns_returnfile 200 application/octet-stream $out_file
 
 # clean everything up
-file delete -force $in_path
-file delete -force $out_path
+file delete -force -- $in_path
+file delete -force -- $out_path
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

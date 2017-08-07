@@ -8,9 +8,9 @@ ad_page_contract {
 } {
     {folder_id:naturalnum,notnull [fs_get_root_folder]}
     {n_past_days:integer "99999"}
-    {orderby:token,optional}
-    {category_id:naturalnum ""}
-    {return_url ""}
+    {orderby:token,notnull,optional}
+    {category_id:naturalnum,notnull ""}
+    {return_url:localurl ""}
 } -validate {
     valid_folder -requires {folder_id:integer} {
 	if {![fs_folder_p $folder_id]} {
@@ -58,39 +58,11 @@ if {!$delete_p} {
 }
 
 set package_id [ad_conn package_id]
-
 set show_administer_permissions_link_p [parameter::get -package_id $package_id -parameter "ShowAdministerPermissionsLinkP" -default 1]
+
 set n_contents [fs::get_folder_contents_count -folder_id $folder_id -user_id $user_id]
 
-form create n_past_days_form
-
-set options {{0 -1} {1 1} {2 2} {3 3} {7 7} {14 14} {30 30}}
-element create n_past_days_form n_past_days \
-    -label "" \
-    -datatype text \
-    -widget select \
-    -options $options \
-    -html {onChange document.n_past_days_form.submit()} \
-    -value $n_past_days
-
-element create n_past_days_form folder_id \
-    -label "[_ file-storage.Folder_ID]" \
-    -datatype text \
-    -widget hidden \
-    -value $folder_id
-
-
-set notification_chunk [notification::display::request_widget \
-    -type fs_fs_notif \
-    -object_id $folder_id \
-    -pretty_name $folder_name \
-    -url [ad_conn url]?folder_id=$folder_id \
-]
-
-if {[form is_valid n_past_days_form]} {
-    form get_values n_past_days_form n_past_days folder_id
-}
-
+set folder_url [export_vars -base [ad_conn url] {folder_id}]
 set context [fs_context_bar_list -root_folder_id $root_folder_id $folder_id]
 
 # Try to find a linked project so you can display a back link.
@@ -146,3 +118,9 @@ set allow_bulk_actions 1
 
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

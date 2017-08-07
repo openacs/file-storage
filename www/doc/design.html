@@ -19,7 +19,7 @@ OpenACS.
 <li>User directory:  <a href="/file-storage/">/file-storage/</a>
 <li>Tcl procedures: <a href="/api-doc/procs-file-view?path=tcl%2ffile%2dstorage%2ddefs%2etcl">/tcl/file-storage-defs.tcl</a>
 <li>Requirements document:  <a href="requirements.html">/doc/requirements/file-storage.html</a>
-<li>Data model:  <a href="/doc/sql/display-sql?url=file-storage-create.sql&package_key=file-storage">file-storage-create.sql</a>
+<li>Data model:  <a href="/doc/sql/display-sql?url=file-storage-create.sql&amp;package_key=file-storage">file-storage-create.sql</a>
 </ul>
 
 
@@ -41,7 +41,7 @@ may:
 </ul>
 
 <p>We want something that is relatively secure, and can be extended
-and maintained by any ArsDigita programmer, <i>i.e.</i>, something that
+and maintained by any ArsDigita programmer, <em>i.e.</em>, something that
 requires only AOLserver Tcl and Oracle skills.
 
 <p>In ACS 4, File Storage can be implemented on top of the Content
@@ -89,7 +89,7 @@ type, or searching through specified file types).
 permissions.  (However they did have a concept of private group
 trees.)  The reasons for this were to simplify the code and the user
 experience.  However, this system actually caused some confusion
-(<i>e.g.</i>, explicitly granting permission to an outsider on a file in a
+(<em>e.g.</em>, explicitly granting permission to an outsider on a file in a
 group's private tree did not actually give that person access to the
 file) and was not as flexible as people desired.  The ACS 4 version
 includes folder read, write and delete permissions.
@@ -138,34 +138,34 @@ we define a delete privilege rather than overloading the write
 permission.  Also, execute privileges have no meaning in this context.
 
 <p>
-<table width=100% border=2>
+<table width="100%" border="2">
 <tr>
 <td></td>
-<th bgcolor=#cccccc>Folder</th>
-<th bgcolor=#cccccc>File</th>
-<th bgcolor=#cccccc>Version</th>
+<th bgcolor="#cccccc">Folder</th>
+<th bgcolor="#cccccc">File</th>
+<th bgcolor="#cccccc">Version</th>
 </tr>
 <tr>
-<td align=right bgcolor=#cccccc>read</td>
-<td align=center>view and enter folder</td>
-<td align=center>view file information</td>
-<td align=center>view and download version</td>
+<td align="right" bgcolor="#cccccc">read</td>
+<td align="center">view and enter folder</td>
+<td align="center">view file information</td>
+<td align="center">view and download version</td>
 </tr>
 <tr>
-<td align=right bgcolor=#cccccc>write</td>
-<td align=center>add new files / folders</td>
-<td align=center>upload new versions</td>
-<td align=center>-----</td>
+<td align="right" bgcolor="#cccccc">write</td>
+<td align="center">add new files / folders</td>
+<td align="center">upload new versions</td>
+<td align="center">-----</td>
 </tr>
 <tr>
-<td align=right bgcolor=#cccccc>delete</td>
-<td align=center>delete folder</td>
-<td align=center>delete file</td>
-<td align=center>delete version</td>
+<td align="right" bgcolor="#cccccc">delete</td>
+<td align="center">delete folder</td>
+<td align="center">delete file</td>
+<td align="center">delete version</td>
 </tr>
 <tr>
-<td align=right bgcolor=#cccccc>admin</td>
-<td colspan=3 align=center>modify permission grants and read, write and delete privileges</td>
+<td align="right" bgcolor="#cccccc">admin</td>
+<td colspan="3" align="center">modify permission grants and read, write and delete privileges</td>
 </tr>
 </table>
 
@@ -237,8 +237,8 @@ PL/SQL package</a>
 
 <h4>Tcl API</h4>
 
-<table width=100%><tr><td bgcolor=#e4e4e4>
-<h3><a href="/api-doc/proc-view?proc=children%5fhave%5fpermission%5fp">children_have_permission_p</a></h3><pre>children_have_permission_p [ -user_id <i>user_id</i> ] <i>item_id</i> <i>privilege</i></pre>
+<table width="100%"><tr><td bgcolor="#e4e4e4">
+<h3><a href="/api-doc/proc-view?proc=children%5fhave%5fpermission%5fp">children_have_permission_p</a></h3><pre>children_have_permission_p [ -user_id <em>user_id</em> ] <em>item_id</em> <em>privilege</em></pre>
 <blockquote>
 This procedure, given a content item and a privilege, checks to see if 
     there are any children of the item on which the user does not have that
@@ -246,20 +246,20 @@ This procedure, given a content item and a privilege, checks to see if
 
 <p>
 <dl>
-<p><dt><b>Switches:</b></dt><dd>
-<b>-user_id</b> (optional)<br>
+<p><dt><strong>Switches:</strong></dt><dd>
+<strong>-user_id</strong> (optional)<br>
 </dd>
-<p><dt><b>Parameters:</b></dt><dd>
-<b>item_id</b><br>
-<b>privilege</b><br>
+<p><dt><strong>Parameters:</strong></dt><dd>
+<strong>item_id</strong><br>
+<strong>privilege</strong><br>
 </dd>
 </dl></blockquote>
 </td></tr></table>
 
 <p>
 
-<table width=100%><tr><td bgcolor=#e4e4e4>
-<h3><a href="/api-doc/proc-view?proc=fs%5fcontext%5fbar%5flist">fs_context_bar_list</a></h3><pre>fs_context_bar_list [ -final <i>final</i> ] <i>item_id</i></pre>
+<table width="100%"><tr><td bgcolor="#e4e4e4">
+<h3><a href="/api-doc/proc-view?proc=fs%5fcontext%5fbar%5flist">fs_context_bar_list</a></h3><pre>fs_context_bar_list [ -final <em>final</em> ] <em>item_id</em></pre>
 <blockquote>
 Constructs the list to be fed to ad_context_bar appropriate for
     item_id.  If -final is specified, that string will be the last 
@@ -268,19 +268,19 @@ Constructs the list to be fed to ad_context_bar appropriate for
 
 <p>
 <dl>
-<p><dt><b>Switches:</b></dt><dd>
-<b>-final</b> (optional)<br>
+<p><dt><strong>Switches:</strong></dt><dd>
+<strong>-final</strong> (optional)<br>
 </dd>
-<p><dt><b>Parameters:</b></dt><dd>
-<b>item_id</b><br>
+<p><dt><strong>Parameters:</strong></dt><dd>
+<strong>item_id</strong><br>
 </dd>
 </dl></blockquote>
 </td></tr></table>
 
 <p>
 
-<table width=100%><tr><td bgcolor=#e4e4e4>
-<h3><a href="/api-doc/proc-view?proc=fs%5ffile%5fdownloader">fs_file_downloader</a></h3><pre>fs_file_downloader <i>conn</i> <i>key</i></pre>
+<table width="100%"><tr><td bgcolor="#e4e4e4">
+<h3><a href="/api-doc/proc-view?proc=fs%5ffile%5fdownloader">fs_file_downloader</a></h3><pre>fs_file_downloader <em>conn</em> <em>key</em></pre>
 <blockquote>
 Sends the requested file to the user.  Note that the path has the 
     original file name, so the browser will have a sensible name if you 
@@ -290,87 +290,87 @@ Sends the requested file to the user.  Note that the path has the
 
 <p>
 <dl>
-<p><dt><b>Parameters:</b></dt><dd>
-<b>conn</b><br>
-<b>key</b><br>
+<p><dt><strong>Parameters:</strong></dt><dd>
+<strong>conn</strong><br>
+<strong>key</strong><br>
 </dd>
 </dl></blockquote>
 </td></tr></table>
 
 <p>
 
-<table width=100%><tr><td bgcolor=#e4e4e4>
-<h3><a href="/api-doc/proc-view?proc=fs%5ffile%5fp">fs_file_p</a></h3><pre>fs_file_p <i>file_id</i></pre>
+<table width="100%"><tr><td bgcolor="#e4e4e4">
+<h3><a href="/api-doc/proc-view?proc=fs%5ffile%5fp">fs_file_p</a></h3><pre>fs_file_p <em>file_id</em></pre>
 <blockquote>
 Returns 1 if the file_id corresponds to a file in the file-storage
     system.  Returns 0 otherwise.
 
 <p>
 <dl>
-<p><dt><b>Parameters:</b></dt><dd>
-<b>file_id</b><br>
+<p><dt><strong>Parameters:</strong></dt><dd>
+<strong>file_id</strong><br>
 </dd>
 </dl></blockquote>
 </td></tr></table>
 
 <p>
 
-<table width=100%><tr><td bgcolor=#e4e4e4>
-<h3><a href="/api-doc/proc-view?proc=fs%5ffolder%5fp">fs_folder_p</a></h3><pre>fs_folder_p <i>folder_id</i></pre>
+<table width="100%"><tr><td bgcolor="#e4e4e4">
+<h3><a href="/api-doc/proc-view?proc=fs%5ffolder%5fp">fs_folder_p</a></h3><pre>fs_folder_p <em>folder_id</em></pre>
 <blockquote>
 Returns 1 if the folder_id corresponds to a folder in the file-storage
     system.  Returns 0 otherwise.
 
 <p>
 <dl>
-<p><dt><b>Parameters:</b></dt><dd>
-<b>folder_id</b><br>
+<p><dt><strong>Parameters:</strong></dt><dd>
+<strong>folder_id</strong><br>
 </dd>
 </dl></blockquote>
 </td></tr></table>
 
 <p>
 
-<table width=100%><tr><td bgcolor=#e4e4e4>
-<h3><a href="/api-doc/proc-view?proc=fs%5fget%5ffolder%5fname">fs_get_folder_name</a></h3><pre>fs_get_folder_name <i>folder_id</i></pre>
+<table width="100%"><tr><td bgcolor="#e4e4e4">
+<h3><a href="/api-doc/proc-view?proc=fs%5fget%5ffolder%5fname">fs_get_folder_name</a></h3><pre>fs_get_folder_name <em>folder_id</em></pre>
 <blockquote>
 Returns the name of a folder.
 
 <p>
 <dl>
-<p><dt><b>Parameters:</b></dt><dd>
-<b>folder_id</b><br>
+<p><dt><strong>Parameters:</strong></dt><dd>
+<strong>folder_id</strong><br>
 </dd>
 </dl></blockquote>
 </td></tr></table>
 
 <p>
 
-<table width=100%><tr><td bgcolor=#e4e4e4>
-<h3><a href="/api-doc/proc-view?proc=fs%5froot%5ffolder">fs_root_folder</a></h3><pre>fs_root_folder [ -package_id <i>package_id</i> ]</pre>
+<table width="100%"><tr><td bgcolor="#e4e4e4">
+<h3><a href="/api-doc/proc-view?proc=fs%5froot%5ffolder">fs_root_folder</a></h3><pre>fs_root_folder [ -package_id <em>package_id</em> ]</pre>
 <blockquote>
 Returns the root folder for the file storage system.
 
 <p>
 <dl>
-<p><dt><b>Switches:</b></dt><dd>
-<b>-package_id</b> (optional)<br>
+<p><dt><strong>Switches:</strong></dt><dd>
+<strong>-package_id</strong> (optional)<br>
 </dd>
 </dl></blockquote>
 </td></tr></table>
 
 <p>
 
-<table width=100%><tr><td bgcolor=#e4e4e4>
-<h3><a href="/api-doc/proc-view?proc=fs%5fversion%5fp">fs_version_p</a></h3><pre>fs_version_p <i>version_id</i></pre>
+<table width="100%"><tr><td bgcolor="#e4e4e4">
+<h3><a href="/api-doc/proc-view?proc=fs%5fversion%5fp">fs_version_p</a></h3><pre>fs_version_p <em>version_id</em></pre>
 <blockquote>
 Returns 1 if the version_id corresponds to a version in the file-storage
     system.  Returns 0 otherwise.
 
 <p>
 <dl>
-<p><dt><b>Parameters:</b></dt><dd>
-<b>version_id</b><br>
+<p><dt><strong>Parameters:</strong></dt><dd>
+<strong>version_id</strong><br>
 </dd>
 </dl></blockquote>
 </td></tr></table>
@@ -389,7 +389,7 @@ Repository.
 
 Inserting a row into the table fs_root_folders occurs the first time
 the package instance is visited. The reason is that there is no
-facility in APM to insert a row in the database everytime a package
+facility in APM to insert a row in the database every time a package
 instance is created (technically, there is no "on insert" trigger
 imposed by APM on Content Repository, since they are separate packages
 even though they are both part of the core). The solution to this
@@ -552,10 +552,10 @@ type.
 
 <h3>XII.  Revision History</h3>
 
-<table cellpadding=2 cellspacing=2 width=90% bgcolor=#efefef>
-<tr bgcolor=#e0e0e0>
-    <th width=10%>Document Revision #</th>
-    <th width=50%>Action Taken, Notes</th>
+<table cellpadding="2" cellspacing="2" width="90%" bgcolor="#efefef">
+<tr bgcolor="#e0e0e0">
+    <th width="10%">Document Revision #</th>
+    <th width="50%">Action Taken, Notes</th>
     <th>When?</th>
     <th>By Whom?</th>
 </tr>

@@ -35,18 +35,14 @@
   <fullquery name="get_folder_tree">
     <querytext>
       select
-      cf.folder_id, ci1.parent_id, cf.label, tree_level(ci1.tree_sortkey) as level_num
-      from cr_folders cf, cr_items ci1, cr_items ci2
+         cf.folder_id, ci1.parent_id, cf.label, tree_level(ci1.tree_sortkey) as level_num
+         from cr_folders cf, cr_items ci1, cr_items ci2
       where
-      ci1.tree_sortkey between ci2.tree_sortkey and
-                               tree_right(ci2.tree_sortkey)
-      and ci2.item_id=:root_folder_id
-      and ci1.item_id=cf.folder_id
-      and exists (select 1
-                   from acs_object_party_privilege_map m
-                   where m.object_id = cf.folder_id
-                     and m.party_id = :user_id
-                     and m.privilege = 'write')
+         ci1.tree_sortkey between ci2.tree_sortkey and  tree_right(ci2.tree_sortkey)
+         and ci2.item_id=:root_folder_id
+         and ci1.item_id=cf.folder_id
+         and acs_permission__permission_p(cf.folder_id, :user_id, 'write')
+
       order by ci1.tree_sortkey, cf.label
     </querytext>
   </fullquery>
@@ -89,5 +85,13 @@
        ) 	 
      </querytext> 	 
    </fullquery>
-  
+
+   <fullquery name="item_exists_already_in_target_folder">
+     <querytext>
+      select count(*) from cr_items
+      where name=:name
+      and parent_id=:folder_id
+     </querytext>
+   </fullquery>
+
 </queryset>

@@ -3,18 +3,6 @@
 <queryset>
    <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
-<fullquery name="rename_file">      
-      <querytext>
-
-    	select file_storage__rename_file (
-        	:file_id, -- file_id
-        	:title	  -- title
-    		);
-
-      </querytext>
-</fullquery>
-
- 
 <fullquery name="duplicate_check">      
       <querytext>
       

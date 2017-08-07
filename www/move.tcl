@@ -9,8 +9,8 @@ ad_page_contract {
 } -query {
     object_id:notnull,integer,multiple
     folder_id:naturalnum,optional
-    {return_url ""}
-    {root_folder_id ""}
+    {return_url:localurl ""}
+    {root_folder_id:integer ""}
     {redirect_to_folder:boolean 0}
     {show_items:boolean 0}
 } -errors {object_id:,notnull,integer,multiple {Please select at least one item to move.}
@@ -40,9 +40,10 @@ db_multirow -extend {move_message} move_objects get_move_objects "" {
     }
     if {$type eq "folder"} {
         lappend not_allowed_children $object_id
-        lappend not_allowed_parents $parent_id
     }
-  
+    # prevent people from selecting source folder as destination
+    # folder
+    lappend not_allowed_parents $parent_id
 }
 
 set total_count [template::multirow size move_objects]
@@ -53,49 +54,54 @@ if {$not_allowed_count > 0} {
 
 if {[info exists folder_id]} {
 
-     permission::require_permission \
- 	-party_id $user_id \
- 	-object_id $folder_id \
- 	-privilege "write"
+    permission::require_permission \
+        -party_id $user_id \
+        -object_id $folder_id \
+        -privilege "write"
 
 
     # check for WRTIE permission on each object to be moved
     # DaveB: I think it should be DELETE instead of WRITE
     # but the existing file-move page checks for WRITE
-     set error_items [list]
+    set error_items {}
     template::multirow foreach move_objects {
-	if {$copy_and_delete_p} {  
-             # copy and delete file to move it
-	    db_transaction {
-		if {$type ne "folder" } {  
-		    set file_rev_id [db_exec_plsql copy_item {}]  
-		    set file_id [content::revision::item_id -revision_id $file_rev_id]  
-		    callback fs::file_revision_new -package_id $package_id -file_id $file_id -parent_id $folder_id  
-		    fs::delete_file -item_id $object_id -parent_id $parent_id  
-		} else {  
-		    db_exec_plsql copy_folder {}  
-		    fs::delete_folder -folder_id $object_id -parent_id $parent_id  
-		}
-	    } on_error {
-		lappend error_items $name
-	    }
-	} else {
-	    # execute move command  
-	    db_transaction {  
-		db_exec_plsql move_item {}
-	    } on_error {
-		lappend error_items $name
-	    }
-	}    
+        if {[db_string item_exists_already_in_target_folder {}]} {
+            ns_log Notice "item $name exists already in folder $folder_id"
+            lappend error_items $name
+        } else {
+            if {$copy_and_delete_p} {  
+                # copy and delete file to move it
+                db_transaction {
+                    if {$type ne "folder" } {  
+                        set file_rev_id [db_exec_plsql copy_item {}]  
+                        set file_id [content::revision::item_id -revision_id $file_rev_id]  
+                        callback fs::file_revision_new -package_id $package_id -file_id $file_id -parent_id $folder_id  
+                        fs::delete_file -item_id $object_id -parent_id $parent_id  
+                    } else {  
+                        db_exec_plsql copy_folder {}  
+                        fs::delete_folder -folder_id $object_id -parent_id $parent_id  
+                    }
+                } on_error {
+                    lappend error_items $name
+                }
+            } else {
+                # execute move command  
+                db_transaction {  
+                    db_exec_plsql move_item {}
+                } on_error {
+                    lappend error_items $name
+                }
+            }    
+        }
     }
-     
-     if {[llength $error_items]} {
-	 set message "There was a problem moving the following items: [join $error_items ", "]"
-     } else {
-	 set message "Selected items moved"
-     }
-     ad_returnredirect -message $message $return_url
-     ad_script_abort
+
+    if {[llength $error_items]} {
+        set message "[_ file-storage.There_was_a_problem_moving_the_following_items]: [join $error_items ", "]"
+    } else {
+        set message [_ file-storage.Selected_items_have_been_moved]
+    }
+    ad_returnredirect -message $message $return_url
+    ad_script_abort
 
  } else {
 
@@ -152,3 +158,9 @@ if {[info exists folder_id]} {
 
 set context [list "\#file-storage.Move\#"]
 set title "\#file-storage.Move\#"
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

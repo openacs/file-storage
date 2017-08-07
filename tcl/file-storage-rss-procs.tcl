@@ -183,3 +183,9 @@ ad_proc -private fs::rss::build_feeds {
         rss_gen_report $subscr_id
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

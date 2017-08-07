@@ -9,8 +9,8 @@ ad_page_contract {
 } -query {
     object_id:notnull,integer,multiple
     folder_id:naturalnum,optional
-    {return_url ""}
-    {root_folder_id ""}
+    {return_url:localurl ""}
+    {root_folder_id:integer ""}
     {redirect_to_folder:boolean 0}
     {show_items:boolean 0}
 } -errors {object_id:,notnull,integer,multiple {Please select at least one item to copy.}
@@ -37,7 +37,7 @@ db_multirow -extend {copy_message} copy_objects get_copy_objects "" {
     }
     if {$type eq "folder"} {
         lappend not_allowed_children $object_id
-        lappend not_allowed_parents $parent_id
+        # lappend not_allowed_parents $parent_id
     }
   
 }
@@ -58,23 +58,44 @@ if {[info exists folder_id]} {
     # check for WRTIE permission on each object to be copyd
     # DaveB: I think it should be DELETE instead of WRITE
     # but the existing file-copy page checks for WRITE
-     set error_items [list]      
+    set error_items [list]      
     template::multirow foreach copy_objects {
         db_transaction {
+            # Allow to copy files into folders that already contain
+            # one with the same name by appending a numeric suffix
+            set suffix 1
+            set orig_title $title
+            set orig_name  $name
+            while {[content::item::get_id_by_name \
+                        -name $name \
+                        -parent_id $folder_id] ne ""} {
+                set title ${orig_title}-${suffix}
+                # for name, put the suffix just before the extension,
+                # so browser can keep guessing the correct filetype at
+                # download
+                set name_ext [file extension $name]
+                set name [string range ${orig_name} 0 end-[string length $name_ext]]
+                set name ${name}-${suffix}${name_ext}
+                incr suffix
+            }
+            
             if {$type ne "folder" } {
                 set file_rev_id [db_exec_plsql copy_item {}]
-		callback fs::file_revision_new -package_id $package_id -file_id $object_id -parent_id $folder_id
+		callback fs::file_revision_new \
+                    -package_id $package_id \
+                    -file_id    $object_id \
+                    -parent_id  $folder_id
             } else {
                 db_exec_plsql copy_folder {}
             }
         } on_error {
-	    lappend error_items $name
+            lappend error_items $name
 	}
     }
      if {[llength $error_items]} {
-	 set message "There was a problem copying the following items: [join $error_items ", "]"
+	 set message "[_ file-storage.There_was_a_problem_copying_the_following_items]: [join $error_items ", "]"
      } else {
-	 set message "Selected items copied."
+	 set message [_ file-storage.Selected_items_have_been_copied]
      }
      ad_returnredirect -message $message $return_url
      ad_script_abort
@@ -131,3 +152,9 @@ if {[info exists folder_id]} {
 
 set context [list "\#file-storage.Copy\#"]
 set title "\#file-storage.Copy\#"
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

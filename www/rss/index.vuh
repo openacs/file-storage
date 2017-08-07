@@ -21,3 +21,9 @@ if { $stub ne "rss.xml" } {
 }
 
 ns_returnfile 200 text/xml [rss_gen_report_file -summary_context_id $subscr_id -impl_name fs_rss]
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

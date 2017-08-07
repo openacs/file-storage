@@ -60,22 +60,8 @@ ad_proc -public -callback search::datasource -impl file_storage_object {} {
 
 } {
     # We probably don't need the whole big query here. TODO: Review.
-    db_0or1row fs_datasource {
-	select r.revision_id as object_id,
-	       i.name as title,
-	       case i.storage_type
-		     when 'lob' then r.lob::text
-		     when 'file' then '[cr_fs_path]' || r.content
-	             else r.content
-	        end as content,
-	        r.mime_type as mime,
-	        '' as keywords,
-	        i.storage_type as storage_type
-	from cr_items i, cr_revisions r
-	where r.item_id = i.item_id
-	and   r.revision_id = :object_id
-    } -column_array datasource
-
+    db_0or1row dbqd.file-storage.tcl.file-storage-callback-procs.fs_datasource {} -column_array datasource
+    
     return [list object_id $object_id \
                 title $datasource(title) \
                 content $datasource(content) \
@@ -90,7 +76,9 @@ ad_proc -public -callback search::url -impl file_storage_object {
     Return the URL to the file_storage_object
 } {
     set item_id [content::revision::item_id -revision_id $object_id]
-    set name [db_string item "select name from cr_items where item_id = :item_id" -default ""]
+    set name [db_string item {
+        select name from cr_items where item_id = :item_id
+    } -default ""]
     return "[ad_url]/file/$item_id/$name"
 }
 
@@ -222,3 +210,9 @@ ad_proc -callback application-track::getApplicationName -impl file_storage {} {
 	
 	
     }      
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

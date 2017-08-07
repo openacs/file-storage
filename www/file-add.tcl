@@ -8,7 +8,7 @@ ad_page_contract {
     file_id:naturalnum,optional,notnull
     folder_id:naturalnum,optional,notnull
     upload_file:trim,optional
-    return_url:optional
+    return_url:localurl,optional
     upload_file.tmpfile:tmpfile,optional
     content_body:optional
     {title ""}
@@ -30,7 +30,7 @@ ad_page_contract {
 		return
 	    }
 	}
-	if {![fs_folder_p $folder_id]} {
+        if {![info exists folder_id] || ![fs_folder_p $folder_id]} {
 	    ad_complain "The specified parent folder is not valid."
 	}
     }
@@ -64,14 +64,16 @@ if {![ad_form_new_p -key file_id]} {
     set context [fs_context_bar_list -final "[_ file-storage.Add_File]" $folder_id]
 }
 
-ad_form -html { enctype multipart/form-data } -export { folder_id lock_title_p name } -form {
-    file_id:key
-    {upload_file:file {label \#file-storage.Upload_a_file\#} {html "size 30"}}
-}
+ad_form -html { enctype multipart/form-data } \
+    -export { folder_id lock_title_p name } \
+    -form {
+        file_id:key
+        {upload_file:file {label \#file-storage.Upload_a_file\#} {html "size 30"}}
+    }
 
 if {[parameter::get -parameter AllowTextEdit -default 0]} {
     if {[ad_form_new_p -key file_id]} { 
-            
+        
         # To allow the creation of files
         ad_form -extend -form {
             {content_body:richtext(richtext),optional 
@@ -83,7 +85,9 @@ if {[parameter::get -parameter AllowTextEdit -default 0]} {
     } else {
         # To make content editable
         set revision_id [content::item::get_live_revision -item_id $file_id]
-        set mime_type [db_string get_mime_type "select mime_type from cr_revisions where revision_id = :revision_id"]
+        set mime_type [db_string get_mime_type {
+            select mime_type from cr_revisions where revision_id = :revision_id
+        }]
         if {$mime_type eq "text/html"} {
             ad_form -extend -form {
                 {edit_content:richtext(richtext),optional 
@@ -110,61 +114,67 @@ if {$lock_title_p} {
 	{title:text(hidden) {value $title}}
     }
 } else { 
-   ad_form -extend -form {
+    ad_form -extend -form {
 	{title:text,optional {label \#file-storage.Title\#} {html {size 30}} }
     }
 }
-
 ad_form -extend -form {
     {description:text(textarea),optional {label \#file-storage.Description\#} {html "rows 5 cols 35"}}
 }
 
-if [catch {set binary [exec $unpack_binary]} errormsg] {
-      set unpack_bin_installed 0
+if {[catch {set binary [exec $unpack_binary]} errormsg]} {
+    set unpack_bin_installed 0
 } else {
-        set unpack_bin_installed 1
+    set unpack_bin_installed 1
 }
 
-if {([ad_form_new_p -key file_id]) && $unpack_bin_installed } { 
+if {[ad_form_new_p -key file_id] && $unpack_bin_installed } {
+
     ad_form -extend -form {
-	{unpack_p:boolean(checkbox),optional {label \#file-storage.Multiple_files\#} {html {onclick "javascript:UnpackChanged(this);"}} {options { {\#file-storage.lt_This_is_a_ZIP\# t} }} }
+	{unpack_p:boolean(checkbox),optional \
+             {label \#file-storage.Multiple_files\#} \
+             {options { {\#file-storage.lt_This_is_a_ZIP\# t} }}
+        }
     }
 }
 if { [parameter::get -parameter CategoriesP -package_id $package_id -default 0] } {
-     if { ([info exists file_id] && $file_id ne "") } {
-	 set categorized_object_id $file_id
-     } else {
-	 # pre-populate with categories from the folder
-	 set categorized_object_id $folder_id
-     }
+    if { [info exists file_id] && $file_id ne "" } {
+        set categorized_object_id $file_id
+    } else {
+        # pre-populate with categories from the folder
+        set categorized_object_id $folder_id
+    }
     
     category::ad_form::add_widgets \
-	 -container_object_id $package_id \
-	 -categorized_object_id $categorized_object_id \
-	 -form_name file-add
+        -container_object_id $package_id \
+        -categorized_object_id $categorized_object_id \
+        -form_name file-add
 }
 
-ad_form -extend -form {} -select_query_name {get_file} -new_data {
+ad_form -extend -form {} -select_query_name get_file -new_data {
     
-  if {(![info exists unpack_p] || $unpack_p eq "")} {
-      set unpack_p f
-  }
-  if { $unpack_p && $unpack_binary ne "" && [file extension [template::util::file::get_property filename $upload_file]] eq ".zip"  } {
+    if {![info exists unpack_p] || $unpack_p eq ""} {
+        set unpack_p f
+    }
+    if { $unpack_p
+         && $unpack_binary ne ""
+         && [file extension [template::util::file::get_property filename $upload_file]] eq ".zip"
+     } {
 	
-	set path [ad_tmpnam]
-	file mkdir $path
+        set path [ad_tmpnam]
+        file mkdir $path
 	
 	
-	catch { exec $unpack_binary -jd $path ${upload_file.tmpfile} } errmsg
+        catch { exec $unpack_binary -jd $path ${upload_file.tmpfile} } errmsg
 	
-	# More flexible parameter design could be:
-	# zip {unzip -jd {out_path} {in_file}} tar {tar xf {in_file} {out_path}} tgz {tar xzf {in_file} {out_path}} 
+        # More flexible parameter design could be:
+        # zip {unzip -jd {out_path} {in_file}} tar {tar xf {in_file} {out_path}} tgz {tar xzf {in_file} {out_path}} 
 
-	set upload_files [list]
-	set upload_tmpfiles [list]
+        set upload_files [list]
+        set upload_tmpfiles [list]
 	
-	foreach file [glob -nocomplain "$path/*"] {
-	    lappend upload_files [file tail $file]
+        foreach file [glob -nocomplain "$path/*"] {
+            lappend upload_files [file tail $file]
 	    lappend upload_tmpfiles $file
 	}
 	
@@ -247,20 +257,20 @@ ad_form -extend -form {} -select_query_name {get_file} -new_data {
 									   -element_name category_id]
         }
 
-        file delete $tmpfile
+        file delete -- $tmpfile
         incr i
         if {$i < $number_upload_files} {
             set file_id [db_nextval "acs_object_id_seq"]
         }
     }
-    file delete $upload_file.tmpfile
+    file delete -- $upload_file.tmpfile
 } -edit_data {
     set this_title $title
     set filename [template::util::file::get_property filename $upload_file]
     if {$this_title eq ""} {
 	set this_title $filename
     }
-	
+    
     fs::add_version \
 	-name $filename \
 	-tmp_filename [template::util::file::get_property tmp_filename $upload_file] \
@@ -270,7 +280,7 @@ ad_form -extend -form {} -select_query_name {get_file} -new_data {
 	-title $this_title \
 	-description $description \
 	-package_id $package_id
-	
+    
     if { [parameter::get -parameter CategoriesP -package_id $package_id -default 0] } {
 	category::map_object -remove_old -object_id $file_id [category::ad_form::get_categories \
 								  -container_object_id $package_id \
@@ -278,7 +288,7 @@ ad_form -extend -form {} -select_query_name {get_file} -new_data {
     }
 } -after_submit {
 
-    if {([info exists return_url] && $return_url ne "")} {
+    if {[info exists return_url] && $return_url ne ""} {
 	ad_returnredirect $return_url
     } else {
 	ad_returnredirect [export_vars -base ./ {folder_id}]
@@ -293,11 +303,41 @@ if {$title eq ""} {
 }
 
 if { [parameter::get -parameter "BehaveLikeFilesystemP" -package_id [ad_conn package_id]] } {
-    set instructions "[_ file-storage.Add_Dup_As_Revision]"
+    set instructions [_ file-storage.Add_Dup_As_Revision]
 } else {
-    set instructions "[_ file-storage.Add_Dup_As_New_File]"
+    set instructions [_ file-storage.Add_Dup_As_New_File]
 }
 
 set unpack_available_p [expr {[string trim [parameter::get -parameter UnzipBinary]] ne ""}]
+if {$unpack_available_p} {
+    template::add_body_script -script {
+        function UnpackChanged(elm) {
+            var form_name = "file-add";
+
+            if (elm == null) return;
+            if (document.forms == null) return;
+            if (document.forms[form_name] == null) return;
+
+            if (elm.checked == true) {
+                document.forms[form_name].elements["title"].disabled = true;   
+                //document.getElementById('fs_title_msg').innerHTML= 'The title you entered will not be used if you upload multiple files at once';
+                
+            } else {
+                document.forms[form_name].elements["title"].disabled = false;
+                //document.getElementById('fs_title_msg').innerHTML= '';
+            }
+        };
+        document.getElementById('file-add:elements:unpack_p:t').addEventListener('click', function (event) {
+            UnpackChanged(this);
+        }, false);
+    }
+}
+
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

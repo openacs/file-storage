@@ -42,3 +42,8 @@ db_multirow subscrs select_subscrs {}
 
 set root_folder_id [fs_get_root_folder]
 set context [fs_context_bar_list -root_folder_id $root_folder_id $folder_id]
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:
