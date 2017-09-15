@@ -223,17 +223,14 @@
 
   <fullquery name="fs::get_folder_package_and_root.select_package_and_root">
     <querytext>
-      select r.package_id,
-             r.folder_id as root_folder_id
-      from fs_root_folders r,
-           (select parent.item_id as folder_id
-            from cr_items parent,
-                 cr_items children
-            where children.item_id = :folder_id
-              and children.tree_sortkey
-                between parent.tree_sortkey
-                and tree_right(parent.tree_sortkey)) t
-      where r.folder_id = t.folder_id
+      With RECURSIVE items AS (
+        select cr.item_id from cr_items cr where cr.item_id = :folder_id
+      UNION ALL
+        select cr.parent_id from cr_items cr, items where items.item_id = cr.item_id
+      )
+      select r.package_id, r.folder_id as root_folder_id
+      from   items i, fs_root_folders r
+      where  r.folder_id = i.item_id
     </querytext>
   </fullquery>
 
