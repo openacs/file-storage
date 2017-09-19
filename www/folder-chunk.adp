@@ -1,5 +1,5 @@
 <if @categories_p;literal@ true>
-  <if @category_links@>
+  <if @category_links@ ne "">
     <p>#file-storage.Categories#: @category_links;noquote@</p>
   </if>
 </if>
