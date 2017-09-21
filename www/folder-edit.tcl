@@ -49,14 +49,14 @@ ad_form -extend -form {
     {submit:text(submit) {label $submit_label}}    
 } -on_request {
     content::item::get -item_id $folder_id -array folder
-    set folder_name $folder(name)
+    set folder_name $folder(label)
     set description $folder(description)
 } -on_submit {
 
     db_transaction {
         content::folder::update -folder_id $folder_id \
             -attributes [list \
-                             [list name $folder_name] \
+                             [list label $folder_name] \
                              [list description $description]]
         
         if { [parameter::get -parameter CategoriesP -package_id $package_id -default 0] } {
@@ -71,8 +71,6 @@ ad_form -extend -form {
 } -after_submit {
     ad_returnredirect "?folder_id=$folder_id"
 }
-
-ad_return_template
 
 # Local variables:
 #    mode: tcl
