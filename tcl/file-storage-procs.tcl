@@ -513,7 +513,7 @@ ad_proc -public fs::publish_object_to_file_system {
 
     db_1row select_object_info {}
     
-    switch $type {
+    switch -- $type {
 	folder {
 	    set result [publish_folder_to_file_system -folder_id $object_id -path $path -folder_name $name -user_id $user_id]
 	} 
@@ -650,7 +650,7 @@ ad_proc -public fs::publish_versioned_object_to_file_system {
                        -tolower \
                        $file_name]
 
-    switch $storage_type {
+    switch -- $storage_type {
 	lob {
 
 	    # FIXME: db_blob_get_file is failing when i use bind variables
