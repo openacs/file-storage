@@ -59,7 +59,7 @@ ad_form -extend -name delete_confirm -on_submit {
     db_transaction {
         template::multirow foreach delete_list {
             if {$delete_p} {
-                switch $type {
+                switch -- $type {
                     folder {
                         fs::delete_folder \
                             -folder_id $fs_object_id \
