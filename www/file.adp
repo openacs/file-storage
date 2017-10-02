@@ -15,7 +15,7 @@
 	<a href="@show_versions_url@" class="button" title="#file-storage.show_all_versions#">#file-storage.show_all_versions#</a>
   </else>
 </div>
-<if @categories_p;literal@ true><if @category_links@ ne ""><p>#file-storage.Categories#: @category_links;noquote@</p></if></if>
+<if @categories_p;literal@ true><if @category_links;literal@ ne ""><p>#file-storage.Categories#: @category_links;noquote@</p></if></if>
   <listtemplate name="version"></listtemplate>
 <if @gc_comments@ not nil>
  <p>#file-storage.lt_Comments_on_this_file#</p>
