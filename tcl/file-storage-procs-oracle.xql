@@ -213,10 +213,7 @@
 
   <fullquery name="fs::delete_folder.delete_folder">      
       <querytext>
-
-	begin
-	        file_storage.delete_folder(:folder_id, :cascade_p );
-	end;
+	select file_storage.delete_folder(:folder_id, :cascade_p ) from dual
       </querytext>
   </fullquery>
   
