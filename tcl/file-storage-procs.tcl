@@ -1155,7 +1155,7 @@ ad_proc fs::delete_folder {
     }
 
     set version_name [get_object_name -object_id $folder_id]
-    db_exec_plsql delete_folder ""
+    db_string delete_folder {}
     
     if { !$no_notifications_p } {
         fs::do_notifications -folder_id $parent_id -filename $version_name -item_id $folder_id -action "delete_folder"

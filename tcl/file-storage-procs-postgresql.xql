@@ -202,10 +202,7 @@
 
   <fullquery name="fs::delete_folder.delete_folder">
      <querytext>
-        select file_storage__delete_folder (
-                       :folder_id,
-                       :cascade_p
-                       )
+       select content_folder__del(:folder_id, :cascade_p)
      </querytext>
   </fullquery>
   
