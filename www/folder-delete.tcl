@@ -74,11 +74,8 @@ ad_form -name "folder-delete" \
 
 if { $confirmed_p == "t" && $blocked_p == "f" } {
     # they have confirmed that they want to delete the folder
-
-    db_1row parent_id "
-    select parent_id from cr_items where item_id = :folder_id"
-
-    db_exec_plsql folder_delete ""
+    fs::delete_folder \
+        -folder_id $folder_id
 
     ad_returnredirect "index?folder_id=$parent_id"
     ad_script_abort
