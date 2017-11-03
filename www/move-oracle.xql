@@ -23,30 +23,6 @@
     </querytext>
   </fullquery>
 
-  <fullquery name="copy_item">
-    <querytext>
-      begin
-      :1 := file_storage.copy_file(
-           :object_id,
-           :folder_id,
-	   :user_id,
-           :peer_addr
-      );
-      end;
-    </querytext>
-  </fullquery>
-
-  <fullquery name="move_item">
-    <querytext>
-	begin
-      	content_item.move(
-           :object_id,
-           :folder_id
-      );
-	end;
-    </querytext>
-  </fullquery>
-
   <fullquery name="get_folder_tree">
     <querytext>
       select

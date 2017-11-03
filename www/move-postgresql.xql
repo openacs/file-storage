@@ -23,15 +23,6 @@
     </querytext>
   </fullquery>
 
-  <fullquery name="move_item">
-    <querytext>
-      select content_item__move(
-           :object_id,
-           :folder_id
-      )
-    </querytext>
-  </fullquery>
-
   <fullquery name="get_folder_tree">
     <querytext>
       select
@@ -63,35 +54,5 @@
     ) select folder_id, parent_id, label, level_num from folder_tree where permission_p is true;
     </querytext>
   </fullquery>
-
-   <fullquery name="copy_item"> 	 
-     <querytext> 	 
-       select file_storage__copy_file( 	 
-            :object_id, 	 
-            :folder_id, 	 
-            :user_id, 	 
-            :peer_addr 	 
-       ) 	 
-     </querytext> 	 
-   </fullquery> 	 
-  	 
-   <fullquery name="copy_folder"> 	 
-     <querytext> 	 
-       select content_folder__copy ( 	 
-            :object_id, 	 
-            :folder_id, 	 
-            :user_id, 	 
-            :peer_addr 	 
-       ) 	 
-     </querytext> 	 
-   </fullquery>
-
-   <fullquery name="item_exists_already_in_target_folder">
-     <querytext>
-      select count(*) from cr_items
-      where name=:name
-      and parent_id=:folder_id
-     </querytext>
-   </fullquery>
 
 </queryset>

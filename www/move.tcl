@@ -65,33 +65,41 @@ if {[info exists folder_id]} {
     # but the existing file-move page checks for WRITE
     set error_items {}
     template::multirow foreach move_objects {
-        if {[db_string item_exists_already_in_target_folder {}]} {
+
+        if {[content::item::get_id_by_name \
+                 -name $name -parent_id $folder_id] ne ""} {
             ns_log Notice "item $name exists already in folder $folder_id"
             lappend error_items $name
         } else {
-            if {$copy_and_delete_p} {  
-                # copy and delete file to move it
-                db_transaction {
+            db_transaction {
+                if {$copy_and_delete_p} {  
+                    # copy and delete file to move it
+                    set file_id [content::item::copy -item_id $object_id \
+                                     -target_folder_id $folder_id \
+                                     -creation_user    $user_id \
+                                     -creation_ip      $peer_addr]
                     if {$type ne "folder" } {  
-                        set file_rev_id [db_exec_plsql copy_item {}]  
-                        set file_id [content::revision::item_id -revision_id $file_rev_id]  
-                        callback fs::file_revision_new -package_id $package_id -file_id $file_id -parent_id $folder_id  
-                        fs::delete_file -item_id $object_id -parent_id $parent_id  
+                        callback fs::file_revision_new \
+                            -package_id $package_id \
+                            -file_id    $file_id \
+                            -parent_id  $folder_id
+                        fs::delete_file \
+                            -item_id   $object_id \
+                            -parent_id $parent_id  
                     } else {  
-                        db_exec_plsql copy_folder {}  
-                        fs::delete_folder -folder_id $object_id -parent_id $parent_id  
+                        fs::delete_folder \
+                            -folder_id $object_id \
+                            -parent_id $parent_id
                     }
-                } on_error {
-                    lappend error_items $name
+                } else {
+                    # execute move command
+                    content::item::move \
+                        -item_id          $object_id \
+                        -target_folder_id $folder_id
                 }
-            } else {
-                # execute move command  
-                db_transaction {  
-                    db_exec_plsql move_item {}
-                } on_error {
-                    lappend error_items $name
-                }
-            }    
+            } on_error {
+                lappend error_items $name
+            } 
         }
     }
 
