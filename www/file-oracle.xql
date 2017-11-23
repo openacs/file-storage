@@ -46,7 +46,7 @@
                       where m.object_id = r.revision_id
                         and m.party_id = :user_id
                         and m.privilege = 'read')
-	and $show_versions order by last_modified desc
+	$show_versions order by last_modified desc
 
       </querytext>
 </fullquery> 
