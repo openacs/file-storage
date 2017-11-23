@@ -3,13 +3,6 @@
 <queryset>
    <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
-<fullquery name="get_folder">      
-      <querytext>
-	select content_item.get_parent_folder(:file_id)
-	from dual
-      </querytext>
-</fullquery>
-
 <fullquery name="file_info">      
       <querytext>
       
@@ -53,24 +46,9 @@
                       where m.object_id = r.revision_id
                         and m.party_id = :user_id
                         and m.privilege = 'read')
-	$show_versions order by last_modified desc
+	and $show_versions order by last_modified desc
 
       </querytext>
 </fullquery> 
 
-<partialquery name="show_all_versions">      
-      <querytext>
-
-      </querytext>
-</partialquery> 	
-
-<partialquery name="show_live_version">      
-      <querytext>
-
-	and r.revision_id = i.live_revision
-
-      </querytext>
-</partialquery> 	
-
- 
 </queryset>

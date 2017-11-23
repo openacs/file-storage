@@ -37,16 +37,15 @@ set root_folder_id [fs::get_root_folder]
 db_1row file_info ""
 
 # get folder id so we can implement a back link
-set folder_id [db_string get_folder {}]
+set folder_id [content::item::get_parent_folder -item_id $file_id]
 set folder_write_p [permission::permission_p -object_id $folder_id -privilege write]
 
 set folder_view_url [export_vars -base index {folder_id}]
 
-# We use the new db_map here
 if { $show_all_versions_p } {
-    set show_versions [db_map show_all_versions]
+    set show_versions ""
 } else {
-    set show_versions [db_map show_live_version]
+    set show_versions "and r.revision_id = i.live_revision"
 }
 
 set not_show_all_versions_p [expr {!$show_all_versions_p}]

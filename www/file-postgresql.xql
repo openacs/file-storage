@@ -3,12 +3,6 @@
 <queryset>
    <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
-<fullquery name="get_folder">      
-      <querytext>
-	select content_item__get_parent_folder(:file_id)
-      </querytext>
-</fullquery>
-
 <fullquery name="file_info">      
       <querytext>
       
@@ -77,21 +71,6 @@
 
     </querytext>
 </fullquery>
-
-
-<partialquery name="show_all_versions">      
-      <querytext>
-
-      </querytext>
-</partialquery> 	
-
-<partialquery name="show_live_version">      
-      <querytext>
-
-	and r.revision_id = i.live_revision
-
-      </querytext>
-</partialquery> 	
 
 </queryset>
 
