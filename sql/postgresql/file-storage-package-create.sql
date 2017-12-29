@@ -245,7 +245,7 @@ BEGIN
              new_file__creation_ip,     -- creation_ip
              new_file__indb_p,          -- storage_type
              null,                      -- item_id
-             new_file__package_id       -- pacakge_id
+             new_file__package_id       -- package_id
         );
 
 END;
