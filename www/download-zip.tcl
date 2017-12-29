@@ -7,7 +7,7 @@ ad_page_contract {
 } -errors {object_id:,notnull,integer,multiple {Please select at least one item to download.}
 }
 
-auth::require_login 
+auth::require_login
 set user_id [ad_conn user_id]
 
 # publish the object to the file system
@@ -15,10 +15,11 @@ set in_path [ad_tmpnam]
 file mkdir $in_path
 
 if {[llength $object_id] == 1} {
-    set download_name [fs::get_file_system_safe_object_name -object_id $object_id]
+    set object_name_id $object_id
 } else {
-    set download_name [fs::get_file_system_safe_object_name -object_id [fs::get_parent -item_id [lindex $object_id 0]]]
+    set object_name_id [fs::get_parent -item_id [lindex $object_id 0]]
 }
+set download_name [fs::get_file_system_safe_object_name -object_id $object_name_id]
 
 append download_name ".zip"
 
@@ -27,9 +28,9 @@ foreach fs_object_id $object_id {
     # hard errors on following outdated links. We could test for
     # supported object_types.
     if {![acs_object::object_p -id $fs_object_id]} {
-	ns_returnnotfound
-	file delete -force -- $in_path
-	ad_script_abort 
+        ns_returnnotfound
+        file delete -force -- $in_path
+        ad_script_abort
     }
     set file [fs::publish_object_to_file_system -object_id $fs_object_id -path $in_path -user_id $user_id]
 }
@@ -41,13 +42,13 @@ file mkdir $out_path
 set out_file [file join ${out_path} ${download_name}]
 
 # create the archive
-with_catch errmsg {
+ad_try {
     util::zip -source $in_path -destination $out_file
-} {
+} on error {errorMsg} {
     # some day we'll do something useful here
     file delete -force -- $in_path
     file delete -force -- $out_path
-    error $errmsg
+    error $errorMsg
 }
 
 # return the archive to the connection.
