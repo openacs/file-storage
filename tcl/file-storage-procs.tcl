@@ -1401,9 +1401,6 @@ ad_proc -public fs::get_object_info {
     
     @error 
 } {
-
-    set user_id [ad_conn user_id]
-    set root_folder_id [fs::get_root_folder]
     if {(![info exists revision_id] || $revision_id eq "")} {
         set revision_id [content::item::get_live_revision -item_id $file_id]
     }
@@ -1426,14 +1423,10 @@ ad_proc -public fs::get_object_info {
     #set content [db_exec_plsql get_content {}]
 
     if {$file_object_info(storage_type) eq "file"} {
-        set filename [cr_fs_path $file_object_info(storage_area_key)]
-        append filename $content
-        set fd [open $filename]
-        set content [read $fd]
-        close $fd
+        set file_object_info(cr_file_path) [content::revision::get_cr_file_path \
+                                                -revision_id $revision_id]
     }
     
-    set file_object_info(content) $content
     return [array get file_object_info]
 }
 
