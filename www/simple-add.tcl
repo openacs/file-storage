@@ -102,7 +102,7 @@ ad_form -extend -form {
 } -after_submit {
 
     ad_returnredirect "?folder_id=$folder_id"
-
+    ad_script_abort
 }
 
 # Local variables:
