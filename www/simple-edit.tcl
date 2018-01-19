@@ -39,6 +39,7 @@ ad_form -extend -edit_request {
 								       -element_name category_id]
     }
     ad_returnredirect [export_vars -base . folder_id]
+    ad_script_abort
 }
 
 set pretty_name "$name"
