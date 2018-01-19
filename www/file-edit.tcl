@@ -75,6 +75,7 @@ ad_form -extend -form {
     }
 } -after_submit {
     ad_returnredirect "file?file_id=$file_id"
+    ad_script_abort
 }
 
 ad_return_template

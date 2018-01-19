@@ -27,6 +27,7 @@ set user_id [ad_conn user_id]
 
 if {![acs_user::site_wide_admin_p]} {
     ad_returnredirect [export_vars -base ./ {folder_id}]
+    ad_script_abort
 }
 
 set package_id [ad_conn package_id]
@@ -44,7 +45,7 @@ ad_form -name file_add -html { enctype multipart/form-data } -export { folder_id
     {upload_folder:text(text) {label \#file-storage.Upload_a_folder#} {html "size 30"} {help_text "[_ file-storage.Upload_folder_help]"}}
 }
 
-if {([info exists return_url] && $return_url ne "")} {
+if {[info exists return_url] && $return_url ne ""} {
     ad_form -extend -name file_add -form {
 	{return_url:text(hidden) {value $return_url}}
     }
@@ -137,7 +138,7 @@ ad_form -extend -name file_add -form {} -on_submit {
  
 } -after_submit {
     
-    if {([info exists return_url] && $return_url ne "")} {
+    if {[info exists return_url] && $return_url ne ""} {
 	ad_returnredirect $return_url
     } else {
 	ad_returnredirect [export_vars -base ./ {folder_id}]
