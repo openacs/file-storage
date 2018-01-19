@@ -34,6 +34,7 @@ ad_form -name upload_limit_size -export folder_id -form {
     parameter::set_value  -parameter "MaximumFileSize" -value $new_size
     if {$return_url ne ""} {
 	ad_returnredirect $return_url
+        ad_script_abort
     }
 }
 

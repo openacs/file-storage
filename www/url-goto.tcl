@@ -16,6 +16,8 @@ set url [db_string select_url {} -default {}]
 
 if {$url ne ""} {
     ad_returnredirect $url
+    ad_script_abort
+
 } else {
     return -code error [_ file-storage.no_such_URL]
 }

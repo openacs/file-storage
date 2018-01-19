@@ -37,7 +37,7 @@ if { [string is false [permission::permission_p -party_id $user_id -object_id $f
 fs::do_notifications -folder_id $folder_id -filename $url -item_id $item_id -action "new_url"
 
 ad_returnredirect "?folder_id=$folder_id"
-
+ad_script_abort
 
 # Local variables:
 #    mode: tcl

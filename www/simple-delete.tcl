@@ -26,6 +26,7 @@ db_transaction {
 
 
 ad_returnredirect "./?folder_id=$folder_id"
+ad_script_abort
 
 
 # Local variables:
