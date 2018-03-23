@@ -86,7 +86,7 @@ of useful functionality for File Storage with no additional
 development costs. However, it may also constrain the system
 somewhat.</p>
 <p>The Content Repository&#39;s datamodel has been extended to
-include an attibute to store the filesize. Unfortunately, the
+include an attribute to store the filesize. Unfortunately, the
 Content Repository does not automatically do this, since files may
 be stored on the filesystem (the Content Repository thus serving as
 a catalog to keep track of file location and some metadata, but not
