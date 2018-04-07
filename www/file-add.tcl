@@ -103,7 +103,7 @@ if {[parameter::get -parameter AllowTextEdit -default 0]} {
     }
 }
 
-if {([info exists return_url] && $return_url ne "")} {
+if {[info exists return_url] && $return_url ne ""} {
     ad_form -extend -form {
 	{return_url:text(hidden) {value $return_url}}
     }

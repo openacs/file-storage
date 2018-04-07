@@ -70,7 +70,7 @@ set context [fs_context_bar_list -root_folder_id $root_folder_id $folder_id]
 # For now I leave it in as it is.
 
 set project_item_id [application_data_link::get_linked -from_object_id $folder_id -to_object_type "content_item"]
-if {([info exists project_item_id] && $project_item_id ne "")} {
+if {$project_item_id ne ""} {
     set project_url [pm::project::url -project_item_id $project_item_id]
     set project_name [pm::project::name -project_item_id $project_item_id]
 } else {
@@ -78,7 +78,7 @@ if {([info exists project_item_id] && $project_item_id ne "")} {
     # The folder itself was not linked. Let's try the parent folder.
     set parent_folder [content::item::get_parent_folder -item_id $folder_id]
     set project_item_id [application_data_link::get_linked -from_object_id $parent_folder -to_object_type "content_item"]
-    if {([info exists project_item_id] && $project_item_id ne "")} {
+    if {$project_item_id ne ""} {
 	set project_url [pm::project::url -project_item_id $project_item_id]
 	set project_name [pm::project::name -project_item_id $project_item_id]
     } else {
@@ -94,7 +94,7 @@ if {$project_item_id ne "" && ![permission::permission_p -object_id $project_ite
 }
 
 set up_url {}
-if { !${root_folder_p}} {
+if { !$root_folder_p} {
     if {[llength $context] == 1} {
 	set up_url [ad_conn package_url]
 	set up_name [ad_conn instance_name]

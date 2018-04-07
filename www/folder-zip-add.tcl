@@ -64,7 +64,7 @@ ad_form -name file_add -html { enctype multipart/form-data } -export { folder_id
     {upload_file:file {label \#file-storage.Upload_a_file\#} {html "size 30"}}
 }
 
-if {([info exists return_url] && $return_url ne "")} {
+if {[info exists return_url] && $return_url ne ""} {
     ad_form -extend -name file_add -form {
 	{return_url:text(hidden) {value $return_url}}
     }
@@ -222,7 +222,7 @@ ad_form -extend -name file_add -form {} -new_data {
     
 } -after_submit {
     
-    if {([info exists return_url] && $return_url ne "")} {
+    if {[info exists return_url] && $return_url ne ""} {
 	ad_returnredirect $return_url
     } else {
 	ad_returnredirect [export_vars -base ./ {folder_id}]
