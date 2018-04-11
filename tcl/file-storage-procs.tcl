@@ -399,7 +399,7 @@ ad_proc -public fs::get_folder {
     {-name:required}
     {-parent_id:required}
 } {
-    Retrieve the folder_id of a folder given it's name and parent folder.
+    Retrieve the folder_id of a folder given its name and parent folder.
 
     @param name Internal name of the folder, must be unique under a given
     parent_id
