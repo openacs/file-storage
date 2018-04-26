@@ -68,7 +68,7 @@ if { $root_folder_id ne $folder_id } {
     set folder_path ""
 }
 
-set actions [list]
+set actions {}
 
 # for now, invite users to upload, and then they will be asked to
 # login if they are not.
