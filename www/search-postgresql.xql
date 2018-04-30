@@ -3,7 +3,7 @@
 <queryset>
    <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
-<fullquery name="results">      
+<fullquery name="get_ids_and_titles">      
       <querytext>
       
     	select item_id as file_id,
