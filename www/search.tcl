@@ -26,7 +26,7 @@ regsub -all {\*} $query {%} query
 set query "%${query}%"
 regsub -all {%+} $query {%} query
 
-db_multirow results results {}
+db_multirow results get_ids_and_titles {}
 
 # get the (lowercased) original back to feed to the template
 
