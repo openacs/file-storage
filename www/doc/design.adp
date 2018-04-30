@@ -179,9 +179,9 @@ children_have_permission_p [ -user_id <em>user_id</em> ] <em>item_id</em><em>pri
 checks to see if there are any children of the item on which the
 user does not have that privilege.
 <dl>
-<dt><strong>Switches:</strong></dt><dd>
+<dd></dd><dt><strong>Switches:</strong></dt><dd>
 <strong>-user_id</strong> (optional)<br>
-</dd><dt><strong>Parameters:</strong></dt><dd>
+</dd><dd></dd><dt><strong>Parameters:</strong></dt><dd>
 <strong>item_id</strong><br><strong>privilege</strong><br>
 </dd>
 </dl>
@@ -195,82 +195,75 @@ appropriate for item_id. If -final is specified, that string will
 be the last item in the context bar. Otherwise, the name
 corresponding to item_id will be used.
 <dl>
-<dt><strong>Switches:</strong></dt><dd>
+<dd></dd><dt><strong>Switches:</strong></dt><dd>
 <strong>-final</strong> (optional)<br>
-</dd><dt><strong>Parameters:</strong></dt><dd>
+</dd><dd></dd><dt><strong>Parameters:</strong></dt><dd>
 <strong>item_id</strong><br>
 </dd>
 </dl>
 </blockquote>
 </td></tr></table>
 <table width="100%"><tr><td bgcolor="#E4E4E4">
-<h3><a href="/api-doc/proc-view?proc=fs%5ffile%5fdownloader">fs_file_downloader</a></h3><pre>
-fs_file_downloader <em>conn</em><em>key</em>
+<h3><a href="/api-doc/proc-view?proc=fs%5ffile%5fdownloader">fs_file_downloader</a></h3><pre>fs_file_downloader <em>conn</em><em>key</em>
 </pre><blockquote>Sends the requested file to the user. Note that the
 path has the original file name, so the browser will have a
 sensible name if you save the file. Version downloads are supported
 by looking for the form variable version_id. We don&#39;t actually
 check that the version_id matches the path, we just serve it up.
 <dl>
-<dt><strong>Parameters:</strong></dt><dd>
+<dd></dd><dt><strong>Parameters:</strong></dt><dd>
 <strong>conn</strong><br><strong>key</strong><br>
 </dd>
 </dl>
 </blockquote>
 </td></tr></table>
 <table width="100%"><tr><td bgcolor="#E4E4E4">
-<h3><a href="/api-doc/proc-view?proc=fs%5ffile%5fp">fs_file_p</a></h3><pre>
-fs_file_p <em>file_id</em>
+<h3><a href="/api-doc/proc-view?proc=fs%5ffile%5fp">fs_file_p</a></h3><pre>fs_file_p <em>file_id</em>
 </pre><blockquote>Returns 1 if the file_id corresponds to a file in the
 file-storage system. Returns 0 otherwise.
 <dl>
-<dt><strong>Parameters:</strong></dt><dd>
+<dd></dd><dt><strong>Parameters:</strong></dt><dd>
 <strong>file_id</strong><br>
 </dd>
 </dl>
 </blockquote>
 </td></tr></table>
 <table width="100%"><tr><td bgcolor="#E4E4E4">
-<h3><a href="/api-doc/proc-view?proc=fs%5ffolder%5fp">fs_folder_p</a></h3><pre>
-fs_folder_p <em>folder_id</em>
+<h3><a href="/api-doc/proc-view?proc=fs%5ffolder%5fp">fs_folder_p</a></h3><pre>fs_folder_p <em>folder_id</em>
 </pre><blockquote>Returns 1 if the folder_id corresponds to a folder in
 the file-storage system. Returns 0 otherwise.
 <dl>
-<dt><strong>Parameters:</strong></dt><dd>
+<dd></dd><dt><strong>Parameters:</strong></dt><dd>
 <strong>folder_id</strong><br>
 </dd>
 </dl>
 </blockquote>
 </td></tr></table>
 <table width="100%"><tr><td bgcolor="#E4E4E4">
-<h3><a href="/api-doc/proc-view?proc=fs%5fget%5ffolder%5fname">fs_get_folder_name</a></h3><pre>
-fs_get_folder_name <em>folder_id</em>
+<h3><a href="/api-doc/proc-view?proc=fs%5fget%5ffolder%5fname">fs_get_folder_name</a></h3><pre>fs_get_folder_name <em>folder_id</em>
 </pre><blockquote>Returns the name of a folder.
 <dl>
-<dt><strong>Parameters:</strong></dt><dd>
+<dd></dd><dt><strong>Parameters:</strong></dt><dd>
 <strong>folder_id</strong><br>
 </dd>
 </dl>
 </blockquote>
 </td></tr></table>
 <table width="100%"><tr><td bgcolor="#E4E4E4">
-<h3><a href="/api-doc/proc-view?proc=fs%5froot%5ffolder">fs_root_folder</a></h3><pre>
-fs_root_folder [ -package_id <em>package_id</em> ]
-</pre><blockquote>Returns the root folder for the file storage system.
+<h3><a href="/api-doc/proc-view?proc=fs%5froot%5ffolder">fs_root_folder</a></h3><pre>fs_root_folder [ -package_id <em>package_id</em> ]</pre><blockquote>Returns the root folder for the file storage system.
 <dl>
-<dt><strong>Switches:</strong></dt><dd>
+<dd></dd><dt><strong>Switches:</strong></dt><dd>
 <strong>-package_id</strong> (optional)<br>
 </dd>
 </dl>
 </blockquote>
 </td></tr></table>
 <table width="100%"><tr><td bgcolor="#E4E4E4">
-<h3><a href="/api-doc/proc-view?proc=fs%5fversion%5fp">fs_version_p</a></h3><pre>
-fs_version_p <em>version_id</em>
+<h3><a href="/api-doc/proc-view?proc=fs%5fversion%5fp">fs_version_p</a></h3><pre>fs_version_p <em>version_id</em>
 </pre><blockquote>Returns 1 if the version_id corresponds to a version in
 the file-storage system. Returns 0 otherwise.
 <dl>
-<dt><strong>Parameters:</strong></dt><dd>
+<dd></dd><dt><strong>Parameters:</strong></dt><dd>
 <strong>version_id</strong><br>
 </dd>
 </dl>
@@ -387,21 +380,19 @@ Document", for example. We could use a method of determining
 the canonical long form of a MIME type.</li>
 </ul>
 <h3>XI. Authors</h3>
-<ul><li>System creator:<br>
-</li></ul>
-<blockquote>3.x : <a href="mailto:dh\@caltech.edu">David Hill</a>
+<li>System creator:<br><blockquote>3.x : <a href="mailto:dh\@caltech.edu">David Hill</a>
 and <a href="http://aure.com/">Aurelius Prochazka</a><br>
 4.x : <a href="mailto:kevin\@arsdigita.com">Kevin
 Scaldeferri</a>
-</blockquote>
-<ul><li>System owner</li></ul>
+</blockquote><ul>
+<li>System owner
 <blockquote><a href="mailto:kevin\@arsdigita.com">Kevin
 Scaldeferri</a></blockquote>
-<ul><li>Documentation author</li></ul>
+</li><li>Documentation author
 <blockquote><a href="mailto:kevin\@arsdigita.com">Kevin
 Scaldeferri</a></blockquote>
-<h3>XII. Revision History</h3>
-<table cellpadding="2" cellspacing="2" width="90%" bgcolor="#EFEFEF">
+</li>
+</ul><h3>XII. Revision History</h3><table cellpadding="2" cellspacing="2" width="90%" bgcolor="#EFEFEF">
 <tr bgcolor="#E0E0E0">
 <th width="10%">Document Revision #</th><th width="50%">Action Taken, Notes</th><th>When?</th><th>By Whom?</th>
 </tr><tr>
@@ -411,6 +402,5 @@ Scaldeferri</a></blockquote>
 </tr><tr>
 <td>0.2</td><td>Revised after review by Josh</td><td>11/16/2000</td><td>Kevin Scaldeferri, Josh Finkler</td>
 </tr>
-</table>
-<hr>
-<a href="mailto:kevin\@arsdigita.com">kevin\@arsdigita.com</a>
+</table><hr><a href="mailto:kevin\@arsdigita.com">kevin\@arsdigita.com</a>
+</li>
