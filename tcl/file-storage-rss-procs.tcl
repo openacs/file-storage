@@ -77,7 +77,7 @@ ad_proc -private fs::rss::datasource {
     if { $folder_id != $root_folder_id } {
         set url_stub [content::item::get_virtual_path -root_folder_id $root_folder_id -item_id $folder_id]
         set stub_parts [split $url_stub /]
-        set enc_url_stub_list {}
+        set enc_url_stub_list [list]
         foreach part $stub_parts {
             lappend enc_url_stub_list [ns_urlencode $part]
         }
@@ -85,7 +85,7 @@ ad_proc -private fs::rss::datasource {
         append pretty_folder_url ${enc_url_stub}/
     }
 
-    set items {}
+    set items [list]
     set counter 0
 
     if {$descend_p == "f"} {

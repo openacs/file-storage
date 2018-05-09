@@ -1623,7 +1623,7 @@ ad_proc -private fs::category_links {
 	set fs_url [ad_conn package_url]
     }
     set selected_found_p 0
-    set categories {}
+    set categories [list]
     foreach category_id [category::get_mapped_categories $object_id] {
 	if { $category_id eq $selected_category_id } {
 	    set selected_found_p 1
