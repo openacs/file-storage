@@ -575,7 +575,7 @@ ad_proc -public fs::publish_url_to_file_system {
     {-path ""}
     {-file_name ""}
 } {
-    publish a url object to the file system as a Windows shortcut
+    publish a URL object to the file system as a Windows shortcut
     (which at least KDE also knows how to handle)
 } {
     if {$path eq ""} {
