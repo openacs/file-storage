@@ -170,9 +170,9 @@ ad_proc file_storage::twt::create_url_in_folder { url_title url url_description 
     if { [string match  "*\?folder_id*" $response_url] } {
 
         if {[catch {tclwebtest::link find $url_title} errmsg]} {
-            aa_error "file_storage::twt::create_url_in_folder $errmsg : Didn't create an URL in a folder"
+            aa_error "file_storage::twt::create_url_in_folder $errmsg : Didn't create a URL in a folder"
         } else {
-            aa_log "an URL created in a folder"
+            aa_log "a URL created in a folder"
             set response 1
         }
 
@@ -368,9 +368,9 @@ ad_proc file_storage::twt::create_url { url_title url url_description }  {
     if { [string match  "*\?folder*id*" $response_url] } {
 	
         if {[catch {tclwebtest::link find $url_title} errmsg]} {
-            aa_error "file_storage::twt::create_url $errmsg : Didn't create an URL"
+            aa_error "file_storage::twt::create_url $errmsg : Didn't create a URL"
         } else {
-            aa_log "an URL created"
+            aa_log "a URL created"
             set response 1
         }
         
@@ -405,9 +405,9 @@ ad_proc file_storage::twt::edit_url {url_title url url_description }  {
     if { [string match  "*/dotlrn/file-storage/\?folder*id*" $response_url] } {
 
         if {[catch {tclwebtest::link find $url_title} errmsg]} {
-            aa_error "file_storage::twt::edit_url $errmsg : Didn't edit an URL"
+            aa_error "file_storage::twt::edit_url $errmsg : Didn't edit a URL"
         } else {
-            aa_log "an URL edited"
+            aa_log "a URL edited"
             set response 1
         }
 
@@ -432,9 +432,9 @@ ad_proc file_storage::twt::delete_url { url_title }  {
     if { [string match  "*/dotlrn/file-storage/\?folder*id*" $response_url] } {
 
         if {![catch {tclwebtest::link find $url_title} errmsg]} {
-            aa_error "file_storage::twt::delete_url $errmsg : Didn't delete an URL"
+            aa_error "file_storage::twt::delete_url $errmsg : Didn't delete a URL"
         } else {
-            aa_log "an URL deleted"
+            aa_log "a URL deleted"
             set response 1
         }
 

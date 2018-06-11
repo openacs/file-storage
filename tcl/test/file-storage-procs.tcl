@@ -168,13 +168,13 @@ aa_register_case -cats {web smoke} -libraries tclwebtest fs_create_url_in_folder
 
 	file_storage::twt::call_fs_page	
 	
-	# Create an URL in a folder
+	# Create a URL in a folder
         set url_title [ad_generate_random_string]
         set url "e-lane.org"
         set url_description [ad_generate_random_string]
 	set response [file_storage::twt::create_url_in_folder $url_title $url $url_description]
 	
-	aa_display_result -response $response -explanation {for creating an URL in a folder}
+	aa_display_result -response $response -explanation {for creating a URL in a folder}
 
         twt::user::logout
     }
@@ -196,7 +196,7 @@ aa_register_case -cats {web smoke} -libraries tclwebtest fs_create_url {
 
 	file_storage::twt::call_fs_page	
 	
-	# Create an URL
+	# Create a URL
         set url_title [ad_generate_random_string]
         set url "e-lane.org"
         set url_description [ad_generate_random_string]
