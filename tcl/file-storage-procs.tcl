@@ -378,8 +378,10 @@ ad_proc -public fs::get_file_system_safe_object_name {
 ad_proc -deprecated -public fs::remove_special_file_system_characters {
     {-string:required}
 } {
-    remove unsafe file system characters. useful if you want to use $string
+    Remove unsafe file system characters. Useful if you want to use $string
     as the name of an object to write to disk.
+
+    @see ad_sanitize_filename
 } {
     regsub -all {[<>:\"|/@\#%&+\\]} $string {_} string
     return [string trim $string]
