@@ -101,7 +101,7 @@ if {$target_window_name eq ""} {
     set target_attr "target=\"$target_window_name\""
 }
 
-if {$delete_p} {
+if {$delete_p && $root_folder_id ne $folder_id} {
     lappend actions \
 	"#file-storage.Delete_this_folder#" \
 	[export_vars -base "${fs_url}folder-delete" {folder_id}] \
