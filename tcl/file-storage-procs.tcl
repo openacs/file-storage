@@ -174,8 +174,8 @@ ad_proc fs_context_bar_list {
 namespace eval fs {}
 
 ad_proc -private fs::after_mount {
-    -package_id
-    -node_id
+    -package_id:required
+    -node_id:required
 } {
     Create root folder for package instance
     via Tcl callback.
@@ -186,8 +186,8 @@ ad_proc -private fs::after_mount {
 }
 
 ad_proc -private fs::before_unmount {
-    -package_id
-    -node_id
+    -package_id:required
+    -node_id:required
 } {
     Create root folder for package instance
     via Tcl callback.
@@ -244,7 +244,7 @@ ad_proc -public fs::get_root_folder {
 }
 
 ad_proc -public fs::get_parent {
-    -item_id
+    -item_id:required
 } {
     Get the parent of a given item.
 } {
@@ -728,7 +728,7 @@ ad_proc -public fs::get_archive_extension {} {
 }
 
 ad_proc -public fs::get_item_id {
-    -name
+    -name:required
     {-folder_id ""}
 } {
     Get the item_id of a file
@@ -741,9 +741,9 @@ ad_proc -public fs::get_item_id {
 }
 
 ad_proc -public fs::add_file {
-    -name
-    -parent_id
-    -package_id
+    -name:required
+    -parent_id:required
+    -package_id:required
     {-item_id ""}
     {-creation_user ""}
     {-creation_ip ""}
@@ -865,8 +865,8 @@ ad_proc -public fs::add_file {
 
 ad_proc -public fs::add_created_file {
     {-name ""}
-    -parent_id
-    -package_id
+    -parent_id:required
+    -package_id:required
     {-item_id ""}
     {-mime_type ""}
     {-creation_user ""}
@@ -939,10 +939,10 @@ ad_proc -public fs::add_created_file {
 }
 
 ad_proc fs::add_created_version {
-    -name
-    -content_body
-    -mime_type
-    -item_id
+    -name:required
+    -content_body:required
+    -mime_type:required
+    -item_id:required
     {-creation_user ""}
     {-creation_ip ""}
     {-title ""}
@@ -1031,9 +1031,9 @@ ad_proc fs::add_created_version {
 
 
 ad_proc fs::add_version {
-    -name
-    -tmp_filename
-    -package_id
+    -name:required
+    -tmp_filename:required
+    -package_id:required
     {-item_id ""}
     {-creation_user ""}
     {-creation_ip ""}
@@ -1071,7 +1071,7 @@ ad_proc fs::add_version {
 			 -image_type "file_storage_object" \
 			 -title $title \
 			 -description $description \
-             -package_id $package_id \
+                         -package_id $package_id \
 			 $parent_id \
 			 $tmp_filename \
 			 $tmp_size \
@@ -1104,7 +1104,7 @@ ad_proc fs::add_version {
 
 # modified 2006/08/11 (nfl) delete all symlinks
 ad_proc fs::delete_file {
-    -item_id
+    -item_id:required
     {-parent_id ""}
     -no_callback:boolean
 } {
@@ -1138,7 +1138,7 @@ ad_proc fs::delete_file {
 }
 
 ad_proc fs::delete_folder {
-    -folder_id
+    -folder_id:required
     {-cascade_p "t"}
     {-parent_id ""}
     -no_callback:boolean
@@ -1165,8 +1165,8 @@ ad_proc fs::delete_folder {
 }
 
 ad_proc fs::delete_version {
-    -item_id
-    -version_id
+    -item_id:required
+    -version_id:required
 } {
     Deletes a revision. If it was the last revision, it deletes
     the file as well.
@@ -1180,7 +1180,7 @@ ad_proc fs::delete_version {
 }
 
 ad_proc fs::webdav_url {
-    -item_id
+    -item_id:required
     {-root_folder_id ""}
     {-package_id ""}
 } {
@@ -1232,7 +1232,7 @@ ad_proc -public fs::do_notifications {
     {-filename:required}
     {-item_id:required}
     {-package_id ""}
-    -action
+    {-action:required}
 } {
     Send notifications for file-storage operations.
 
@@ -1448,7 +1448,7 @@ ad_proc -public fs::get_folder_package_and_root folder_id {
 }
 
 ad_proc -public fs::get_file_package_id {
-    -file_id
+    -file_id:required
 } {
     Returns the package_id for a passed-in file_id. This is useful when
     using symlinks to files whose real root_folder_id is not the root_folder_id
@@ -1468,7 +1468,7 @@ ad_proc -public fs::get_file_package_id {
 namespace eval fs::notification {}
 
 ad_proc -public fs::notification::get_url {
-    object_id
+    object_id:required
 } {
     returns a full url to the object_id.
     handles folders
