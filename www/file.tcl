@@ -34,7 +34,26 @@ set context [fs_context_bar_list $file_id]
 
 set show_administer_permissions_link_p [parameter::get -parameter "ShowAdministerPermissionsLinkP"]
 set root_folder_id [fs::get_root_folder]
-db_1row file_info ""
+db_1row file_info {
+        select (select creation_user from acs_objects
+                 where object_id = f.object_id) as creation_user,
+               name as title,
+               parent_id,
+               coalesce(url,file_upload_name) as name,
+               live_revision
+	from   fs_objects f
+	where  f.object_id = :file_id
+}
+
+set write_p  [permission::permission_p -party_id $user_id -object_id $file_id -privilege "write"]
+set delete_p [permission::permission_p -party_id $user_id -object_id $file_id -privilege "delete"]
+set admin_p  [permission::permission_p -party_id $user_id -object_id $file_id -privilege "admin"]
+
+set owner [acs_user::get_element \
+               -user_id $creation_user -element name]
+
+set file_url [content::item::get_path -item_id $file_id \
+                  -root_folder_id $root_folder_id]
 
 # get folder id so we can implement a back link
 set folder_id [content::item::get_parent_folder -item_id $file_id]
@@ -54,12 +73,7 @@ set show_versions_url [export_vars -base file {file_id {show_all_versions_p $not
 set return_url [export_vars -base [ad_conn url] file_id]
 
 set categories_p [parameter::get -parameter CategoriesP -package_id [ad_conn package_id] -default 0]
-if { $categories_p } {
-    set rename_name [_ file-storage.Edit_File]
-} else {
-    set rename_name [_ file-storage.Rename_File]
-}
-
+set rename_name [expr { $categories_p ? [_ file-storage.Edit_File] : [_ file-storage.Rename_File]}]
 
 set actions {}
 
