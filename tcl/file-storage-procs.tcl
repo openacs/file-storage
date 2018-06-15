@@ -990,7 +990,7 @@ ad_proc fs::add_created_version {
             # we need to use lob. the only want ot get a lob into the
             # database if to pass it as a file
             set revision_id [cr_import_content \
-             -item_id $item_id \
+                         -item_id $item_id \
                          -storage_type  \
                          -creation_user $creation_user \
                          -creation_ip $creation_ip \
@@ -998,7 +998,7 @@ ad_proc fs::add_created_version {
                          -image_type "file_storage_object" \
                          -title $title \
                          -description $description \
-             -package_id $package_id \
+                         -package_id $package_id \
                          $parent_id \
                          $tmp_filename \
                          $tmp_size \
