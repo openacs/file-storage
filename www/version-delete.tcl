@@ -24,14 +24,11 @@ ad_page_contract {
 
 permission::require_permission -object_id $version_id -privilege delete
 
-db_1row item_select {
-    select item_id
-    from   cr_revisions
-    where  revision_id = :version_id
-}
-
-db_1row version_name {
-    select i.name as title,r.title as version_name 
+db_1row version_info {
+    select i.item_id,
+           i.parent_id,
+           i.name as title,    
+           r.title as version_name
     from cr_items i,cr_revisions r
     where i.item_id = r.item_id
     and revision_id = :version_id
@@ -46,23 +43,17 @@ ad_form -export version_id -cancel_url $file_url -form {
     {delete_message:text(inform) {label $delete_message}}
 } -on_submit {
 
-    set parent_id [db_exec_plsql delete_version {}]
-
-    if {$parent_id > 0} {
-
-        # Delete the item if there is no more revision. We do this here only because of PostgreSQL's RI bug
-        db_exec_plsql delete_file {}
-        
-        fs::do_notifications -folder_id $parent_id -filename $version_name -item_id $item_id -action "delete_file"
-
-        # Redirect to the folder, instead of the latest revision (which does not exist anymore)
-        ad_returnredirect [export_vars -base index {{folder_id $parent_id}}]
-        
-    } else {
-
-        # Ok, we don't have to do anything fancy, just redirect to the last revision of the file
-        ad_returnredirect $file_url
-    }
+    set parent_id [fs::delete_version \
+                       -item_id $item_id \
+                       -version_id $version_id]
+    # parent_id > 0 means this was last revision left, therefore file
+    # was deleted as well. Return to the parent instead than to the
+    # non-existing file.
+    set return_url [expr {$parent_id == 0 ?
+                          $file_url :
+                          [export_vars -base index {{folder_id $parent_id}}]}]
+    
+    ad_returnredirect $return_url
     ad_script_abort
 }
 

@@ -43,15 +43,10 @@ ad_proc fs_folder_p {
     Returns 1 if the folder_id corresponds to a folder in the file-storage
     system.  Returns 0 otherwise.
 } {
-    if {[db_string object_type {
-        select object_type
-        from   acs_objects
-        where  object_id = :folder_id
-    } -default ""] eq "content_folder"} {
-        return 1
-    } else {
-        return 0
-    }
+    return [db_0or1row is_folder {
+        select 1 from acs_objects
+        where object_id = :folder_id
+        and object_type = 'content_folder'}]
 }
 
 ad_proc fs_file_p {
@@ -60,15 +55,10 @@ ad_proc fs_file_p {
     Returns 1 if the file_id corresponds to a file in the file-storage
     system.  Returns 0 otherwise.
 } {
-    if {[db_string object_type {
-        select object_type
-        from   acs_objects
-        where  object_id = :file_id
-    } -default ""] eq "content_item"} {
-        return 1
-    } else {
-        return 0
-    }
+    return [db_0or1row is_file {
+        select 1 from acs_objects
+        where object_id = :file_id
+        and object_type = 'content_item'}]
 }
 
 ad_proc fs_version_p {
@@ -77,15 +67,10 @@ ad_proc fs_version_p {
     Returns 1 if the version_id corresponds to a version in the file-storage
     system.  Returns 0 otherwise.
 } {
-    if {[db_string object_type {
-        select object_type
-        from   acs_objects
-        where  object_id = :version_id
-    } -default ""] eq "file_storage_object"} {
-        return 1
-    } else {
-        return 0
-    }
+    return [db_0or1row is_version {
+        select 1 from acs_objects
+        where object_id = :version_id
+        and object_type = 'file_storage_object'}]
 }
 
 #
@@ -155,9 +140,7 @@ ad_proc fs_context_bar_list {
         set start_id [db_string parent_id {
             select parent_id from cr_items where item_id = :item_id
         }]
-        set final [db_exec_plsql title "begin
-        :1 := file_storage.get_title(:item_id);
-    end;"]
+        set final [db_exec_plsql title {}]
     } else {
         set start_id $item_id
     }
@@ -165,7 +148,7 @@ ad_proc fs_context_bar_list {
     set extra_vars [concat &$extra_vars]
 
     set context_bar [db_list_of_lists context_bar {}]
-    if {!($item_id == $root_folder_id)} {
+    if {$item_id != $root_folder_id} {
         lappend context_bar $final
     }
     return $context_bar
@@ -734,10 +717,12 @@ ad_proc -public fs::get_item_id {
     Get the item_id of a file
 } {
     if {$folder_id eq ""} {
-        set package_id [ad_conn package_id]
-        set folder_id [fs_get_root_folder -package_id $package_id]
+        set folder_id [fs_get_root_folder -package_id [ad_conn package_id]]
     }
-    return [db_exec_plsql get_item_id ""]
+    return [content::item::get_id \
+                -item_path      $name \
+                -root_folder_id $folder_id \
+                -resolve_index "f"]
 }
 
 ad_proc -public fs::add_file {
@@ -1008,7 +993,15 @@ ad_proc fs::add_created_version {
                 db_dml set_lob_size ""
         }
         text {
-            set revision_id [db_exec_plsql new_text_revision {}]
+            set revision_id [content::revision::new \
+                                 -item_id $item_id \
+                                 -title $title \
+                                 -description $description \
+                                 -content $content_body \
+                                 -mime_type $mime_type \
+                                 -creation_user $creation_user \
+                                 -creation_ip $creation_ip \
+                                 -package_id $package_id]
         }
     }
 
@@ -1132,9 +1125,13 @@ ad_proc fs::delete_file {
         }
     }
 
-    db_exec_plsql delete_file ""
+    fs::do_notifications \
+        -folder_id $parent_id \
+        -filename $version_name \
+        -item_id $item_id \
+        -action "delete_file"
 
-    fs::do_notifications -folder_id $parent_id -filename $version_name -item_id $item_id -action "delete_file"
+    db_exec_plsql delete_file {}
 }
 
 ad_proc fs::delete_folder {
@@ -1157,11 +1154,16 @@ ad_proc fs::delete_folder {
     }
 
     set version_name [get_object_name -object_id $folder_id]
-    db_exec_plsql delete_folder {}
 
     if { !$no_notifications_p } {
-        fs::do_notifications -folder_id $parent_id -filename $version_name -item_id $folder_id -action "delete_folder"
+        fs::do_notifications \
+            -folder_id $parent_id \
+            -filename $version_name \
+            -item_id $folder_id \
+            -action "delete_folder"
     }
+    
+    db_exec_plsql delete_folder {}
 }
 
 ad_proc fs::delete_version {
@@ -1247,34 +1249,44 @@ ad_proc -public fs::do_notifications {
         set package_id [lindex $package_and_root 0]
     }
 
-    if {$action eq "new_file"} {
-        set action_type "[_ file-storage.New_File_Uploaded]"
-    } elseif {$action eq "new_url"} {
-        set action_type "[_ file-storage.New_URL_Uploaded]"
-    } elseif {$action eq "new_version"} {
-        set action_type "[_ file-storage.lt_New_version_of_file_u]"
-    } elseif {$action eq "delete_file"} {
-        set action_type "[_ file-storage.File_deleted]"
-    } elseif {$action eq "delete_url"} {
-        set action_type "[_ file-storage.URL_deleted]"
-    } elseif {$action eq "delete_folder"} {
-        set action_type "[_ file-storage.Folder_deleted]"
-    } else {
-        error "Unknown file-storage notification action: $action"
+    switch $action {
+        "new_file" {
+            set action_type "[_ file-storage.New_File_Uploaded]"
+        }
+        "new_url" {
+            set action_type "[_ file-storage.New_URL_Uploaded]"
+        }
+        "new_version" {
+            set action_type "[_ file-storage.lt_New_version_of_file_u]"
+        }
+        "delete_file" {
+            set action_type "[_ file-storage.File_deleted]"
+        }
+        "delete_url" {
+            set action_type "[_ file-storage.URL_deleted]"
+        }
+        "delete_folder" {
+            set action_type "[_ file-storage.Folder_deleted]"
+        }
+        default {
+            error "Unknown file-storage notification action: $action"
+        }
     }
 
     set url "[ad_url]"
     set new_content ""
-    db_0or1row get_owner_name {}
+    set creation_user [acs_object::get_element \
+                           -object_id $item_id \
+                           -element creation_user]
+    set owner [acs_user::get_element \
+                   -user_id $creation_user \
+                   -element name]
 
-    if {$action eq "new_file" || $action eq "new_url" || $action eq "new_version"} {
-
-
+    if {$action in {"new_file" "new_url" "new_version"}} {
+        
         if {$action eq "new_version"} {
             set sql "select description as description from cr_revisions
                            where cr_revisions.revision_id = :item_id"
-        } elseif {[string match "*folder" $action]} {
-            set sql "select description from cr_folders where folder_id=:item_id"
         } else {
             set sql "select description as description from cr_revisions
                            where cr_revisions.item_id = :item_id"
@@ -1283,7 +1295,12 @@ ad_proc -public fs::do_notifications {
         db_0or1row description $sql
 
     }
-    db_1row path1 { }
+    set root_folder_package_id [db_string get_package_id {
+        select package_id from fs_root_folders
+        where folder_id = :root_folder
+    }]
+    set path1 [site_node::get_url_from_object_id \
+                   -object_id $root_folder_package_id]
 
     # Set email message body - "text only" for now
     set text_version ""
