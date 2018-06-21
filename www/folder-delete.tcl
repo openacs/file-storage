@@ -37,7 +37,7 @@ permission::require_permission -object_id $folder_id -privilege delete
 # contents at all.)
 set blocked_p [expr {![children_have_permission_p $folder_id delete]}]
 
-set folder_name [db_string folder_name {}]
+set folder_name [lang::util::localize [db_string folder_name {}]]
 set child_count [db_string child_count {}]
 
 # TODO add child_count to message key
