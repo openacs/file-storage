@@ -472,10 +472,10 @@ ad_proc -public fs::get_folder_contents_count {
     @param folder_id The folder for which to retrieve contents
 
     @param user_id DEPRECATED since commit 2002-02-22 by Yonatan
-                   Feldman (yon@milliped.com) this parameter doens't
+                   Feldman (yon@milliped.com) this parameter doesn't
                    have any effect. It was used to count only items
                    where user had read permission, but was considered
-                   unscalable.    
+                   unscalable.
 } {
     if {$folder_id eq ""} {
         set folder_id [get_root_folder -package_id [ad_conn package_id]]
