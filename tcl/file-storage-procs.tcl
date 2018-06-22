@@ -470,15 +470,19 @@ ad_proc -public fs::get_folder_contents_count {
     Retrieve the count of contents of the specified folder.
 
     @param folder_id The folder for which to retrieve contents
-    @param user_id The viewer of the contents (to make sure they have
-                                               permission)
+
+    @param user_id DEPRECATED since commit 2002-02-22 by Yonatan
+                   Feldman (yon@milliped.com) this parameter doens't
+                   have any effect. It was used to count only items
+                   where user had read permission, but was considered
+                   unscalable.    
 } {
     if {$folder_id eq ""} {
         set folder_id [get_root_folder -package_id [ad_conn package_id]]
     }
 
-    if {$user_id eq ""} {
-        set user_id [acs_magic_object the_public]
+    if {$user_id ne ""} {
+        ns_log warning "fs::get_folder_contents_count: specified -user_id doesn't have any effect on proc result"
     }
 
     return [db_string select_folder_contents_count {}]
