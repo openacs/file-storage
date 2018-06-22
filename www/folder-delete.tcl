@@ -37,12 +37,10 @@ permission::require_permission -object_id $folder_id -privilege delete
 # contents at all.)
 set blocked_p [expr {![children_have_permission_p $folder_id delete]}]
 
-set folder_name [lang::util::localize [db_string folder_name {}]]
-set child_count [db_string child_count {}]
+# Message lookup uses variables folder_name and child_count
+set folder_name [lang::util::localize [fs_get_folder_name $folder_id]]
+set child_count [fs::get_folder_contents_count -folder_id $folder_id]
 
-# TODO add child_count to message key
-
-# Message lookup uses variable folder_name
 set page_title [_ file-storage.folder_delete_page_title]
 set context [fs_context_bar_list -final "[_ file-storage.Delete]" $folder_id]
     
@@ -59,10 +57,7 @@ ad_form -name "folder-delete" \
     } -on_request {
     } -on_submit {
         # they have confirmed that they want to delete the folder
-        set parent_id [db_string parent_id {}]
-        fs::delete_folder \
-            -parent_id $parent_id \
-            -folder_id $folder_id
+        fs::delete_folder -folder_id $folder_id
 
         ad_returnredirect "index?folder_id=$parent_id"
         ad_script_abort
