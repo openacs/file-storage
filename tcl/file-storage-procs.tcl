@@ -1282,9 +1282,7 @@ ad_proc -public fs::do_notifications {
     set creation_user [acs_object::get_element \
                            -object_id $item_id \
                            -element creation_user]
-    set owner [acs_user::get_element \
-                   -user_id $creation_user \
-                   -element name]
+    set owner [person::name -person_id $creation_user]
 
     if {$action in {"new_file" "new_url" "new_version"}} {
         

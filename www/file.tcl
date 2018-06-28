@@ -49,8 +49,7 @@ set write_p  [permission::permission_p -party_id $user_id -object_id $file_id -p
 set delete_p [permission::permission_p -party_id $user_id -object_id $file_id -privilege "delete"]
 set admin_p  [permission::permission_p -party_id $user_id -object_id $file_id -privilege "admin"]
 
-set owner [acs_user::get_element \
-               -user_id $creation_user -element name]
+set owner [person::name -person_id $creation_user]
 
 set file_url [content::item::get_path -item_id $file_id \
                   -root_folder_id $root_folder_id]
