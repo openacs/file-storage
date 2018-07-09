@@ -15,10 +15,12 @@ aa_register_case \
 	aa_run_with_teardown \
         -rollback \
         -test_code {
+
+            set package_id [subsite::main_site_id]
             
             # Create folder
             set folder_id [fs::new_root_folder \
-                               -package_id [ad_conn package_id] \
+                               -package_id $package_id \
                                -pretty_name "Foobar" \
                                -description "Foobar"]
 	    
