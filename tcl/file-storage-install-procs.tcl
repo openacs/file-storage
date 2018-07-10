@@ -171,44 +171,6 @@ ad_proc -private ::install::xml::action::file-storage-folder { node } {
     }
 }
 
-ad_proc -public -callback fs::folder_new {
-    {-package_id:required}
-    {-folder_id:required}
-} {
-}
-
-ad_proc -public -callback fs::folder_edit {
-    {-package_id:required}
-    {-folder_id:required}
-} {
-}
-
-ad_proc -public -callback fs::folder_delete {
-    {-package_id:required}
-    {-folder_id:required}
-} {
-}
-
-ad_proc -public -callback fs::file_new {
-    {-package_id:required}
-    {-file_id:required}
-} {
-}
-
-ad_proc -public -callback fs::file_edit {
-    {-package_id:required}
-    {-file_id:required}
-} {
-}
-
-ad_proc -public -callback fs::file_delete {
-    {-package_id:required}
-    {-file_id:required}
-} {
-}
-
-
-
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
