@@ -19,7 +19,8 @@ ad_proc -public -callback fs::folder_chunk::add_bulk_actions {
     {-folder_id:required}
     {-var_export_list:required}
 } {
-}
+    Insert additional bulk_action in folder-chunk UI list template
+} -
 
 ad_proc -public -callback fs::before_file_new {
     {-package_id:required}
@@ -27,7 +28,7 @@ ad_proc -public -callback fs::before_file_new {
     {-cancel_url:required}
     {-return_url:required}
 } {
-    this can be used to check for confirmation before upload to folder
+    This can be used to check for confirmation before upload to folder
 } -
 
 ad_proc -public -callback fs::file_revision_new {
