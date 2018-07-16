@@ -20,7 +20,7 @@ if {![info exists folder_id] || $folder_id eq ""} {
 if {![info exists allow_bulk_actions] || $allow_bulk_actions eq ""} {
     set allow_bulk_actions "0"
 }
-if { ![info exists category_id] || $category_id eq "" } {
+if { ![info exists category_id] } {
     set category_id ""
 }
 set viewing_user_id [ad_conn user_id]
@@ -271,7 +271,7 @@ if {$orderby eq ""} {
     set orderby " order by fs_objects.sort_key, fs_objects.name asc"
 }
 
-if { $categories_p && ([info exists category_id] && $category_id ne "") } {
+if { $categories_p && [info exists category_id] && $category_id ne "" } {
     set categories_limitation [db_map categories_limitation]
 } else {
     set categories_limitation {}
@@ -341,13 +341,25 @@ db_multirow \
             
         }
         symlink {
-            # save the original object_id to set it later back (see below)
-            set original_object_id $object_id
             set properties_link [_ file-storage.properties]
             set target_object_id [content::symlink::resolve -item_id $object_id]
-            db_1row file_info {select * from fs_objects where object_id = :target_object_id}
-            # because of the side effect that SQL sets Tcl variables, set object_id back to the original value
-            set object_id $original_object_id
+            db_1row file_info {
+                select live_revision,
+                       type,
+                       content_size,
+                       name,
+                       file_upload_name,
+                       title,
+                       mime_type,
+                       last_modified,
+                       url,
+                       parent_id,
+                       key,
+                       sort_key,
+                       pretty_type
+                 from fs_objects
+                where object_id = :target_object_id
+            }
             if {$type eq "folder"} {
                 set content_size_pretty [lc_numeric $content_size]
                 append content_size_pretty "&nbsp;[_ file-storage.items]"
@@ -426,7 +438,6 @@ if { $expose_rss_p } {
 if {$content_size_total > 0} {
     set compressed_url [export_vars -base ${fs_url}download-zip -url {{object_id $folder_id}}]
 }
-ad_return_template
 
 # Local variables:
 #    mode: tcl
