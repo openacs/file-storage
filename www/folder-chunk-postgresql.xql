@@ -28,7 +28,7 @@
 	    and   acs_permission__permission_p(fs_objects.object_id, :viewing_user_id, 'read')
 
             $categories_limitation
-	    [template::list::orderby_clause -name contents -orderby]
+            $orderby
 
     </querytext>
   </fullquery>
