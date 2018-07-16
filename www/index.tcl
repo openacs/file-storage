@@ -38,11 +38,8 @@ if {$folder_id == $root_folder_id} {
 # set templating datasources
 set folder_name [fs_get_folder_name $folder_id]
 
-set user_id [ad_conn user_id]
-#permission::require_permission \
-    -party_id $user_id \
-    -object_id $folder_id \
-    -privilege "read"
+# set user_id [ad_conn user_id]
+# permission::require_permission -party_id $user_id -object_id $folder_id -privilege "read"
 
 set write_p [permission::permission_p -object_id $folder_id -privilege write]
 set admin_p [permission::permission_p -object_id $folder_id -privilege admin]
@@ -60,7 +57,7 @@ if {!$delete_p} {
 set package_id [ad_conn package_id]
 set show_administer_permissions_link_p [parameter::get -package_id $package_id -parameter "ShowAdministerPermissionsLinkP" -default 1]
 
-set n_contents [fs::get_folder_contents_count -folder_id $folder_id -user_id $user_id]
+set n_contents [fs::get_folder_contents_count -folder_id $folder_id]
 
 set folder_url [export_vars -base [ad_conn url] {folder_id}]
 set context [fs_context_bar_list -root_folder_id $root_folder_id $folder_id]
