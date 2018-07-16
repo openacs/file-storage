@@ -202,7 +202,7 @@ if {$allow_bulk_actions} {
     }]
     set bulk_copy_p [permission::permission_p -object_id $folder_id -privilege write]
 
-    
+
     # add button only when available folders for move exist.  We
     # lazily check for deletion, as a proper check of a suitable
     # destination for moving would be too much effort
@@ -218,7 +218,7 @@ if {$allow_bulk_actions} {
             [_ file-storage.Copy] ${fs_url}copy [_ file-storage.lt_Copy_Checked_Items_to]
     }
 
-    if {$bulk_delete_p} {        
+    if {$bulk_delete_p} {
         lappend bulk_actions \
             [_ file-storage.Delete] ${fs_url}delete [_ file-storage.Delete_Checked_Items]
     }
@@ -233,9 +233,9 @@ if {$allow_bulk_actions} {
 }
 
 
-if {$format eq "list"} { 
+if {$format eq "list"} {
     set actions {}
-} 
+}
 
 template::list::create \
     -name contents_${folder_id} \
@@ -254,7 +254,7 @@ template::list::create \
             label List
             layout list
             template {
-                <listelement name="short_name"> - <listelement name="last_modified_pretty">  
+                <listelement name="short_name"> - <listelement name="last_modified_pretty">
             }
         }
     } \
@@ -278,12 +278,12 @@ if { $categories_p && [info exists category_id] && $category_id ne "" } {
 }
 
 db_multirow \
-    -extend {label alt_icon icon last_modified_pretty content_size_pretty 
-	properties_link properties_url download_link download_url 
+    -extend {label alt_icon icon last_modified_pretty content_size_pretty
+	properties_link properties_url download_link download_url
 	new_version_link new_version_url views categories
     } contents select_folder_contents {} {
     set last_modified_ansi [lc_time_system_to_conn $last_modified_ansi]
-    
+
     set last_modified_pretty [lc_time_fmt $last_modified_ansi "%x %X"]
     if {$type eq "folder"} {
         set content_size_pretty [lc_numeric $content_size]
@@ -306,7 +306,7 @@ db_multirow \
 
     set views ""
     if {[apm_package_installed_p views]} {
-        array set views_arr [views::get -object_id $object_id] 
+        array set views_arr [views::get -object_id $object_id]
         if {$views_arr(views_count) ne ""} {
             set views " $views_arr(views_count) / $views_arr(unique_views)"
         }
@@ -338,7 +338,7 @@ db_multirow \
             set file_url ${url}
             set download_url {}
             set download_link {}
-            
+
         }
         symlink {
             set properties_link [_ file-storage.properties]
@@ -370,7 +370,7 @@ db_multirow \
                 } else {
                     set content_size_pretty "[lc_numeric [expr {$content_size / 1024 }]]&nbsp;[_ file-storage.kb]"
                 }
-                
+
             }
             set properties_url [export_vars -base ${fs_url}file {{file_id $object_id}}]
             set new_version_link [_ acs-kernel.common_New]
