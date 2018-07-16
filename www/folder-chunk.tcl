@@ -236,7 +236,7 @@ if {$format eq "list"} {
 }
 
 template::list::create \
-    -name contents \
+    -name contents_${folder_id} \
     -multirow contents \
     -key object_id \
     -actions $actions \
@@ -281,6 +281,8 @@ template::list::create \
             orderby_asc {last_modified_ansi asc}
         }
     }
+
+set orderby [template::list::orderby_clause -name contents_${folder_id} -orderby]
 
 set categories_limitation [expr {$categories_p && $category_id ne "" ?
                                  [db_map categories_limitation] : ""}]

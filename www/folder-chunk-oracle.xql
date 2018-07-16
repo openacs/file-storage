@@ -33,7 +33,7 @@
                    where m.object_id = fs_objects.object_id
                      and m.party_id = :viewing_user_id
                      and m.privilege = 'read')
-            [template::list::orderby_clause -name contents -orderby]
+            $orderby
 
     </querytext>
   </fullquery>

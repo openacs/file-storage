@@ -4,7 +4,7 @@
   </if>
 </if>
 
-<listtemplate name="contents"></listtemplate>
+<listtemplate name="contents_@folder_id;literal@"></listtemplate>
 
 <if @content_size_total@ gt 0>
   <p>
