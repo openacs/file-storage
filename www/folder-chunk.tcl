@@ -235,6 +235,9 @@ if {$format eq "list"} {
     set actions {}
 }
 
+# template::list creates a lot of variables in the global templating
+# namespace and therefore needs to be named uniquely in order to
+# include multiple instances of this script in the same page.
 template::list::create \
     -name contents_${folder_id} \
     -multirow contents \
@@ -286,8 +289,6 @@ set orderby [template::list::orderby_clause -name contents_${folder_id} -orderby
 
 set categories_limitation [expr {$categories_p && $category_id ne "" ?
                                  [db_map categories_limitation] : ""}]
-
-#"test [template::list::orderby_clause -name contents -orderby]"
 
 db_multirow -extend {
     label
