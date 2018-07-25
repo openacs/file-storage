@@ -1409,14 +1409,13 @@ ad_proc -public fs::get_object_info {
     -file_id:required
     -revision_id
 } {
-    returns an array containing the fs object info
+    Returns an array containing the fs object info.
 
     @author Deds Castillo (deds@i-manila.com.ph)
     @creation-date 2004-07-03
 
-    @param item_id
-
-    @param revision_id
+    @param file_id Id of the file
+    @param revision_id Id of the revision
 
     @return
 
