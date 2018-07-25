@@ -1166,7 +1166,7 @@ ad_proc fs::delete_folder {
             -item_id $folder_id \
             -action "delete_folder"
     }
-    
+
     db_exec_plsql delete_folder {}
 }
 
@@ -1285,7 +1285,7 @@ ad_proc -public fs::do_notifications {
     set owner [person::name -person_id $creation_user]
 
     if {$action in {"new_file" "new_url" "new_version"}} {
-        
+
         if {$action eq "new_version"} {
             set sql "select description as description from cr_revisions
                            where cr_revisions.revision_id = :item_id"
