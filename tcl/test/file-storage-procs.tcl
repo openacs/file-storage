@@ -8,6 +8,7 @@ ad_library {
 
 aa_register_case \
     -cats {api db smoke} \
+    -procs {fs::new_root_folder} \
     fs_new_root_folder {
 	Test the fs::new_root_folder proc.
     } {    
@@ -32,7 +33,11 @@ aa_register_case \
         }
     }
 
-aa_register_case -cats {web smoke} -libraries tclwebtest fs_create_folder {
+aa_register_case \
+    -cats {web smoke} \
+    -libraries tclwebtest \
+    -procs {file_storage::twt::create_new_folder file_storage::twt::call_fs_page} \
+    fs_create_folder {
     
     Test Load File.
     
@@ -59,7 +64,15 @@ aa_register_case -cats {web smoke} -libraries tclwebtest fs_create_folder {
     }
 }
 
-aa_register_case -cats {web smoke} -libraries tclwebtest fs_delete_folder {
+aa_register_case \
+    -cats {web smoke} \
+    -libraries tclwebtest \
+    -procs {
+        file_storage::twt::create_new_folder
+        file_storage::twt::call_fs_page
+        file_storage::twt::delete_folder
+    } \
+    fs_delete_folder {
     
     Test Delete a Folder.
     
@@ -90,7 +103,15 @@ aa_register_case -cats {web smoke} -libraries tclwebtest fs_delete_folder {
     }
 }
 
-aa_register_case -cats {web smoke} -libraries tclwebtest fs_edit_folder {
+aa_register_case \
+    -cats {web smoke} \
+    -libraries tclwebtest \
+    -procs {
+        file_storage::twt::call_fs_page
+        file_storage::twt::create_new_folder
+        file_storage::twt::edit_folder
+    } \
+    fs_edit_folder {
     
     Test Edit a Folder.
     
@@ -121,7 +142,16 @@ aa_register_case -cats {web smoke} -libraries tclwebtest fs_edit_folder {
     }
 }
 
-aa_register_case -cats {web smoke} -libraries tclwebtest fs_add_file_to_folder {
+aa_register_case \
+    -cats {web smoke} \
+    -libraries tclwebtest \
+    -procs {
+        file_storage::twt::call_fs_page
+        file_storage::twt::create_new_folder
+        file_storage::twt::add_file_to_folder
+        file_storage::twt::delete_file
+    } \
+    fs_add_file_to_folder {
 
     Test Upload a File in a Folder.
     
@@ -149,12 +179,18 @@ aa_register_case -cats {web smoke} -libraries tclwebtest fs_add_file_to_folder {
 	
         aa_display_result -response $response -explanation {for uploadding a file in a folder}
 	
-        file_storage:::twt::delete_file $uploaded_file_name
+        file_storage::twt::delete_file $uploaded_file_name
         twt::user::logout
     }
 }
 
-aa_register_case -cats {web smoke} -libraries tclwebtest fs_create_url_in_folder {
+aa_register_case \
+    -cats {web smoke} \
+    -libraries tclwebtest \
+    -procs {
+        file_storage::twt::call_fs_page
+        file_storage::twt::create_url_in_folder
+    } fs_create_url_in_folder {
     
     Test Create a URL in a Folder.
     
@@ -182,7 +218,14 @@ aa_register_case -cats {web smoke} -libraries tclwebtest fs_create_url_in_folder
     }
 }
 
-aa_register_case -cats {web smoke} -libraries tclwebtest fs_create_url {
+aa_register_case \
+    -cats {web smoke} \
+    -libraries tclwebtest \
+    -procs {
+        file_storage::twt::call_fs_page
+        file_storage::twt::create_url
+    } \
+    fs_create_url {
     
     Test Create a URL.
     
@@ -211,7 +254,16 @@ aa_register_case -cats {web smoke} -libraries tclwebtest fs_create_url {
 }
 
 
-aa_register_case -cats {web smoke} -libraries tclwebtest fs_upload_file {
+aa_register_case \
+    -cats {web smoke} \
+    -libraries tclwebtest \
+    -procs {
+        file_storage::twt::call_fs_page
+        file_storage::twt::create_file
+        file_storage::twt::upload_file
+        file_storage::twt::delete_file
+    } \
+    fs_upload_file {
 
     Test Upload a File.
 
@@ -234,12 +286,10 @@ aa_register_case -cats {web smoke} -libraries tclwebtest fs_upload_file {
         
 	aa_display_result -response $response -explanation {for uploadding a file}
 	
-	file_storage:::twt::delete_file $uploaded_file_name
+	file_storage::twt::delete_file $uploaded_file_name
         twt::user::logout
     }
 }
-
-
 
 
 
