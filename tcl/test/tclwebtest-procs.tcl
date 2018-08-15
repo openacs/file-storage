@@ -15,7 +15,7 @@ ad_proc file_storage::twt::call_fs_page {} {
     ::twt::do_request $fs_page
 }
 
-ad_proc file_storage:::twt::create_file { f_name }  {
+ad_proc file_storage::twt::create_file { f_name }  {
     Creates a temporary file.
 } {
     # Create a temporary file
@@ -26,7 +26,7 @@ ad_proc file_storage:::twt::create_file { f_name }  {
     return $file_name
 }
 
-ad_proc file_storage:::twt::delete_file { file_name } {
+ad_proc file_storage::twt::delete_file { file_name } {
     Deletes a file.
 } {
     # Delete a file name
