@@ -3,7 +3,6 @@
 -- 
 -- @author Malte Sussdorff (sussdorff@sussdorff.de)
 -- @creation-date 2005-08-25
--- @arch-tag: e4da8594-c90f-4ca9-b517-d10cc8bddcb9
 -- @cvs-id $Id$
 --
 
