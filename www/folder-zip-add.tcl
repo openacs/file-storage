@@ -94,7 +94,10 @@ ad_form -extend -name file_add -form {} -new_data {
     if {$title eq ""} {
 	set title [file rootname [list [template::util::file::get_property filename $upload_file]]]
     }
-    set folder_id [content::folder::new -name $title -parent_id $folder_id -label $title]
+    set folder_id [content::item::get_id_by_name -name $title -parent_id $folder_id]
+    if {$folder_id eq ""} {
+        set folder_id [content::folder::new -name $title -parent_id $folder_id -label $title]
+    }
     
     set unzip_binary [string trim [parameter::get -parameter UnzipBinary]]
     
