@@ -68,7 +68,7 @@ ad_form -extend -name file_add -form {} -on_submit {
     set number_upload_files [llength $upload_files]
     foreach upload_file $upload_files tmpfile $upload_tmpfiles {
 	# upload a new file
-	# if the user choose upload from the folder view
+	# if the user chose upload from the folder view
 	# and the file with the same name already exists
 	# we create a new revision
 	

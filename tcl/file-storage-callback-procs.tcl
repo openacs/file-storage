@@ -84,7 +84,7 @@ ad_proc -public -callback fs::file_revision_new {
     @param file_id New file_id for the revision
     @param parent_id Usually the folder the file was uploaded to.
     @param creation_user User_id of the user creating the revision
-    @param creation_ip IP Of the creation
+    @param creation_ip IP of the creation
 } - 
 
 
@@ -96,8 +96,8 @@ ad_proc -public -callback search::datasource -impl file_storage_object {} {
     @author Jowell S. Sabino (jowellsabino@netscape.net)
     @creation-date 2005-06-13
 
-    Returns a datasource for the search package
-    this is the content that will be indexed by the full text
+    Returns a datasource for the search package.
+    This is the content that will be indexed by the full text
     search engine.
 
 } {
