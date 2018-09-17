@@ -1,7 +1,7 @@
 ad_library {
-    
+
     Callback procs for file storage
-    
+
     @author Malte Sussdorff (sussdorff@sussdorff.de)
     @creation-date 2005-06-15
     @cvs-id $Id$
@@ -85,7 +85,7 @@ ad_proc -public -callback fs::file_revision_new {
     @param parent_id Usually the folder the file was uploaded to.
     @param creation_user User_id of the user creating the revision
     @param creation_ip IP of the creation
-} - 
+} -
 
 
 # Our callback implementations
@@ -103,7 +103,7 @@ ad_proc -public -callback search::datasource -impl file_storage_object {} {
 } {
     # We probably don't need the whole big query here. TODO: Review.
     db_0or1row dbqd.file-storage.tcl.file-storage-callback-procs.fs_datasource {} -column_array datasource
-    
+
     return [list object_id $object_id \
                 title $datasource(title) \
                 content $datasource(content) \
@@ -136,7 +136,7 @@ ad_proc -public -callback datamanager::copy_folder -impl datamanager {
     set new_folder_id [fs_folder_copy -old_folder_id $object_id -new_parent_id $parent_id -mode $mode]
 
     return $new_folder_id
-    
+
 }
 
 ad_proc -public -callback pm::project_new -impl file_storage {
@@ -148,48 +148,48 @@ ad_proc -public -callback pm::project_new -impl file_storage {
     set pm_name [pm::project::name -project_item_id $project_id]
 
     foreach fs_package_id [application_link::get_linked -from_package_id $package_id -to_package_key "file-storage"] {
-	set root_folder_id [fs::get_root_folder -package_id $fs_package_id]
+        set root_folder_id [fs::get_root_folder -package_id $fs_package_id]
 
-	set folder_id [fs::new_folder \
-			   -name $root_folder_id \
-			   -pretty_name $pm_name \
-			   -parent_id $root_folder_id \
-			   -no_callback]
+        set folder_id [fs::new_folder \
+            -name $root_folder_id \
+            -pretty_name $pm_name \
+            -parent_id $root_folder_id \
+            -no_callback]
 
-	application_data_link::new -this_object_id $project_id -target_object_id $folder_id
+        application_data_link::new -this_object_id $project_id -target_object_id $folder_id
     }
 }
 
 #Callbacks for application-track
 
-ad_proc -callback application-track::getApplicationName -impl file_storage {} { 
-    Callback implementation 
+ad_proc -callback application-track::getApplicationName -impl file_storage {} {
+    Callback implementation
 } {
-    return "file_storage"		
-}    
+    return "file_storage"
+}
 
-ad_proc -callback application-track::getGeneralInfo -impl file_storage {} { 
-    Callback implementation 
+ad_proc -callback application-track::getGeneralInfo -impl file_storage {} {
+    Callback implementation
 } {
-    
+
     db_1row my_query {
         select count(1) as result
         from acs_objects a, acs_objects b
         where b.object_id = :comm_id
         and a.tree_sortkey between b.tree_sortkey
-        and tree_right(b.tree_sortkey)       
+        and tree_right(b.tree_sortkey)
         and a.object_type = 'file_storage_object'
     }
-    
-    
-    return "$result"
-} 
 
-ad_proc -callback application-track::getSpecificInfo -impl file_storage {} { 
-    Callback implementation 
+
+    return "$result"
+}
+
+ad_proc -callback application-track::getSpecificInfo -impl file_storage {} {
+    Callback implementation
 } {
 
-    upvar $query_name my_query	
+    upvar $query_name my_query
     upvar $elements_name my_elements
 
     set my_query {
@@ -214,41 +214,41 @@ ad_proc -callback application-track::getSpecificInfo -impl file_storage {} {
     set my_elements {
             name {
                 label "Name"
-                display_col name                    
-                html {align center}	 	    
+                display_col name
+                html {align center}
 
             }
             type {
                 label "Type"
-                display_col type 	              	              
-                html {align center}	 	    
+                display_col type
+                html {align center}
 
             }
             folder {
                 label "Folder"
-                display_col folder_name 	              	              
-                html {align center}	 	
+                display_col folder_name
+                html {align center}
             }
             size {
                 label "Size (bytes)"
                 display_col size
-                html {align center}	 	         
+                html {align center}
 
             }
             last_modification_date {
                 label "Last_Modification_Date"
-                display_col last_modified 
-                html {align center}	 	      
+                display_col last_modified
+                html {align center}
             }
             post_date {
                 label "Post_Date"
                 display_col creation_date
-                html {align center}    
+                html {align center}
 
-            }	                  
+            }
 
     }
-}      
+}
 
 # Local variables:
 #    mode: tcl
