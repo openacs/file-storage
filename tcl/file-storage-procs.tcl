@@ -976,8 +976,8 @@ ad_proc fs::add_created_version {
         }
         lob {
             # if someone stored file storage content in the database
-            # we need to use lob. the only want ot get a lob into the
-            # database if to pass it as a file
+            # we need to use lob. The only way to get a lob into the
+            # database is to pass it as a file
             set revision_id [cr_import_content \
                          -item_id $item_id \
                          -storage_type  \
