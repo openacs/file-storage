@@ -1660,6 +1660,32 @@ ad_proc -private fs::category_links {
     return [join $categories $joinwith]
 }
 
+ad_proc -private fs::max_upload_size {
+    {-package_id ""}
+} {
+    @param package_id id of the file-storage package instance. Will
+           default to the connection package_id if not specified.
+
+    Returns the maximum upload size for this file-storage instance. If
+    the value from the parameter is empty, invalid, or bigger than
+    the server-wide upload limit, the latter will take over.
+
+    @return numeric value in bytes
+} {
+    set max_bytes_param [parameter::get -package_id $package_id -parameter "MaximumFileSize"]
+    if {![string is double -strict $max_bytes_param]} {
+        set max_bytes_param Inf
+    }
+
+    set driver [expr {[ns_conn isconnected] ?
+                      [ns_conn driver] :
+                      [lindex [ns_driver names] 0]}]
+    set section [ns_driversection -driver $driver]
+    set max_bytes_conf [ns_config $section maxinput]
+
+    return [expr {min($max_bytes_param,$max_bytes_conf)}]
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4

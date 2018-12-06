@@ -149,8 +149,34 @@ ad_proc -private fs::install::upgrade {
             5.1.0a11 5.1.0a12 {
 		fs::rss::create_rss_gen_subscr_impl
 	    }
+            5.10.0d1 5.10.0d2 {
+                # Get max upload size from server conf
+                set driver [expr {[ns_conn isconnected] ?
+                                  [ns_conn driver] :
+                                  [lindex [ns_driver names] 0]}]
+                set section [ns_driversection -driver $driver]
+                set max_bytes_conf [ns_config $section maxinput]
+                # Get all file-storage instances
+                foreach package_id [db_list get_fs_instances {
+                    select package_id from apm_packages where package_key = 'file-storage'
+                }] {
+                    # Get max upload size from package parameter
+                    set max_bytes_param [parameter::get -package_id $package_id -parameter "MaximumFileSize"]
+                    if {![string is double -strict $max_bytes_param]} {
+                        set max_bytes_param Inf
+                    }
+                    # If value from parameter is larger than the one
+                    # from server conf, just reset the parameter and
+                    # let server value overtake. (You won't be able to
+                    # upload such big files anyway)
+                    if {$max_bytes_param >= $max_bytes_conf} {
+                        parameter::set_value \
+                            -package_id $package_id \
+                            -parameter "MaximumFileSize" -value ""
+                    }
+                }
+	    }
 	}
-
 }
 
 ad_proc -private ::install::xml::action::file-storage-folder { node } {

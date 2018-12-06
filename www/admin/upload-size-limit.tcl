@@ -19,7 +19,7 @@ if {$max_size eq ""} {
 set title "#file-storage.Configure_File_Upload_Limit#"
 set context [list $title]
 
-set upload_limit [parameter::get -parameter "MaximumFileSize"]
+set upload_limit [fs::max_upload_size]
 
 ad_form -name upload_limit_size -export folder_id -form {
     {new_size:integer(text) {label "#file-storage.Upload_Limit# $max_size"} {value $upload_limit} {html { maxlength 10}}}
