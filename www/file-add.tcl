@@ -45,7 +45,8 @@ ad_page_contract {
 
 set user_id [ad_conn user_id]
 set package_id [ad_conn package_id]
-set unpack_binary [string trim [parameter::get -parameter UnzipBinary]]
+set unpack_binary [util::which [string trim [parameter::get -parameter UnzipBinary]]]
+set unpack_available_p [expr {$unpack_binary ne ""}]
 # check for write permission on the folder or item
 
 permission::require_permission \
@@ -58,14 +59,14 @@ if {![ad_form_new_p -key file_id]} {
         -object_id $file_id \
         -party_id $user_id \
         -privilege "write"
-    set context [fs_context_bar_list -final "[_ file-storage.Add_Revision]" $folder_id]
-
+    set page_title [_ file-storage.Add_Revision]
 } else {
-    set context [fs_context_bar_list -final "[_ file-storage.Add_File]" $folder_id]
+    set page_title [_ file-storage.Add_File]
 }
+set context [fs_context_bar_list -final $page_title $folder_id]
 
 ad_form -html { enctype multipart/form-data } \
-    -export { folder_id lock_title_p name } \
+    -export { folder_id lock_title_p name return_url } \
     -form {
         file_id:key
         {upload_file:file {label \#file-storage.Upload_a_file\#} {html "size 30"}}
@@ -84,9 +85,8 @@ if {[parameter::get -parameter AllowTextEdit -default 0]} {
         }
     } else {
         # To make content editable
-        set revision_id [content::item::get_live_revision -item_id $file_id]
         set mime_type [db_string get_mime_type {
-            select mime_type from cr_revisions where revision_id = :revision_id
+            select mime_type from fs_objects where object_id = :file_id
         }]
         if {$mime_type eq "text/html"} {
             ad_form -extend -form {
@@ -103,12 +103,6 @@ if {[parameter::get -parameter AllowTextEdit -default 0]} {
     }
 }
 
-if {[info exists return_url] && $return_url ne ""} {
-    ad_form -extend -form {
-        {return_url:text(hidden) {value $return_url}}
-    }
-}
-
 if {$lock_title_p} {
     ad_form -extend -form {
         {title:text(hidden) {value $title}}
@@ -122,21 +116,17 @@ ad_form -extend -form {
     {description:text(textarea),optional {label \#file-storage.Description\#} {html "rows 5 cols 35"}}
 }
 
-if {[catch {set binary [exec $unpack_binary]} errormsg]} {
-    set unpack_bin_installed 0
-} else {
-    set unpack_bin_installed 1
-}
-
-if {[ad_form_new_p -key file_id] && $unpack_bin_installed } {
-
+if {[ad_form_new_p -key file_id] && $unpack_available_p } {
     ad_form -extend -form {
         {unpack_p:boolean(checkbox),optional \
              {label \#file-storage.Multiple_files\#} \
              {options { {\#file-storage.lt_This_is_a_ZIP\# t} }}
         }
     }
+} else {
+    set unpack_p false
 }
+
 if { [parameter::get -parameter CategoriesP -package_id $package_id -default 0] } {
     if { [info exists file_id] && $file_id ne "" } {
         set categorized_object_id $file_id
@@ -153,11 +143,7 @@ if { [parameter::get -parameter CategoriesP -package_id $package_id -default 0] 
 
 ad_form -extend -form {} -select_query_name get_file -new_data {
 
-    if {![info exists unpack_p] || $unpack_p eq ""} {
-        set unpack_p f
-    }
-    if { $unpack_p
-         && $unpack_binary ne ""
+    if { [string is true -strict $unpack_p]
          && [file extension [template::util::file::get_property filename $upload_file]] eq ".zip"
     } {
 
@@ -182,14 +168,14 @@ ad_form -extend -form {} -select_query_name get_file -new_data {
         set upload_files [list [template::util::file::get_property filename $upload_file]]
         set upload_tmpfiles [list [template::util::file::get_property tmp_filename $upload_file]]
     }
-    set mime_type ""
     if { [lindex $upload_files 0] eq ""} {
-        if {[parameter::get -parameter AllowTextEdit -default 0] && [template::util::richtext::get_property html_value $content_body] eq "" } {
+        if {[info exists content_body] && $content_body ne ""} {
+            set content_body [template::util::richtext::get_property html_value $content_body]
+        } else {
             ad_return_complaint 1 "You have to upload a file or create a new one"
             ad_script_abort
         }
         # create a tmp file to import from user entered HTML
-        set content_body [template::util::richtext::get_property html_value $content_body]
         set mime_type text/html
         set tmp_filename [ad_tmpnam]
         set fd [open $tmp_filename w]
@@ -222,7 +208,7 @@ ad_form -extend -form {} -select_query_name get_file -new_data {
 
         if {$existing_item_id ne ""} {
             # file with the same name already exists in this folder
-            if { [parameter::get -parameter "BehaveLikeFilesystemP" -package_id [ad_conn package_id]] } {
+            if { [parameter::get -parameter "BehaveLikeFilesystemP" -package_id $package_id] } {
                 # create a new revision -- in effect, replace the existing file
                 set this_file_id $existing_item_id
                 permission::require_permission \
@@ -230,12 +216,10 @@ ad_form -extend -form {} -select_query_name get_file -new_data {
                     -party_id $user_id \
                     -privilege write
             } else {
-                # create a new file by altering the filename of the
-                # uploaded new file (append "-1" to filename)
+                # create a new filename by appending the item_id to its rootname
                 set extension [file extension $upload_file]
-                set root [string trimright $upload_file $extension]
-                append new_name $root "-$this_file_id" $extension
-                set upload_file $new_name
+                set rootname [file rootname $upload_file]
+                set upload_file ${rootname}-${this_file_id}${extension}
             }
         }
 
@@ -265,11 +249,8 @@ ad_form -extend -form {} -select_query_name get_file -new_data {
     }
     file delete -- $upload_file.tmpfile
 } -edit_data {
-    set this_title $title
     set filename [template::util::file::get_property filename $upload_file]
-    if {$this_title eq ""} {
-        set this_title $filename
-    }
+    set this_title [expr {$title ne "" ? $title : $filename}]
 
     fs::add_version \
         -name $filename \
@@ -288,11 +269,10 @@ ad_form -extend -form {} -select_query_name get_file -new_data {
     }
 } -after_submit {
 
-    if {[info exists return_url] && $return_url ne ""} {
-        ad_returnredirect $return_url
-    } else {
-        ad_returnredirect [export_vars -base ./ {folder_id}]
+    if {![info exists return_url] || $return_url eq ""} {
+        set return_url [export_vars -base ./ {folder_id}]
     }
+    ad_returnredirect $return_url
     ad_script_abort
 
 }
@@ -302,13 +282,13 @@ if {$title eq ""} {
     set lock_title_p 0
 }
 
-if { [parameter::get -parameter "BehaveLikeFilesystemP" -package_id [ad_conn package_id]] } {
+if { [parameter::get -parameter "BehaveLikeFilesystemP" -package_id $package_id] } {
     set instructions [_ file-storage.Add_Dup_As_Revision]
 } else {
     set instructions [_ file-storage.Add_Dup_As_New_File]
 }
 
-set unpack_available_p [expr {[string trim [parameter::get -parameter UnzipBinary]] ne ""}]
+
 if {$unpack_available_p} {
     template::add_body_script -script {
         function UnpackChanged(elm) {
@@ -332,8 +312,6 @@ if {$unpack_available_p} {
         }, false);
     }
 }
-
-ad_return_template
 
 # Local variables:
 #    mode: tcl
