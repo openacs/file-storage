@@ -38,7 +38,7 @@ ad_page_contract {
         set n_bytes [file size ${upload_file.tmpfile}]
         set max_bytes [fs::max_upload_size]
         if { $n_bytes > $max_bytes } {
-            set number_of_bytes $max_bytes ; # needed by message key
+            set number_of_bytes [lc_numeric $max_bytes] ; # needed by message key
             ad_complain [_ file-storage.lt_Your_file_is_larger_t]
         }
     }
@@ -67,6 +67,7 @@ if {![ad_form_new_p -key file_id]} {
 set context [fs_context_bar_list -final $page_title $folder_id]
 
 set max_upload_size [fs::max_upload_size]
+set max_upload_size_pretty [lc_numeric $max_upload_size]
 ad_form -html { enctype multipart/form-data } \
     -export { folder_id lock_title_p name return_url } \
     -form {
@@ -74,13 +75,13 @@ ad_form -html { enctype multipart/form-data } \
         {upload_file:file
             {label "#file-storage.Upload_a_file#"}
             {html "size 30"}
-            {help_text "[_ file-storage.Upload_Limit]: $max_upload_size"}
+            {help_text "[_ file-storage.Upload_Limit]: $max_upload_size_pretty"}
         }
     }
 
 # Try to prevent upload of too big files from the client side. Saves
 # us some useless requests and gives a quicker feedback to the user.
-set number_of_bytes $max_upload_size ; # needed by message key
+set number_of_bytes $max_upload_size_pretty ; # needed by message key
 set file_too_big_msg [_ file-storage.lt_Your_file_is_larger_t]
 template::add_event_listener -event submit -id file-add \
     -preventdefault=false -script [subst -nocommands {
