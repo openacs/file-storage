@@ -47,8 +47,8 @@ set user_id [ad_conn user_id]
 set package_id [ad_conn package_id]
 set unpack_binary [util::which [string trim [parameter::get -parameter UnzipBinary]]]
 set unpack_available_p [expr {$unpack_binary ne ""}]
-# check for write permission on the folder or item
 
+# check for write permission on the folder or item
 permission::require_permission \
     -object_id $folder_id \
     -party_id $user_id \
@@ -69,12 +69,14 @@ ad_form -html { enctype multipart/form-data } \
     -export { folder_id lock_title_p name return_url } \
     -form {
         file_id:key
-        {upload_file:file {label \#file-storage.Upload_a_file\#} {html "size 30"}}
+        {upload_file:file
+            {label "#file-storage.Upload_a_file#"}
+            {html "size 30"}
+        }
     }
 
 if {[parameter::get -parameter AllowTextEdit -default 0]} {
     if {[ad_form_new_p -key file_id]} {
-
         # To allow the creation of files
         ad_form -extend -form {
             {content_body:richtext(richtext),optional
@@ -105,22 +107,30 @@ if {[parameter::get -parameter AllowTextEdit -default 0]} {
 
 if {$lock_title_p} {
     ad_form -extend -form {
-        {title:text(hidden) {value $title}}
+        {title:text(hidden)
+            {value $title}
+        }
     }
 } else {
     ad_form -extend -form {
-        {title:text,optional {label \#file-storage.Title\#} {html {size 30}} }
+        {title:text,optional
+            {label "#file-storage.Title#"}
+            {html {size 30}}
+        }
     }
 }
 ad_form -extend -form {
-    {description:text(textarea),optional {label \#file-storage.Description\#} {html "rows 5 cols 35"}}
+    {description:text(textarea),optional
+        {label "#file-storage.Description#"}
+        {html "rows 5 cols 35"}
+    }
 }
 
 if {[ad_form_new_p -key file_id] && $unpack_available_p } {
     ad_form -extend -form {
-        {unpack_p:boolean(checkbox),optional \
-             {label \#file-storage.Multiple_files\#} \
-             {options { {\#file-storage.lt_This_is_a_ZIP\# t} }}
+        {unpack_p:boolean(checkbox),optional
+            {label "#file-storage.Multiple_files#"}
+            {options {{"#file-storage.lt_This_is_a_ZIP#" t}}}
         }
     }
 } else {
