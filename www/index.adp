@@ -18,7 +18,7 @@
 <p>
 <include src="/packages/notifications/lib/notification-widget" type="fs_fs_notif"
 	 object_id="@folder_id;literal@"
-	 pretty_name="@folder_name@"
+	 pretty_name="@folder_name;literal@"
 	 url="@folder_url;literal@" >
 
 <if @webdav_url@ not nil>
