@@ -422,7 +422,7 @@ db_multirow -extend {
                 set file_url [export_vars -base ${fs_url}download/[ad_urlencode_path $title] {{file_id $object_id}}]
             } else {
                 set download_url /file/$object_id/[ad_urlencode_path $name]
-		set file_url ${fs_url}view/[ad_urlencode_folder_path ${folder_path}][ad_urlencode_path $name]
+		set file_url ${fs_url}view/[expr {$folder_path ne "" ? [ad_urlencode_folder_path ${folder_path}] : ""}][ad_urlencode_path $name]
             }
         }
     }
