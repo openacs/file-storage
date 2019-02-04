@@ -50,11 +50,11 @@ permission::require_permission \
 
 if {![ad_form_new_p -key file_id]} {
     permission::require_permission \
-	-object_id $file_id \
-	-party_id $user_id \
-	-privilege "write"
+        -object_id $file_id \
+        -party_id $user_id \
+        -privilege "write"
     set context [fs_context_bar_list -final "[_ file-storage.Add_Revision]" $folder_id]
-    
+
 } else {
     set context [fs_context_bar_list -final "[_ file-storage.Add_File]" $folder_id]
 }
@@ -66,172 +66,172 @@ ad_form -name file_add -html { enctype multipart/form-data } -export { folder_id
 
 if {[info exists return_url] && $return_url ne ""} {
     ad_form -extend -name file_add -form {
-	{return_url:text(hidden) {value $return_url}}
+        {return_url:text(hidden) {value $return_url}}
     }
 }
 
 if {$lock_title_p} {
     ad_form -extend -name file_add -form {
-	{title:text(hidden) {value $title}}
+        {title:text(hidden) {value $title}}
     }
 } else {
     ad_form -extend -name file_add -form {
-	{title:text {label \#file-storage.Title\#} {html {size 30}} }
+        {title:text {label \#file-storage.Title\#} {html {size 30}} }
     }
 }
 
-if {[ad_form_new_p -key file_id]} { 
+if {[ad_form_new_p -key file_id]} {
     ad_form -extend -name file_add -form {
         {unpack_message:text(inform) {label "[_ file-storage.Important]"} {value "[_ file-storage.Use_this_form_to_upload_a_ZIP]"}}
     }
 }
 
 ad_form -extend -name file_add -form {} -new_data {
-    
+
     # create a new folder to hold the zip contents
     # TODO make sure its name is unique?
-    
+
     if {$title eq ""} {
-	set title [file rootname [list [template::util::file::get_property filename $upload_file]]]
+        set title [file rootname [list [template::util::file::get_property filename $upload_file]]]
     }
     set folder_id [content::item::get_id_by_name -name $title -parent_id $folder_id]
     if {$folder_id eq ""} {
         set folder_id [content::folder::new -name $title -parent_id $folder_id -label $title]
     }
-    
+
     set unzip_binary [string trim [parameter::get -parameter UnzipBinary]]
-    
+
     if { $unzip_binary ne "" } {
-        
+
         set unzip_path [ad_tmpnam]
         file mkdir $unzip_path
         # save paths! get rid of -j switch --DAVEB 20050628
         catch { exec $unzip_binary -d $unzip_path ${upload_file.tmpfile} } errmsg
-        
+
         # More flexible parameter design could be:
-        # zip {unzip -jd {out_path} {in_file}} tar {tar xf {in_file} {out_path}} tgz {tar xzf {in_file} {out_path}} 
-        
+        # zip {unzip -jd {out_path} {in_file}} tar {tar xf {in_file} {out_path}} tgz {tar xzf {in_file} {out_path}}
+
         set upload_files [list]
         set upload_tmpfiles [list]
-        
+
         foreach file [ad_find_all_files "$unzip_path"] {
             lappend upload_files [regsub "^$unzip_path\/" $file {}]
             lappend upload_tmpfiles $file
         }
-        
+
     } else {
         set upload_files [list [template::util::file::get_property filename $upload_file]]
         set upload_tmpfiles [list [template::util::file::get_property tmp_filename $upload_file]]
     }
-    
+
     if { [lindex $upload_files 0] eq ""} {
         ad_return_complaint 1 "<li>You have to upload a file"
         ad_script_abort
     }
-    
+
     set i 0
     set number_upload_files [llength $upload_files]
     set unzip_path_list_len [llength [file split $unzip_path]]
 
     foreach upload_file $upload_files tmpfile $upload_tmpfiles {
-	set this_file_id $file_id
-	set this_title $title
-	# upload a new file
-	# if the user choose upload from the folder view
-	# and the file with the same name already exists
-	# we create a new revision
-	
-	# check if this is in a folder inside the zip and create
-	# the folders if they don't exist
-	set p_f_id $folder_id
-	set file_paths [file split [file dirname $upload_file]]
+        set this_file_id $file_id
+        set this_title $title
+        # upload a new file
+        # if the user choose upload from the folder view
+        # and the file with the same name already exists
+        # we create a new revision
+
+        # check if this is in a folder inside the zip and create
+        # the folders if they don't exist
+        set p_f_id $folder_id
+        set file_paths [file split [file dirname $upload_file]]
 
         # remove unzip_path portion by selecting remaining part of list
-	set file_paths [lrange $file_paths $unzip_path_list_len end]
+        set file_paths [lrange $file_paths $unzip_path_list_len end]
 
-	if {"." ne $file_paths && [llength $file_paths] > 0} {
-	    # make sure every folder exists
-	    set path ""
-	    foreach p $file_paths {
-		append path /${p}
-		if {![info exists paths($path)]} {
-		    set f_id [content::item::get_id -item_path $path -root_folder_id $p_f_id]
-		    if {$f_id eq ""} {
-			set p_f_id [content::folder::new -parent_id $p_f_id -name $p -label $p]
-			set paths($path) $p_f_id
-		    }
-		} else { 
-		    set p_f_id $paths($path)
-		}
-                
-	    }
-	    set upload_file [file tail $upload_file]
-	} 
-	
-	set this_folder_id $p_f_id
-	set this_title $upload_file
-	
-	set existing_item_id [fs::get_item_id -name $upload_file -folder_id $this_folder_id]
-	
-	if {$existing_item_id ne ""} {
-	    # file with the same name already exists
-	    # in this folder, create a new revision
-	    set this_file_id $existing_item_id
-	    permission::require_permission \
-		-object_id $this_file_id \
-		-party_id $user_id \
-		-privilege write
-	}
-	
-	set rev_id [fs::add_file \
-			-name $upload_file \
-			-item_id $this_file_id \
-			-parent_id $this_folder_id \
-			-tmp_filename $tmpfile \
-			-creation_user $user_id \
-			-creation_ip [ad_conn peeraddr] \
-			-title $this_title \
-			-package_id $package_id]
-	
-	file delete -- $tmpfile
-	incr i
+        if {"." ne $file_paths && [llength $file_paths] > 0} {
+            # make sure every folder exists
+            set path ""
+            foreach p $file_paths {
+                append path /${p}
+                if {![info exists paths($path)]} {
+                    set f_id [content::item::get_id -item_path $path -root_folder_id $p_f_id]
+                    if {$f_id eq ""} {
+                        set p_f_id [content::folder::new -parent_id $p_f_id -name $p -label $p]
+                        set paths($path) $p_f_id
+                    }
+                } else {
+                    set p_f_id $paths($path)
+                }
 
-	if {$rev_id ne ""} {
-	    set this_file_id [db_string get_item_id {
-		select item_id
-		from cr_revisions
-		where revision_id = :rev_id
-	    } -default 0]
-	}
-	
-	if {$i < $number_upload_files} {
-	    set file_id [db_nextval "acs_object_id_seq"]
-	}
-	
+            }
+            set upload_file [file tail $upload_file]
+        }
+
+        set this_folder_id $p_f_id
+        set this_title $upload_file
+
+        set existing_item_id [fs::get_item_id -name $upload_file -folder_id $this_folder_id]
+
+        if {$existing_item_id ne ""} {
+            # file with the same name already exists
+            # in this folder, create a new revision
+            set this_file_id $existing_item_id
+            permission::require_permission \
+                -object_id $this_file_id \
+                -party_id $user_id \
+                -privilege write
+        }
+
+        set rev_id [fs::add_file \
+            -name $upload_file \
+            -item_id $this_file_id \
+            -parent_id $this_folder_id \
+            -tmp_filename $tmpfile \
+            -creation_user $user_id \
+            -creation_ip [ad_conn peeraddr] \
+            -title $this_title \
+            -package_id $package_id]
+
+        file delete -- $tmpfile
+        incr i
+
+        if {$rev_id ne ""} {
+            set this_file_id [db_string get_item_id {
+                select item_id
+                from cr_revisions
+                where revision_id = :rev_id
+            } -default 0]
+        }
+
+        if {$i < $number_upload_files} {
+            set file_id [db_nextval "acs_object_id_seq"]
+        }
+
     }
     if {$unzip_path ne ""} {
-	file delete -force -- $unzip_path
+        file delete -force -- $unzip_path
     }
     file delete -- $upload_file.tmpfile
 } -edit_data {
     fs::add_version \
-	-name [template::util::file::get_property filename $upload_file] \
-	-tmp_filename [template::util::file::get_property tmp_filename $upload_file] \
-	-item_id $file_id \
-	-creation_user $user_id \
-	-creation_ip [ad_conn peeraddr] \
-	-title $title \
-	-package_id $package_id
-    
+        -name [template::util::file::get_property filename $upload_file] \
+        -tmp_filename [template::util::file::get_property tmp_filename $upload_file] \
+        -item_id $file_id \
+        -creation_user $user_id \
+        -creation_ip [ad_conn peeraddr] \
+        -title $title \
+        -package_id $package_id
+
 } -after_submit {
-    
+
     if {[info exists return_url] && $return_url ne ""} {
-	ad_returnredirect $return_url
+        ad_returnredirect $return_url
     } else {
-	ad_returnredirect [export_vars -base ./ {folder_id}]
+        ad_returnredirect [export_vars -base ./ {folder_id}]
     }
     ad_script_abort
-    
+
 }
 
 set unpack_available_p [expr {[string trim [parameter::get -parameter UnzipBinary]] ne ""}]
