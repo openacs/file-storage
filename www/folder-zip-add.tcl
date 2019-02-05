@@ -94,9 +94,10 @@ ad_form -extend -name file_add -form {} -new_data {
     if {$title eq ""} {
         set title [file rootname [list [template::util::file::get_property filename $upload_file]]]
     }
+    set parent_folder_id $folder_id
     set folder_id [content::item::get_id_by_name -name $title -parent_id $folder_id]
     if {$folder_id eq ""} {
-        set folder_id [content::folder::new -name $title -parent_id $folder_id -label $title]
+        set folder_id [content::folder::new -name $title -parent_id $parent_folder_id -label $title]
     }
 
     set unzip_binary [string trim [parameter::get -parameter UnzipBinary]]
@@ -144,7 +145,7 @@ ad_form -extend -name file_add -form {} -new_data {
         # check if this is in a folder inside the zip and create
         # the folders if they don't exist
         set p_f_id $folder_id
-        set file_paths [file split [file dirname $upload_file]]
+        set file_paths [file split [file dirname $tmpfile]]
 
         # remove unzip_path portion by selecting remaining part of list
         set file_paths [lrange $file_paths $unzip_path_list_len end]
