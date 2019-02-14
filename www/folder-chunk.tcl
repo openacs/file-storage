@@ -99,9 +99,9 @@ if {$target_window_name eq ""} {
 
 if {$delete_p && $root_folder_id ne $folder_id} {
     lappend actions \
-	"#file-storage.Delete_this_folder#" \
-	[export_vars -base "${fs_url}folder-delete" {folder_id}] \
-	"#file-storage.Delete_this_folder#"
+        "#file-storage.Delete_this_folder#" \
+        [export_vars -base "${fs_url}folder-delete" {folder_id}] \
+        "#file-storage.Delete_this_folder#"
 }
 if {$admin_p} {
     if { $root_folder_id ne $folder_id } {
@@ -112,8 +112,8 @@ if {$admin_p} {
     }
     lappend actions \
         "#file-storage.lt_Modify_permissions_on_1#" \
-	[export_vars -base "${fs_url}permissions" -override {{object_id $folder_id}} {{return_url "[ad_conn url]"}}] \
-	"#file-storage.lt_Modify_permissions_on_1#"
+        [export_vars -base "${fs_url}permissions" -override {{object_id $folder_id}} {{return_url "[ad_conn url]"}}] \
+        "#file-storage.lt_Modify_permissions_on_1#"
     if { $expose_rss_p } {
         lappend actions "Configure RSS" [export_vars -base "${fs_url}admin/rss-subscrs" {folder_id}] "Configure RSS"
     }
@@ -122,9 +122,9 @@ set categories_p [parameter::get -parameter CategoriesP -package_id $package_id 
 if { $categories_p } {
     if { [permission::permission_p -party_id $viewing_user_id -object_id $package_id -privilege "admin"] } {
         lappend actions \
-	    [_ categories.cadmin] \
-	    [export_vars -base "/categories/cadmin/object-map" -url {{object_id $package_id}}] \
-	    [_ categories.cadmin]
+            [_ categories.cadmin] \
+            [export_vars -base "/categories/cadmin/object-map" -url {{object_id $package_id}}] \
+            [_ categories.cadmin]
     }
     set category_links [fs::category_links -object_id $folder_id -folder_id $folder_id -selected_category_id $category_id -fs_url $fs_url]
 }
@@ -403,7 +403,7 @@ db_multirow -extend {
                 set file_url $download_url
             } else {
                 set download_url [export_vars -base ${fs_url}download/[ad_urlencode_path $name] {{file_id $target_object_id}}]
-		set file_url ${fs_url}view/${file_url}
+                set file_url ${fs_url}view/${file_url}
             }
         }
         default {
@@ -422,7 +422,7 @@ db_multirow -extend {
                 set file_url [export_vars -base ${fs_url}download/[ad_urlencode_path $title] {{file_id $object_id}}]
             } else {
                 set download_url /file/$object_id/[ad_urlencode_path $name]
-		set file_url ${fs_url}view/[ad_urlencode_folder_path $folder_path][ad_urlencode_path $name]
+                set file_url ${fs_url}view/[ad_urlencode_folder_path $folder_path][ad_urlencode_path $name]
             }
         }
     }
@@ -433,11 +433,11 @@ db_multirow -extend {
             set cat_folder_id $folder_id
         }
         set categories [fs::category_links \
-			    -object_id $object_id \
-			    -folder_id $cat_folder_id \
-			    -selected_category_id $category_id \
-			    -fs_url $fs_url \
-			    -joinwith "<br>"]
+                -object_id $object_id \
+                -folder_id $cat_folder_id \
+                -selected_category_id $category_id \
+                -fs_url $fs_url \
+                -joinwith "<br>"]
     }
 
 }

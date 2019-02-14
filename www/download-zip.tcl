@@ -1,5 +1,5 @@
 ad_page_contract {
-    delete items
+    Download items as a ZIP file
 } {
     object_id:naturalnum,notnull,multiple
     {confirm_p:optional,boolean 0}
