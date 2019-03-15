@@ -27,7 +27,13 @@ set package_id [ad_conn package_id]
 set not_allowed_parents [list]
 set not_allowed_children [list]
 
-db_multirow -extend {copy_message} copy_objects get_copy_objects "" {
+db_multirow -extend {copy_message} copy_objects get_copy_objects [subst {
+      select fs.object_id, fs.name, fs.title, fs.parent_id,
+      acs_permission.permission_p(fs.object_id, :user_id, 'read') as copy_p, fs.type
+      from fs_objects fs
+      where fs.object_id in ([template::util::tcl_to_sql_list $object_id])
+	order by copy_p
+}] {
     if {$copy_p} {
 	set copy_message ""
 	incr allowed_count
