@@ -30,7 +30,13 @@ set not_allowed_count 0
 set not_allowed_parents [list]
 set not_allowed_children [list]
 
-db_multirow -extend {move_message} move_objects get_move_objects "" {
+db_multirow -extend {move_message} move_objects get_move_objects [subst {
+      select fs.object_id, fs.name, fs.type, fs.parent_id,
+      acs_permission.permission_p(fs.object_id, :user_id, 'delete') as move_p
+      from fs_objects fs
+      where fs.object_id in ([template::util::tcl_to_sql_list $object_id])
+	order by move_p
+}] {
     if {$move_p} {
 	set move_message ""
 	incr allowed_count
