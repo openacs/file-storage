@@ -99,7 +99,12 @@ ad_proc children_have_permission_p {
     # now check revisions
 
     db_foreach child_items {} {
-        incr num_wo_perm [db_string revision_perms {}]
+        incr num_wo_perm [db_string revision_perms {
+            select count(*)
+            from cr_revisions
+            where item_id = :child_item_id
+            and not acs_permission.permission_p(revision_id, :user_id, :privilege)
+        }]
     }
 
     if { $num_wo_perm > 0 } {
@@ -407,7 +412,12 @@ ad_proc -public fs::get_folder_objects {
                                                permission)
 
 } {
-    return [db_list select_folder_contents {}]
+    return [db_list select_folder_contents {
+        select cr_items.item_id as object_id, cr_items.name
+        from   cr_items
+        where  cr_items.parent_id = :folder_id
+        and    acs_permission.permission_p(cr_items.item_id, :user_id, 'read')
+    }]
 }
 
 ad_proc -public fs::get_folder_contents {
@@ -445,7 +455,28 @@ ad_proc -public fs::get_folder_contents {
         set user_id [acs_magic_object the_public]
     }
 
-    set list_of_ns_sets [db_list_of_ns_sets select_folder_contents {}]
+    set list_of_ns_sets [db_list_of_ns_sets select_folder_contents {
+           select fs_objects.object_id,
+           fs_objects.name,
+           fs_objects.title,
+           fs_objects.live_revision,
+           fs_objects.type,
+           to_char(fs_objects.last_modified, 'YYYY-MM-DD HH24:MI:SS') as last_modified_ansi,
+           fs_objects.content_size,
+           fs_objects.url,
+           fs_objects.key,
+           fs_objects.sort_key,
+           fs_objects.file_upload_name,
+           fs_objects.title,
+           fs_objects.last_modified >= (current_timestamp - cast('$n_past_days days' as interval)) as new_p,
+           acs_permission.permission_p(fs_objects.object_id, :user_id, 'admin') as admin_p,
+           acs_permission.permission_p(fs_objects.object_id, :user_id, 'delete') as delete_p,
+           acs_permission.permission_p(fs_objects.object_id, :user_id, 'write') as write_p
+           from fs_objects
+           where fs_objects.parent_id = :folder_id
+           and acs_permission.permission_p(fs_objects.object_id, :user_id, 'read')
+           order by fs_objects.sort_key, fs_objects.name
+    }]
 
     foreach set $list_of_ns_sets {
         # in plain Tcl:
