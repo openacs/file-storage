@@ -196,7 +196,7 @@ if {$allow_bulk_actions} {
     set bulk_delete_p [db_string some_deletables {
         select exists (select 1 from fs_objects
                        where parent_id = :folder_id
-                       and acs_permission__permission_p(object_id, :viewing_user_id, 'delete'))
+                       and acs_permission.permission_p(object_id, :viewing_user_id, 'delete'))
     }]
     set bulk_copy_p [permission::permission_p -object_id $folder_id -privilege write]
 
