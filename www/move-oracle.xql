@@ -13,16 +13,6 @@
     <version>8.1.6</version>
   </rdbms>
   
-  <fullquery name="get_move_objects">
-    <querytext>
-      select fs.object_id, fs.name, fs.type, fs.parent_id,
-      acs_permission.permission_p(fs.object_id, :user_id, 'delete') as move_p
-      from fs_objects fs
-      where fs.object_id in ([template::util::tcl_to_sql_list $object_id])
-	order by move_p
-    </querytext>
-  </fullquery>
-
   <fullquery name="get_folder_tree">
     <querytext>
       select
