@@ -29,7 +29,7 @@ set object_list_where ""
 set viewing_user_id [ad_conn user_id]
 if {!$permission_check} {
     set permission_p 1
-    set permission_clause [db_map permission_clause] 
+    set permission_clause {and acs_permission.permission_p(fs_objects.object_id, :viewing_user_id, 'read')}
 } else {
     set permission_p [permission::permission_p -party_id $viewing_user_id -object_id $folder_id -privilege "read"]
     set permission_clause ""
@@ -41,7 +41,7 @@ lassign [fs::get_folder_package_and_root $folder_id]  package_id root_folder_id
 
 set fs_url [site_node::get_url_from_object_id -object_id $package_id]
 if {$root_folder_id ne $folder_id && "/view/" eq $base_url} {
-    set folder_path [db_exec_plsql get_folder_path {}]
+    set folder_path [content::item::get_path -item_id $folder_id -root_folder_id $root_folder_id]
 } else {
     set folder_path ""
 }
