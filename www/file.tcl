@@ -146,7 +146,34 @@ template::list::create \
 	}
     }
 
-db_multirow -unclobber -extend { author_link last_modified_pretty content_size_pretty version_url version_delete version_delete_url} version version_info {} {
+db_multirow -unclobber -extend {
+    author
+    author_link
+    last_modified_pretty
+    content_size_pretty
+    version_url
+    version_delete
+    version_delete_url
+} version version_info [subst {
+    select  r.title,
+            r.revision_id as version_id,
+            o.creation_user as author_id,
+            r.mime_type as type,
+            m.label as pretty_type,
+            to_char(o.last_modified,'YYYY-MM-DD HH24:MI:SS') as last_modified_ansi,
+            r.description,
+            acs_permission.permission_p(r.revision_id,:user_id,'admin') as admin_p,
+            acs_permission.permission_p(r.revision_id,:user_id,'delete') as delete_p,
+            coalesce(r.content_length,0) as content_size
+    from   acs_objects o, cr_items i,cr_revisions r
+            left join cr_mime_types m on r.mime_type=m.mime_type
+    where o.object_id = r.revision_id
+      and r.item_id = i.item_id
+      and r.item_id = :file_id
+          and acs_permission.permission_p(r.revision_id, :user_id, 'read')
+    $show_versions order by last_modified desc
+}] {
+    set author [person::name -person_id $author_id]
     # FIXME urlencode each part of the path
     # set file_url [ad_urlencode $file_url]
     set last_modified_ansi [lc_time_system_to_conn $last_modified_ansi]
