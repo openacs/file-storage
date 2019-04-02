@@ -455,7 +455,7 @@ ad_proc -public fs::get_folder_contents {
         set user_id [acs_magic_object the_public]
     }
 
-    set list_of_ns_sets [db_list_of_ns_sets select_folder_contents {
+    set list_of_ns_sets [db_list_of_ns_sets select_folder_contents [subst {
            select fs_objects.object_id,
            fs_objects.name,
            fs_objects.title,
@@ -476,7 +476,7 @@ ad_proc -public fs::get_folder_contents {
            where fs_objects.parent_id = :folder_id
            and acs_permission.permission_p(fs_objects.object_id, :user_id, 'read')
            order by fs_objects.sort_key, fs_objects.name
-    }]
+    }]]
 
     foreach set $list_of_ns_sets {
         # in plain Tcl:
