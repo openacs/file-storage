@@ -5,7 +5,7 @@ ad_page_contract {
     Allows move of single or multiple items
 
     @author Dave Bauer dave@thedesignexperience.org
-    
+
 } -query {
     object_id:notnull,integer,multiple
     folder_id:naturalnum,optional
@@ -16,8 +16,8 @@ ad_page_contract {
 } -errors {object_id:,notnull,integer,multiple {Please select at least one item to move.}
 }
 
-set peer_addr [ad_conn peeraddr]  
-set package_id [ad_conn package_id]  
+set peer_addr [ad_conn peeraddr]
+set package_id [ad_conn package_id]
 set copy_and_delete_p [parameter::get -parameter MoveByCopyDeleteP -package_id $package_id -default 0]
 
 set objects_to_move $object_id
@@ -78,21 +78,21 @@ if {[info exists folder_id]} {
             lappend error_items $name
         } else {
             db_transaction {
-                if {$copy_and_delete_p} {  
+                if {$copy_and_delete_p} {
                     # copy and delete file to move it
                     set file_id [content::item::copy -item_id $object_id \
                                      -target_folder_id $folder_id \
                                      -creation_user    $user_id \
                                      -creation_ip      $peer_addr]
-                    if {$type ne "folder" } {  
+                    if {$type ne "folder" } {
                         callback fs::file_revision_new \
                             -package_id $package_id \
                             -file_id    $file_id \
                             -parent_id  $folder_id
                         fs::delete_file \
                             -item_id   $object_id \
-                            -parent_id $parent_id  
-                    } else {  
+                            -parent_id $parent_id
+                    } else {
                         fs::delete_folder \
                             -folder_id $object_id \
                             -parent_id $parent_id
@@ -105,7 +105,7 @@ if {[info exists folder_id]} {
                 }
             } on_error {
                 lappend error_items $name
-            } 
+            }
         }
     }
 
@@ -126,7 +126,7 @@ if {[info exists folder_id]} {
 	    name {label \#file-storage.Files_to_be_moved\#}
 	    move_message {}
 	}
-    
+
     template::list::create \
         -name folder_tree \
         -pass_properties { item_id redirect_to_folder return_url } \
@@ -152,7 +152,7 @@ if {[info exists folder_id]} {
     set object_id $objects_to_move
     set cancel_url "[ad_conn url]?[ad_conn query]"
     db_multirow -extend {move_url level} folder_tree get_folder_tree "" {
-	# teadams 2003-08-22 - change level to level num to avoid 
+	# teadams 2003-08-22 - change level to level num to avoid
 	# Oracle issue with key words.
         if {$folder_id in [concat $not_allowed_parents $not_allowed_children]
 	    || $parent_id in $not_allowed_children
