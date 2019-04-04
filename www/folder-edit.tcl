@@ -46,7 +46,7 @@ if { [parameter::get -parameter CategoriesP -package_id $package_id -default 0] 
 
 
 ad_form -extend -form {
-    {submit:text(submit) {label $submit_label}}    
+    {submit:text(submit) {label $submit_label}}
 } -on_request {
     content::item::get -item_id $folder_id -array folder
     set folder_name $folder(label)
@@ -59,12 +59,12 @@ ad_form -extend -form {
                              [list name [ad_sanitize_filename -collapse_spaces $folder_name]] \
                              [list label $folder_name] \
                              [list description $description]]
-        
+
         if { [parameter::get -parameter CategoriesP -package_id $package_id -default 0] } {
             category::map_object -remove_old -object_id $folder_id [category::ad_form::get_categories \
                                                                         -container_object_id $package_id \
                                                                         -element_name category_id]
-        }        
+        }
 
         callback fs::folder_edit -package_id [ad_conn package_id] -folder_id $folder_id
     }
