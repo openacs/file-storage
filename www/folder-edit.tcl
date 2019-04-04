@@ -56,6 +56,7 @@ ad_form -extend -form {
     db_transaction {
         content::folder::update -folder_id $folder_id \
             -attributes [list \
+                             [list name [ad_sanitize_filename -collapse_spaces $folder_name]] \
                              [list label $folder_name] \
                              [list description $description]]
         
