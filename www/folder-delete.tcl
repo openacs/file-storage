@@ -10,15 +10,15 @@ ad_page_contract {
     {confirmed_p:boolean "f"}
 } -validate {
     valid_folder -requires {folder_id:integer} {
-	if {![fs_folder_p $folder_id]} {
-	    ad_complain "[_ file-storage.lt_The_specified_folder__1]"
-	}
+        if {![fs_folder_p $folder_id]} {
+            ad_complain "[_ file-storage.lt_The_specified_folder__1]"
+        }
     }
 } -validate {
     not_root_folder -requires {folder_id} {
-	if { $folder_id == [fs_get_root_folder] } {
-	    ad_complain "[_ file-storage.lt_You_may_not_delete_th]"
-	}
+        if { $folder_id == [fs_get_root_folder] } {
+            ad_complain "[_ file-storage.lt_You_may_not_delete_th]"
+        }
     }
 
 } -properties {
@@ -44,7 +44,7 @@ set child_count [fs::get_folder_contents_count -folder_id $folder_id]
 
 set page_title [_ file-storage.folder_delete_page_title]
 set context [fs_context_bar_list -final "[_ file-storage.Delete]" $folder_id]
-    
+
 set delete_message "[_ file-storage.delete_folder_and_children]"
 set delete_label "[_ acs-kernel.common_OK]"
 
@@ -54,7 +54,7 @@ ad_form -name "folder-delete" \
     -edit_buttons $edit_buttons \
     -cancel_url [export_vars -base "index" {folder_id}] \
     -form {
-	{delete_message:text(inform) {label ""} {value $delete_message}}
+        {delete_message:text(inform) {label ""} {value $delete_message}}
     } -on_request {
     } -on_submit {
         #
@@ -66,7 +66,7 @@ ad_form -name "folder-delete" \
         ad_returnredirect "index?folder_id=$parent_id"
         ad_script_abort
     } -export {folder_id}
-   
+
 
 # Local variables:
 #    mode: tcl
