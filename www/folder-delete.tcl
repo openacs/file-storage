@@ -27,8 +27,9 @@ ad_page_contract {
     blocked_p:onevalue
     context:onevalue
 }
-
-# check for delete permission on the folder
+#
+# Check for delete permission on the folder.
+#
 
 permission::require_permission -object_id $folder_id -privilege delete
 
@@ -56,7 +57,10 @@ ad_form -name "folder-delete" \
 	{delete_message:text(inform) {label ""} {value $delete_message}}
     } -on_request {
     } -on_submit {
-        # they have confirmed that they want to delete the folder
+        #
+        # The user has confirmed to delete the folder.
+        #
+        set parent_id [fs::get_parent -item_id $folder_id]
         fs::delete_folder -folder_id $folder_id
 
         ad_returnredirect "index?folder_id=$parent_id"
