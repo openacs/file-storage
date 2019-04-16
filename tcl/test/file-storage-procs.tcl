@@ -7,101 +7,58 @@ ad_library {
 }
 
 aa_register_case \
-    -cats {api db smoke} \
-    -procs {fs::new_root_folder} \
-    fs_new_root_folder {
-        Test the fs::new_root_folder proc.
-} {
-
-    aa_run_with_teardown \
-        -rollback \
-        -test_code {
-
-            set package_id [subsite::main_site_id]
-
-            # Create folder
-            set folder_id [fs::new_root_folder \
-                -package_id $package_id \
-                -pretty_name "Foobar" \
-                -description "Foobar"]
-
-            set success_p [db_string success_p {
-                select 1 from fs_root_folders where folder_id = :folder_id
-            } -default "0"]
-
-            aa_equals "folder was created successfully" $success_p 1
-    }
-}
-
-aa_register_case \
     -cats {web smoke} \
-    -libraries tclwebtest \
-    -procs {file_storage::twt::create_new_folder file_storage::twt::call_fs_page} \
+    -procs {
+        file_storage::test::create_new_folder
+    } \
     fs_create_folder {
 
-    Test Load File.
+        Create a folder and delete it later.
 
-    @author Mounir Lallali
+        @author Mounir Lallali
 } {
-    aa_run_with_teardown -test_code {
 
-        tclwebtest::cookies clear
+    try {
+        # Create a test user
+        set user_info [acs::test::user::create -admin]
 
-        # Login user
-        array set user_info [twt::user::create -admin]
-        twt::user::login $user_info(email) $user_info(password)
+        aa_run_with_teardown -test_code {
+            #
+            # Go to the first instance of the file storage
+            #
+            set fs_page [aa_get_first_url -package_key file-storage]
+            set d [acs::test::http -user_info $user_info $fs_page]
 
-        file_storage::twt::call_fs_page
+            #
+            # Create a new folder with a random name in this instance
+            #
+            aa_section "Create a fresh folder"
+            set folder_name [ad_generate_random_string]
+            set folder_description [ad_generate_random_string]
+            set d [file_storage::test::create_new_folder \
+                       -last_request $d \
+                       $folder_name $folder_description]
 
-        # Create a new folder
-        set folder_name [ad_generate_random_string]
-        set folder_description [ad_generate_random_string]
-        set response [file_storage::twt::create_new_folder $folder_name $folder_description]
+            acs::test::reply_has_status_code $d 200
+            aa_log "Folder $folder_name was created successfully"
 
-        aa_display_result -response $response -explanation {for creating a new folder}
+            #
+            # Finally, delete the folder
+            #
+            aa_section "Delete the empty folder"
+            file_storage::test::delete_current_folder -last_request $d
 
-        twt::user::logout
+            aa_section "Log out"
+            acs::test::logout -last_request $d
+        }
+    } finally {
+        #
+        # Get rid of the user
+        #
+        acs::test::user::delete -user_id [dict get $user_info user_id]
     }
 }
 
-aa_register_case \
-    -cats {web smoke} \
-    -libraries tclwebtest \
-    -procs {
-        file_storage::twt::create_new_folder
-        file_storage::twt::call_fs_page
-        file_storage::twt::delete_folder
-    } \
-    fs_delete_folder {
-
-    Test Delete a Folder.
-
-    @author Mounir Lallali
-} {
-    aa_run_with_teardown -test_code {
-
-        tclwebtest::cookies clear
-
-        # Login user
-        array set user_info [twt::user::create -admin]
-        twt::user::login $user_info(email) $user_info(password)
-
-        file_storage::twt::call_fs_page
-
-
-        # Create a new folder
-        set folder_name [ad_generate_random_string]
-        set folder_description [ad_generate_random_string]
-        file_storage::twt::create_new_folder $folder_name $folder_description
-
-        # Delete a folder
-        set response [file_storage::twt::delete_folder]
-
-        aa_display_result -response $response -explanation {for deleting a folder}
-
-        twt::user::logout
-    }
-}
 
 aa_register_case \
     -cats {web smoke} \
