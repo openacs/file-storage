@@ -64,7 +64,13 @@ set submit_label [_ file-storage.Create]
 ad_form -extend -form {
     {url:text(text) {label \#file-storage.URL\#} {value "http://"}}
     {description:text(textarea),optional {html {rows 5 cols 50}} {label \#file-storage.Description\#}}
+} -validate {
+    {url
+        {[string match "data:*" [string trim $url]] == 0}
+        "\$url\" must not start with 'data:'"
+    }
 }
+
 
 set package_id [ad_conn package_id]
 set user_id [ad_conn user_id]
