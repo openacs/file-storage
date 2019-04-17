@@ -61,7 +61,9 @@ ad_form -name "folder-delete" \
         # The user has confirmed to delete the folder.
         #
         set parent_id [fs::get_parent -item_id $folder_id]
-        fs::delete_folder -folder_id $folder_id
+        fs::delete_folder \
+            -parent_id $parent_id \
+            -folder_id $folder_id
 
         ad_returnredirect "index?folder_id=$parent_id"
         ad_script_abort
