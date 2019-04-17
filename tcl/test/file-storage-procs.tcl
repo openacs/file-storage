@@ -10,6 +10,7 @@ aa_register_case \
     -cats {web smoke} \
     -procs {
         file_storage::test::create_new_folder
+        file_storage::test::delete_current_folder
     } \
     fs_create_folder {
 
@@ -19,7 +20,7 @@ aa_register_case \
 } {
 
     try {
-        # Create a test user
+        aa_section "Create a test user"
         set user_info [acs::test::user::create -admin]
 
         aa_run_with_teardown -test_code {
@@ -55,18 +56,17 @@ aa_register_case \
         #
         # Get rid of the user
         #
+        aa_section "Delete test user"
         acs::test::user::delete -user_id [dict get $user_info user_id]
     }
 }
 
-
 aa_register_case \
     -cats {web smoke} \
-    -libraries tclwebtest \
     -procs {
-        file_storage::twt::call_fs_page
-        file_storage::twt::create_new_folder
-        file_storage::twt::edit_folder
+        file_storage::test::create_new_folder
+        file_storage::test::edit_folder
+        file_storage::test::delete_current_folder
     } \
     fs_edit_folder {
 
@@ -74,30 +74,56 @@ aa_register_case \
 
     @author Mounir Lallali
 } {
-    aa_run_with_teardown -test_code {
 
-        tclwebtest::cookies clear
+    try {
+        aa_section "Create a test user"
+        set user_info [acs::test::user::create -admin]
 
-        # Login user
-        array set user_info [twt::user::create -admin]
-        twt::user::login $user_info(email) $user_info(password)
+        aa_run_with_teardown -test_code {
+            #
+            # Go to the first instance of the file storage
+            #
+            set fs_page [aa_get_first_url -package_key file-storage]
+            set d [acs::test::http -user_info $user_info $fs_page]
 
-        file_storage::twt::call_fs_page
+            #
+            # Create a new folder with a random name in this instance
+            #
+            aa_section "Create a fresh folder"
+            set folder_name [ad_generate_random_string]
+            set folder_description [ad_generate_random_string]
+            set d [file_storage::test::create_new_folder \
+                       -last_request $d \
+                       $folder_name $folder_description]
 
-        # Create a new folder
-        set folder_name [ad_generate_random_string]
-        set folder_description [ad_generate_random_string]
-        file_storage::twt::create_new_folder $folder_name $folder_description
+            acs::test::reply_has_status_code $d 200
+            aa_log "Folder $folder_name was created successfully"
 
-        # Edit a folder
-        set new_folder_name [ad_generate_random_string]
-        set response [file_storage::twt::edit_folder $new_folder_name]
+            aa_section "Edit folder"
 
-        aa_display_result -response $response -explanation {for editing a folder}
+            set folder_name [ad_generate_random_string]
+            set d [file_storage::test::edit_folder \
+                       -last_request $d \
+                       $folder_name]
 
-        twt::user::logout
+            acs::test::reply_has_status_code $d 200
+            aa_log "Folder $folder_name was edited successfully"
+
+            #
+            # Finally, delete the folder
+            #
+            aa_section "Delete the empty folder"
+            file_storage::test::delete_current_folder -last_request $d
+        }
+    } finally {
+        #
+        # Get rid of the user
+        #
+        aa_section "Delete test user"
+        acs::test::user::delete -user_id [dict get $user_info user_id]
     }
 }
+
 
 aa_register_case \
     -cats {web smoke} \
