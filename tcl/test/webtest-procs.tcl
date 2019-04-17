@@ -26,12 +26,11 @@ namespace eval file_storage::test {
 
 	set d [::acs::test::form_reply \
 		   -last_request $d \
-		   -url [dict get $form @action] \
+		   -form $form \
 		   -update [subst {
 		       folder_name "$folder_name"
 		       description "$folder_description"
-		   }] \
-		   [dict get $form fields]]
+		   }]]
 	acs::test::reply_has_status_code $d 302
 	set location [::xowiki::test::get_url_from_location $d]
 
@@ -61,14 +60,12 @@ namespace eval file_storage::test {
 	set response [dict get $d body]
 	set form [acs::test::get_form $response {//form[@id='folder-edit']}]
 	aa_true "edit form was returned" {[llength $form] > 2}
-	aa_log form=$form
 	set d [::acs::test::form_reply \
 		   -last_request $d \
-		   -url [dict get $form @action] \
+		   -form $form \
 		   -update [subst {
 		       folder_name "$folder_name"
-		   }] \
-		   [dict get $form fields]]
+		   }]]
 	acs::test::reply_has_status_code $d 302
 	set location [::xowiki::test::get_url_from_location $d]
 
@@ -95,10 +92,7 @@ namespace eval file_storage::test {
 	set form [acs::test::get_form [dict get $d body] {//form[@id='folder-delete']}]
 	aa_true "delete form was returned" {[llength $form] > 2}
 
-	set d [::acs::test::form_reply \
-		   -last_request $d \
-		   -url [dict get $form @action] \
-		   [dict get $form fields]]
+	set d [::acs::test::form_reply -last_request $d -form $form]
 	acs::test::reply_has_status_code $d 302
 	return $d
     }
