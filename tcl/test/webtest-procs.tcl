@@ -22,6 +22,7 @@ namespace eval file_storage::test {
 
 	set response [dict get $d body]
 	set form [acs::test::get_form $response {//form[@id='folder-ae']}]
+	aa_true "create form was returned" {[llength $form] > 2}
 
 	set d [::acs::test::form_reply \
 		   -last_request $d \
@@ -29,6 +30,43 @@ namespace eval file_storage::test {
 		   -update [subst {
 		       folder_name "$folder_name"
 		       description "$folder_description"
+		   }] \
+		   [dict get $form fields]]
+	acs::test::reply_has_status_code $d 302
+	set location [::xowiki::test::get_url_from_location $d]
+
+	if { [string match  "*/\?folder_id*" $location] } {
+	    set d [acs::test::http -last_request $d $location]
+	    acs::test::reply_contains $d $folder_name
+	} else {
+	    aa_error "file_storage::test::create_new_folder failed, bad response url : $location"
+	}
+
+	return $d
+    }
+
+    ad_proc ::file_storage::test::edit_folder {
+	-last_request:required
+	folder_name
+    } {
+	Create a new folder via Web UI.
+    } {
+	#
+	# Create a new folder based on the current page, which is from
+	# a file-storage instance
+	#
+	set d [acs::test::follow_link -last_request $last_request -label {Edit Folder}]
+	acs::test::reply_has_status_code $d 200
+
+	set response [dict get $d body]
+	set form [acs::test::get_form $response {//form[@id='folder-edit']}]
+	aa_true "edit form was returned" {[llength $form] > 2}
+	aa_log form=$form
+	set d [::acs::test::form_reply \
+		   -last_request $d \
+		   -url [dict get $form @action] \
+		   -update [subst {
+		       folder_name "$folder_name"
 		   }] \
 		   [dict get $form fields]]
 	acs::test::reply_has_status_code $d 302
@@ -55,6 +93,7 @@ namespace eval file_storage::test {
 	set d [acs::test::follow_link -last_request $last_request -label {Delete this folder}]
 	acs::test::reply_has_status_code $d 200
 	set form [acs::test::get_form [dict get $d body] {//form[@id='folder-delete']}]
+	aa_true "delete form was returned" {[llength $form] > 2}
 
 	set d [::acs::test::form_reply \
 		   -last_request $d \
