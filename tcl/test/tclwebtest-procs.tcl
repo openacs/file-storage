@@ -19,7 +19,7 @@ ad_proc file_storage::twt::create_file { f_name }  {
     Creates a temporary file.
 } {
     # Create a temporary file
-    set file_name "/tmp/$f_name.txt"
+    set file_name "[ad_tmpdir]/$f_name.txt"
     exec touch $file_name
     exec ls / >> $file_name
     exec chmod 777 $file_name
