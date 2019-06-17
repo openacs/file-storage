@@ -5,7 +5,7 @@
   <msg key="Action">Action</msg>
   <msg key="Actions">Actions:</msg>
   <msg key="Actions_1">Actions</msg>
-  <msg key="Add_Dup_As_New_File">If you upload a file with the same name as a file already in this folder, we will alter your new file&#39;s name by adding an incremental suffix (eg. &amp;quot;mydoc.doc&amp;quot; -&amp;gt; &amp;quot;mydoc-1.doc&amp;quot;) and making it a new, separate file. &lt;br&gt;&lt;br&gt;&lt;em&gt;Note that this is not the Title of the file, which you can specify as you like. This is the File Name, which must be unique in each folder.&lt;/em&gt;</msg>
+  <msg key="Add_Dup_As_New_File">If you upload a file with the same name as a file already in this folder, we will alter your new file&#39;s name by adding an incremental suffix (e.g. &amp;quot;mydoc.doc&amp;quot; -&amp;gt; &amp;quot;mydoc-1.doc&amp;quot;) and making it a new, separate file. &lt;br&gt;&lt;br&gt;&lt;em&gt;Note that this is not the Title of the file, which you can specify as you like. This is the File Name, which must be unique in each folder.&lt;/em&gt;</msg>
   <msg key="Add_Dup_As_Revision">If you upload a file with the same name as a file already in this folder, we will add this as a new revision of the existing file. </msg>
   <msg key="Add_File">Add File</msg>
   <msg key="Add_folder_from_fs">Add folder from file system</msg>
