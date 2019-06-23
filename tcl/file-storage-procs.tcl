@@ -1714,7 +1714,7 @@ ad_proc -private fs::max_upload_size {
     set section [ns_driversection -driver $driver]
     set max_bytes_conf [ns_config $section maxinput]
     if {[regexp {^([0-9.]+)(MB|KB)} $max_bytes_conf . number unit]} {
-        set max_bytes_conf [expr {int($number * ($unit eq "BB" ? 1024 : 1024*1024))}]
+        set max_bytes_conf [expr {int($number * ($unit eq "KB" ? 1024 : 1024*1024))}]
     }
     return [expr {min($max_bytes_param,$max_bytes_conf)}]
 }
