@@ -66,12 +66,7 @@ db_multirow -extend {
         append content_size_pretty " [_ file-storage.items]"
         set pretty_type "Folder"
     } else {
-        if {$content_size < 1024} {
-            set content_size_pretty "[lc_numeric $content_size] [_ file-storage.bytes]"
-        } else {
-            set content_size_pretty "[lc_numeric [expr {$content_size / 1024 }]] [_ file-storage.kb]"
-        }
-
+        set content_size_pretty [util::content_size_pretty -size $content_size]
     }
 
     set name [lang::util::localize $name]
