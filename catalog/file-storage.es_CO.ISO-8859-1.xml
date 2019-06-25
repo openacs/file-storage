@@ -145,9 +145,9 @@
   <msg key="Upload">Subir Archivo</msg>
   <msg key="Upload_a_file">Subir un archivo</msg>
   <msg key="Upload_a_new_version">Subir una nueva versión</msg>
-  <msg key="Upload_Limit">Tamaño Límite(bytes)</msg>
-  <msg key="Upload_limit_error">El tamaño límite no debe ser mayor que</msg>
-  <msg key="Upload_limit_error_2">bytes. Aumente el tamaño límite en su archivo Tcl de configuración de AOLserver</msg>
+  <msg key="Upload_Limit">Tamaño máximo (bytes)</msg>
+  <msg key="Upload_limit_error">El tamaño máximo no debe ser mayor que</msg>
+  <msg key="Upload_limit_error_2">bytes. Aumente el tamaño máximo en su archivo Tcl de configuración de AOLserver</msg>
   <msg key="Upload_New_File">Subir un nuevo archivo</msg>
   <msg key="Upload_New_Version">Subir una nueva versión</msg>
   <msg key="Upload_Revision">Subir nueva versión</msg>
