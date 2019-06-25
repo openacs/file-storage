@@ -47,7 +47,7 @@ ad_page_contract {
         set n_bytes [file size ${upload_file.tmpfile}]
         set max_bytes [fs::max_upload_size]
         if { $n_bytes > $max_bytes } {
-            ad_complain "Your file is larger than the maximum file size allowed on this system ([util_commify_number $max_bytes] bytes)"
+            ad_complain "Your file is larger than the maximum file size allowed on this system ([util::content_size_pretty -size $max_bytes])"
         }
     }
 }
