@@ -338,14 +338,7 @@ db_multirow -extend {
         set content_size_pretty "[lc_numeric $content_size]&nbsp;[_ file-storage.items]"
         set pretty_type "#file-storage.Folder#"
     } else {
-        if { $content_size eq "" } {
-            set content_size 0
-        }
-        if {$content_size < 1024} {
-            set content_size_pretty "[lc_numeric $content_size]&nbsp;[_ file-storage.bytes]"
-        } else {
-            set content_size_pretty "[lc_numeric [expr {$content_size / 1024 }]]&nbsp;[_ file-storage.kb]"
-        }
+        set content_size_pretty [util::content_size_pretty -size $content_size]
     }
 
     if { $content_size ne "" } {
@@ -412,11 +405,7 @@ db_multirow -extend {
                 append content_size_pretty "&nbsp;[_ file-storage.items]"
                 set pretty_type "#file-storage.Folder#"
             } else {
-                if {$content_size < 1024} {
-                    set content_size_pretty "[lc_numeric $content_size]&nbsp;[_ file-storage.bytes]"
-                } else {
-                    set content_size_pretty "[lc_numeric [expr {$content_size / 1024 }]]&nbsp;[_ file-storage.kb]"
-                }
+                set content_size_pretty [util::content_size_pretty -size $content_size]
             }
             set properties_url [export_vars -base ${fs_url}file {{file_id $object_id}}]
             set new_version_link [_ acs-kernel.common_New]
