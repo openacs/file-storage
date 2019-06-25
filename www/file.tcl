@@ -178,11 +178,7 @@ db_multirow -unclobber -extend {
     # set file_url [ad_urlencode $file_url]
     set last_modified_ansi [lc_time_system_to_conn $last_modified_ansi]
     set last_modified_pretty [lc_time_fmt $last_modified_ansi "%x %X"]
-    if {$content_size < 1024} {
-	set content_size_pretty "[lc_numeric $content_size] [_ file-storage.bytes]"
-    } else {
-	set content_size_pretty "[lc_numeric [expr {$content_size / 1024 }]] [_ file-storage.kb]"
-    }
+    set content_size_pretty [util::content_size_pretty -size $content_size]
     if {$title eq ""} {
 	set title "[_ file-storage.untitled]"
     }
