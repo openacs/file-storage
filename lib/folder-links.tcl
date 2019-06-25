@@ -55,12 +55,12 @@ db_multirow -extend {
     properties_url download_url target_tag
 } contents select_folder_contents {} {
     set last_modified_ansi [lc_time_system_to_conn $last_modified_ansi]
-    
+
     set last_modified_pretty [lc_time_fmt $last_modified_ansi "%x %X"]
     #    if {$description ne ""} {
     #        set description " - $description"
     #    }
-    
+
     if {$type eq "folder"} {
         set content_size_pretty [lc_numeric $content_size]
         append content_size_pretty " [_ file-storage.items]"

@@ -9,9 +9,9 @@ ad_page_contract {
     {show_all_versions_p:boolean,notnull "f"}
 } -validate {
     valid_file -requires {file_id} {
-	if {![fs_file_p $file_id]} {
-	    ad_complain "[_ file-storage.lt_The_specified_file_is]"
-	}
+        if {![fs_file_p $file_id]} {
+            ad_complain "[_ file-storage.lt_The_specified_file_is]"
+        }
     }
 } -properties {
     title:onevalue
@@ -41,8 +41,8 @@ db_1row file_info {
                parent_id,
                coalesce(url,file_upload_name) as name,
                live_revision
-	from   fs_objects f
-	where  f.object_id = :file_id
+        from   fs_objects f
+        where  f.object_id = :file_id
 }
 
 set write_p  [permission::permission_p -party_id $user_id -object_id $file_id -privilege "write"]
@@ -89,7 +89,7 @@ if {$write_p} {
 # add button only when available folders for copy exist. We settle for
 # a lazy check on write permissions for folder because a rigorous
 # check of available destinations would not be performant.
-if {$folder_write_p} {    
+if {$folder_write_p} {
     lappend actions \
         [_ file-storage.Copy_File] \
         [export_vars -base copy {{object_id $file_id} return_url}] \
@@ -120,30 +120,30 @@ template::list::create \
     -multirow version \
     -actions $actions \
     -elements {
-	title {
-	    label \#file-storage.Title\#
-	    link_url_col version_url
-	    link_html {title "\#file-storage.show_version_title\#"}
-	}
-	author { label \#file-storage.Author\#
-            display_template {@version.author_link;noquote@}
+        title {
+            label \#file-storage.Title\#
+            link_url_col version_url
+            link_html {title "\#file-storage.show_version_title\#"}
         }
-	content_size {
-	    label \#file-storage.Size\#
-	    display_col content_size_pretty
-	}
-	type { label \#file-storage.Type\#
-	       display_col pretty_type }
-	last_modified_ansi {
-	    label \#file-storage.Last_Modified\#
-	    display_col last_modified_pretty
-	}
-	description { label \#file-storage.Version_Notes\#}
-	version_delete {
-	    label "" 
-	    link_url_col version_delete_url
-	    link_html {title "\#file-storage.Delete_Version\#"}
-	}
+        author { label \#file-storage.Author\#
+                 display_template {@version.author_link;noquote@}
+        }
+        content_size {
+            label \#file-storage.Size\#
+            display_col content_size_pretty
+        }
+        type { label \#file-storage.Type\#
+               display_col pretty_type }
+        last_modified_ansi {
+            label \#file-storage.Last_Modified\#
+            display_col last_modified_pretty
+        }
+        description { label \#file-storage.Version_Notes\#}
+        version_delete {
+            label ""
+            link_url_col version_delete_url
+            link_html {title "\#file-storage.Delete_Version\#"}
+        }
     }
 
 db_multirow -unclobber -extend {
@@ -180,7 +180,7 @@ db_multirow -unclobber -extend {
     set last_modified_pretty [lc_time_fmt $last_modified_ansi "%x %X"]
     set content_size_pretty [util::content_size_pretty -size $content_size]
     if {$title eq ""} {
-	set title "[_ file-storage.untitled]"
+        set title "[_ file-storage.untitled]"
     }
     if {$version_id ne $live_revision } {
         set version_url [export_vars -base "download/$title" {version_id}]
