@@ -66,7 +66,7 @@ db_multirow -extend {
         append content_size_pretty " [_ file-storage.items]"
         set pretty_type "Folder"
     } else {
-        set content_size_pretty [util::content_size_pretty -size $content_size]
+        set content_size_pretty [lc_content_size_pretty -size $content_size]
     }
 
     set name [lang::util::localize $name]
