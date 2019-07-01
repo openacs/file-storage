@@ -178,7 +178,7 @@ db_multirow -unclobber -extend {
     # set file_url [ad_urlencode $file_url]
     set last_modified_ansi [lc_time_system_to_conn $last_modified_ansi]
     set last_modified_pretty [lc_time_fmt $last_modified_ansi "%x %X"]
-    set content_size_pretty [util::content_size_pretty -size $content_size]
+    set content_size_pretty [lc_content_size_pretty -size $content_size]
     if {$title eq ""} {
         set title "[_ file-storage.untitled]"
     }
