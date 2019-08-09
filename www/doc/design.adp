@@ -159,7 +159,7 @@ of the file, is stored in the "title" attribute of
 cr_revisions. Note that "title" is also used as the
 (unique within a folder) identifier of the file stored in cr_items.
 Thus, wrappers to the Content Repository API makes sure that the
-naming convention is corect: cr_items.name attribute stores the
+naming convention is correct: cr_items.name attribute stores the
 title of a file and all its versions, while the cr_revisions.title
 attribute stores the filename of the version uploaded into the
 Content Repository.</p>
@@ -316,7 +316,7 @@ by APM. This trigger walks through all the contents of the instance
 of File Storage, and starts deleting from the "leaves" or
 end nodes of the file tree up to the root folder. Later
 improvements in Content Repository will allow archiving of the
-contents instaed of actually deleting them from the database.</p>
+contents instead of actually deleting them from the database.</p>
 <h3>VIII. User Interface</h3>
 <p>The user interface attempts to replicate the file system
 metaphors familiar to most computer users, with folders containing
