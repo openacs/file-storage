@@ -61,7 +61,7 @@ if {[info exists folder_id]} {
  	-privilege "write"
 
 
-    # check for WRTIE permission on each object to be copyd
+    # Check for WRITE permission on each object to be copied.
     # DaveB: I think it should be DELETE instead of WRITE
     # but the existing file-copy page checks for WRITE
     set error_items [list]      

@@ -437,7 +437,7 @@ select define_function_args('file_storage__move_file','file_id,target_folder_id,
 -- procedure file_storage__move_file/4
 --
     --
-    -- Move a file (ans all its versions) to a different folder.
+    -- Move a file (and all its versions) to a different folder.
     -- Wrapper for content_item__move
     -- 
 
