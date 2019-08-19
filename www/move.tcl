@@ -66,7 +66,7 @@ if {[info exists folder_id]} {
         -privilege "write"
 
 
-    # check for WRTIE permission on each object to be moved
+    # check for WRITE permission on each object to be moved
     # DaveB: I think it should be DELETE instead of WRITE
     # but the existing file-move page checks for WRITE
     set error_items {}
