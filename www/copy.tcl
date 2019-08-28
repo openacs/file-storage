@@ -140,7 +140,23 @@ if {[info exists folder_id]} {
     }
     set object_id $objects_to_copy
     set cancel_url "[ad_conn url]?[ad_conn query]"
-    db_multirow -extend {copy_url} folder_tree get_folder_tree "" {
+    db_multirow -extend {copy_url} folder_tree get_folder_tree {
+        with recursive folder_tree (folder_id, parent_id, label) as (
+            select cf.folder_id, cif.parent_id, cf.label, 1 as level_num
+            from cr_folders cf, cr_items cif
+            where cf.folder_id = :root_folder_id
+              and cf.folder_id = cif.item_id
+            and acs_permission.permission_p(cf.folder_id, :user_id, 'write')
+
+            union all
+
+            select cf.folder_id, cif.parent_id, cf.label, level_num + 1 as level_num
+            from cr_folders cf, cr_items cif, folder_tree t
+            where cif.parent_id = t.folder_id
+              and cf.folder_id = cif.item_id
+              and acs_permission.permission_p(cf.folder_id, :user_id, 'write')
+       ) select * from folder_tree
+    } {
         if {$folder_id in [concat $not_allowed_parents $not_allowed_children] 
 	    || $parent_id in $not_allowed_children
 	} {
