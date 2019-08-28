@@ -5,7 +5,7 @@ ad_page_contract {
     Allows copy of single or multiple items
 
     @author Dave Bauer dave@thedesignexperience.org
-    
+
 } -query {
     object_id:notnull,integer,multiple
     folder_id:naturalnum,optional
@@ -28,24 +28,23 @@ set not_allowed_parents [list]
 set not_allowed_children [list]
 
 db_multirow -extend {copy_message} copy_objects get_copy_objects [subst {
-      select fs.object_id, fs.name, fs.title, fs.parent_id,
-      acs_permission.permission_p(fs.object_id, :user_id, 'read') as copy_p, fs.type
+    select fs.object_id, fs.name, fs.title, fs.parent_id,
+           acs_permission.permission_p(fs.object_id, :user_id, 'read') as copy_p, fs.type
       from fs_objects fs
-      where fs.object_id in ([template::util::tcl_to_sql_list $object_id])
-	order by copy_p
+     where fs.object_id in ([template::util::tcl_to_sql_list $object_id])
+     order by copy_p
 }] {
     if {$copy_p} {
-	set copy_message ""
-	incr allowed_count
+        set copy_message ""
+        incr allowed_count
     } else {
-	set copy_message [_ file-storage.Not_Allowed]
-	incr not_allowed_count
+        set copy_message [_ file-storage.Not_Allowed]
+        incr not_allowed_count
     }
     if {$type eq "folder"} {
         lappend not_allowed_children $object_id
         # lappend not_allowed_parents $parent_id
     }
-  
 }
 
 set total_count [template::multirow size copy_objects]
@@ -56,15 +55,15 @@ if {$not_allowed_count > 0} {
 
 if {[info exists folder_id]} {
      permission::require_permission \
- 	-party_id $user_id \
- 	-object_id $folder_id \
- 	-privilege "write"
+         -party_id $user_id \
+         -object_id $folder_id \
+         -privilege "write"
 
 
     # Check for WRITE permission on each object to be copied.
     # DaveB: I think it should be DELETE instead of WRITE
     # but the existing file-copy page checks for WRITE
-    set error_items [list]      
+    set error_items [list]
     template::multirow foreach copy_objects {
         db_transaction {
             # Allow to copy files into folders that already contain
@@ -84,10 +83,10 @@ if {[info exists folder_id]} {
                 set name ${name}-${suffix}${name_ext}
                 incr suffix
             }
-            
+
             if {$type ne "folder" } {
                 set file_rev_id [db_exec_plsql copy_item {}]
-		callback fs::file_revision_new \
+                callback fs::file_revision_new \
                     -package_id $package_id \
                     -file_id    $object_id \
                     -parent_id  $folder_id
@@ -96,26 +95,26 @@ if {[info exists folder_id]} {
             }
         } on_error {
             lappend error_items $name
-	}
+        }
     }
-     if {[llength $error_items]} {
-	 set message "[_ file-storage.There_was_a_problem_copying_the_following_items]: [join $error_items ", "]"
-     } else {
-	 set message [_ file-storage.Selected_items_have_been_copied]
-     }
-     ad_returnredirect -message $message $return_url
-     ad_script_abort
+    if {[llength $error_items]} {
+        set message "[_ file-storage.There_was_a_problem_copying_the_following_items]: [join $error_items ", "]"
+    } else {
+        set message [_ file-storage.Selected_items_have_been_copied]
+    }
+    ad_returnredirect -message $message $return_url
+    ad_script_abort
 
  } else {
 
     template::list::create \
-	-name copy_objects \
-	-multirow copy_objects \
-	-elements {
-	    name {label \#file-storage.Files_to_be_copied\#}
-	    copy_message {}
-	}
-    
+        -name copy_objects \
+        -multirow copy_objects \
+        -elements {
+            name {label \#file-storage.Files_to_be_copied\#}
+            copy_message {}
+    }
+
     template::list::create \
         -name folder_tree \
         -pass_properties { item_id redirect_to_folder return_url } \
@@ -136,7 +135,7 @@ if {[info exists folder_id]} {
         }
 
     if {$root_folder_id eq ""} {
-	set root_folder_id [fs::get_root_folder]
+        set root_folder_id [fs::get_root_folder]
     }
     set object_id $objects_to_copy
     set cancel_url "[ad_conn url]?[ad_conn query]"
@@ -159,9 +158,9 @@ if {[info exists folder_id]} {
            from folder_tree
           order by tree_sortkey asc, label asc
     } {
-        if {$folder_id in [concat $not_allowed_parents $not_allowed_children] 
-	    || $parent_id in $not_allowed_children
-	} {
+        if {$folder_id in [concat $not_allowed_parents $not_allowed_children]
+            || $parent_id in $not_allowed_children
+        } {
             if {$parent_id in $not_allowed_children} {
                 lappend not_allowed_children $folder_id
             }
@@ -171,7 +170,6 @@ if {[info exists folder_id]} {
             set copy_url [export_vars -base "file-upload-confirm" {folder_id cancel_url {return_url $target_url}}]
         }
     }
-    
 }
 
 set context [list "\#file-storage.Copy\#"]
