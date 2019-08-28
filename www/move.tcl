@@ -151,7 +151,25 @@ if {[info exists folder_id]} {
     }
     set object_id $objects_to_move
     set cancel_url "[ad_conn url]?[ad_conn query]"
-    db_multirow -extend {move_url level} folder_tree get_folder_tree "" {
+    db_multirow -extend {move_url} folder_tree get_folder_tree {
+        with recursive folder_tree (folder_id, parent_id, label, level_num, tree_sortkey) as (
+            select cf.folder_id, cif.parent_id, cf.label, 0 as level_num, cast(cif.parent_id as text) as tree_sortkey
+            from cr_folders cf, cr_items cif
+            where cf.folder_id = :root_folder_id
+              and cf.folder_id = cif.item_id
+            and acs_permission.permission_p(cf.folder_id, :user_id, 'write')
+
+            union all
+
+            select cf.folder_id, cif.parent_id, cf.label, level_num + 1 as level_num, t.tree_sortkey || '|' || cif.parent_id as tree_sortkey
+            from cr_folders cf, cr_items cif, folder_tree t
+            where cif.parent_id = t.folder_id
+              and cf.folder_id = cif.item_id
+              and acs_permission.permission_p(cf.folder_id, :user_id, 'write')
+       ) select folder_id, parent_id, label, level_num
+           from folder_tree
+          order by tree_sortkey asc, label asc
+    } {
 	# teadams 2003-08-22 - change level to level num to avoid
 	# Oracle issue with key words.
         if {$folder_id in [concat $not_allowed_parents $not_allowed_children]
