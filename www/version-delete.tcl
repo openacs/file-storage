@@ -46,7 +46,7 @@ ad_form -export version_id -cancel_url $file_url -form {
     set parent_id [fs::delete_version \
                        -item_id $item_id \
                        -version_id $version_id]
-    # parent_id > 0 means this was last revision left, therefore file
+    # parent_id > 0 means this was last revision left, therefore, file
     # was deleted as well. Return to the parent instead than to the
     # non-existing file.
     set return_url [expr {$parent_id == 0 ?
