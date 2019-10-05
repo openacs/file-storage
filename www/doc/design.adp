@@ -61,7 +61,7 @@ of a given type, or searching through specified file types).</p>
 <h3>V. Design Tradeoffs</h3>
 <h4>Folder Permissions</h4>
 <p>Previous versions of File Storage have not included folder
-permissions. (However they did have a concept of private group
+permissions. (However, they did have a concept of private group
 trees.) The reasons for this were to simplify the code and the user
 experience. However, this system actually caused some confusion
 (<em>e.g.</em>, explicitly granting permission to an outsider on a

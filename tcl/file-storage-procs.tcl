@@ -427,7 +427,7 @@ ad_proc -public fs::get_folder_contents {
 } {
     WARNING: This proc is not scalable because it does too many permission checks.
 
-    DRB: Not so true now that permissions are fast.  However it is now only used
+    DRB: Not so true now that permissions are fast.  However, it is now only used
     to clone files in dotLRN and for the somewhat brain-damaged syllabus package.
     At minimum the permission checks returned by the code can be removed.  Most of
     the other fields as well.   Oh well ...
