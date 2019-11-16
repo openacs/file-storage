@@ -36,7 +36,7 @@ permission::require_permission -object_id $folder_id -privilege delete
 # Check if there are child items they don't have permission to delete
 # (Irrelevant at this point because they can't delete folders with
 # contents at all.)
-set blocked_p [expr {![children_have_permission_p $folder_id delete]}]
+set blocked_p [expr {![fs_children_have_permission_p $folder_id delete]}]
 
 # Message lookup uses variables folder_name and child_count
 set folder_name [lang::util::localize [fs_get_folder_name $folder_id]]

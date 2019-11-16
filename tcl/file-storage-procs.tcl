@@ -77,7 +77,7 @@ ad_proc fs_version_p {
 # Permission procs
 #
 
-ad_proc children_have_permission_p {
+ad_proc -private fs_children_have_permission_p {
     {-user_id ""}
     item_id
     privilege
