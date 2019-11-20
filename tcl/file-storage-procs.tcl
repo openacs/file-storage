@@ -84,35 +84,35 @@ ad_proc -private fs_children_have_permission_p {
 } {
     This procedure, given a content item and a privilege, checks to see if
     there are any children of the item on which the user does not have that
-    privilege.  It returns 0 if there is any child item on which the user
-    does not have the privilege.  It returns 1 if the user has the
-    privilege on every child item.
+    privilege.
+
+    @return 0 if there is any child item on which the user does not
+    have the privilege.  It returns 1 if the user has the privilege on
+    every child item.
 } {
     if {$user_id eq ""} {
         set user_id [ad_conn user_id]
     }
 
-    # This only gets child folders and items
-
-    set num_wo_perm [db_string child_perms {}]
-
-    # now check revisions
-
-    db_foreach child_items {} {
-        incr num_wo_perm [db_string revision_perms {
-            select count(*)
-            from cr_revisions
-            where item_id = :child_item_id
-            and not acs_permission.permission_p(revision_id, :user_id, :privilege)
-        }]
-    }
-
-    if { $num_wo_perm > 0 } {
-        return 0
-    } else {
-        return 1
-    }
-
+    # Check that no item or revision over the whole cr_item
+    # descendants hierarchy does not have the required permissison.
+    set all_children_have_privilege_p [db_string all_children_have_privilege {
+        with recursive children(item_id) as (
+            select cast(:item_id as integer) as item_id
+            union all
+            select i.item_id
+            from cr_items i,
+                 children c
+            where i.parent_id = c.item_id
+        )
+        select not exists (select 1 from children
+                            where not acs_permission.permission_p(item_id, :user_id, :privilege))
+           and not exists (select 1 from cr_revisions
+                            where item_id in (select item_id from children)
+                              and not acs_permission.permission_p(revision_id, :user_id, :privilege))
+          from dual
+    }]
+    return [expr {$all_children_have_privilege_p ? 1 : 0}]
 }
 
 

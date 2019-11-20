@@ -45,27 +45,6 @@
         </querytext>
     </fullquery>
 
-    <fullquery name="children_have_permission_p.child_perms">
-        <querytext>
-            select count(*)
-            from cr_items
-            where item_id in (select item_id
-                              from cr_items
-                              connect by prior item_id = parent_id
-                              start with item_id = :item_id)
-            and acs_permission.permission_p(item_id, :user_id, :privilege) = 'f'
-        </querytext>
-    </fullquery>
-
-    <fullquery name="children_have_permission_p.child_items">
-        <querytext>
-            select item_id as child_item_id
-            from cr_items
-            connect by prior item_id = parent_id
-            start with item_id = :item_id
-        </querytext>
-    </fullquery>
-
     <fullquery name="fs_context_bar_list.title">
         <querytext>
             begin
