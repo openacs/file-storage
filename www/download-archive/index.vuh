@@ -58,12 +58,7 @@ set out_file [file join ${out_path} ${download_name}]
 set cmd [fs::get_archive_command -in_file $file_name -out_file $out_file]
 
 # create the archive
-with_catch errmsg {
-    exec bash -c "cd $in_path; $cmd; cd -"
-} {
-    # some day we'll do something useful here
-    error $errmsg
-}
+exec bash -c "cd $in_path; $cmd; cd -"
 
 # return the archive to the connection.
 ns_returnfile 200 application/octet-stream $out_file
