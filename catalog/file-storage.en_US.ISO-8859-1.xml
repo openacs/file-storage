@@ -117,7 +117,7 @@ This action cannot be reversed.</msg>
   <msg key="lt_This_file_has_version">This file has versions that you do not have permission to delete,
 so you cannot delete the file.</msg>
   <msg key="lt_This_folder_contains_">This folder contains items that you do not have permission to
-delete, therefore you cannot delete it.</msg>
+delete, therefore, you cannot delete it.</msg>
   <msg key="lt_This_is_a_ZIP">This is a ZIP file containing multiple files. Expect a long upload time for large files.  You may minimize your browser while waiting.</msg>
   <msg key="lt_Upload_a_compressed_f">Upload a compressed folder that will be unzipped as it was.</msg>
   <msg key="lt_Upload_a_file_in_this">Upload a file in this folder</msg>
