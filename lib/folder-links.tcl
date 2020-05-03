@@ -47,7 +47,7 @@ if {$root_folder_id ne $folder_id && "/view/" eq $base_url} {
 }
 
 if {[llength $object_list] > 0} {
-    set object_list_where " and fs_objects.object_id in ([join $object_list ", "])"
+    set object_list_where " and fs_objects.object_id in ([ns_dbquotelist $object_list])"
 }
 
 db_multirow -extend {
