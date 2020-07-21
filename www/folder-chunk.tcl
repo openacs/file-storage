@@ -433,7 +433,7 @@ db_multirow -extend {
             set alt_icon "#file-storage.file#"
             set download_link [_ file-storage.Download]
             if {$like_filesystem_p} {
-                set download_url /file/$object_id/[ad_urlencode_path $title][file extension $name]
+                set download_url /file/$object_id/[ad_urlencode_path $title][ad_file extension $name]
                 set file_url [export_vars -base ${fs_url}download/[ad_urlencode_path $title] {{file_id $object_id}}]
             } else {
                 set download_url /file/$object_id/[ad_urlencode_path $name]

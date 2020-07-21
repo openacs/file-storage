@@ -35,7 +35,7 @@ ad_proc fs::impl::fs_object::put {} {
     }
     
     set tmp_filename [oacs_dav::conn tmpfile]
-    set tmp_size [file size $tmp_filename]
+    set tmp_size [ad_file size $tmp_filename]
 
     set name [oacs_dav::conn item_name]
     set parent_id [oacs_dav::item_parent_folder_id $uri]
