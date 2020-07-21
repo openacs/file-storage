@@ -75,7 +75,7 @@ ad_form -extend -name file_add -form {} -on_submit {
         # check if this is in a folder inside the zip and create
         # the folders if they don't exist
         set p_f_id $folder_id
-        set file_paths [file split [file dirname $upload_file]]
+        set file_paths [file split [ad_file dirname $upload_file]]
 
         if {"." ne $file_paths && [llength $file_paths]} {
             # make sure every folder exists
@@ -93,7 +93,7 @@ ad_form -extend -name file_add -form {} -on_submit {
                 }
 
             }
-            set upload_file [file tail $upload_file]
+            set upload_file [ad_file tail $upload_file]
         }
 
         set this_folder_id $p_f_id

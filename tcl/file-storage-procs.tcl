@@ -571,8 +571,8 @@ ad_proc -public fs::publish_folder_to_file_system {
                          -tolower \
                          $folder_name]
 
-    set dir "[file join ${path} "${folder_name}"]"
-    # set dir "[file join ${path} "download"]"
+    set dir [ad_file join $path $folder_name]
+    # set dir [ad_file join $path "download"]
     file mkdir $dir
 
     foreach object [get_folder_contents -folder_id $folder_id -user_id $user_id] {
@@ -614,12 +614,12 @@ ad_proc -public fs::publish_url_to_file_system {
                        -tolower \
                        $file_name]
 
-    set fp [open [file join $path $file_name] w]
+    set fp [open [ad_file join $path $file_name] w]
     puts $fp {[InternetShortcut]}
     puts $fp URL=$url
     close $fp
 
-    return [file join $path $file_name]
+    return [ad_file join $path $file_name]
 }
 
 ad_proc -public fs::publish_versioned_object_to_file_system {
@@ -681,12 +681,12 @@ ad_proc -public fs::publish_versioned_object_to_file_system {
             # this.  It's safe because we've pulled the value ourselves from the database,
             # don't need to worry about SQL smuggling etc.
 
-            db_blob_get_file select_object_content {} -file [file join ${path} ${file_name}]
+            db_blob_get_file select_object_content {} -file [ad_file join $path $file_name]
         }
         text {
             set content [db_string select_object_content {}]
 
-            set fp [open [file join ${path} ${file_name}] w]
+            set fp [open [ad_file join $path $file_name] w]
             puts $fp $content
             close $fp
         }
@@ -701,10 +701,10 @@ ad_proc -public fs::publish_versioned_object_to_file_system {
             # operation. Therefore, generate a new name with an
             # alternate suffix in these cases.
             #
-            set full_name [file join $path $file_name]
+            set full_name [ad_file join $path $file_name]
             set base_name $full_name
             set count 0
-            while {[file exists $full_name]} {
+            while {[ad_file exists $full_name]} {
                set full_name $base_name-[incr $count]
             }
 
@@ -712,7 +712,7 @@ ad_proc -public fs::publish_versioned_object_to_file_system {
         }
     }
 
-    return [file join ${path} ${file_name}]
+    return [ad_file join $path $file_name]
 }
 
 ad_proc -public fs::get_archive_command {
@@ -1088,7 +1088,7 @@ ad_proc fs::add_version {
                        -mime_type $mime_type \
                        -file      $tmp_filename]
 
-    set tmp_size [file size $tmp_filename]
+    set tmp_size [ad_file size $tmp_filename]
     set parent_id [fs::get_parent -item_id $item_id]
     set revision_id [cr_import_content \
                          -item_id $item_id \
@@ -1549,7 +1549,7 @@ ad_proc -public fs::file_copy {
     db_1row file_data {}
 
     if {$postfix ne ""} {
-        set name [lang::util::localize "[file rootname $name]_$postfix[file extension $name]"]
+        set name [lang::util::localize "[ad_file rootname $name]_$postfix[ad_file extension $name]"]
     }
 
     if {$symlink_p} {
@@ -1610,7 +1610,7 @@ ad_proc -public fs::file_copy {
     db_1row file_data {}
 
     if {$postfix ne ""} {
-        set name [lang::util::localize "[file rootname $name]_$postfix[file extension $name]"]
+        set name [lang::util::localize "[ad_file rootname $name]_$postfix[ad_file extension $name]"]
     }
 
     if {$symlink_p} {

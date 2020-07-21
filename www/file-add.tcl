@@ -35,7 +35,7 @@ ad_page_contract {
         }
     }
     max_size -requires {upload_file} {
-        set n_bytes [file size ${upload_file.tmpfile}]
+        set n_bytes [ad_file size ${upload_file.tmpfile}]
         set max_bytes [fs::max_upload_size]
         if { $n_bytes > $max_bytes } {
             set number_of_bytes [lc_numeric $max_bytes] ; # needed by message key
@@ -189,7 +189,7 @@ ad_form -extend -form {} -select_query_name get_file -new_data {
         set upload_tmpfiles [list]
 
         foreach file [glob -nocomplain "$path/*"] {
-            lappend upload_files [file tail $file]
+            lappend upload_files [ad_file tail $file]
             lappend upload_tmpfiles $file
         }
 
@@ -246,8 +246,8 @@ ad_form -extend -form {} -select_query_name get_file -new_data {
                     -privilege write
             } else {
                 # create a new filename by appending the item_id to its rootname
-                set extension [file extension $upload_file]
-                set rootname [file rootname $upload_file]
+                set extension [ad_file extension $upload_file]
+                set rootname [ad_file rootname $upload_file]
                 set upload_file ${rootname}-${this_file_id}${extension}
             }
         }

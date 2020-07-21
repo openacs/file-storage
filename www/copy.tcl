@@ -78,7 +78,7 @@ if {[info exists folder_id]} {
                 # for name, put the suffix just before the extension,
                 # so browser can keep guessing the correct filetype at
                 # download
-                set name_ext [file extension $name]
+                set name_ext [ad_file extension $name]
                 set name [string range ${orig_name} 0 end-[string length $name_ext]]
                 set name ${name}-${suffix}${name_ext}
                 incr suffix

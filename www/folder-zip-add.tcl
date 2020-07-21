@@ -44,7 +44,7 @@ ad_page_contract {
         #
         # Check if the file is larger than fs::max_upload_size.
         #
-        set n_bytes [file size ${upload_file.tmpfile}]
+        set n_bytes [ad_file size ${upload_file.tmpfile}]
         set max_bytes [fs::max_upload_size]
         if { $n_bytes > $max_bytes } {
             ad_complain "Your file is larger than the maximum file size allowed on this system ([lc_content_size_pretty -size $max_bytes])"
@@ -185,7 +185,7 @@ ad_form -extend -name file_add -form {} -new_data {
         #
         set this_file_id $file_id
         set p_f_id $folder_id
-        set file_paths [file split [file dirname $upload_file]]
+        set file_paths [file split [ad_file dirname $upload_file]]
         if {"." ne $file_paths && [llength $file_paths] > 0} {
             #
             # Make sure every folder exists, or create it otherwise.
@@ -203,7 +203,7 @@ ad_form -extend -name file_add -form {} -new_data {
                     set p_f_id $paths($path)
                 }
             }
-            set upload_file [file tail $upload_file]
+            set upload_file [ad_file tail $upload_file]
         }
         set this_title $upload_file
         set this_folder_id $p_f_id

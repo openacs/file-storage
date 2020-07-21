@@ -39,7 +39,7 @@ foreach fs_object_id $object_id {
 set out_path [ad_tmpnam]
 file mkdir $out_path
 
-set out_file [file join ${out_path} ${download_name}]
+set out_file [ad_file join ${out_path} ${download_name}]
 
 # create the archive
 ad_try {
@@ -54,7 +54,7 @@ ad_try {
 # return the archive to the connection.
 ns_set put [ad_conn outputheaders] Content-Disposition "attachment;filename=\"$download_name\""
 ns_set put [ad_conn outputheaders] Content-Type "application/zip"
-ns_set put [ad_conn outputheaders] Content-Size "[file size $out_file]"
+ns_set put [ad_conn outputheaders] Content-Size "[ad_file size $out_file]"
 ns_returnfile 200 application/octet-stream $out_file
 
 # clean everything up
