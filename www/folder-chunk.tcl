@@ -194,9 +194,10 @@ set bulk_actions {}
 if {$allow_bulk_actions} {
     set user_id [ad_conn user_id]
     set bulk_delete_p [db_string some_deletables {
-        select exists (select 1 from fs_objects
-                       where parent_id = :folder_id
-                       and acs_permission.permission_p(object_id, :viewing_user_id, 'delete'))
+        select case when exists (select 1 from fs_objects
+                                 where parent_id = :folder_id
+                                 and acs_permission.permission_p(object_id, :viewing_user_id, 'delete')) then 1 else 0 end
+        from dual
     }]
     set bulk_copy_p [permission::permission_p -object_id $folder_id -privilege write]
 
