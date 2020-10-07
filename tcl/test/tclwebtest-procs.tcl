@@ -8,14 +8,14 @@ ad_library {
 
 namespace eval file_storage::twt {}
 
-ad_proc file_storage::twt::call_fs_page {} {
+ad_proc -private file_storage::twt::call_fs_page {} {
     Requests the file-storage page.
 } {
     set fs_page [aa_get_first_url -package_key file-storage]
     ::twt::do_request $fs_page
 }
 
-ad_proc file_storage::twt::create_file { f_name }  {
+ad_proc -private file_storage::twt::create_file { f_name }  {
     Creates a temporary file.
 } {
     # Create a temporary file
@@ -26,14 +26,14 @@ ad_proc file_storage::twt::create_file { f_name }  {
     return $file_name
 }
 
-ad_proc file_storage::twt::delete_file { file_name } {
+ad_proc -private file_storage::twt::delete_file { file_name } {
     Deletes a file.
 } {
     # Delete a file name
     file delete -force -- $file_name
 }
 
-ad_proc file_storage::twt::create_new_folder { folder_name folder_description } {
+ad_proc -private file_storage::twt::create_new_folder { folder_name folder_description } {
     Creates a new folder from the UI.
 } {
     set response 0
@@ -64,7 +64,7 @@ ad_proc file_storage::twt::create_new_folder { folder_name folder_description } 
     return $response
 }
 
-ad_proc file_storage::twt::delete_folder {} {
+ad_proc -private file_storage::twt::delete_folder {} {
     Deletes a folder from the UI.
 } {
     set response 0
@@ -92,7 +92,7 @@ ad_proc file_storage::twt::delete_folder {} {
 }
 
 
-ad_proc file_storage::twt::add_file_to_folder { folder_name file_name file_description } {
+ad_proc -private file_storage::twt::add_file_to_folder { folder_name file_name file_description } {
     Adds a file to a folder from the UI.
 } {
 
@@ -130,7 +130,7 @@ ad_proc file_storage::twt::add_file_to_folder { folder_name file_name file_descr
     return $response
 }
 
-ad_proc file_storage::twt::create_url_in_folder { url_title url url_description }  {
+ad_proc -private file_storage::twt::create_url_in_folder { url_title url url_description }  {
     Creates a URL in a folder from the UI.
 } {
 
@@ -164,7 +164,7 @@ ad_proc file_storage::twt::create_url_in_folder { url_title url url_description 
     }
 }
 
-ad_proc file_storage::twt::upload_file { file_name file_description } {
+ad_proc -private file_storage::twt::upload_file { file_name file_description } {
     Uploads a new file from the UI.
 } {
 
@@ -202,7 +202,7 @@ ad_proc file_storage::twt::upload_file { file_name file_description } {
      return $response
 }
 
-ad_proc file_storage::twt::delete_uploaded_file { file_name } {
+ad_proc -private file_storage::twt::delete_uploaded_file { file_name } {
     Deletes a file from the UI.
 } {
 
@@ -236,7 +236,7 @@ ad_proc file_storage::twt::delete_uploaded_file { file_name } {
     return $response
 }
 
-ad_proc file_storage::twt::rename_file { file_name } {
+ad_proc -private file_storage::twt::rename_file { file_name } {
     Renames a file from the UI.
 } {
 
@@ -270,7 +270,7 @@ ad_proc file_storage::twt::rename_file { file_name } {
     return $response
 }
 
-ad_proc file_storage::twt::copy_file { folder_name file_name } {
+ad_proc -private file_storage::twt::copy_file { folder_name file_name } {
     Copies a file from the UI.
 } {
 
@@ -304,7 +304,7 @@ ad_proc file_storage::twt::copy_file { folder_name file_name } {
     return $response
 }
 
-ad_proc file_storage::twt::move_file { folder_name file_name } {
+ad_proc -private file_storage::twt::move_file { folder_name file_name } {
     Moves a file from the UI.
 } {
 
@@ -338,7 +338,7 @@ ad_proc file_storage::twt::move_file { folder_name file_name } {
     return $response
 }
 
-ad_proc file_storage::twt::create_url { url_title url url_description } {
+ad_proc -private file_storage::twt::create_url { url_title url url_description } {
     Creates a new URL from the UI.
 } {
 
@@ -374,7 +374,7 @@ ad_proc file_storage::twt::create_url { url_title url url_description } {
     return $response
 }
 
-ad_proc file_storage::twt::edit_url {url_title url url_description } {
+ad_proc -private file_storage::twt::edit_url {url_title url url_description } {
     Edits an existing URL from the UI.
 } {
 
@@ -413,7 +413,7 @@ ad_proc file_storage::twt::edit_url {url_title url url_description } {
     return $response
 }
 
-ad_proc file_storage::twt::delete_url { url_title } {
+ad_proc -private file_storage::twt::delete_url { url_title } {
     Deletes a URL from the UI.
 } {
 
