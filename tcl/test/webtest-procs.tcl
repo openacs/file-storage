@@ -32,7 +32,7 @@ namespace eval file_storage::test {
                        description "$folder_description"
                    }]]
         acs::test::reply_has_status_code $d 302
-        set location [::xowiki::test::get_url_from_location $d]
+        set location [::acs::test::get_url_from_location $d]
 
         if { [string match  "*/\?folder_id*" $location] } {
             set d [acs::test::http -last_request $d $location]
@@ -67,7 +67,7 @@ namespace eval file_storage::test {
                        folder_name "$folder_name"
                    }]]
         acs::test::reply_has_status_code $d 302
-        set location [::xowiki::test::get_url_from_location $d]
+        set location [::acs::test::get_url_from_location $d]
 
         if { [string match  "*/\?folder_id*" $location] } {
             set d [acs::test::http -last_request $d $location]
