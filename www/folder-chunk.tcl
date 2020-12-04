@@ -333,7 +333,7 @@ db_multirow -extend {
                    fs_objects.last_modified >= (current_timestamp - cast('$n_past_days days' as interval)) as new_p
             from fs_objects
             where fs_objects.parent_id = :folder_id
-	    and   acs_permission.permission_p(fs_objects.object_id, :viewing_user_id, 'read')
+            and   acs_permission.permission_p(fs_objects.object_id, :viewing_user_id, 'read')
 
             $categories_limitation
             $orderby
