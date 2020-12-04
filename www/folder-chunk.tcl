@@ -88,6 +88,12 @@ if {$write_p} {
 }
 
 set expose_rss_p [parameter::get -parameter ExposeRssP -package_id $package_id -default 0]
+
+# Disable RSS exposure if the RSS generation is disabled
+if {![parameter::get_global_value -package_key rss-support -parameter RssGenActiveP]} {
+    set expose_rss_p 0
+}
+
 set like_filesystem_p [parameter::get -parameter BehaveLikeFilesystemP -package_id $package_id -default 1]
 
 set target_window_name [parameter::get -parameter DownloadTargetWindowName -package_id $package_id -default ""]
