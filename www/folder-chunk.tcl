@@ -1,5 +1,3 @@
-# file-storage/www/folder-chunk.tcl
-
 ad_include_contract {
     @author yon (yon@openforce.net)
     @creation-date Feb 22, 2002
@@ -90,7 +88,7 @@ if {$write_p} {
 set expose_rss_p [parameter::get -parameter ExposeRssP -package_id $package_id -default 0]
 
 # Disable RSS exposure if the RSS generation is disabled
-if {![parameter::get_global_value -package_key rss-support -parameter RssGenActiveP]} {
+if {![parameter::get_global_value -package_key rss-support -parameter RssGenActiveP -default 1]} {
     set expose_rss_p 0
 }
 
