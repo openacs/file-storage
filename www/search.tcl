@@ -22,9 +22,9 @@ set orig_query $query
 
 # In case they used wildcards, replace * with %
 
-regsub -all {\*} $query {%} query
+regsub -all -- {\*} $query {%} query
 set query "%${query}%"
-regsub -all {%+} $query {%} query
+regsub -all -- {%+} $query {%} query
 
 db_multirow results get_ids_and_titles {}
 

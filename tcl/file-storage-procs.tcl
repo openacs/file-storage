@@ -371,7 +371,7 @@ ad_proc -deprecated -public fs::remove_special_file_system_characters {
 
     @see ad_sanitize_filename
 } {
-    regsub -all {[<>:\"|/@\#%&+\\]} $string {_} string
+    regsub -all -- {[<>:\"|/@\#%&+\\]} $string {_} string
     return [string trim $string]
 }
 
@@ -724,16 +724,16 @@ ad_proc -public fs::get_archive_command {
 } {
     set cmd [parameter::get -parameter ArchiveCommand -default "tar cf - {in_file} | gzip > {out_file}"]
 
-    regsub -all {(\W)} $in_file {\\\1} in_file
-    regsub -all {\\/} $in_file {/} in_file
-    regsub -all {\\\.} $in_file {.} in_file
+    regsub -all -- {(\W)} $in_file {\\\1} in_file
+    regsub -all -- {\\/} $in_file {/} in_file
+    regsub -all -- {\\\.} $in_file {.} in_file
 
-    regsub -all {(\W)} $out_file {\\\1} out_file
-    regsub -all {\\/} $out_file {/} out_file
-    regsub -all {\\\.} $out_file {.} out_file
+    regsub -all -- {(\W)} $out_file {\\\1} out_file
+    regsub -all -- {\\/} $out_file {/} out_file
+    regsub -all -- {\\\.} $out_file {.} out_file
 
-    regsub -all {{in_file}} $cmd $in_file cmd
-    regsub -all {{out_file}} $cmd $out_file cmd
+    regsub -all -- {{in_file}} $cmd $in_file cmd
+    regsub -all -- {{out_file}} $cmd $out_file cmd
 
     return $cmd
 }
