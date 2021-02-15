@@ -108,6 +108,15 @@ if {[ad_form_new_p -key file_id]} {
 }
 
 # Rest of the form.
+
+# Folder names cannot contain backslashes
+ad_form -extend -name file_add -form {} -validate {
+    {title
+        {[string first "/" $title] == -1}
+        "#acs-templating.Invalid_filename#"
+    }
+}
+
 ad_form -extend -name file_add -form {} -new_data {
     #
     # new_data block, which unzips the file and uploads its contents to the file
