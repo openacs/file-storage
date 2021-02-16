@@ -12,6 +12,12 @@ aa_register_case \
         file_storage::test::create_new_folder
         file_storage::test::delete_current_folder
         acs::test::follow_link
+
+        fs_get_root_folder
+        fs_context_bar_list
+        ad_form_new_p
+        ad_user_logout
+        ad_unset_cookie
     } \
     fs_create_folder {
 
@@ -68,7 +74,11 @@ aa_register_case \
         file_storage::test::create_new_folder
         file_storage::test::edit_folder
         file_storage::test::delete_current_folder
-        acs::test::follow_link 
+        acs::test::follow_link
+
+        fs_get_root_folder
+        fs_context_bar_list
+        ad_form_new_p
     } \
     fs_edit_folder {
 
@@ -131,7 +141,7 @@ aa_register_case \
     -cats {web smoke} \
     -libraries tclwebtest \
     -procs {
-        aa_display_result        
+        aa_display_result
         file_storage::twt::call_fs_page
         file_storage::twt::create_new_folder
         file_storage::twt::add_file_to_folder
