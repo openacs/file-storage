@@ -6,7 +6,7 @@ ad_library {
 
 namespace eval file_storage::test {
 
-    ad_proc ::file_storage::test::create_new_folder {
+    ad_proc -private ::file_storage::test::create_new_folder {
         -last_request:required
         folder_name
         folder_description
@@ -44,7 +44,7 @@ namespace eval file_storage::test {
         return $d
     }
 
-    ad_proc ::file_storage::test::edit_folder {
+    ad_proc  -private ::file_storage::test::edit_folder {
         -last_request:required
         folder_name
     } {
@@ -79,7 +79,7 @@ namespace eval file_storage::test {
         return $d
     }
 
-    ad_proc ::file_storage::test::delete_current_folder {
+    ad_proc  -private ::file_storage::test::delete_current_folder {
         -last_request:required
     } {
         Delete the current folder via Web UI.
