@@ -691,8 +691,7 @@ ad_proc -public fs::publish_versioned_object_to_file_system {
             close $fp
         }
         file {
-            set cr_path [cr_fs_path $storage_area_key]
-            set cr_file_name [db_string select_file_name {}]
+            set cr_file_name [content::revision::get_cr_file_path -revision_id $live_revision]
 
             #
             # When there are multiple "unnamed files" in a directory,
@@ -708,7 +707,7 @@ ad_proc -public fs::publish_versioned_object_to_file_system {
                set full_name $base_name-[incr $count]
             }
 
-            file copy -- "${cr_path}${cr_file_name}" $full_name
+            file copy -- $cr_file_name $full_name
         }
     }
 
@@ -1557,7 +1556,8 @@ ad_proc -public fs::file_copy {
     } else {
         set user_id [ad_conn user_id]
         set creation_ip [ad_conn peeraddr]
-        set file_path "[cr_fs_path][cr_create_content_file_path $file_id $file_rev_id]"
+        #set file_path "[cr_fs_path][cr_create_content_file_path $file_id $file_rev_id]"
+        set file_path [content::revision::get_cr_file_path -revision_id $file_rev_id]
 
         # We need to check if the file already exists with the same name in the target folder
         # If yes, just add a new revision.
@@ -1580,7 +1580,7 @@ ad_proc -public fs::file_copy {
                                  -creation_user $user_id \
                                  -creation_ip $creation_ip]
 
-        set new_path [cr_create_content_file_path $new_file_id $new_file_rev_id]
+        #set new_path [cr_create_content_file_path $new_file_id $new_file_rev_id]
         cr_create_content_file $new_file_id $new_file_rev_id $file_path
 
         if {$postfix ne ""} {
@@ -1618,7 +1618,8 @@ ad_proc -public fs::file_copy {
     } else {
         set user_id [ad_conn user_id]
         set creation_ip [ad_conn peeraddr]
-        set file_path "[cr_fs_path][cr_create_content_file_path $file_id $file_rev_id]"
+        #set file_path "[cr_fs_path][cr_create_content_file_path $file_id $file_rev_id]"
+        set file_path [content::revision::get_cr_file_path -revision_id $file_rev_id]
 
         # We need to check if the file already exists with the same name in the target folder
         # If yes, just add a new revision.
@@ -1641,7 +1642,7 @@ ad_proc -public fs::file_copy {
                                  -creation_user $user_id \
                                  -creation_ip $creation_ip]
 
-        set new_path [cr_create_content_file_path $new_file_id $new_file_rev_id]
+        #set new_path [cr_create_content_file_path $new_file_id $new_file_rev_id]
         cr_create_content_file $new_file_id $new_file_rev_id $file_path
 
         if {$postfix ne ""} {
