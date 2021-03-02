@@ -10,7 +10,7 @@
 	       i.name as title,
 	       (case i.storage_type
 		     when 'lob' then r.lob::text
-		     when 'file' then '[cr_fs_path]' || r.content
+		     when 'file' then r.content
 	             else r.content
 	        end) as content,
 	        r.mime_type as mime,

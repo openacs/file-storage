@@ -13,12 +13,12 @@ ad_proc fs__datasource {
     @author Jowell S. Sabino (jowellsabino@netscape.net)
 } {
     
-    db_0or1row fs_datasource "
+    db_0or1row fs_datasource {
 	select r.revision_id as object_id,
 	       i.name as title,
 	       case i.storage_type
 		     when 'lob' then r.lob::text
-		     when 'file' then '[cr_fs_path]' || r.content
+		     when 'file' then r.content
 	             else r.content
 	        end as content,
 	        r.mime_type as mime,
@@ -27,7 +27,11 @@ ad_proc fs__datasource {
 	from cr_items i, cr_revisions r
 	where r.item_id = i.item_id
 	and   r.revision_id = :revision_id
-    " -column_array datasource
+    } -column_array datasource
+
+    if {$storage_type eq "file"} {
+        set datasource(content) [content::revision::get_cr_file_path -revision_id $object_id]
+    }
 	
     return [array get datasource]
 }
