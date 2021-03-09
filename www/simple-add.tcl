@@ -62,7 +62,7 @@ if {$lock_title_p} {
 set submit_label [_ file-storage.Create]
 
 ad_form -extend -form {
-    {url:text(text) {label \#file-storage.URL\#} {value "http://"}}
+    {url:text(url) {label \#file-storage.URL\#} {value "https://"}}
     {description:text(textarea),optional {html {rows 5 cols 50}} {label \#file-storage.Description\#}}
 } -validate {
     {url
