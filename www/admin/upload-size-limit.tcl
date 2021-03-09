@@ -11,23 +11,29 @@ ad_page_contract {
     {return_url:localurl ""}
 } 
 
-set max_size [ns_config "ns/server/[ns_info server]/module/nssock" maxinput]
-if {$max_size eq ""} {
-    set max_size 0
-}
-
 set title "#file-storage.Configure_File_Upload_Limit#"
 set context [list $title]
+
+# Get the webserver maximum file upload value.
+
+# Set a conservative default value of 2GB if the maximum upload value is not
+# found in the webserver config.
+set driver [expr {[ns_conn isconnected] ?
+                  [ns_conn driver] :
+                  [lindex [ns_driver names] 0]}]
+set section [ns_driversection -driver $driver]
+set max_size [ns_config $section maxinput 2147483648]
+
 
 set upload_limit [fs::max_upload_size]
 
 ad_form -name upload_limit_size -export folder_id -form {
-    {new_size:integer(text) {label "#file-storage.Upload_Limit# $max_size"} {value $upload_limit} {html { maxlength 10}}}
+    {new_size:integer(number) {label "#file-storage.Upload_Limit# $max_size"} {value $upload_limit} {html { min 0 max $max_size }}}
     {return_url:text(hidden) {value $return_url}}
     {submit:text(submit) {label "[_ file-storage.Change_upload_limit]"}}
 } -validate {
  {new_size
-    { $new_size <= $max_size }
+    { $max_size == 0 || $new_size <= $max_size }
          "#file-storage.Upload_limit_error# $max_size #file-storage.Upload_limit_error_2#  "}
 
 } -on_submit {
