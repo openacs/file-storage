@@ -286,6 +286,74 @@ aa_register_case \
     }
 }
 
+aa_register_case -cats {
+    api
+    smoke
+} -procs {
+    fs::get_root_folder
+    fs::new_folder
+    fs::get_folder
+    fs::folder_p
+    fs::delete_folder
+    fs::rename_folder
+    fs_get_folder_name
+} fs_create_folder_using_api {
+
+    Create and delete a folder using the API.
+
+    @author Héctor Romojaro <hector.romojaro@gmail.com>
+    @creation-date 11 March 2021
+
+} {
+    aa_run_with_teardown -rollback -test_code {
+        #
+        # Create a new admin user and login
+        #
+        set user_id [db_nextval acs_object_id_seq]
+        set user_info [acs::test::user::create -user_id $user_id -admin]
+        acs::test::confirm_email -user_id $user_id
+        #
+        # Instantiate file storage
+        #
+        set package_id [site_node::instantiate_and_mount \
+                            -node_name "file-storage-foo-test" \
+                            -package_key file-storage]
+        #
+        # Get root folder
+        #
+        set root_folder_id [fs::get_root_folder -package_id $package_id]
+        aa_true "Root folder exists" [fs::folder_p -object_id $root_folder_id]
+        #
+        # Create folder
+        #
+        set folder_name foo
+        set folder_id [fs::new_folder \
+                        -name $folder_name \
+                        -pretty_name $folder_name \
+                        -parent_id $root_folder_id]
+        aa_true "Created root folder" [fs::folder_p -object_id $folder_id]
+        #
+        # Get folder
+        #
+        aa_equals "Get folder" [fs::get_folder -name $folder_name \
+                                               -parent_id $root_folder_id] \
+                               $folder_id
+        #
+        # Rename the folder
+        #
+        aa_equals "Folder name" [fs_get_folder_name $folder_id] $folder_name
+        set folder_name bar
+        fs::rename_folder -folder_id $folder_id -name $folder_name
+        aa_equals "Folder name after renaming" [fs_get_folder_name $folder_id] \
+            $folder_name
+        #
+        # Delete root folder
+        #
+        fs::delete_folder -folder_id $folder_id
+        aa_false "Deleted folder" [fs::folder_p -object_id $folder_id]
+    }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
