@@ -15,16 +15,6 @@ ad_proc -private file_storage::twt::call_fs_page {} {
     ::twt::do_request $fs_page
 }
 
-ad_proc -private file_storage::twt::create_file { f_name }  {
-    Creates a temporary file.
-} {
-    # Create a temporary file
-    set file_name "[ad_tmpdir]/$f_name.txt"
-    exec touch $file_name
-    exec ls / >> $file_name
-    exec chmod 777 $file_name
-    return $file_name
-}
 
 ad_proc -private file_storage::twt::delete_file { file_name } {
     Deletes a file.

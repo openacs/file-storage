@@ -79,6 +79,74 @@ namespace eval file_storage::test {
         return $d
     }
 
+    ad_proc -private ::file_storage::test::add_file_to_folder {
+        -last_request:required
+        folder_name
+        file_name
+        file_description
+    } {
+        Adds a file to a folder from the UI.
+    } { 
+        set d [acs::test::follow_link -last_request $last_request -label {Add File}]
+        #acs::test::reply_has_status_code $d 200
+        #
+        # "Add File" links to a redirect page file-upload-confirm...
+        #
+        acs::test::reply_has_status_code $d 302
+        set location [::acs::test::get_url_from_location $d]
+        set d [acs::test::http -last_request $d $location]
+
+        set response [dict get $d body]
+        set form [acs::test::get_form $response {//form[@id='file-add']}]
+        
+        aa_true "add form was returned" {[llength $form] > 2}
+        set d [::acs::test::form_reply \
+                   -last_request $d \
+                   -form $form \
+                   -update [subst {
+                       upload_file $file_name
+                       upload_file.tmpfile $file_name
+                       title $file_name
+                       description $file_description
+                   }]]
+        acs::test::reply_has_status_code $d 302
+        set location [::acs::test::get_url_from_location $d]
+
+        if { [string match  "*\?folder*id*" $location] } {
+            aa_log "location contains folder*id"
+            set list_words [split $file_name /]
+            set short_file_name [lindex $list_words end]
+            
+            set d [acs::test::http -last_request $d $location]
+            acs::test::reply_contains $d $folder_name
+        } else {
+            aa_error "file_storage::test::add_file_to_folder  failed, bad response url : $response_url"
+        }
+
+        return $d
+    }
+
+    ad_proc -private ::file_storage::test::delete_first_file {
+        -last_request:required
+        file_name
+    } {
+        Delete the current file via Web UI.
+    } {
+        
+        #
+        # Delete the first displayed file (current rather crude, failure must
+        # me detectable from return code).
+        #
+        set href [acs::test::find_link -last_request $last_request -label {New}]
+        aa_log "Download link $href"
+        
+        regsub -all /file-add $href /delete href
+        set d [acs::test::http -last_request $last_request $href]
+        
+        return $d
+    }
+
+    
     ad_proc  -private ::file_storage::test::delete_current_folder {
         -last_request:required
     } {
@@ -95,6 +163,24 @@ namespace eval file_storage::test {
         set d [::acs::test::form_reply -last_request $d -form $form]
         acs::test::reply_has_status_code $d 302
         return $d
+    }
+
+    ad_proc -private ::file_storage::test::call_fs_page {-last_request} {
+        Requests the file-storage page.
+    } {
+        set fs_page [aa_get_first_url -package_key file-storage]
+        return [::acs::test::http -last_request $last_request $fs_page]
+    }
+
+    ad_proc -private ::file_storage::test::create_file { f_name }  {
+        Creates a temporary file.
+    } {
+        # Create a temporary file
+        set file_name "[ad_tmpdir]/$f_name.txt"
+        exec touch $file_name
+        exec ls / >> $file_name
+        exec chmod 777 $file_name
+        return $file_name
     }
 }
 
