@@ -147,7 +147,7 @@ aa_register_case \
         file_storage::twt::add_file_to_folder
         file_storage::twt::delete_file
     } \
-    fs_add_file_to_folder {
+    fs_add_file_to_folder_twt {
 
     Test Upload a File in a Folder.
 
@@ -353,6 +353,55 @@ aa_register_case -cats {
         aa_false "Deleted folder" [fs::folder_p -object_id $folder_id]
     }
 }
+
+aa_register_case \
+    -cats {web smoke} \
+    -procs {
+        aa_display_result
+        file_storage::test::call_fs_page
+        file_storage::test::create_new_folder
+        file_storage::test::add_file_to_folder
+        #file_storage::test::delete_file
+    } \
+    fs_add_file_to_folder {
+        
+    Test Upload a File in a Folder.
+
+    @author Mounir Lallali
+} {
+    aa_run_with_teardown -test_code {
+        #
+        # Setup of test user_id and login
+        #
+        set user_info [::acs::test::user::create -admin]
+        aa_log "user_info = $user_info"
+        set request_info [::acs::test::login $user_info]
+
+        set d [file_storage::test::call_fs_page -last_request $request_info]
+        aa_log "call_fs_page done"
+
+        # Create a new folder
+        set folder_name [ad_generate_random_string]
+        set folder_description [ad_generate_random_string]
+        file_storage::test::create_new_folder -last_request $d $folder_name $folder_description
+        aa_log "new folder created"        
+
+        # Add a file to folder
+        set uploaded_file_name [file_storage::test::create_file [ad_generate_random_string]]
+        set uploaded_file_description [ad_generate_random_string]
+        set d [file_storage::test::add_file_to_folder \
+                   -last_request $d \
+                   $folder_name \
+                   $uploaded_file_name \
+                   $uploaded_file_description]
+
+        #aa_display_result -response $response -explanation {for uploadding a file in a folder}
+        aa_log "now delete file again"
+        file_storage::test::delete_first_file -last_request $d $uploaded_file_name
+        ::acs::test::logout -last_request $d
+    }
+}
+
 
 # Local variables:
 #    mode: tcl
