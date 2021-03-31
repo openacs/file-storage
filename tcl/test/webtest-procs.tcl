@@ -104,10 +104,10 @@ namespace eval file_storage::test {
                    -last_request $d \
                    -form $form \
                    -update [subst {
-                       upload_file $file_name
-                       upload_file.tmpfile $file_name
-                       title $file_name
-                       description $file_description
+                       upload_file {$file_name}
+                       upload_file.tmpfile {$file_name}
+                       title {$file_name}
+                       description {$file_description}
                    }]]
         acs::test::reply_has_status_code $d 302
         set location [::acs::test::get_url_from_location $d]
@@ -141,8 +141,18 @@ namespace eval file_storage::test {
         aa_log "Download link $href"
         
         regsub -all /file-add $href /delete href
-        set d [acs::test::http -last_request $last_request $href]
-        
+        regsub -all file_id= $href object_id= href
+        aa_log "Delete link $href"
+        set d [acs::test::http -last_request $last_request? $href]
+        acs::test::reply_has_status_code $d 200
+        #
+        # Get confirm form
+        #
+        set form [acs::test::get_form [dict get $d body] {//form[@id='delete_confirm']}]
+        aa_true "delete confirm form was returned" {[llength $form] > 2}
+        set d [::acs::test::form_reply -last_request $d -form $form]
+        acs::test::reply_has_status_code $d 302
+
         return $d
     }
 
@@ -160,7 +170,12 @@ namespace eval file_storage::test {
         set form [acs::test::get_form [dict get $d body] {//form[@id='folder-delete']}]
         aa_true "delete form was returned" {[llength $form] > 2}
 
-        set d [::acs::test::form_reply -last_request $d -form $form]
+        set d [::acs::test::form_reply -last_request $d -form $form \
+                   -update [subst {
+                       formbutton:ok "OK"
+                       __refreshing_p 0
+                   }]]
+
         acs::test::reply_has_status_code $d 302
         return $d
     }

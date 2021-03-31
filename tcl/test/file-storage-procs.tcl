@@ -361,6 +361,29 @@ aa_register_case \
         file_storage::test::call_fs_page
         file_storage::test::create_new_folder
         file_storage::test::add_file_to_folder
+        file_storage::test::delete_file
+
+        aa_get_first_url
+        acs::test::find_link        
+        acs::test::follow_link
+        acs::test::form_reply
+        acs::test::get_url_from_location
+        ad_sanitize_filename
+        content::item::get_id_by_name
+        fs::add_file
+        fs::add_version
+        fs::delete_file
+        fs::do_notifications
+        fs::get_folder_contents_count
+        fs::get_folder_package_and_root
+        fs::get_item_id
+        fs::get_object_name
+        fs::get_parent
+        fs::get_root_folder
+        fs::max_upload_size
+        fs::new_folder
+        fs_context_bar_list
+        fs_get_root_folder
     } \
     fs_add_file_to_folder {
 

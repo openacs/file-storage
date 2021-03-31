@@ -6,7 +6,6 @@ ad_page_contract {
     {return_url:localurl ""}
 }
 
-
 set user_id [ad_conn user_id]
 
 template::list::create \
@@ -15,12 +14,12 @@ template::list::create \
     -key fs_object_id \
     -no_data "No items selected" \
     -elements {
-	name {
-	    label "\#file-storage.Name\#"
-	}
-	delete_message {
-	    label ""
-	}
+        name {
+            label "\#file-storage.Name\#"
+        }
+        delete_message {
+            label ""
+        }
     }
 
 set allowed_count 0
@@ -32,23 +31,27 @@ if {$root_folders_count > 0} {
     ad_script_abort
 }
 
-set object_id_list [join $object_id "','"]
+set F [db_list_of_lists . [subst {
+    select fs.object_id as fs_object_id, fs.type, fs.name, fs.parent_id,
+    acs_permission.permission_p(fs.object_id, :user_id, 'delete') as delete_p
+    from fs_objects fs
+    where fs.object_id in ([ns_dbquotelist $object_id])
+}]] 
 
 db_multirow -extend {delete_message} delete_list get_to_be_deleted [subst {
     select fs.object_id as fs_object_id, fs.type, fs.name, fs.parent_id,
     acs_permission.permission_p(fs.object_id, :user_id, 'delete') as delete_p
     from fs_objects fs
-    where fs.object_id in ('$object_id_list')
+    where fs.object_id in ([ns_dbquotelist $object_id])
 }] {
-	  if {$delete_p} {
-	      set delete_message ""
-	      incr allowed_count
-	  } else {
-	      set delete_message [_ file-storage.Not_Allowed]
-	      incr not_allowed_count
-	  }
-
-      }
+    if {$delete_p} {
+        set delete_message ""
+        incr allowed_count
+    } else {
+        set delete_message [_ file-storage.Not_Allowed]
+        incr not_allowed_count
+    }
+}
 
 set total_count [template::multirow size delete_list]
 set delete_inform [_ file-storage.lt_Do_you_want_to_delete]
@@ -73,12 +76,12 @@ ad_form -extend -name delete_confirm -on_submit {
                     default {
                         fs::delete_file \
                             -item_id $fs_object_id \
-                            -parent_id $parent_id 
+                            -parent_id $parent_id
                     }
                 }
 
-	    }
-	}
+            }
+        }
     }
     ad_returnredirect $return_url
     ad_script_abort
