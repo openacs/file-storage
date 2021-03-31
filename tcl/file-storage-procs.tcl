@@ -1692,7 +1692,7 @@ ad_proc -private fs::category_links {
     return [join $categories $joinwith]
 }
 
-ad_proc -private fs::max_upload_size {
+ad_proc -public fs::max_upload_size {
     {-package_id ""}
 } {
     @param package_id id of the file-storage package instance. Will
