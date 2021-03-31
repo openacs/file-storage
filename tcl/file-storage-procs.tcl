@@ -257,7 +257,7 @@ ad_proc -public fs::new_folder {
     @param pretty_name What we show to users of the system
     @param parent_id Where we create this folder
     @param creation_user Who created this folder
-    @param creation_ip What is the ip address of the creation_user
+    @param creation_ip What is the IP address of the creation_user
     @param description of the folder. Not used in the current FS UI but might be used elsewhere.
     @param package_id Package_id of the package for which to create the new folder. Preferably a file storage package_id
     @param no_callback defines if the callback should be called. Defaults to yes
@@ -355,7 +355,7 @@ ad_proc -public fs::get_file_system_safe_object_name {
     {-object_id:required}
 } {
     get the name of a file storage object and make it safe for writing to
-    the file system
+    the filesystem
 } {
     return [ad_sanitize_filename \
                 -collapse_spaces \
@@ -366,7 +366,7 @@ ad_proc -public fs::get_file_system_safe_object_name {
 ad_proc -deprecated -public fs::remove_special_file_system_characters {
     {-string:required}
 } {
-    Remove unsafe file system characters. Useful if you want to use $string
+    Remove unsafe filesystem characters. Useful if you want to use $string
     as the name of an object to write to disk.
 
     @see ad_sanitize_filename
@@ -525,7 +525,7 @@ ad_proc -public fs::publish_object_to_file_system {
     {-file_name ""}
     {-user_id ""}
 } {
-    publish a file storage object to the file system
+    publish a file storage object to the filesystem
 } {
     if {$path eq ""} {
         set path [ad_tmpnam]
@@ -557,7 +557,7 @@ ad_proc -public fs::publish_folder_to_file_system {
     {-folder_name ""}
     {-user_id ""}
 } {
-    publish the contents of a file storage folder to the file system
+    publish the contents of a file storage folder to the filesystem
 } {
     if {$path eq ""} {
         set path [ad_tmpnam]
@@ -595,7 +595,7 @@ ad_proc -public fs::publish_url_to_file_system {
     {-path ""}
     {-file_name ""}
 } {
-    publish a URL object to the file system as a Windows shortcut
+    publish a URL object to the filesystem as a Windows shortcut
     (which at least KDE also knows how to handle)
 } {
     if {$path eq ""} {
@@ -627,7 +627,7 @@ ad_proc -public fs::publish_versioned_object_to_file_system {
     {-path ""}
     {-file_name ""}
 } {
-    publish an object to the file system
+    publish an object to the filesystem
 } {
     if {$path eq ""} {
         set path [ad_tmpnam]
@@ -827,7 +827,7 @@ ad_proc -public fs::add_file {
                 permission::grant -party_id $creation_user -object_id $item_id -privilege admin
             }
 
-            # Deal with notifications. Usually send out the notification
+            # Deal with notifications. Usually, send out the notification
             # But suppress it if the parameter is given
             if {$no_notification_p} {
                 set do_notify_here_p "f"

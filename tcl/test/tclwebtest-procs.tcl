@@ -19,7 +19,7 @@ ad_proc -private file_storage::twt::call_fs_page {} {
 ad_proc -private file_storage::twt::delete_file { file_name } {
     Deletes a file.
 } {
-    # Delete a file name
+    # Delete a filename
     file delete -force -- $file_name
 }
 
@@ -209,7 +209,7 @@ ad_proc -private file_storage::twt::delete_uploaded_file { file_name } {
 
     if { [string match  "*\?folder*id*" $response_url] } {
 
-        # Get the short file name
+        # Get the short filename
         set list_words [split "$file_name" /]
         set short_file_name [lindex $list_words [llength $list_words]-1]
 
@@ -276,7 +276,7 @@ ad_proc -private file_storage::twt::copy_file { folder_name file_name } {
 
     if { [string match  "*/dotlrn/file-storage/\?folder*id*" $response_url] } {
 
-        # Get the short file name
+        # Get the short filename
         set list_words [split "$file_name" /]
         set short_file_name [lindex $list_words [llength $list_words]-1]
 
@@ -310,7 +310,7 @@ ad_proc -private file_storage::twt::move_file { folder_name file_name } {
 
     if { [string match  "*/dotlrn/file-storage/\?folder*id*" $response_url] } {
 
-        # Get the short file name
+        # Get the short filename
         set list_words [split "$file_name" /]
         set short_file_name [lindex $list_words [llength $list_words]-1]
 

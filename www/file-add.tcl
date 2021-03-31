@@ -204,7 +204,7 @@ ad_form -extend -form {} -select_query_name get_file -new_data {
             ad_return_complaint 1 "You have to upload a file or create a new one"
             ad_script_abort
         }
-        # create a tmp file to import from user entered HTML
+        # create a temporary file to import from user entered HTML
         set mime_type text/html
         set tmp_filename [ad_tmpnam]
         set fd [open $tmp_filename w]

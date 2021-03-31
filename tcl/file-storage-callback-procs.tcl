@@ -82,7 +82,7 @@ ad_proc -public -callback fs::file_revision_new {
     Callback executed when a new file revision is created
     @param package_id Package_id of the file storage package
     @param file_id New file_id for the revision
-    @param parent_id Usually the folder the file was uploaded to.
+    @param parent_id Usually, the folder the file was uploaded to.
     @param creation_user User_id of the user creating the revision
     @param creation_ip IP of the creation
 } -
