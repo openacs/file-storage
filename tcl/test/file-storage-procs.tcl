@@ -361,10 +361,9 @@ aa_register_case \
         file_storage::test::call_fs_page
         file_storage::test::create_new_folder
         file_storage::test::add_file_to_folder
-        #file_storage::test::delete_file
     } \
     fs_add_file_to_folder {
-        
+
     Test Upload a File in a Folder.
 
     @author Mounir Lallali
@@ -384,7 +383,7 @@ aa_register_case \
         set folder_name [ad_generate_random_string]
         set folder_description [ad_generate_random_string]
         file_storage::test::create_new_folder -last_request $d $folder_name $folder_description
-        aa_log "new folder created"        
+        aa_log "new folder created"
 
         # Add a file to folder
         set uploaded_file_name [file_storage::test::create_file [ad_generate_random_string]]
