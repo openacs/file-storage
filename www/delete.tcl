@@ -36,7 +36,7 @@ set F [db_list_of_lists . [subst {
     acs_permission.permission_p(fs.object_id, :user_id, 'delete') as delete_p
     from fs_objects fs
     where fs.object_id in ([ns_dbquotelist $object_id])
-}]] 
+}]]
 
 db_multirow -extend {delete_message} delete_list get_to_be_deleted [subst {
     select fs.object_id as fs_object_id, fs.type, fs.name, fs.parent_id,

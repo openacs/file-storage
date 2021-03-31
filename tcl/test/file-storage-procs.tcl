@@ -364,7 +364,7 @@ aa_register_case \
         file_storage::test::delete_file
 
         aa_get_first_url
-        acs::test::find_link        
+        acs::test::find_link
         acs::test::follow_link
         acs::test::form_reply
         acs::test::get_url_from_location

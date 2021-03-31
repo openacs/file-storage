@@ -177,7 +177,7 @@ ad_proc -private fs::before_unmount {
     -package_id:required
     -node_id:required
 } {
-    Unregister the root WebDAV folder mapping before 
+    Unregister the root WebDAV folder mapping before
     unmounting a file storage package instance.
 } {
     set folder_id [fs::get_root_folder -package_id $package_id]
