@@ -10,7 +10,7 @@ ad_page_contract {
 auth::require_login
 set user_id [ad_conn user_id]
 
-# publish the object to the file system
+# publish the object to the filesystem
 set in_path [ad_tmpnam]
 file mkdir $in_path
 

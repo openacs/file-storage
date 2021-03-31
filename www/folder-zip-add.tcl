@@ -254,7 +254,7 @@ ad_form -extend -name file_add -form {} -new_data {
         }
 
         #
-        # Cleanup of the tmp file.
+        # Cleanup of the temporary file.
         #
         file delete -- $tmpfile
     }
