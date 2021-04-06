@@ -683,48 +683,13 @@ ad_proc -public fs::publish_versioned_object_to_file_system {
                        -tolower \
                        $file_name]
 
-    switch -- $storage_type {
-        lob {
-
-            # FIXME: db_blob_get_file is failing when i use bind variables
-
-            # DRB: you're out of luck - the driver doesn't support them and while it should
-            # be fixed it will be a long time before we'll want to require an updated
-            # driver.  I'm substituting the Tcl variable value directly in the query due to
-            # this.  It's safe because we've pulled the value ourselves from the database,
-            # don't need to worry about SQL smuggling etc.
-
-            db_blob_get_file select_object_content {} -file [ad_file join $path $file_name]
-        }
-        text {
-            set content [db_string select_object_content {}]
-
-            set fp [open [ad_file join $path $file_name] w]
-            puts $fp $content
-            close $fp
-        }
-        file {
-            set cr_file_name [content::revision::get_cr_file_path -revision_id $live_revision]
-
-            #
-            # When there are multiple "unnamed files" in a directory,
-            # the constructed full_name might exist already. This
-            # would lead to an error in the "file copy"
-            # operation. Therefore, generate a new name with an
-            # alternate suffix in these cases.
-            #
-            set full_name [ad_file join $path $file_name]
-            set base_name $full_name
-            set count 0
-            while {[ad_file exists $full_name]} {
-               set full_name $base_name-[incr $count]
-            }
-
-            file copy -- $cr_file_name $full_name
-        }
-    }
-
-    return [ad_file join $path $file_name]
+    set full_filename [ad_file join $path $file_name]
+    ::content::revision::write_to_filesystem \
+        -storage_type $storage_type \
+        -revision_id $live_revision \
+        -filename $full_filename
+        
+    return $full_filename
 }
 
 ad_proc -public fs::get_archive_command {
