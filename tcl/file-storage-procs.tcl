@@ -535,17 +535,30 @@ ad_proc -public fs::publish_object_to_file_system {
 
     switch -- $type {
         folder {
-            set result [publish_folder_to_file_system -folder_id $object_id -path $path -folder_name $name -user_id $user_id]
+            set result [publish_folder_to_file_system \
+                            -folder_id $object_id \
+                            -path $path \
+                            -folder_name $name \
+                            -user_id $user_id]
         }
         url {
-            set result [publish_url_to_file_system -object_id $object_id -path $path -file_name $file_name]
+            set result [publish_url_to_file_system \
+                            -object_id $object_id \
+                            -path $path \
+                            -file_name $file_name]
         }
         symlink {
             set linked_object_id [content::symlink::resolve -item_id $object_id]
-            set result [publish_versioned_object_to_file_system -object_id $linked_object_id -path $path -file_name $file_name]
+            set result [publish_versioned_object_to_file_system \
+                            -object_id $linked_object_id \
+                            -path $path \
+                            -file_name $file_name]
         }
         default {
-            set result [publish_versioned_object_to_file_system -object_id $object_id -path $path -file_name $file_name]
+            set result [publish_versioned_object_to_file_system \
+                            -object_id $object_id \
+                            -path $path \
+                            -file_name $file_name]
         }
     }
     return $result
