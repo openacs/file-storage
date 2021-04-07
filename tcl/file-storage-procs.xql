@@ -147,27 +147,6 @@
     </querytext>
   </fullquery>
 
-<fullquery name="fs::add_created_version.get_storage_type">
-  <querytext>
-    select storage_type from cr_items where item_id=:item_id
-  </querytext>
-</fullquery>
-
-<fullquery name="fs::add_created_version.set_live_revision">
-  <querytext>
-      update cr_items set live_revision=:revision_id
-      where item_id=:item_id
-  </querytext>
-</fullquery>
-
-<fullquery name="fs::add_created_version.update_revision">
-  <querytext>
-	update	cr_revisions
-	set content = :cr_file,	content_length = :file_size
-	where revision_id = :revision_id
-  </querytext>
-</fullquery>
-
 <fullquery name="fs::add_created_file.item_exists">
    <querytext>
           select count(*) from cr_items
