@@ -259,7 +259,8 @@ ad_proc -public fs::new_folder {
     @param creation_user Who created this folder
     @param creation_ip What is the IP address of the creation_user
     @param description of the folder. Not used in the current FS UI but might be used elsewhere.
-    @param package_id Package_id of the package for which to create the new folder. Preferably a file storage package_id
+    @param package_id Package_id of the package for which to create the new folder.
+           Preferably a file storage package_id
     @param no_callback defines if the callback should be called. Defaults to yes
     @return folder_id of the newly created folder
 } {
@@ -513,7 +514,8 @@ ad_proc -public fs::get_folder_contents_count {
     }
 
     if {$user_id ne ""} {
-        ns_log warning "fs::get_folder_contents_count: specified -user_id doesn't have any effect on proc result"
+        ns_log warning "fs::get_folder_contents_count:" \
+            "specified -user_id doesn't have any effect on proc result"
     }
 
     return [db_string select_folder_contents_count {}]
@@ -849,7 +851,13 @@ ad_proc -public fs::add_file {
         }
 
         if {[string is true $do_notify_here_p]} {
-            fs::do_notifications -folder_id $parent_id -filename $title -item_id $revision_id -action "new_file" -package_id $package_id
+            fs::do_notifications \
+                -folder_id $parent_id \
+                -filename $title \
+                -item_id $revision_id \
+                -action "new_file" \
+                -package_id $package_id
+
             if {!$no_callback_p} {
                 if {![catch {ad_conn package_id} package_id]} {
                     callback fs::file_new -package_id $package_id -file_id $item_id
@@ -923,7 +931,12 @@ ad_proc -public fs::add_created_file {
 
 
         if {[string is true $do_notify_here_p]} {
-            fs::do_notifications -folder_id $parent_id -filename $title -item_id $revision_id -action "new_file" -package_id $package_id
+            fs::do_notifications \
+                -folder_id $parent_id \
+                -filename $title \
+                -item_id $revision_id \
+                -action "new_file" \
+                -package_id $package_id
         }
 
         if {!$no_callback_p} {
@@ -1057,7 +1070,12 @@ ad_proc fs::add_version {
     db_exec_plsql update_last_modified ""
 
     if {[string is false $suppress_notify_p]} {
-        fs::do_notifications -folder_id $parent_id -filename $title -item_id $revision_id -action "new_version" -package_id $package_id
+        fs::do_notifications \
+            -folder_id $parent_id \
+            -filename $title \
+            -item_id $revision_id \
+            -action "new_version" \
+            -package_id $package_id
     }
 
     #It's safe to rebuild RSS repeatedly, assuming it's not too expensive.
@@ -1221,8 +1239,8 @@ ad_proc -public fs::do_notifications {
 
     Note that not all possible operations are implemented, e.g. move, copy etc. See documentation.
 
-    @param action The kind of operation. One of: new_file, new_version, new_url, delete_file, delete_url
-                  delete_folder
+    @param action The kind of operation. One of: new_file, new_version,
+                  new_url, delete_file, delete_url, delete_folder
 } {
     set package_and_root [fs::get_folder_package_and_root $folder_id]
     set root_folder [lindex $package_and_root 1]
@@ -1398,7 +1416,7 @@ ad_proc -public fs::get_object_info {
 
     @error
 } {
-    if {(![info exists revision_id] || $revision_id eq "")} {
+    if {![info exists revision_id] || $revision_id eq ""} {
         set revision_id [content::item::get_live_revision -item_id $file_id]
     }
 
@@ -1489,7 +1507,8 @@ ad_proc -public fs::file_copy {
 
     @param file_id Item_id of the file to be copied
     @param target_folder_id Folder ID of the folder to which the file is copied to
-    @param postfix Postfix will be added with "_" to the new filename (not title). Very useful if you want to avoid unique name constraints on cr_items.
+    @param postfix Postfix will be added with "_" to the new filename (not title).
+           Very useful if you want to avoid unique name constraints on cr_items.
     @param symlink Defines if, instead of a full item, we should just add a symlink.
 } {
     db_1row file_data {}
@@ -1499,7 +1518,11 @@ ad_proc -public fs::file_copy {
     }
 
     if {$symlink_p} {
-        return [content::symlink::new -name $name -label $title -target_id $file_id -parent_id $target_folder_id]
+        return [content::symlink::new \
+                    -name $name \
+                    -label $title \
+                    -target_id $file_id \
+                    -parent_id $target_folder_id]
     } else {
         set user_id [ad_conn user_id]
         set creation_ip [ad_conn peeraddr]
@@ -1551,7 +1574,8 @@ ad_proc -public fs::file_copy {
 
     @param file_id Item_id of the file to be copied
     @param target_folder_id Folder ID of the folder to which the file is copied to
-    @param postfix Postfix will be added with "_" to the new filename (not title). Very useful if you want to avoid unique name constraints on cr_items.
+    @param postfix Postfix will be added with "_" to the new filename (not title).
+           Very useful if you want to avoid unique name constraints on cr_items.
     @param symlink Defines if, instead of a full item, we should just add a symlink.
 } {
     db_1row file_data {}
@@ -1561,7 +1585,11 @@ ad_proc -public fs::file_copy {
     }
 
     if {$symlink_p} {
-        return [content::symlink::new -name $name -label $title -target_id $file_id -parent_id $target_folder_id]
+        return [content::symlink::new \
+                    -name $name \
+                    -label $title \
+                    -target_id $file_id \
+                    -parent_id $target_folder_id]
     } else {
         set user_id [ad_conn user_id]
         set creation_ip [ad_conn peeraddr]
@@ -1612,8 +1640,10 @@ ad_proc -private fs::category_links {
 } {
     @param object_id the file storage object_id whose category list we creating
     @param folder_id the folder the category link should shearch on
-    @param selected_category_id the category that has been selected and for which a link to return to the folder without that category limitation should exist
-    @param fs_url is the file storage url for which these links will be created - defaults to the current package_url
+    @param selected_category_id the category that has been selected and for
+           which a link to return to the folder without that category limitation should exist
+    @param fs_url is the file storage url for which these links will be created -
+           defaults to the current package_url
     @param joinwith allows you to join the link list with something other than the default ", "
 
     @return a list of category_links to filter the supplied folder for a given category
@@ -1624,17 +1654,22 @@ ad_proc -private fs::category_links {
     set selected_found_p 0
     set categories [list]
     foreach category_id [category::get_mapped_categories $object_id] {
+        set name [category::get_name $category_id]
         if { $category_id eq $selected_category_id } {
             set selected_found_p 1
-            lappend categories "[category::get_name $category_id] <a href=\"[export_vars -base $fs_url -url {folder_id}]\">(x)</a>"
+            set href [export_vars -base $fs_url -url {folder_id}]
+            lappend categories "[ns_quotehtml $name] <a href=\"[ns_quotehtml $href]\">(x)</a>"
         } else {
-            lappend categories "<a href=\"[export_vars -base $fs_url -url {folder_id category_id}]\">[category::get_name $category_id]</a>"
+            set href [export_vars -base $fs_url -url {folder_id category_id}]
+            lappend categories "<a href=\"[ns_quotehtml $href]\">[ns_quotehtml $name]</a>"
         }
     }
     if { [string is false $selected_found_p] && $selected_category_id ne "" } {
         # we need to show the link to remove this category file at the
         # top of the folder
-        lappend categories "[category::get_name $selected_category_id] <a href=\"[export_vars -base $fs_url -url {folder_id}]\">(x)</a>"
+        set href [export_vars -base $fs_url -url {folder_id}]
+        set name [category::get_name $selected_category_id]
+        lappend categories "[ns_quotehtml $name] <a href=\"[ns_quotehtml $href]\">(x)</a>"
     }
     return [join $categories $joinwith]
 }
