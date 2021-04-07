@@ -118,15 +118,6 @@
       </querytext>
   </fullquery>
   
-  <fullquery name="fs::add_version.update_last_modified">
-    <querytext>
-      begin
-      acs_object.update_last_modified(:parent_id,:creation_user,:creation_ip);
-      acs_object.update_last_modified(:item_id,:creation_user,:creation_ip);
-      end;
-    </querytext>
-  </fullquery>
-
   <fullquery name="fs::get_folder_package_and_root.select_package_and_root">
     <querytext>
 	select r.package_id,

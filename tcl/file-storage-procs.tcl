@@ -688,7 +688,7 @@ ad_proc -public fs::publish_versioned_object_to_file_system {
         -storage_type $storage_type \
         -revision_id $live_revision \
         -filename $full_filename
-        
+
     return $full_filename
 }
 
@@ -956,7 +956,9 @@ ad_proc fs::add_created_version {
         set package_id [ad_conn package_id]
     }
     if {$storage_type eq ""} {
-        set storage_type [db_string get_storage_type {}]
+        set storage_type [db_string get_storage_type {
+            select storage_type from cr_items where item_id = :item_id
+        }]
     }
     if {$creation_user eq ""} {
         set creation_user [ad_conn user_id]
@@ -964,67 +966,34 @@ ad_proc fs::add_created_version {
     if {$creation_ip eq ""} {
         set creation_ip [ns_conn peeraddr]
     }
-    set parent_id [fs::get_parent -item_id $item_id]
-    if {$storage_type eq ""} {
-        set storage_type [db_string get_storage_type {
-            select storage_type from cr_items where item_id=:item_id
-        }]
-    }
-    switch -- $storage_type {
-        file {
-            set revision_id [db_exec_plsql new_file_revision {}]
 
-            set cr_file [cr_create_content_file_from_string $item_id $revision_id $content_body]
-
-            # get the size
-            set file_size [cr_file_size $cr_file]
-
-            # update the file path in the CR and the size on cr_revisions
-            db_dml update_revision {}
-        }
-        lob {
-            # if someone stored file storage content in the database
-            # we need to use lob. The only way to get a lob into the
-            # database is to pass it as a file
-            set revision_id [cr_import_content \
+    set revision_id [content::revision::new \
                          -item_id $item_id \
-                         -storage_type  \
-                         -creation_user $creation_user \
-                         -creation_ip $creation_ip \
-                         -other_type "file_storage_object" \
-                         -image_type "file_storage_object" \
                          -title $title \
                          -description $description \
+                         -content $content_body \
+                         -mime_type $mime_type \
+                         -creation_user $creation_user \
+                         -creation_ip $creation_ip \
                          -package_id $package_id \
-                         $parent_id \
-                         $tmp_filename \
-                         $tmp_size \
-                         $mime_type \
-                         $name]
-                db_dml set_lob_content "" -blobs [list $content_body]
-                db_dml set_lob_size ""
-        }
-        text {
-            set revision_id [content::revision::new \
-                                 -item_id $item_id \
-                                 -title $title \
-                                 -description $description \
-                                 -content $content_body \
-                                 -mime_type $mime_type \
-                                 -creation_user $creation_user \
-                                 -creation_ip $creation_ip \
-                                 -package_id $package_id]
-        }
-    }
+                         -is_live "t" \
+                         -storage_type $storage_type]
 
-    db_dml set_live_revision ""
-    db_exec_plsql update_last_modified ""
+    set parent_id [fs::get_parent -item_id $item_id]
 
     if {[string is false $suppress_notify_p]} {
-        fs::do_notifications -folder_id $parent_id -filename $title -item_id $revision_id -action "new_version" -package_id $package_id
+        fs::do_notifications \
+            -folder_id $parent_id \
+            -filename $title \
+            -item_id $revision_id \
+            -action "new_version" \
+            -package_id $package_id
     }
 
-    #It's safe to rebuild RSS repeatedly, assuming it's not too expensive.
+    #
+    # It is safe to rebuild RSS repeatedly, assuming it's not too
+    # expensive.
+    #
     set folder_info [fs::get_folder_package_and_root $parent_id]
     set db_package_id [lindex $folder_info 0]
     if { [parameter::get -package_id $db_package_id -parameter ExposeRssP -default 0] } {
