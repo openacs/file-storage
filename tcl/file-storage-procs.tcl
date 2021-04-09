@@ -1067,7 +1067,38 @@ ad_proc fs::add_version {
 
     content::item::set_live_revision -revision_id $revision_id
 
-    db_exec_plsql update_last_modified ""
+    # apisano - This is what we had before (postgres code):
+    # begin
+    # perform acs_object__update_last_modified
+    # (:parent_id,:creation_user,:creation_ip);
+    # perform
+    # acs_object__update_last_modified(:item_id,:creation_user,:creation_ip);
+    # return null;
+    # end;
+    # It has been translated with the recursive query below, which
+    # conserves the same logics: update modification metadata for the
+    # whole context hierarchy of item and parent. However, I wonder if
+    # there is really need for all of this...
+    db_dml update_last_modified {
+        with recursive context_hierarchy as (
+            select object_id, context_id
+              from acs_objects
+             where object_id in (:item_id, :parent_id)
+
+            union
+
+            select p.object_id, p.context_id
+              from acs_objects p,
+                   context_hierarchy c
+             where p.object_id = c.context_id
+               and c.context_id <> 0
+        )
+        update acs_objects set
+          modifying_user = :creation_user,
+          modifying_ip   = :creation_ip,
+          last_modified  = current_timestamp
+        where object_id in (select object_id from context_hierarchy)
+    }
 
     if {[string is false $suppress_notify_p]} {
         fs::do_notifications \
