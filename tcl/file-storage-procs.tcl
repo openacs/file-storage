@@ -1075,29 +1075,31 @@ ad_proc fs::add_version {
     # acs_object__update_last_modified(:item_id,:creation_user,:creation_ip);
     # return null;
     # end;
-    # It has been translated with the recursive query below, which
-    # conserves the same logics: update modification metadata for the
-    # whole context hierarchy of item and parent. However, I wonder if
-    # there is really need for all of this...
+    # Could be refactored with the recursive query below, which will
+    # not go over the context hierarchy, but over the "filesystem"
+    # hierarchy, which makes more sense, and update modification
+    # metadata for the whole tree.
+    # However, I wonder if there is really need for all of this... If
+    # there is, one should probably have this logic at the content
+    # repository level, rather than here.
     db_dml update_last_modified {
-        with recursive context_hierarchy as (
-            select object_id, context_id
-              from acs_objects
-             where object_id in (:item_id, :parent_id)
+        with recursive fs_hierarchy as (
+            select object_id, parent_id
+              from fs_objects
+             where object_id = :item_id
 
             union
 
-            select p.object_id, p.context_id
-              from acs_objects p,
-                   context_hierarchy c
-             where p.object_id = c.context_id
-               and c.context_id <> 0
+            select p.object_id, p.parent_id
+              from fs_objects p,
+                   fs_hierarchy c
+             where p.object_id = c.parent_id
         )
         update acs_objects set
           modifying_user = :creation_user,
           modifying_ip   = :creation_ip,
           last_modified  = current_timestamp
-        where object_id in (select object_id from context_hierarchy)
+        where object_id in (select object_id from fs_hierarchy)
     }
 
     if {[string is false $suppress_notify_p]} {
