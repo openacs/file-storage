@@ -391,7 +391,7 @@ aa_register_case \
 
     @author Mounir Lallali
 } {
-    aa_run_with_teardown -rollback -test_code {
+    aa_run_with_teardown -test_code {
         #
         # Setup of test user_id and login
         #
@@ -417,7 +417,7 @@ aa_register_case \
                    $uploaded_file_name \
                    $uploaded_file_description]
 
-        #aa_display_result -response $response -explanation {for uploadding a file in a folder}
+        #aa_display_result -response $response -explanation {for uploading a file in a folder}
         aa_log "now delete file again"
         file_storage::test::delete_first_file -last_request $d $uploaded_file_name
         ::acs::test::logout -last_request $d
