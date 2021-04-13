@@ -391,7 +391,7 @@ aa_register_case \
 
     @author Mounir Lallali
 } {
-    aa_run_with_teardown -test_code {
+    try {
         #
         # Setup of test user_id and login
         #
@@ -399,29 +399,47 @@ aa_register_case \
         aa_log "user_info = $user_info"
         set request_info [::acs::test::login $user_info]
 
-        set d [file_storage::test::call_fs_page -last_request $request_info]
-        aa_log "call_fs_page done"
+        aa_run_with_teardown -test_code {
 
-        # Create a new folder
-        set folder_name [ad_generate_random_string]
-        set folder_description [ad_generate_random_string]
-        file_storage::test::create_new_folder -last_request $d $folder_name $folder_description
-        aa_log "new folder created"
+            set d [file_storage::test::call_fs_page -last_request $request_info]
+            aa_log "call_fs_page done"
 
-        # Add a file to folder
-        set uploaded_file_name [file_storage::test::create_file [ad_generate_random_string]]
-        set uploaded_file_description [ad_generate_random_string]
-        set d [file_storage::test::add_file_to_folder \
-                   -last_request $d \
-                   $folder_name \
-                   $uploaded_file_name \
-                   $uploaded_file_description]
+            # Create a new folder
+            set folder_name [ad_generate_random_string]
+            set folder_description [ad_generate_random_string]
+            set folder_reply [file_storage::test::create_new_folder -last_request $d \
+                                  $folder_name $folder_description]
+            aa_log "new folder created"
 
-        #aa_display_result -response $response -explanation {for uploading a file in a folder}
-        aa_log "now delete file again"
-        file_storage::test::delete_first_file -last_request $d $uploaded_file_name
-        ::acs::test::logout -last_request $d
+            # Add a file to folder
+            set uploaded_file_name [file_storage::test::create_file [ad_generate_random_string]]
+            set uploaded_file_description [ad_generate_random_string]
+            set d [file_storage::test::add_file_to_folder \
+                       -last_request $d \
+                       $folder_name \
+                       $uploaded_file_name \
+                       $uploaded_file_description]
+
+            #aa_display_result -response $response -explanation {for uploading a file in a folder}
+            aa_log "now delete file again"
+            file_storage::test::delete_first_file -last_request $d $uploaded_file_name
+
+            #
+            # Finally, delete the folder
+            #
+            aa_section "Delete the folder"
+            file_storage::test::delete_current_folder -last_request $folder_reply
+
+            ::acs::test::logout -last_request $d
+        }
+    } finally {
+        #
+        # Get rid of the user
+        #
+        aa_section "Delete test user (user_id [dict get $user_info user_id])"
+        acs::test::user::delete -user_id [dict get $user_info user_id]
     }
+
 }
 
 
