@@ -120,7 +120,7 @@ namespace eval file_storage::test {
             set d [acs::test::http -last_request $d $location]
             acs::test::reply_contains $d $folder_name
         } else {
-            aa_error "file_storage::test::add_file_to_folder  failed, bad response url : $response_url"
+            aa_error "file_storage::test::add_file_to_folder failed, bad redirect url: '$location'"
         }
 
         return $d
