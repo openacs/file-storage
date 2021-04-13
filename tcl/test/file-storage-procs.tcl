@@ -153,7 +153,7 @@ aa_register_case \
 
     @author Mounir Lallali
 } {
-    aa_run_with_teardown -test_code {
+    aa_run_with_teardown -rollback -test_code {
 
         tclwebtest::cookies clear
 
@@ -192,7 +192,7 @@ aa_register_case \
 
     @author Mounir Lallali
 } {
-    aa_run_with_teardown -test_code {
+    aa_run_with_teardown -rollback -test_code {
 
         tclwebtest::cookies clear
 
@@ -227,7 +227,7 @@ aa_register_case \
 
     @author Mounir Lallali
 } {
-    aa_run_with_teardown -test_code {
+    aa_run_with_teardown -rollback -test_code {
 
         tclwebtest::cookies clear
 
@@ -264,7 +264,7 @@ aa_register_case \
 
     @author Mounir Lallali
 } {
-    aa_run_with_teardown -test_code {
+    aa_run_with_teardown -rollback -test_code {
 
         tclwebtest::cookies clear
 
@@ -391,7 +391,7 @@ aa_register_case \
 
     @author Mounir Lallali
 } {
-    aa_run_with_teardown -test_code {
+    aa_run_with_teardown -rollback -test_code {
         #
         # Setup of test user_id and login
         #
