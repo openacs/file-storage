@@ -1213,6 +1213,17 @@ ad_proc fs::delete_version {
     return $parent_id
 }
 
+ad_proc -private fs::webdav_p {} {
+    Returns if webDAV is enabled.
+
+    @return boolean
+} {
+    return [expr {
+                  [parameter::get -parameter "UseWebDavP" -default 0] &&
+                  [apm_package_installed_p oacs-dav]
+              }]
+}
+
 ad_proc fs::webdav_url {
     -item_id:required
     {-root_folder_id ""}
@@ -1227,7 +1238,7 @@ ad_proc fs::webdav_url {
             item is not WebDAV enabled
 } {
 
-    if {  [parameter::get -parameter "UseWebDavP"] == 0 } {
+    if {![fs::webdav_p]} {
         return "ho"
     }
     if {$package_id eq ""} {
