@@ -9,6 +9,48 @@ ad_library {
 aa_register_case \
     -cats {web smoke} \
     -procs {
+        fs::publish_versioned_object_to_file_system
+    } \
+    fs_publish_file {
+
+        Test that exporting a file to the filesystem works.
+
+    } {
+
+        aa_run_with_teardown -rollback -test_code {
+            db_1row get_folder {
+                select folder_id, package_id
+                from fs_root_folders
+                fetch first 1 rows only
+            }
+
+            set tmp_filename [ad_tmpnam]
+            set content "This is a test file"
+            set wfd [open $tmp_filename w]
+            puts $wfd $content
+            close $wfd
+
+            set revision_id [fs::add_file \
+                                 -name __test_fs_publish_file \
+                                 -parent_id $folder_id \
+                                 -package_id $package_id \
+                                 -tmp_filename $tmp_filename]
+            set item_id [db_string get_item_id {
+                select item_id from cr_revisions
+                where revision_id = :revision_id
+            }]
+
+            set exported [fs::publish_versioned_object_to_file_system \
+                              -object_id $item_id]
+
+            aa_equals "Original and exported files are identical" \
+                [ns_md file $tmp_filename] [ns_md file $exported]
+        }
+    }
+
+aa_register_case \
+    -cats {web smoke} \
+    -procs {
         file_storage::test::create_new_folder
         file_storage::test::delete_current_folder
         acs::test::follow_link
