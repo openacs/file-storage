@@ -686,7 +686,7 @@ ad_proc -public fs::publish_versioned_object_to_file_system {
                        $file_name]
 
     set full_filename [ad_file join $path $file_name]
-    ::content::revision::write_to_filesystem \
+    ::content::revision::export_to_filesystem \
         -storage_type $storage_type \
         -revision_id $live_revision \
         -filename $full_filename
