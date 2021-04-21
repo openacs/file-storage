@@ -7,8 +7,9 @@ ad_library {
 }
 
 aa_register_case \
-    -cats {web smoke} \
+    -cats {api smoke} \
     -procs {
+        fs::add_file
         fs::publish_versioned_object_to_file_system
     } \
     fs_publish_file {
