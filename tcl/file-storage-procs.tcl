@@ -1718,6 +1718,19 @@ ad_proc -private fs::category_links {
     return [join $categories $joinwith]
 }
 
+ad_proc -private fs::unit_conv {value} {
+
+    Convert units to value. This should done more generic, ... we have
+    in NaviServer c-level support for this which should be used if
+    available in the future.
+
+} {
+    if {[regexp {^([0-9.]+)\s*(MB|KB)} $value . number unit]} {
+        set value [expr {int($number * ($unit eq "KB" ? 1024 : 1024*1024))}]
+    }
+    return $value
+}
+
 ad_proc -public fs::max_upload_size {
     {-package_id ""}
 } {
@@ -1730,7 +1743,9 @@ ad_proc -public fs::max_upload_size {
 
     @return numeric value in bytes
 } {
-    set max_bytes_param [parameter::get -package_id $package_id -parameter "MaximumFileSize"]
+    set max_bytes_param [fs::unit_conv [parameter::get \
+                                            -package_id $package_id \
+                                            -parameter "MaximumFileSize"]]
     if {![string is double -strict $max_bytes_param]} {
         set max_bytes_param Inf
     }
@@ -1739,10 +1754,7 @@ ad_proc -public fs::max_upload_size {
                       [ns_conn driver] :
                       [lindex [ns_driver names] 0]}]
     set section [ns_driversection -driver $driver]
-    set max_bytes_conf [ns_config $section maxinput]
-    if {[regexp {^([0-9.]+)(MB|KB)} $max_bytes_conf . number unit]} {
-        set max_bytes_conf [expr {int($number * ($unit eq "KB" ? 1024 : 1024*1024))}]
-    }
+    set max_bytes_conf [fs::unit_conv  [ns_config $section maxinput]]
     return [expr {min($max_bytes_param,$max_bytes_conf)}]
 }
 
