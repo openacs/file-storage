@@ -141,6 +141,11 @@ ad_form -extend -name file_add -form {} -new_data {
     # Uncompress the file.
     #
     set unzip_binary [string trim [parameter::get -parameter UnzipBinary]]
+    if {$unzip_binary ne ""} {
+        ns_log warning "package parameter UnzipBinary of file-storage is ignored, using systemwide util::unzip"
+    }
+    
+    set unzip_binary [util::which unzip]
     if { $unzip_binary ne "" } {
         #
         # Create temp directory to unzip.
@@ -151,19 +156,14 @@ ad_form -extend -name file_add -form {} -new_data {
         #
         # Unzip.
         #
-        # More flexible parameter design could be:
-        # zip {unzip -jd {out_path} {in_file}} tar {tar xf {in_file} {out_path}} tgz {tar xzf {in_file} {out_path}}
-        #
-        # save paths! get rid of -j switch --DAVEB 20050628
-        #
-        catch { exec $unzip_binary -d $unzip_path ${upload_file.tmpfile} } errmsg
+        util::unzip -source ${upload_file.tmpfile} -destination $unzip_path
 
         #
         # Get two lists of the files to upload, with and without their full path.
         #
         set upload_files [list]
         set upload_tmpfiles [list]
-        foreach file [ad_find_all_files "$unzip_path"] {
+        foreach file [ad_find_all_files $unzip_path] {
             lappend upload_files [regsub "^$unzip_path\/" $file {}]
             lappend upload_tmpfiles $file
         }
