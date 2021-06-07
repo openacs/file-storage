@@ -233,6 +233,13 @@ ad_form -extend -form {} -select_query_name get_file -new_data {
             set upload_file $name
         }
 
+        # The upload filename is the one we are going to use as
+        # download filename. Must be safe.
+        set upload_file [ad_sanitize_filename \
+                             -collapse_spaces \
+                             -tolower \
+                             $upload_file]
+
         set existing_item_id [fs::get_item_id -name $upload_file -folder_id $folder_id]
 
         if {$existing_item_id ne ""} {
