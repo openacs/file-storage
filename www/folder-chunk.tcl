@@ -144,12 +144,12 @@ set elements {
         display_template {
             <a @target_attr@ href="@contents.file_url@" title="#file-storage.view_contents#">
             <if @contents.title@ nil>
-               @contents.name@</a>
+            @contents.name;noi18n@</a>
             </if>
             <else>
                @contents.title@</a><br>
                <if @contents.name@ ne @contents.title@>
-                  @contents.name@
+                 @contents.name;noi18n@
                </if>
             </else>
         }
@@ -358,7 +358,6 @@ db_multirow -extend {
         }
     }
 
-    set name [lang::util::localize $name]
     switch -- $type {
         folder {
             set properties_link ""
