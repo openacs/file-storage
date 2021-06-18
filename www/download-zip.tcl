@@ -25,6 +25,9 @@ if {[db_string objects_do_not_exist "
 
 ad_try {
 
+    ad_progress_bar_begin \
+        -title [_ file-storage.download_zip_creating_archive_msg]
+
     set user_id [ad_conn user_id]
 
     # copy all files together in a temporary folder on the filesystem
@@ -53,22 +56,31 @@ ad_try {
     }
     set download_name [fs::get_file_system_safe_object_name -object_id $object_name_id].zip
 
-    # return the archive to the connection.
-    ns_set put [ad_conn outputheaders] Content-Disposition "attachment;filename=\"$download_name\""
-    ns_set put [ad_conn outputheaders] Content-Type "application/zip"
-    ns_set put [ad_conn outputheaders] Content-Size [ad_file size $out_file]
-    ns_returnfile 200 application/octet-stream $out_file
+    set n $download_name
+    set f $out_file
+    set u $user_id
+    set file_url [export_vars -base ./download-zip-2 {
+        f:sign(max_age=300)
+        n:sign(max_age=300)
+        u:sign(max_age=300)
+    }]
+
+    util_user_message \
+        -html \
+        -message [_ file-storage.download_zip_file_is_ready_msg \
+                      [list file_url [ns_quotehtml $file_url]]]
+
+    ad_progress_bar_end \
+        -url $return_url
 
 } on error {errorMsg} {
 
-    # some day we'll do something useful here
     error $errorMsg
 
 } finally {
 
     # clean everything up
     file delete -force -- $in_path
-    file delete -- $out_file
 
 }
 
