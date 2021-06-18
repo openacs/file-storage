@@ -23,36 +23,35 @@ if {[db_string objects_do_not_exist "
     ad_script_abort
 }
 
-set user_id [ad_conn user_id]
-
-# publish the object to the filesystem
-set in_path [ad_tmpnam]
-file mkdir $in_path
-
-if {$n_objects == 1} {
-    set object_name_id $object_id
-} else {
-    set object_name_id [fs::get_parent -item_id [lindex $object_id 0]]
-}
-set download_name [fs::get_file_system_safe_object_name -object_id $object_name_id]
-
-append download_name ".zip"
-
-foreach fs_object_id $object_id {
-    fs::publish_object_to_file_system \
-        -object_id $fs_object_id \
-        -path $in_path \
-        -user_id $user_id
-}
-
-set out_file [ad_tmpnam]
-
 ad_try {
+
+    set user_id [ad_conn user_id]
+
+    # copy all files together in a temporary folder on the filesystem
+    set in_path [ad_tmpnam]
+    file mkdir $in_path
+
+    foreach fs_object_id $object_id {
+        fs::publish_object_to_file_system \
+            -object_id $fs_object_id \
+            -path $in_path \
+            -user_id $user_id
+    }
+
+    set out_file [ad_tmpnam]
 
     # create the archive
     util::zip -source $in_path -destination $out_file
 
 } on ok {d} {
+
+    # compute the archive download filename
+    if {$n_objects == 1} {
+        set object_name_id $object_id
+    } else {
+        set object_name_id [fs::get_parent -item_id [lindex $object_id 0]]
+    }
+    set download_name [fs::get_file_system_safe_object_name -object_id $object_name_id].zip
 
     # return the archive to the connection.
     ns_set put [ad_conn outputheaders] Content-Disposition "attachment;filename=\"$download_name\""
