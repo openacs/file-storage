@@ -39,7 +39,10 @@ set download_name [fs::get_file_system_safe_object_name -object_id $object_name_
 append download_name ".zip"
 
 foreach fs_object_id $object_id {
-    set file [fs::publish_object_to_file_system -object_id $fs_object_id -path $in_path -user_id $user_id]
+    set file [fs::publish_object_to_file_system \
+                  -object_id $fs_object_id \
+                  -path $in_path \
+                  -user_id $user_id]
 }
 
 set out_file [ad_tmpnam]
