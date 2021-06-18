@@ -8,13 +8,28 @@ ad_page_contract {
 }
 
 auth::require_login
+
+# Make sure all selected objects exist. This is the minimal
+# requirement. Don't throw hard errors on following outdated links. We
+# could test for supported object_types.
+set n_objects [llength $object_id]
+if {[db_string objects_do_not_exists "
+    select :n_objects <> (select count(*)
+                          from acs_objects
+                          where object_id in ([join $object_id ,]))
+    from dual
+"]} {
+    ns_returnnotfound
+    ad_script_abort
+}
+
 set user_id [ad_conn user_id]
 
 # publish the object to the filesystem
 set in_path [ad_tmpnam]
 file mkdir $in_path
 
-if {[llength $object_id] == 1} {
+if {$n_objects == 1} {
     set object_name_id $object_id
 } else {
     set object_name_id [fs::get_parent -item_id [lindex $object_id 0]]
@@ -24,14 +39,6 @@ set download_name [fs::get_file_system_safe_object_name -object_id $object_name_
 append download_name ".zip"
 
 foreach fs_object_id $object_id {
-    # The minimal requirement is that the object exists. Don't throw
-    # hard errors on following outdated links. We could test for
-    # supported object_types.
-    if {![acs_object::object_p -id $fs_object_id]} {
-        ns_returnnotfound
-        file delete -force -- $in_path
-        ad_script_abort
-    }
     set file [fs::publish_object_to_file_system -object_id $fs_object_id -path $in_path -user_id $user_id]
 }
 
@@ -49,6 +56,7 @@ ad_try {
     file delete -force -- $in_path
     file delete -force -- $out_path
     error $errorMsg
+
 }
 
 # return the archive to the connection.
