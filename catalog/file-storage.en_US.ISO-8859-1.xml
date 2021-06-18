@@ -40,6 +40,8 @@
   <msg key="Download">Download</msg>
   <msg key="Download_ZIP">Download as a ZIP file</msg>
   <msg key="Download_ZIP_Checked_Items">Download checked items as a ZIP file</msg>
+  <msg key="download_zip_creating_archive_msg">Creating archive, please wait...</msg>
+  <msg key="download_zip_file_is_ready_msg">Your ZIP file is ready. &lt;a title=&#34;ZIP file&#34; href=&#34;%file_url%&#34;&gt;Download&lt;/a&gt;</msg>
   <msg key="Edit">Edit</msg>
   <msg key="edit">edit</msg>
   <msg key="Edit_File">Edit File</msg>
