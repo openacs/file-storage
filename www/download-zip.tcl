@@ -44,25 +44,31 @@ foreach fs_object_id $object_id {
 
 set out_file [ad_tmpnam]
 
-# create the archive
 ad_try {
+
+    # create the archive
     util::zip -source $in_path -destination $out_file
+
+} on ok {d} {
+
+    # return the archive to the connection.
+    ns_set put [ad_conn outputheaders] Content-Disposition "attachment;filename=\"$download_name\""
+    ns_set put [ad_conn outputheaders] Content-Type "application/zip"
+    ns_set put [ad_conn outputheaders] Content-Size [ad_file size $out_file]
+    ns_returnfile 200 application/octet-stream $out_file
+
 } on error {errorMsg} {
+
     # some day we'll do something useful here
+    error $errorMsg
+
+} finally {
+
+    # clean everything up
     file delete -force -- $in_path
     file delete -- $out_file
-    error $errorMsg
+
 }
-
-# return the archive to the connection.
-ns_set put [ad_conn outputheaders] Content-Disposition "attachment;filename=\"$download_name\""
-ns_set put [ad_conn outputheaders] Content-Type "application/zip"
-ns_set put [ad_conn outputheaders] Content-Size "[ad_file size $out_file]"
-ns_returnfile 200 application/octet-stream $out_file
-
-# clean everything up
-file delete -force -- $in_path
-file delete -- $out_file
 
 # Local variables:
 #    mode: tcl
