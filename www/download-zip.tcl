@@ -13,7 +13,7 @@ auth::require_login
 # requirement. Don't throw hard errors on following outdated links. We
 # could test for supported object_types.
 set n_objects [llength $object_id]
-if {[db_string objects_do_not_exists "
+if {[db_string objects_do_not_exist "
     select :n_objects <> (select count(*)
                           from acs_objects
                           where object_id in ([join $object_id ,]))
