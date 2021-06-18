@@ -42,11 +42,7 @@ foreach fs_object_id $object_id {
     set file [fs::publish_object_to_file_system -object_id $fs_object_id -path $in_path -user_id $user_id]
 }
 
-# create a temp dir to put the archive in
-set out_path [ad_tmpnam]
-file mkdir $out_path
-
-set out_file [ad_file join ${out_path} ${download_name}]
+set out_file [ad_tmpnam]
 
 # create the archive
 ad_try {
@@ -54,9 +50,8 @@ ad_try {
 } on error {errorMsg} {
     # some day we'll do something useful here
     file delete -force -- $in_path
-    file delete -force -- $out_path
+    file delete -- $out_file
     error $errorMsg
-
 }
 
 # return the archive to the connection.
@@ -67,7 +62,7 @@ ns_returnfile 200 application/octet-stream $out_file
 
 # clean everything up
 file delete -force -- $in_path
-file delete -force -- $out_path
+file delete -- $out_file
 
 # Local variables:
 #    mode: tcl
