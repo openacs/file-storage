@@ -65,10 +65,12 @@ ad_try {
         u:sign(max_age=300)
     }]
 
+    set message "#file-storage.download_zip_file_is_ready_msg#
+                 <iframe style='display:none' src='[ns_quotehtml $file_url]'></iframe>"
+
     util_user_message \
         -html \
-        -message [_ file-storage.download_zip_file_is_ready_msg \
-                      [list file_url [ns_quotehtml $file_url]]]
+        -message $message
 
     ad_progress_bar_end \
         -url $return_url
