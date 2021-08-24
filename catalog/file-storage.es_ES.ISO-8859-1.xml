@@ -37,6 +37,8 @@
   <msg key="Delete_this_folder">Borrar esta carpeta</msg>
   <msg key="Delete_Version">Borrar versión</msg>
   <msg key="Description">Descripción:</msg>
+  <msg key="download_zip_creating_archive_msg">Creando archivo, espere por favor...</msg>
+  <msg key="download_zip_file_is_ready_msg">El archivo ZIP está listo.</msg>
   <msg key="Download">Descargar</msg>
   <msg key="Download_ZIP">Descargar en un ZIP</msg>
   <msg key="Download_ZIP_Checked_Items">Descargar elementos seleccionados en un ZIP</msg>
