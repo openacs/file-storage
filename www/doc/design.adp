@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/file-storage {File Storage}} {File Storage Design Document}</property>
+<property name="context">{/doc/file-storage/ {File Storage}} {File Storage Design Document}</property>
 <property name="doc(title)">File Storage Design Document</property>
 <master>
 <h2>File Storage Design Document</h2>
@@ -173,8 +173,7 @@ file_storage PL/SQL package</a>
 </p>
 <h4>Tcl API</h4>
 <table width="100%"><tr><td bgcolor="#E4E4E4">
-<h3><a href="/api-doc/proc-view?proc=children%5fhave%5fpermission%5fp">children_have_permission_p</a></h3><pre>
-children_have_permission_p [ -user_id <em>user_id</em> ] <em>item_id</em><em>privilege</em>
+<h3><a href="/api-doc/proc-view?proc=children%5fhave%5fpermission%5fp">children_have_permission_p</a></h3><pre>children_have_permission_p [ -user_id <em>user_id</em> ] <em>item_id</em><em>privilege</em>
 </pre><blockquote>This procedure, given a content item and a privilege,
 checks to see if there are any children of the item on which the
 user does not have that privilege.
@@ -188,8 +187,7 @@ user does not have that privilege.
 </blockquote>
 </td></tr></table>
 <table width="100%"><tr><td bgcolor="#E4E4E4">
-<h3><a href="/api-doc/proc-view?proc=fs%5fcontext%5fbar%5flist">fs_context_bar_list</a></h3><pre>
-fs_context_bar_list [ -final <em>final</em> ] <em>item_id</em>
+<h3><a href="/api-doc/proc-view?proc=fs%5fcontext%5fbar%5flist">fs_context_bar_list</a></h3><pre>fs_context_bar_list [ -final <em>final</em> ] <em>item_id</em>
 </pre><blockquote>Constructs the list to be fed to ad_context_bar
 appropriate for item_id. If -final is specified, that string will
 be the last item in the context bar. Otherwise, the name
