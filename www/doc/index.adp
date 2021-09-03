@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/file-storage {File Storage}} {File-Storage Documentation}</property>
+<property name="context">{/doc/file-storage/ {File Storage}} {File-Storage Documentation}</property>
 <property name="doc(title)">File-Storage Documentation</property>
 <master>
 <h1>File-Storage Documentation</h1>
