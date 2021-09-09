@@ -27,6 +27,8 @@ ad_include_contract {
     page_num
 }
 
+set this_page [ad_return_url]
+
 set viewing_user_id [ad_conn user_id]
 
 permission::require_permission -party_id $viewing_user_id -object_id $folder_id -privilege "read"
@@ -226,8 +228,9 @@ if {$allow_bulk_actions} {
             [_ file-storage.Delete] ${fs_url}delete [_ file-storage.Delete_Checked_Items]
     }
 
+    set zip_url [export_vars -base ${fs_url}download-zip {{return_url $this_page}}]
     lappend bulk_actions \
-        [_ file-storage.Download_ZIP] ${fs_url}download-zip [_ file-storage.Download_ZIP_Checked_Items]
+        [_ file-storage.Download_ZIP] $zip_url [_ file-storage.Download_ZIP_Checked_Items]
 
     callback fs::folder_chunk::add_bulk_actions \
         -bulk_variable "bulk_actions" \
@@ -368,7 +371,7 @@ db_multirow -extend {
             set alt_icon #file-storage.folder#
             set file_url [export_vars -base "${fs_url}index" {{folder_id $object_id}}]
             set download_link [_ file-storage.Download]
-            set download_url "[export_vars -base "${fs_url}download-zip" -url {object_id}]"
+            set download_url [export_vars -base "${fs_url}download-zip" -url {object_id {return_url $this_page}}]
         }
         url {
             set properties_link [_ file-storage.properties]
@@ -470,7 +473,7 @@ if { $expose_rss_p } {
 }
 
 if {$content_size_total > 0} {
-    set compressed_url [export_vars -base ${fs_url}download-zip -url {{object_id $folder_id}}]
+    set compressed_url [export_vars -base ${fs_url}download-zip -url {{object_id $folder_id} {return_url $this_page}}]
 }
 
 # Local variables:

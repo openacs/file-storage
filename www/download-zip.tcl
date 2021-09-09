@@ -59,7 +59,11 @@ ad_try {
     set n $download_name
     set f $out_file
     set u $user_id
-    set file_url [export_vars -base ./download-zip-2 {
+    # The download URL always points to the file-storage instance of
+    # the file, unlike the return_url, which might be arbitrary.
+    set package_id [fs::get_file_package_id -file_id $object_name_id]
+    set package_url [site_node::get_url_from_object_id -object_id $package_id]
+    set file_url [export_vars -base ${package_url}/download-zip-2 {
         f:sign(max_age=300)
         n:sign(max_age=300)
         u:sign(max_age=300)
@@ -71,6 +75,12 @@ ad_try {
     util_user_message \
         -html \
         -message $message
+
+    if {$return_url eq ""} {
+        # Return URL must be not-empty or we will redirect to
+        # ourselves...
+        set return_url $package_url
+    }
 
     ad_progress_bar_end \
         -url $return_url
