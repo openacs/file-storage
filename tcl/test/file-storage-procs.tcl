@@ -11,6 +11,7 @@ aa_register_case \
     -procs {
         fs::add_file
         fs::publish_versioned_object_to_file_system
+        fs::get_file_package_id
     } \
     fs_publish_file {
 
@@ -40,6 +41,9 @@ aa_register_case \
                 select item_id from cr_revisions
                 where revision_id = :revision_id
             }]
+
+            aa_equals "Package id from the API and from the database are consistent" \
+                [fs::get_file_package_id -file_id $revision_id] $package_id
 
             set exported [fs::publish_versioned_object_to_file_system \
                               -object_id $item_id]
