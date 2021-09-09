@@ -141,7 +141,7 @@
 
   <fullquery name="fs::get_file_package_id.select_package_id">
     <querytext>
-      select package__id
+      select package_id
       from acs_objects
       where object_id = :file_id
     </querytext>
