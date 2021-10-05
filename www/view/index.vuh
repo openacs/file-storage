@@ -3,11 +3,11 @@
 # Try and look up the item in the content repository
 #################################################
 ad_page_contract {
-    
+
     @author Unknown
     @creation-date Unknown
     @cvs-id $Id$
-} {    
+} {
     { revision_id "" }
 }
 
@@ -33,7 +33,7 @@ set user_id [ad_conn user_id]
 # path as an absolute path within the filesystem.
 
 if {[parameter::get -parameter BehaveLikeFilesystemP -default 0] || [catch {set init_p [content::init the_url the_root $content_root $template_root public $revision_id $content_type]}] || !$init_p } {
-    
+
     # Make sure we are not dealing with an upgraded file and there exists a file with the title
     if {$file_id eq ""} {
         set splitted_url [split $the_url "/"]
@@ -52,7 +52,7 @@ if {[parameter::get -parameter BehaveLikeFilesystemP -default 0] || [catch {set 
 
         if {[content::symlink::is_symlink -item_id $file_id]} {
             set file_id [content::symlink::resolve -item_id $file_id]
-        }           
+        }
 
         if {(![info exists version_id] || $version_id eq "")} {
             set version_id [content::item::get_live_revision -item_id $file_id]
@@ -71,7 +71,7 @@ if {[parameter::get -parameter BehaveLikeFilesystemP -default 0] || [catch {set 
     }
 
 } else {
-    
+
     set version_id [content::item::get_live_revision -item_id $file_id]
     permission::require_permission \
         -party_id $user_id \
