@@ -100,7 +100,25 @@ ad_proc -private fs::rss::datasource {
         set revisions_clause "r.item_id = o.object_id"
     }
 
-    db_foreach select_files {} {
+    db_foreach select_files [subst -nocommands {
+        select * from (
+          select o.object_id as item_id,
+                 o.title,
+                 o.name,
+                 o.file_upload_name,
+                 o.type,
+                 o.content_size,
+                 to_char(r.publish_date,'YYYY-MM-DD HH24:MI:SS') as publish_date_ansi,
+                 r.description,
+                 r.revision_id
+          from fs_objects o,
+               cr_revisions r
+          where $parent_clause
+            and type != 'folder'
+            and $revisions_clause
+          order by last_modified desc
+        ) as v fetch first :max_items rows only
+    }] {
         set link "${ad_url}${base_url}file?file_id=$item_id&version_id=$revision_id"
         set content "content"
         set description $description
@@ -162,7 +180,13 @@ ad_proc -private fs::rss::lastUpdated {
 
     #result differs on whether we're including revisions
 
-    db_1row select_last_updated {}
+    db_1row select_last_updated {
+	select (max(last_modified)-to_date('1970-01-01','YYYY-MM-DD'))*60*60*24 as last_update
+        from fs_rss_subscrs s, fs_objects f
+        where s.subscr_id = :summary_context_id
+          and f.parent_id = s.folder_id
+          and f.type != 'folder'
+    }
 
     return $last_update
 }
