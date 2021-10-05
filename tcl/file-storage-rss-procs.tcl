@@ -2,7 +2,7 @@ namespace eval fs::rss {}
 
 ad_proc -public fs::rss::create_rss_gen_subscr_impl {} {
     Register the service contract implementation and return the impl_id
-    
+
     @return impl_id of the created implementation
 } {
     return [acs_sc::impl::new_from_spec -spec {
@@ -18,7 +18,7 @@ ad_proc -public fs::rss::create_rss_gen_subscr_impl {} {
 
 ad_proc -public fs::rss::drop_rss_gen_subscr_impl {} {
     Unegister the service contract implementation and return the impl_id
-    
+
     @return impl_id of the created implementation
 } {
     acs_sc::impl::delete -contract_name RssGenerationSubscriber -impl_name fs_rss
@@ -28,11 +28,11 @@ ad_proc -private fs::rss::datasource {
     summary_context_id
 } {
     This procedure implements the "datasource" operation of the
-    RssGenerationSubscriber service contract.  
+    RssGenerationSubscriber service contract.
 
     Important: in this implementation, the summary_context_id is equal
     to the subscription_id, which we use to key into the fs_rss_subscrs table
-    to find the folder_id.  
+    to find the folder_id.
 
     @author Andrew Grumet (aegrumet@alum.mit.edu)
 } {
@@ -108,11 +108,11 @@ ad_proc -private fs::rss::datasource {
         if {$include_revisions_p == "t"} {
             append description "<br><br><b>Note:</b> This may be a new revision of an existing file."
         }
-        
+
         # Always convert timestamp to GMT
         set publish_date_ansi [lc_time_tz_convert -from [lang::system::timezone] -to "Etc/GMT" -time_value $publish_date_ansi]
         set publish_timestamp "[clock format [clock scan $publish_date_ansi] -format "%a, %d %b %Y %H:%M:%S"] GMT"
-        
+
         set iteminfo [list \
                           link $link \
                           title $title \
@@ -147,7 +147,7 @@ ad_proc -private fs::rss::datasource {
     set column_array(channel_rating)                 ""
     set column_array(channel_skipDays)               ""
     set column_array(channel_skipHours)              ""
-    
+
     return [array get column_array]
 }
 
@@ -178,7 +178,7 @@ ad_proc -private fs::rss::build_feeds {
     #Don't use nested db_ calls because then fs::rss::datasource will
     #not see the results of in-progress transactions.
     set subscr_id_list [db_list select_subscrs {}]
-    
+
     foreach subscr_id $subscr_id_list {
         rss_gen_report $subscr_id
     }
