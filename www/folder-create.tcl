@@ -77,12 +77,15 @@ if { [parameter::get -parameter CategoriesP -package_id $package_id -default 0] 
 }
 
 ad_form -extend -name "folder-ae" -edit_request {
-    #For now I'm using the bCSM proc. We need to move it to somewhere its more accessible.
-    #But I hope we can avoid repeating the code in 2 places.
-    #    array set folder [bcms::folder::get_folder -folder_id $folder_id]
-    # use a plain old query until this gets fixed in CR
-
-    db_1row get_folder_info "" -array folder
+    db_1row get_folder_info {
+        select cf.label,
+               cf.description,
+               ci.parent_id
+          from cr_folders cf,
+               cr_items ci
+         where cf.folder_id = :folder_id
+           and cf.folder_id = ci.item_id
+    } -array folder
 
     #Sigh, there seems to be no consitancy as to how name, title, label and pretty_name are used.
 
