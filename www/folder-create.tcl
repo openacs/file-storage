@@ -104,6 +104,15 @@ ad_form -extend -name "folder-ae" -edit_request {
                   -tolower \
                   $folder_name]
 
+    # 'folder_name' itself cannot be null, but the sanitized 'name'
+    # might be, if 'folder_name' is made only of invalid
+    # characters. We complain in such case, as we need some kind of
+    # valid name to be there.
+    if {[string length $name] == 0} {
+        template::form::set_error folder-ae folder_name [_ acs-tcl.lt_name_contains_invalid [list name [_ file-storage.Title]]]
+        break
+    }
+
     # check folder name does not exist already
     if {[content::item::get_id_by_name \
              -name $name -parent_id $parent_id] ne ""} {
