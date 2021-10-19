@@ -31,9 +31,9 @@ set package_id [ad_conn package_id]
 # check that they have write permission on the parent folder or this folder if its an edit.
 if { [info exists parent_id] && $parent_id ne "" } {
     permission::require_permission \
-	    -object_id $parent_id \
-	    -party_id $user_id \
-	    -privilege "write"
+        -object_id $parent_id \
+        -party_id $user_id \
+        -privilege "write"
 }
 
 if {![ad_form_new_p -key folder_id]} {
@@ -41,9 +41,9 @@ if {![ad_form_new_p -key folder_id]} {
     # editing an existing folder
     #
     permission::require_permission \
-	    -object_id $folder_id \
-	    -party_id $user_id \
-	    -privilege "write"
+        -object_id $folder_id \
+        -party_id $user_id \
+        -privilege "write"
     set context [fs_context_bar_list -final "[_ file-storage.Edit_Folder]" $folder_id]
 } elseif {[info exists parent_id]} {
     #
@@ -71,19 +71,19 @@ if { [parameter::get -parameter CategoriesP -package_id $package_id -default 0] 
 	set categorized_object_id ""
     }
     category::ad_form::add_widgets \
-	 -container_object_id $package_id \
-	 -categorized_object_id $categorized_object_id \
-	 -form_name folder-ae
+        -container_object_id $package_id \
+        -categorized_object_id $categorized_object_id \
+        -form_name folder-ae
 }
 
 ad_form -extend -name "folder-ae" -edit_request {
     #For now I'm using the bCSM proc. We need to move it to somewhere its more accessible.
     #But I hope we can avoid repeating the code in 2 places.
-#    array set folder [bcms::folder::get_folder -folder_id $folder_id]
-# use a plain old query until this gets fixed in CR
+    #    array set folder [bcms::folder::get_folder -folder_id $folder_id]
+    # use a plain old query until this gets fixed in CR
 
     db_1row get_folder_info "" -array folder
-    
+
     #Sigh, there seems to be no consitancy as to how name, title, label and pretty_name are used.
 
     # cr_folders.label is the pretty name
@@ -111,12 +111,12 @@ ad_form -extend -name "folder-ae" -edit_request {
 
     db_transaction {
 	set folder_id [fs::new_folder \
-	    -name $name \
-	    -pretty_name $folder_name \
-	    -parent_id $parent_id \
-	    -creation_user [ad_conn user_id] \
-	    -creation_ip [ad_conn peeraddr] \
-	    -description $description]
+                           -name $name \
+                           -pretty_name $folder_name \
+                           -parent_id $parent_id \
+                           -creation_user [ad_conn user_id] \
+                           -creation_ip [ad_conn peeraddr] \
+                           -description $description]
     } on_error {
         ns_log error $errmsg
 	ad_return_complaint 1 "[_ acs-subsite.lt_Heres_what_the_databa] $errmsg"
@@ -125,23 +125,23 @@ ad_form -extend -name "folder-ae" -edit_request {
 
     if { [parameter::get -parameter CategoriesP -package_id $package_id -default 0] } {
 	category::map_object -remove_old -object_id $folder_id [category::ad_form::get_categories \
-								       -container_object_id $package_id \
-								       -element_name category_id]
+                                                                    -container_object_id $package_id \
+                                                                    -element_name category_id]
     }
 
 } -edit_data {
-    
+
     db_transaction {
 	fs::rename_folder -folder_id $folder_id -name $folder_name
 	fs::set_folder_description -folder_id $folder_id -description $description
     }
     if { [parameter::get -parameter CategoriesP -package_id $package_id -default 0] } {
 	category::map_object -remove_old -object_id $folder_id [category::ad_form::get_categories \
-								       -container_object_id $package_id \
-								       -element_name category_id]
+                                                                    -container_object_id $package_id \
+                                                                    -element_name category_id]
     }
-    
-} -after_submit {   
+
+} -after_submit {
     ad_returnredirect "?folder_id=$folder_id"
     ad_script_abort
 }
