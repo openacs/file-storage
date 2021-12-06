@@ -47,7 +47,7 @@ if {[parameter::get -parameter BehaveLikeFilesystemP -default 0]
         set item_url_folder [lindex $splitted_url end-1]
         set item_url_parent_folder [lindex $splitted_url end-2]
         set file_id [db_string upgraded_item_id {
-            select min(i.item_id)
+            select i.item_id
             from cr_revisions r, cr_items i
             where r.item_id = i.item_id
             and r.title = :item_url_title
@@ -57,7 +57,7 @@ if {[parameter::get -parameter BehaveLikeFilesystemP -default 0]
                                and parent_id in (select item_id
                                                 from cr_items
                                                 where name = :item_url_parent_folder))
-            order by revision_id desc
+            fetch first 1 row only
         } -default 0]
     }
 
