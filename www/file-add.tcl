@@ -239,6 +239,14 @@ ad_form -extend -form {} -select_query_name get_file -new_data {
                              -collapse_spaces \
                              -tolower \
                              $upload_file]
+        # If the sanitized upload_file name turns out empty, the file
+        # name was only made of invalid characters and chances are
+        # something funny is happening. We complain.
+        if {[string length $upload_file] == 0} {
+            template::form::set_error file-add upload_file \
+                [_ acs-tcl.lt_name_contains_invalid [list name [_ file-storage.Name]]]
+            break
+        }
 
         set existing_item_id [fs::get_item_id -name $upload_file -folder_id $folder_id]
 
