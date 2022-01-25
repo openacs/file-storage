@@ -85,7 +85,7 @@ ad_form -extend -name "folder-ae" -edit_request {
                cr_items ci
          where cf.folder_id = :folder_id
            and cf.folder_id = ci.item_id
-    } -array folder
+    } -column_array folder
 
     #Sigh, there seems to be no consitancy as to how name, title, label and pretty_name are used.
 
