@@ -15,8 +15,8 @@ auth::require_login
 set n_objects [llength $object_id]
 if {[db_string objects_do_not_exist "
     select :n_objects <> (select count(*)
-                          from acs_objects
-                          where object_id in ([join $object_id ,]))
+                          from cr_items
+                          where item_id in ([join $object_id ,]))
     from dual
 "]} {
     ns_returnnotfound
