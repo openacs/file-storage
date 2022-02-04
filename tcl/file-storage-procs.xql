@@ -139,14 +139,6 @@
   </querytext>
 </fullquery>
 
-  <fullquery name="fs::get_file_package_id.select_package_id">
-    <querytext>
-      select package_id
-      from acs_objects
-      where object_id = :file_id
-    </querytext>
-  </fullquery>
-
 <fullquery name="fs::add_created_file.item_exists">
    <querytext>
           select count(*) from cr_items

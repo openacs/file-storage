@@ -1519,7 +1519,23 @@ ad_proc -public fs::get_file_package_id {
     @return package_id
 
 } {
-    return [db_string select_package_id {}]
+    return [db_string select_package_id {
+        with recursive hierarchy as
+        (
+         select package_id, context_id
+         from acs_objects
+         where object_id = :file_id
+
+         union
+
+         select o.package_id, o.context_id
+         from acs_objects o, hierarchy h
+         where object_id = h.context_id
+           and h.package_id is null
+         )
+        select package_id from hierarchy
+        where package_id is not null
+    } -default ""]
 }
 
 namespace eval fs::notification {}
