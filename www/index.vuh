@@ -23,6 +23,12 @@ permission::require_permission \
     -party_id $user_id
 
 set file_live_revision [content::item::get_live_revision -item_id $file_item_id]
+if {$file_live_revision eq ""} {
+    # A cr_item might not have any revision that is live. We do not
+    # deliver the file in this case.
+    ns_returnnotfound
+    ad_script_abort
+}
 
 if {[apm_package_installed_p views]} {
     views::record_view -object_id $file_item_id -viewer_id $user_id
