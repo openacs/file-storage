@@ -14,13 +14,11 @@ ad_page_contract {
             ad_complain "[_ file-storage.lt_The_specified_folder__1]"
         }
     }
-} -validate {
     not_root_folder -requires {folder_id} {
         if { $folder_id == [fs_get_root_folder] } {
             ad_complain "[_ file-storage.lt_You_may_not_delete_th]"
         }
     }
-
 } -properties {
     folder_id:onevalue
     folder_name:onevalue
