@@ -5,6 +5,152 @@
 -- @creation-date 2002-04-03
 -- @version $Id$
 --
+CREATE OR REPLACE PACKAGE file_storage
+AS
+
+    function get_root_folder(
+        package_id in apm_packages.package_id%TYPE
+    ) return fs_root_folders.folder_id%TYPE;
+
+    function get_package_id(
+        item_id in cr_items.item_id%TYPE
+    ) return fs_root_folders.package_id%TYPE;
+
+    function new_root_folder(
+        --
+        -- A hackish function to get around the fact that we can't run
+        -- code automatically when a new package instance is created.
+        --
+        package_id in apm_packages.package_id%TYPE,
+        folder_name in cr_folders.label%TYPE,
+        folder_url in cr_items.name%TYPE,
+        description in cr_folders.description%TYPE default null
+    ) return fs_root_folders.folder_id%TYPE;
+
+    function new_file(
+        --
+        -- Create a file in CR in preparation for actual storage
+        -- Wrapper for content_item.new
+        --
+        item_id in cr_items.item_id%TYPE default null,
+        title in cr_items.name%TYPE,
+        folder_id in cr_items.parent_id%TYPE,
+        creation_user in acs_objects.creation_user%TYPE,
+        creation_ip in acs_objects.creation_ip%TYPE,
+        indb_p in char default 't',
+	package_id in acs_objects.package_id%TYPE default null
+    ) return cr_items.item_id%TYPE;
+
+    procedure delete_file(
+        --
+        -- Delete a file and all its version
+        -- Wrapper to content_item.delete
+        --
+        file_id in cr_items.item_id%TYPE
+    );
+
+    procedure rename_file(
+        --
+        -- Rename a file and all
+        -- Wrapper to content_item__edit_name
+        --
+        file_id in cr_items.item_id%TYPE,
+        title in cr_items.name%TYPE
+    );
+
+    function copy_file(
+        --
+        -- Copy a file, but only copy the live_revision
+        --
+        file_id          in cr_items.item_id%TYPE,
+        target_folder_id in cr_items.parent_id%TYPE,
+        creation_user    in acs_objects.creation_user%TYPE,
+        creation_ip      in acs_objects.creation_ip%TYPE,
+	name             in cr_items.name%TYPE default null,
+	title            in cr_revisions.title%TYPE default null
+    ) return cr_revisions.revision_id%TYPE;
+    
+
+    procedure move_file(
+        --
+        -- Move a file, and all its versions, to a new folder
+        --
+        file_id in cr_items.item_id%TYPE,
+        target_folder_id in cr_items.parent_id%TYPE,
+        creation_user in acs_objects.creation_user%TYPE,
+        creation_ip in acs_objects.creation_ip%TYPE
+    );
+
+    function new_version(
+        --
+        -- Create a new version of a file
+        -- Wrapper for content_revision.new
+        --
+        filename in cr_revisions.title%TYPE,
+        description in cr_revisions.description%TYPE,
+        mime_type in cr_revisions.mime_type%TYPE,
+        item_id in cr_items.item_id%TYPE,
+        creation_user in acs_objects.creation_user%TYPE,
+        creation_ip in acs_objects.creation_ip%TYPE
+    ) return cr_revisions.revision_id%TYPE;
+
+    function get_title(
+        --
+        -- Unfortunately, title in the file-storage context refers
+        -- to the name attribute in cr_items, not the title attribute in
+        -- cr_revisions
+        item_id in cr_items.item_id%TYPE
+    ) return varchar;
+
+    function get_parent_id(
+        item_id in cr_items.item_id%TYPE
+    ) return cr_items.item_id%TYPE;
+
+    function get_content_type(
+        --
+        -- Wrapper for content_item. get_content_type
+        --
+        item_id in cr_items.item_id%TYPE
+    ) return cr_items.content_type%TYPE;
+
+    function get_folder_name(
+        --
+        -- Wrapper for content_folder.get_label
+        --
+        folder_id in cr_folders.folder_id%TYPE
+    ) return cr_folders.label%TYPE;
+
+    function delete_version(
+        --
+        -- Delete a version of a file
+        --
+        file_id in cr_items.item_id%TYPE,
+        version_id in cr_revisions.revision_id%TYPE
+    ) return cr_items.parent_id%TYPE;
+
+    function new_folder(
+        --
+        -- Create a folder
+        --
+        name in cr_items.name%TYPE,
+        folder_name in cr_folders.label%TYPE,
+        parent_id in cr_items.parent_id%TYPE,
+        creation_user in acs_objects.creation_user%TYPE,
+        creation_ip in acs_objects.creation_ip%TYPE
+    ) return cr_folders.folder_id%TYPE;
+
+    procedure delete_folder(
+        --
+        -- Delete a folder
+        --
+        folder_id in cr_folders.folder_id%TYPE,
+	cascade_p in char default 'f'
+    );
+
+END file_storage;
+/
+show errors
+
 
 create or replace package body file_storage
 as
