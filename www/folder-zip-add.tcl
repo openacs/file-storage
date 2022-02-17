@@ -40,6 +40,29 @@ ad_page_contract {
         }
     }
 
+    upload_file_tmpfile -requires {upload_file} {
+        #
+        # Check if the upload file looks like a zip file
+        #
+        set n_bytes [ad_file size ${upload_file.tmpfile}]
+        if {$n_bytes < 5} {
+            #
+            # A zip file has at least 4 bytes.
+            #
+            set ok 0
+        } else {
+            #
+            # Check the signature of the zip file, which is more
+            # portable and robust than using external programs.
+            #
+            set F [open ${upload_file.tmpfile} rb]; set signature [read $F 4]; close $F
+            set ok [expr {[binary encode hex $signature] eq "504b0304"}]
+        }
+        if { !$ok} {
+            ad_complain "The uploaded file does not look like a zip file."
+        }
+    }
+
     max_size -requires {upload_file} {
         #
         # Check if the file is larger than fs::max_upload_size.
@@ -144,7 +167,7 @@ ad_form -extend -name file_add -form {} -new_data {
     if {$unzip_binary ne ""} {
         ns_log warning "package parameter UnzipBinary of file-storage is ignored, using systemwide util::unzip"
     }
-    
+
     set unzip_binary [util::which unzip]
     if { $unzip_binary ne "" } {
         #
