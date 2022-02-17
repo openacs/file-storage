@@ -106,10 +106,10 @@ ad_proc -private fs_children_have_permission_p {
             where i.parent_id = c.item_id
         )
         select not exists (select 1 from children
-                            where not acs_permission.permission_p(item_id, :user_id, :privilege))
+                            where acs_permission.permission_p(item_id, :user_id, :privilege) = 'f')
            and not exists (select 1 from cr_revisions
                             where item_id in (select item_id from children)
-                              and not acs_permission.permission_p(revision_id, :user_id, :privilege))
+                              and acs_permission.permission_p(revision_id, :user_id, :privilege) = 'f')
           from dual
     }]
     return [expr {$all_children_have_privilege_p ? 1 : 0}]
@@ -417,7 +417,7 @@ ad_proc -public fs::get_folder_objects {
         select cr_items.item_id as object_id, cr_items.name
         from   cr_items
         where  cr_items.parent_id = :folder_id
-        and    acs_permission.permission_p(cr_items.item_id, :user_id, 'read')
+        and    acs_permission.permission_p(cr_items.item_id, :user_id, 'read') = 't'
     }]
 }
 
@@ -475,7 +475,7 @@ ad_proc -public fs::get_folder_contents {
            acs_permission.permission_p(fs_objects.object_id, :user_id, 'write') as write_p
            from fs_objects
            where fs_objects.parent_id = :folder_id
-           and acs_permission.permission_p(fs_objects.object_id, :user_id, 'read')
+           and acs_permission.permission_p(fs_objects.object_id, :user_id, 'read') = 't'
            order by fs_objects.sort_key, fs_objects.name
     }]]
 
