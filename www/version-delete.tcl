@@ -40,7 +40,7 @@ set delete_message [_ file-storage.lt_Are_you_sure_that_you]
 set file_url [export_vars -base file {{file_id $item_id}}]
 
 ad_form -export version_id -cancel_url $file_url -form {
-    {delete_message:text(inform) {label $delete_message}}
+    {delete_message:text(inform) {label ""} {value $delete_message}}
 } -on_submit {
 
     set parent_id [fs::delete_version \
