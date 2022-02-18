@@ -173,14 +173,28 @@ if { [parameter::get -parameter CategoriesP -package_id $package_id -default 0] 
 ad_form -extend -form {} -select_query_name get_file -new_data {
 
     if { [string is true -strict $unpack_p]
+         && $unpack_binary ne ""
          && [file extension [template::util::file::get_property filename $upload_file]] eq ".zip"
     } {
+
+        set ok [util::file_content_check -type zip -file ${upload_file.tmpfile}]
+        if {!$ok} {
+            ad_complain "The uploaded file does not look like a zip file."
+            ad_script_abort
+        }
 
         set path [ad_tmpnam]
         file mkdir $path
 
-
-        catch { exec $unpack_binary -jd $path ${upload_file.tmpfile} } errmsg
+        if {[catch { exec $unpack_binary -jd $path ${upload_file.tmpfile} } errMsg]} {
+            #
+            # Completely silently catching unzip errors (like it was
+            # before Feb 18, 2022) is NOT a good idea. Maybe, some zip
+            # variants produce output on stderr, so we have to check,
+            # before we are considering to abort here.
+            #
+            ns_log warning "unpacking the uploaded zip file lead to error: $errorMsg"
+        }
 
         # More flexible parameter design could be:
         # zip {unzip -jd {out_path} {in_file}} tar {tar xf {in_file} {out_path}} tgz {tar xzf {in_file} {out_path}}
