@@ -52,11 +52,9 @@ ad_page_contract {
             set ok 0
         } else {
             #
-            # Check the signature of the zip file, which is more
-            # portable and robust than using external programs.
+            # Check the signature of the zip file.
             #
-            set F [open ${upload_file.tmpfile} rb]; set signature [read $F 4]; close $F
-            set ok [expr {[binary encode hex $signature] eq "504b0304"}]
+            set ok [util::file_content_check -type zip -file ${upload_file.tmpfile}]
         }
         if { !$ok} {
             ad_complain "The uploaded file does not look like a zip file."
