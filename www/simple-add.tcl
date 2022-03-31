@@ -52,7 +52,7 @@ ad_form -export {folder_id type}
 
 if {$lock_title_p} {
     ad_form -extend -form {
-        {title_display:text(inform) {label \#file-storage.Title\#} }
+        {title_display:text(inform) {label \#file-storage.Title\#} {value $title}}
         {title:text(hidden) {value $title}}
     }
 } else {
