@@ -54,10 +54,22 @@ ad_form -extend -form {
     set description $folder(description)
 } -on_submit {
 
+    set name [ad_sanitize_filename -collapse_spaces $folder_name]
+
+    # 'folder_name' itself cannot be null, but the sanitized 'name'
+    # might be, if 'folder_name' is made only of invalid
+    # characters. We complain in such case, as we need some kind of
+    # valid name to be there.
+    if {[string length $name] == 0} {
+        template::form::set_error folder-edit folder_name \
+            [_ acs-tcl.lt_name_contains_invalid [list name [_ file-storage.Title]]]
+        break
+    }
+
     db_transaction {
         content::folder::update -folder_id $folder_id \
             -attributes [list \
-                             [list name [ad_sanitize_filename -collapse_spaces $folder_name]] \
+                             [list name $name] \
                              [list label $folder_name] \
                              [list description $description]]
 
