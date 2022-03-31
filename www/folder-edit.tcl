@@ -28,6 +28,7 @@ set submit_label [_ file-storage.Save]
 ad_form -export folder_id -form {
     {folder_name:text(text)
         {label "\#file-storage.Folder_Name\#"}
+	{maxlength 1000}
     }
     {description:text(textarea),optional
         {label \#file-storage.Description\#}

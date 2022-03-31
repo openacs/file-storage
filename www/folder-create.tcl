@@ -57,7 +57,7 @@ if {![ad_form_new_p -key folder_id]} {
 
 ad_form -name "folder-ae" -html { enctype multipart/form-data } -export { parent_id } -form {
     folder_id:key
-    {folder_name:text {label \#file-storage.Title\#} {html {size 30}} }
+    {folder_name:text {label \#file-storage.Title\#} {html {size 30}} {maxlength 1000}}
     {description:text(textarea),optional {label \#file-storage.Description\#} {html "rows 5 cols 35"}}
 }
 
