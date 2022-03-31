@@ -18,10 +18,12 @@ ad_form -name simple-edit -form {
     {name:text
         {label "#file-storage.Title_#"}
         {html {size 40} }
+        {maxlength 1000}
     }
     {url:text(url)
         {label "#file-storage.URL#"}
         {html {size 50} }
+        {maxlength 1000}
     }
     {description:text(textarea),optional
         {label "#file-storage.Description#" }
