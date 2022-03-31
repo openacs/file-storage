@@ -53,11 +53,11 @@ ad_form -export {folder_id type}
 if {$lock_title_p} {
     ad_form -extend -form {
         {title_display:text(inform) {label \#file-storage.Title\#} {value $title}}
-        {title:text(hidden) {value $title}}
+        {title:text(hidden) {value $title} {maxlength 1000}}
     }
 } else {
     ad_form -extend -form {
-        {title:text {label \#file-storage.Title\#} {html {size 30}} }
+        {title:text {label \#file-storage.Title\#} {html {size 30}} {maxlength 1000}}
     }
 }
 
@@ -67,6 +67,7 @@ ad_form -extend -form {
     {url:text(url)
         {label \#file-storage.URL\#}
         {value "https://"}
+        {maxlength 1000}
     }
     {description:text(textarea),optional
         {html {rows 5 cols 50}}
