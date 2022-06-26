@@ -483,8 +483,9 @@ aa_register_case \
         #
         # Get rid of the user
         #
-        aa_section "Delete test user (user_id [dict get $user_info user_id])"
-        acs::test::user::delete -user_id [dict get $user_info user_id]
+        set user_id [dict get $user_info user_id]
+        aa_section "Delete test user (user_id $user_id)"
+        acs::test::user::delete -user_id $user_id -delete_created_acs_objects
     }
 
 }
