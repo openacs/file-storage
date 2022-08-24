@@ -490,6 +490,126 @@ aa_register_case \
 
 }
 
+aa_register_case \
+    -cats {web api smoke} \
+    -procs {
+        template::util::file_transform
+        template::data::validate::file
+        content::revision::get_cr_file_path
+    } \
+    fs_upload_a_notmpfile {
+
+        Try to add a file to a folder where the content does not come
+        from the user, but from a pre-existing file on the server.
+
+        When a file is uploaded, the tmpfile holding the actual
+        content should be created by the webserver and its path
+        should not be in control of the user.
+
+        Here we create a file on the server, then try to copy this
+        file into the file-storage via a user requrest. This wold be
+        nasty because:
+        1. It means we could access any file the server can read
+           e.g. source code, /etc/passwd...
+        2. As the file-storage normally cleans up the file when the
+           upload is over, we could potentially delete every file
+           the server can write.
+
+} {
+    try {
+        #
+        # Setup of test user_id and login
+        #
+        set user_info [::acs::test::user::create -admin]
+        aa_log "user_info = $user_info"
+        set request_info [::acs::test::login $user_info]
+
+        set d [file_storage::test::call_fs_page -last_request $request_info]
+        aa_log "call_fs_page done"
+
+        set d [acs::test::follow_link -last_request $d -label {Add File}]
+        #acs::test::reply_has_status_code $d 200
+        #
+        # "Add File" links to a redirect page file-upload-confirm...
+        #
+        acs::test::reply_has_status_code $d 302
+        set location [::acs::test::get_url_from_location $d]
+        set d [acs::test::http -last_request $d $location]
+
+        set response [dict get $d body]
+        set form [acs::test::get_form $response {//form[@id='file-add']}]
+
+        aa_true "add form was returned" {[llength $form] > 2}
+
+        set file_name "I am not a tmpfile"
+        set notmpfile [ad_tmpnam]
+        set wfd [open $notmpfile w]
+        puts $wfd "I am not a real tmpfile!"
+        close $wfd
+        set notmpfile_checksum [ns_md file $notmpfile]
+
+        #
+        # Try to create the file via the UI
+        #
+        set d [::acs::test::form_reply \
+                   -last_request $d \
+                   -form $form \
+                   -update [list \
+                                upload_file [list $file_name $notmpfile "text/plain"] \
+                                title $file_name \
+                                description $file_name \
+                               ]]
+
+        #
+        # When upload succeeds, a redirect is returned. Here we want
+        # to make sure our upload was rejected, but without a server
+        # error.
+        #
+        set status [dict get $d status]
+        if {$status != 304 && $status < 500} {
+            set expected_status $status
+        } else {
+            set expected_status 200
+        }
+        acs::test::reply_has_status_code $d $expected_status
+
+        aa_true "Our notmpfile '$notmpfile' still exists" \
+            [file exists $notmpfile]
+
+        #
+        # Now make sure that the file did not end up in the content
+        # repository. We exploit the fact that the user is fresh and
+        # does not own many objects.
+        #
+        set notmpfile_was_found_p false
+        set user_id [dict get $user_info user_id]
+        foreach revision_id [db_list get_revisions {
+            select revision_id from cr_revisions r, acs_objects o
+            where o.object_id = r.revision_id
+              and o.creation_user = :user_id
+        }] {
+            set path [content::revision::get_cr_file_path -revision_id $revision_id]
+            set path_checksum [ns_md file $path]
+            aa_log "Checking revision '$revision_id', checksum '$path_checksum'"
+            if {$path_checksum eq $notmpfile_checksum} {
+                set notmpfile_was_found_p true
+            }
+        }
+
+        aa_false "Our notmpfile file was not found in the content repository of the user" \
+            $notmpfile_was_found_p
+
+    } finally {
+        #
+        # Get rid of the user
+        #
+        set user_id [dict get $user_info user_id]
+        aa_section "Delete test user (user_id $user_id)"
+        acs::test::user::delete -user_id $user_id -delete_created_acs_objects
+    }
+
+}
+
 
 # Local variables:
 #    mode: tcl
