@@ -86,7 +86,7 @@ namespace eval file_storage::test {
         file_description
     } {
         Adds a file to a folder from the UI.
-    } { 
+    } {
         set d [acs::test::follow_link -last_request $last_request -label {Add File}]
         #acs::test::reply_has_status_code $d 200
         #
@@ -98,7 +98,7 @@ namespace eval file_storage::test {
 
         set response [dict get $d body]
         set form [acs::test::get_form $response {//form[@id='file-add']}]
-        
+
         aa_true "add form was returned" {[llength $form] > 2}
         set d [::acs::test::form_reply \
                    -last_request $d \
@@ -116,7 +116,7 @@ namespace eval file_storage::test {
             aa_log "location contains folder*id"
             set list_words [split $file_name /]
             set short_file_name [lindex $list_words end]
-            
+
             set d [acs::test::http -last_request $d $location]
             acs::test::reply_contains $d $folder_name
         } else {
@@ -132,14 +132,14 @@ namespace eval file_storage::test {
     } {
         Delete the current file via Web UI.
     } {
-        
+
         #
         # Delete the first displayed file (current rather crude, failure must
         # me detectable from return code).
         #
         set href [acs::test::find_link -last_request $last_request -label {New}]
         aa_log "Download link $href"
-        
+
         regsub -all /file-add $href /delete href
         regsub -all file_id= $href object_id= href
         aa_log "Delete link $href"
@@ -156,7 +156,7 @@ namespace eval file_storage::test {
         return $d
     }
 
-    
+
     ad_proc  -private ::file_storage::test::delete_current_folder {
         -last_request:required
     } {
