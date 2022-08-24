@@ -35,6 +35,10 @@ ad_page_contract {
         }
     }
     max_size -requires {upload_file} {
+        if {![info exists upload_file.tmpfile]} {
+            ad_complain {Invalid file}
+            return
+        }
         set n_bytes [ad_file size ${upload_file.tmpfile}]
         set max_bytes [fs::max_upload_size]
         if { $n_bytes > $max_bytes } {
