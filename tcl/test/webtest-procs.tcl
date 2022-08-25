@@ -99,16 +99,24 @@ namespace eval file_storage::test {
         set response [dict get $d body]
         set form [acs::test::get_form $response {//form[@id='file-add']}]
 
+        # A 'real' simulation would actually upload a file via
+        # multipart request, but this is enough for testing.
+        set tmpfile [ad_tmpnam]
+        set wfd [open $tmpfile w]
+        puts $wfd 1234
+        close $wfd
+
         aa_true "add form was returned" {[llength $form] > 2}
         set d [::acs::test::form_reply \
                    -last_request $d \
                    -form $form \
-                   -update [subst {
-                       upload_file {$file_name}
-                       upload_file.tmpfile {$file_name}
-                       title {$file_name}
-                       description {$file_description}
-                   }]]
+                   -update [list \
+                                upload_file $file_name \
+                                "upload_file.tmpfile" $tmpfile \
+                                "upload_file.content-type" text/plain \
+                                title $file_name \
+                                description $file_description]
+              ]
         acs::test::reply_has_status_code $d 302
         set location [::acs::test::get_url_from_location $d]
 
