@@ -118,7 +118,7 @@ namespace eval file_storage::test {
         dict unset form_content upload_file
         set payload [util::http::post_payload \
                          -files $files \
-                         -formvars_dict $form_content]
+                         -formvars_list $form_content]
         set body [dict get $payload payload]
         set headers [ns_set array [dict get $payload headers]]
         set d [acs::test::http \
