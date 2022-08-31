@@ -107,16 +107,26 @@ namespace eval file_storage::test {
         close $wfd
 
         aa_true "add form was returned" {[llength $form] > 2}
-        set d [::acs::test::form_reply \
+        set form_content [::acs::test::form_get_fields $form]
+        dict set form_content title $file_name
+        dict set form_content description $file_description
+        set files [list \
+                       [list \
+                            file $tmpfile \
+                            fieldname upload_file \
+                            mime_type text/plain]]
+        dict unset form_content upload_file
+        set payload [util::http::post_payload \
+                         -files $files \
+                         -formvars_dict $form_content]
+        set body [dict get $payload payload]
+        set headers [ns_set array [dict get $payload headers]]
+        set d [acs::test::http \
                    -last_request $d \
-                   -form $form \
-                   -update [list \
-                                upload_file $file_name \
-                                "upload_file.tmpfile" $tmpfile \
-                                "upload_file.content-type" text/plain \
-                                title $file_name \
-                                description $file_description]
-              ]
+                   -method POST \
+                   -body $body \
+                   -headers $headers \
+                   [dict get $form @action]]
         acs::test::reply_has_status_code $d 302
         set location [::acs::test::get_url_from_location $d]
 
