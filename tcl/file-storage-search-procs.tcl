@@ -7,7 +7,7 @@ ad_library {
     @cvs-id $Id$
 }
 
-ad_proc fs__datasource {
+ad_proc -private fs__datasource {
     revision_id
 } {
     @author Jowell S. Sabino (jowellsabino@netscape.net)
@@ -36,7 +36,7 @@ ad_proc fs__datasource {
     return [array get datasource]
 }
 
-ad_proc fs__url {
+ad_proc -private fs__url {
     revision_id
 } {
     @author Jowell S. Sabino (jowellsabino@netscape.net)
