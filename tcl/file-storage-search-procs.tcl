@@ -1,4 +1,4 @@
-ad_library { 
+ad_library {
     Site-wide search procs for file storage
     Implements OpenFTS Search service contracts
 
@@ -12,7 +12,7 @@ ad_proc fs__datasource {
 } {
     @author Jowell S. Sabino (jowellsabino@netscape.net)
 } {
-    
+
     db_0or1row fs_datasource {
 	select r.revision_id as object_id,
 	       i.name as title,
@@ -32,10 +32,10 @@ ad_proc fs__datasource {
     if {$storage_type eq "file"} {
         set datasource(content) [content::revision::get_cr_file_path -revision_id $object_id]
     }
-	
+
     return [array get datasource]
 }
-	
+
 ad_proc fs__url {
     revision_id
 } {
@@ -50,7 +50,7 @@ ad_proc fs__url {
 	    where children.item_id = r.item_id
 	      and r.revision_id = $revision_id
               and children.tree_sortkey
-                    between parent.tree_sortkey 
+                    between parent.tree_sortkey
                     and     tree_right(parent.tree_sortkey) ) as i
   	  where f.folder_id = i.parent_id
     "
