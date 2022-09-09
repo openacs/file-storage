@@ -205,7 +205,7 @@ aa_register_case \
         tclwebtest::cookies clear
 
         # Login user
-        array set user_info [twt::user::create -admin]
+        array set user_info [acs::test::user::create -admin]
         twt::user::login $user_info(email) $user_info(password)
 
         file_storage::twt::call_fs_page
@@ -244,7 +244,7 @@ aa_register_case \
         tclwebtest::cookies clear
 
         # Login user
-        array set user_info [twt::user::create -admin]
+        array set user_info [acs::test::user::create -admin]
         twt::user::login $user_info(email) $user_info(password)
 
         file_storage::twt::call_fs_page
@@ -279,7 +279,7 @@ aa_register_case \
         tclwebtest::cookies clear
 
         # Login user
-        array set user_info [twt::user::create -admin]
+        array set user_info [acs::test::user::create -admin]
         twt::user::login $user_info(email) $user_info(password)
 
         file_storage::twt::call_fs_page
@@ -316,7 +316,7 @@ aa_register_case \
         tclwebtest::cookies clear
 
         # Login user
-        array set user_info [twt::user::create -admin]
+        array set user_info [acs::test::user::create -admin]
         twt::user::login $user_info(email) $user_info(password)
 
         file_storage::twt::call_fs_page
