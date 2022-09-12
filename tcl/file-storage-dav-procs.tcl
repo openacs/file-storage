@@ -10,19 +10,19 @@ ad_library {
 
 namespace eval fs::impl::fs_object {}
 
-ad_proc fs::impl::fs_object::get {} {
+ad_proc -private fs::impl::fs_object::get {} {
     GET method
 } {
     return [oacs_dav::impl::content_revision::get]
 }
 
-ad_proc fs::impl::fs_object::head {} {
+ad_proc -private fs::impl::fs_object::head {} {
     HEAD method
 } {
     return [oacs_dav::impl::content_revision::head]
 }
 
-ad_proc fs::impl::fs_object::put {} {
+ad_proc -private fs::impl::fs_object::put {} {
     PUT method
 } {
     set user_id [oacs_dav::conn user_id]
@@ -80,19 +80,19 @@ ad_proc fs::impl::fs_object::put {} {
 
 }
 
-ad_proc fs::impl::fs_object::propfind {} {
+ad_proc -private fs::impl::fs_object::propfind {} {
     PROPFIND method
 } {
     return [oacs_dav::impl::content_revision::propfind]
 }
 
-ad_proc fs::impl::fs_object::delete {} {
+ad_proc -private fs::impl::fs_object::delete {} {
     DELETE method
 } {
     return [oacs_dav::impl::content_revision::delete]
 }
 
-ad_proc fs::impl::fs_object::mkcol {} {
+ad_proc -private fs::impl::fs_object::mkcol {} {
     MKCOL method
 } {
     set uri [oacs_dav::conn uri]
@@ -122,32 +122,32 @@ ad_proc fs::impl::fs_object::mkcol {} {
     return [list 201]
 }
 
-ad_proc fs::impl::fs_object::proppatch {} {
+ad_proc -private fs::impl::fs_object::proppatch {} {
     PROPPATCH method
 } {
     return [oacs_dav::impl::content_revision::proppatch]
 }
 
-ad_proc fs::impl::fs_object::copy {} {
+ad_proc -private fs::impl::fs_object::copy {} {
     COPY method
 } {
     return [oacs_dav::impl::content_revision::copy]
 }
 
-ad_proc fs::impl::fs_object::move {} {
+ad_proc -private fs::impl::fs_object::move {} {
     MOVE method
 } {
     return [oacs_dav::impl::content_revision::move]
 }
 
 
-ad_proc fs::impl::fs_object::lock {} {
+ad_proc -private fs::impl::fs_object::lock {} {
     LOCK method
 } {
     return [oacs_dav::impl::content_revision::lock]
 }
 
-ad_proc fs::impl::fs_object::unlock {} {
+ad_proc -private fs::impl::fs_object::unlock {} {
     UNLOCK method
 } {
     return [oacs_dav::impl::content_revision::unlock]
@@ -155,7 +155,7 @@ ad_proc fs::impl::fs_object::unlock {} {
 
 namespace eval fs::impl::dav_put_type {}
 
-ad_proc fs::impl::dav_put_type::get_type {} {
+ad_proc -private fs::impl::dav_put_type::get_type {} {
 
 } {
     return "file_storage_object"
@@ -163,7 +163,7 @@ ad_proc fs::impl::dav_put_type::get_type {} {
 
 namespace eval fs::impl::dav_mkcol_type {}
 
-ad_proc fs::impl::dav_mkcol_type::get_type {} {
+ad_proc -private fs::impl::dav_mkcol_type::get_type {} {
 
 } {
     return "file_storage_object"
