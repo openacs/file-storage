@@ -13,13 +13,19 @@ namespace eval fs::impl::fs_object {}
 ad_proc -private fs::impl::fs_object::get {} {
     GET method
 } {
-    return [oacs_dav::impl::content_revision::get]
+    acs_sc::invoke \
+        -contract dav \
+        -operation get \
+        -impl content_revision
 }
 
 ad_proc -private fs::impl::fs_object::head {} {
     HEAD method
 } {
-    return [oacs_dav::impl::content_revision::head]
+    acs_sc::invoke \
+        -contract dav \
+        -operation head \
+        -impl content_revision
 }
 
 ad_proc -private fs::impl::fs_object::put {} {
@@ -83,13 +89,19 @@ ad_proc -private fs::impl::fs_object::put {} {
 ad_proc -private fs::impl::fs_object::propfind {} {
     PROPFIND method
 } {
-    return [oacs_dav::impl::content_revision::propfind]
+    acs_sc::invoke \
+        -contract dav \
+        -operation propfind \
+        -impl content_revision
 }
 
 ad_proc -private fs::impl::fs_object::delete {} {
     DELETE method
 } {
-    return [oacs_dav::impl::content_revision::delete]
+    acs_sc::invoke \
+        -contract dav \
+        -operation delete \
+        -impl content_revision
 }
 
 ad_proc -private fs::impl::fs_object::mkcol {} {
@@ -125,32 +137,47 @@ ad_proc -private fs::impl::fs_object::mkcol {} {
 ad_proc -private fs::impl::fs_object::proppatch {} {
     PROPPATCH method
 } {
-    return [oacs_dav::impl::content_revision::proppatch]
+    acs_sc::invoke \
+        -contract dav \
+        -operation proppatch \
+        -impl content_revision
 }
 
 ad_proc -private fs::impl::fs_object::copy {} {
     COPY method
 } {
-    return [oacs_dav::impl::content_revision::copy]
+    acs_sc::invoke \
+        -contract dav \
+        -operation copy \
+        -impl content_revision
 }
 
 ad_proc -private fs::impl::fs_object::move {} {
     MOVE method
 } {
-    return [oacs_dav::impl::content_revision::move]
+    acs_sc::invoke \
+        -contract dav \
+        -operation move \
+        -impl content_revision
 }
 
 
 ad_proc -private fs::impl::fs_object::lock {} {
     LOCK method
 } {
-    return [oacs_dav::impl::content_revision::lock]
+    acs_sc::invoke \
+        -contract dav \
+        -operation lock \
+        -impl content_revision
 }
 
 ad_proc -private fs::impl::fs_object::unlock {} {
     UNLOCK method
 } {
-    return [oacs_dav::impl::content_revision::unlock]
+    acs_sc::invoke \
+        -contract dav \
+        -operation unlock \
+        -impl content_revision
 }
 
 namespace eval fs::impl::dav_put_type {}
