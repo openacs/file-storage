@@ -1,11 +1,11 @@
 ad_library {
-    
+
     Procedures for DAV service contract implementations
-    
+
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2003-11-09
     @cvs-id $Id$
-    
+
 }
 
 namespace eval fs::impl::fs_object {}
@@ -33,7 +33,7 @@ ad_proc -private fs::impl::fs_object::put {} {
     if {"unlocked" ne [tdav::check_lock $uri] } {
 	return [list 423]
     }
-    
+
     set tmp_filename [oacs_dav::conn tmpfile]
     set tmp_size [ad_file size $tmp_filename]
 
@@ -46,18 +46,18 @@ ad_proc -private fs::impl::fs_object::put {} {
 	set response [list 409]
 	return $response
     }
-    
+
     if {$item_id eq ""} {
         fs::add_file \
-        -package_id $package_id \
-        -name $name \
-        -title $name \
-	-item_id $item_id \
-	-parent_id $parent_id \
-	-tmp_filename $tmp_filename \
-	-creation_user $user_id \
-	-creation_ip [ad_conn peeraddr] \
-    
+            -package_id $package_id \
+            -name $name \
+            -title $name \
+            -item_id $item_id \
+            -parent_id $parent_id \
+            -tmp_filename $tmp_filename \
+            -creation_user $user_id \
+            -creation_ip [ad_conn peeraddr] \
+
 	if {[file exists [tdav::get_lock_file $uri]]} {
 	    # if there is a null lock use 204
 	    set response [list 204]
@@ -72,7 +72,7 @@ ad_proc -private fs::impl::fs_object::put {} {
 	    -item_id $item_id \
 	    -creation_user $user_id \
 	    -package_id $package_id
-	
+
 	set response [list 204]
     }
     file delete -- $tmp_filename
@@ -115,7 +115,7 @@ ad_proc -private fs::impl::fs_object::mkcol {} {
 	    -parent_id $parent_id \
 	    -creation_user $user_id \
 	    -creation_ip $peer_addr \
-    } ]} {
+        } ]} {
 	return [list 500]
     }
 
