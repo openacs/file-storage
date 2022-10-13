@@ -72,7 +72,7 @@ if {[parameter::get -parameter BehaveLikeFilesystemP -default 0]
 
         set version_id [content::item::get_live_revision -item_id $file_id]
 
-        if {[apm_package_installed_p views]} {
+        if {[namespace which ::views::record_view] ne ""} {
             views::record_view -object_id $file_id -viewer_id $user_id
         }
 
