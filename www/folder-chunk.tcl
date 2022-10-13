@@ -185,7 +185,8 @@ if { $categories_p } {
         categories [list label [_ file-storage.Categories] display_col "categories;noquote"]
 }
 
-if {[apm_package_installed_p views]} {
+set views_installed_p [expr {[namespace which ::views::get] ne ""}]
+if { $views_installed_p } {
     lappend elements views [list label "Views"]
 }
 
@@ -354,7 +355,7 @@ db_multirow -extend {
     }
 
     set views ""
-    if {[apm_package_installed_p views]} {
+    if { $views_installed_p } {
         array set views_arr [views::get -object_id $object_id]
         if {$views_arr(views_count) ne ""} {
             set views " $views_arr(views_count) / $views_arr(unique_views)"
