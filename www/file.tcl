@@ -194,7 +194,7 @@ db_multirow -unclobber -extend {
     set author_link [acs_community_member_link -user_id $author_id -label $author]
 }
 
-if { [apm_package_installed_p "general-comments"] && [parameter::get -parameter "GeneralCommentsP" -package_id [ad_conn package_id]] } {
+if { [namespace which ::general_comments_create_link] ne "" && [parameter::get -parameter "GeneralCommentsP" -package_id [ad_conn package_id]] } {
     set gc_link [general_comments_create_link $file_id $return_url]
     set gc_comments [general_comments_get_comments $file_id $return_url]
 } else {

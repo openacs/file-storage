@@ -30,7 +30,7 @@ if {$file_live_revision eq ""} {
     ad_script_abort
 }
 
-if {[apm_package_installed_p views]} {
+if {[namespace which ::views::record_view] ne ""} {
     views::record_view -object_id $file_item_id -viewer_id $user_id
 }
 
