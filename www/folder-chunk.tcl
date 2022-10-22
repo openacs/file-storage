@@ -368,7 +368,7 @@ db_multirow -extend {
             set properties_url ""
             set new_version_link {}
             set new_version_url {}
-            set icon folder
+            set icon [::template::icon::name folder]
             set alt_icon #file-storage.folder#
             set file_url [export_vars -base "${fs_url}index" {{folder_id $object_id}}]
             set download_link [_ file-storage.Download]
@@ -379,7 +379,7 @@ db_multirow -extend {
             set properties_url [export_vars -base "${fs_url}simple" {object_id}]
             set new_version_link [_ acs-kernel.common_New]
             set new_version_url [export_vars -base "${fs_url}file-add" {{file_id $object_id}}]
-            set icon link
+            set icon [::template::icon::name link]
             # DRB: This alt text somewhat sucks, but the message key already exists in
             # the language catalog files we care most about and we want to avoid a new
             # round of translation work for this minor release if possible ...
@@ -418,7 +418,7 @@ db_multirow -extend {
             set properties_url [export_vars -base ${fs_url}file {{file_id $object_id}}]
             set new_version_link [_ acs-kernel.common_New]
             set new_version_url [export_vars -base ${fs_url}file-add {{file_id $object_id}}]
-            set icon file
+            set icon [::template::icon::name file]
             set alt_icon #file-storage.file#
             set download_link [_ file-storage.Download]
             if {$like_filesystem_p} {
@@ -437,7 +437,7 @@ db_multirow -extend {
                 set new_version_link [_ acs-kernel.common_New]
                 set new_version_url [export_vars -base ${fs_url}file-add {{file_id $object_id}}]
             }
-            set icon file
+            set icon [::template::icon::name file]
             set alt_icon #file-storage.file#
             set download_link [_ file-storage.Download]
             if {$like_filesystem_p} {
