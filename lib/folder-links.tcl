@@ -85,7 +85,7 @@ db_multirow -extend {
         url {
             set properties_link "properties"
             set properties_url [export_vars -base ${fs_url}simple {object_id return_url}]
-            set icon "/resources/acs-subsite/url-button.gif"
+            set icon [::template::icon::name link]
             set file_url ${url}
             set download_url $file_url
         }
@@ -93,7 +93,7 @@ db_multirow -extend {
 
             set properties_link [_ file-storage.properties]
             set properties_url [export_vars -base ${fs_url}file {{file_id $object_id} return_url}]
-            set icon "/resources/file-storage/file.gif"
+            set icon [::template::icon::name file]            
             set file_url "${base_url}${file_url}"
             set download_url [export_vars -base ${fs_url}download {{file_id $object_id}}]
         }
