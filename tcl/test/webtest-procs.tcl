@@ -101,8 +101,7 @@ namespace eval file_storage::test {
 
         # A 'real' simulation would actually upload a file via
         # multipart request, but this is enough for testing.
-        set tmpfile [ad_tmpnam]
-        set wfd [open $tmpfile w]
+        set wfd [ad_opentmpfile tmpfile]
         puts $wfd 1234
         close $wfd
 

@@ -31,8 +31,7 @@ ad_try {
     set user_id [ad_conn user_id]
 
     # copy all files together in a temporary folder on the filesystem
-    set in_path [ad_tmpnam]
-    file mkdir $in_path
+    set in_path [ad_mktmpdir]
 
     foreach fs_object_id $object_id {
         fs::publish_object_to_file_system \

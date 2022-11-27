@@ -614,8 +614,7 @@ ad_proc -public fs::publish_url_to_file_system {
     (which at least KDE also knows how to handle)
 } {
     if {$path eq ""} {
-        set path [ad_tmpnam]
-        file mkdir $path
+        set path [ad_mktmpdir]
     }
 
     db_1row select_object_metadata {}
@@ -645,8 +644,7 @@ ad_proc -public fs::publish_versioned_object_to_file_system {
     publish an object to the filesystem
 } {
     if {$path eq ""} {
-        set path [ad_tmpnam]
-        file mkdir $path
+        set path [ad_mktmpdir]
     }
 
     db_1row select_object_metadata {}
