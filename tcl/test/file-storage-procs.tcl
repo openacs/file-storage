@@ -26,9 +26,8 @@ aa_register_case \
                 fetch first 1 rows only
             }
 
-            set tmp_filename [ad_tmpnam]
             set content "This is a test file"
-            set wfd [open $tmp_filename w]
+            set wfd [ad_opentmpfile tmp_filename]
             puts $wfd $content
             close $wfd
 
@@ -542,8 +541,7 @@ aa_register_case \
         aa_true "add form was returned" {[llength $form] > 2}
 
         set file_name "I am not a tmpfile"
-        set notmpfile [ad_tmpnam]
-        set wfd [open $notmpfile w]
+        set wfd [ad_opentmpfile notmpfile]
         puts $wfd "I am not a real tmpfile!"
         close $wfd
         set notmpfile_checksum [ns_md file $notmpfile]

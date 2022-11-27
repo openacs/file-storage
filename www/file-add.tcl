@@ -187,8 +187,7 @@ ad_form -extend -form {} -select_query_name get_file -new_data {
             ad_script_abort
         }
 
-        set path [ad_tmpnam]
-        file mkdir $path
+        set path [ad_mktmpdir]
 
         if {[catch { exec $unpack_binary -jd $path ${upload_file.tmpfile} } errMsg]} {
             #
@@ -224,8 +223,7 @@ ad_form -extend -form {} -select_query_name get_file -new_data {
         }
         # create a temporary file to import from user entered HTML
         set mime_type text/html
-        set tmp_filename [ad_tmpnam]
-        set fd [open $tmp_filename w]
+        set fd [ad_opentmpfile tmp_filename]
         puts $fd $content_body
         close $fd
         set upload_files [list $title]

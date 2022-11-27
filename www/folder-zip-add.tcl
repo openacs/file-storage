@@ -171,8 +171,7 @@ ad_form -extend -name file_add -form {} -new_data {
         #
         # Create temp directory to unzip.
         #
-        set unzip_path [ad_tmpnam]
-        file mkdir $unzip_path
+        set unzip_path [ad_mktmpdir]
 
         #
         # Unzip.
