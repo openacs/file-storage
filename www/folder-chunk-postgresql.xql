@@ -1,14 +1,7 @@
 <?xml version="1.0"?>
-<queryset>
 
-  <fullquery name="select_subscrs">
-    <querytext>
-      select subscr_id, short_name, folder_id
-      from fs_rss_subscrs
-      where folder_id = :folder_id
-      order by upper(short_name)
-    </querytext>
-  </fullquery>
+<queryset>
+  <rdbms><type>postgresql</type><version>8.4</version></rdbms>
 
   <fullquery name="select_folder_contents">
     <querytext>
@@ -32,13 +25,20 @@
              end as file_url,
              fs_objects.last_modified >= (current_timestamp - cast('$n_past_days days' as interval)) as new_p
       from fs_objects
-      where fs_objects.parent_id = :folder_id
-      and   acs_permission.permission_p(fs_objects.object_id, :viewing_user_id, 'read')
-      and   (:categories_p = 'f' or
-             :category_id is null or
-             fs_objects.object_id in (select object_id from category_object_map
-                                       where category_id = :category_id)
-             )
+      where fs_objects.object_id in (
+        select distinct(orig_object_id) from acs_permission.permission_p_recursive_array(array(
+
+          select item_id
+            from cr_items i
+           where parent_id = :folder_id
+             and (:categories_p = 'f' or
+                  :category_id is null or
+                  object_id in (select object_id from category_object_map
+                                 where category_id = :category_id)
+                  )
+
+          ), :viewing_user_id, 'read')
+        )
       $orderby
 
     </querytext>
