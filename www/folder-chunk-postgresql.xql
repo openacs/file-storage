@@ -33,7 +33,7 @@
            where parent_id = :folder_id
              and (:categories_p = 'f' or
                   :category_id is null or
-                  object_id in (select object_id from category_object_map
+                  i.item_id in (select object_id from category_object_map
                                  where category_id = :category_id)
                   )
 
