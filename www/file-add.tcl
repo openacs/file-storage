@@ -132,6 +132,7 @@ if {$lock_title_p} {
     ad_form -extend -form {
         {title:text(hidden)
             {value $title}
+            {maxlength 1000}
         }
     }
 } else {
@@ -139,6 +140,7 @@ if {$lock_title_p} {
         {title:text,optional
             {label "#file-storage.Title#"}
             {html {size 30}}
+            {maxlength 1000}
         }
     }
 }
