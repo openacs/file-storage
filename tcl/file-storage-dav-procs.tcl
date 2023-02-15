@@ -8,6 +8,62 @@ ad_library {
 
 }
 
+namespace eval fs::dav {}
+
+ad_proc -private fs::dav::require {} {
+    oacs-dav used to be a requirement for file-storage. We now made
+    this optional, with the caveat that some operations need to happen
+    only depending if the package is there or not.
+} {
+    if { ![apm_package_installed_p oacs-dav] } {
+        #
+        # Delete the Service Contract implementation if they existed.
+        #
+        fs::install::unregister_implementation
+
+        if { [db_table_exists dav_site_node_folder_map] } {
+            #
+            # oacs-dav registers folders for access after mount. We remove
+            # this registration.
+            #
+            db_dml unregister_folders {
+                delete from dav_site_node_folder_map
+                where folder_id in (select folder_id from fs_root_folders)
+            }
+        }
+
+        #
+        # We do not need to define the DAV callbacks, exit now.
+        #
+        return
+
+    } elseif { ![db_0or1row implementation_exists {
+        select 1 from acs_sc_impls
+         where impl_owner_name = 'file-storage'
+           and impl_contract_name = 'dav'
+         fetch first 1 rows only
+    }] } {
+        #
+        # Check at load time whether the Service Contract implementations
+        # exist and register them on the fly in case.
+        #
+        fs::install::register_implementation
+
+        #
+        # Map the root folder of all mounted file-storage instances. Do
+        # not do anything if the DAV folders table has already tuples.
+        #
+        db_dml register_folders {
+            insert into dav_site_node_folder_map
+            select n.node_id, f.folder_id, true as enabled_p
+            from fs_root_folders f,
+                 site_nodes n
+            where n.object_id = f.package_id
+              and not exists (select 1 from dav_site_node_folder_map)
+        }
+    }
+}
+
 namespace eval fs::impl::fs_object {}
 
 ad_proc -private fs::impl::fs_object::get {} {

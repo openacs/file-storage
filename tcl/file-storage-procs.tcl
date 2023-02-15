@@ -170,7 +170,9 @@ ad_proc -private fs::after_mount {
 } {
     set folder_id [fs::get_root_folder -package_id $package_id]
 
-    oacs_dav::register_folder -enabled_p "t" $folder_id $node_id
+    if {[apm_package_installed_p oacs-dav]} {
+        oacs_dav::register_folder -enabled_p "t" $folder_id $node_id
+    }
 }
 
 ad_proc -private fs::before_unmount {
@@ -182,7 +184,9 @@ ad_proc -private fs::before_unmount {
 } {
     set folder_id [fs::get_root_folder -package_id $package_id]
 
-    oacs_dav::unregister_folder $folder_id $node_id
+    if {[apm_package_installed_p oacs-dav]} {
+        oacs_dav::unregister_folder $folder_id $node_id
+    }
 }
 
 ad_proc -public fs::new_root_folder {
@@ -1238,7 +1242,7 @@ ad_proc fs::webdav_url {
 } {
 
     if {![fs::webdav_p]} {
-        return "ho"
+        return ""
     }
     if {$package_id eq ""} {
         set package_id [ad_conn package_id]

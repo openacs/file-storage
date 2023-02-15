@@ -15,7 +15,6 @@ ad_proc -private fs::install::package_install {} {
     setup DAV service contracts
 } {
     db_transaction {
-	register_implementation
 	fs::rss::create_rss_gen_subscr_impl
     }
 }
@@ -24,7 +23,7 @@ ad_proc -private fs::install::package_uninstall {} {
     clean up for package uninstall
 } {
     db_transaction {
-	unregister_implementation
+	fs::install::unregister_implementation
 	fs::rss::drop_rss_gen_subscr_impl
     }
 }
