@@ -64,6 +64,11 @@ ad_proc -private fs::dav::require {} {
     }
 }
 
+if { ![apm_package_installed_p oacs-dav] } {
+    ns_log notice "oacs-dav not installed, fs::impl::fs_object callbacks won't be loaded"
+    return
+}
+
 namespace eval fs::impl::fs_object {}
 
 ad_proc -private fs::impl::fs_object::get {} {
