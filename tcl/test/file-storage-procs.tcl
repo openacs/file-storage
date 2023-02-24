@@ -71,6 +71,7 @@ aa_register_case \
         fs::set_folder_description
         fs::get_object_name
         fs::get_object_prettyname
+        fs::get_file_system_safe_object_name
     } \
     fs_add_delete_copy {
 
