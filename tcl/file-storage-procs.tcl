@@ -870,7 +870,7 @@ ad_proc -public fs::add_file {
     return $revision_id
 }
 
-ad_proc -public fs::add_created_file {
+ad_proc -deprecated fs::add_created_file {
     {-name ""}
     -parent_id:required
     -package_id:required
@@ -884,6 +884,10 @@ ad_proc -public fs::add_created_file {
 } {
     Create a new file storage item or add a new revision if
     an item with the same name and parent folder already exists
+
+    DEPRECATED: this proc was superseded by fs::add_file
+
+    @see fs::add_file
 
     @return revision_id
 } {
@@ -950,7 +954,7 @@ ad_proc -public fs::add_created_file {
     return $revision_id
 }
 
-ad_proc fs::add_created_version {
+ad_proc -deprecated fs::add_created_version {
     -name:required
     -content_body:required
     -mime_type:required
@@ -965,6 +969,11 @@ ad_proc fs::add_created_version {
     {-storage_type ""}
 } {
     Create a new version of a file storage item using the content passed in content_body
+
+    DEPRECATED: this proc has been superseded by fs::add_version
+
+    @see fs::add_version
+
     @return revision_id
 } {
     if {$package_id eq ""} {
@@ -1020,54 +1029,118 @@ ad_proc fs::add_created_version {
 
 
 ad_proc fs::add_version {
-    -name:required
-    -tmp_filename:required
-    -package_id:required
-    {-item_id ""}
+    -item_id:required
+    {-name ""}
+    {-package_id ""}
+    {-mime_type ""}
+    -tmp_filename
+    -content_body
     {-creation_user ""}
     {-creation_ip ""}
     {-title ""}
     {-description ""}
     {-suppress_notify_p "f"}
     {-storage_type ""}
-    {-mime_type ""}
     -no_callback:boolean
 } {
-    Create a new version of a file storage item
+    Create a new version of a file storage item.
+
+    @param tmp_filename absolute path to a file on the
+                        filesystem. when specified, the new revision
+                        data will come from this file.
+    @param content_body Text content for the new revision. When
+                        'tmp_filename' is missing, the new revision
+                        data will come from here.
+
     @return revision_id
 } {
-    # always use the storage type of the existing item
-    if {$storage_type eq ""} {
-        set storage_type [db_string get_storage_type {}]
+    if {![info exists content_body] && ![info exists tmp_filename]} {
+        error "No data supplied for the new version."
     }
 
-    # This check also happens in content repository, but as something
-    # similar was already here and mimetype coming from this was used
-    # afterwards, we kept this behavior.
-    set mime_type [cr_check_mime_type \
-                       -filename  $name \
-                       -mime_type $mime_type \
-                       -file      $tmp_filename]
+    #
+    # Obtain optional information for the new version from the
+    # existing item.
+    #
+    db_1row get_item_info {
+        select coalesce(:storage_type, i.storage_type) as storage_type,
+               coalesce(:name, i.name) as name,
+               coalesce(:package_id, o.package_id) as package_id,
+               coalesce(:title, r.title) as title,
+               coalesce(:description, r.description) as description,
+               coalesce(:mime_type, r.mime_type) as mime_type,
+               i.parent_id
+        from cr_items i
+             -- we may not have a live revision here yet
+             left join cr_revisions r
+               on r.revision_id = i.live_revision,
+             acs_objects o
+        where i.item_id = :item_id
+          and o.object_id = i.item_id
+    }
 
-    set tmp_size [ad_file size $tmp_filename]
-    set parent_id [fs::get_parent -item_id $item_id]
-    set revision_id [cr_import_content \
-                         -item_id $item_id \
-                         -storage_type $storage_type \
-                         -creation_user $creation_user \
-                         -creation_ip $creation_ip \
-                         -other_type "file_storage_object" \
-                         -image_type "file_storage_object" \
-                         -title $title \
-                         -description $description \
-                         -package_id $package_id \
-                         $parent_id \
-                         $tmp_filename \
-                         $tmp_size \
-                         $mime_type \
-                         $name]
+    #
+    # Obtain other possibly missing information from the connection
+    # context.
+    #
+    if {$package_id eq ""} {
+        set package_id [ad_conn package_id]
+    }
+    if {$creation_user eq ""} {
+        set creation_user [ad_conn user_id]
+    }
+    if {$creation_ip eq ""} {
+        set creation_ip [ns_conn peeraddr]
+    }
 
-    content::item::set_live_revision -revision_id $revision_id
+    if {[info exists tmp_filename]} {
+        #
+        # The new revision will come from a file.
+        #
+
+        # This check also happens in content repository, but as something
+        # similar was already here and mimetype coming from this was used
+        # afterwards, we kept this behavior.
+        set mime_type [cr_check_mime_type \
+                           -filename  $name \
+                           -mime_type $mime_type \
+                           -file      $tmp_filename]
+
+        set tmp_size [ad_file size $tmp_filename]
+        set revision_id [cr_import_content \
+                             -item_id $item_id \
+                             -storage_type $storage_type \
+                             -creation_user $creation_user \
+                             -creation_ip $creation_ip \
+                             -other_type "file_storage_object" \
+                             -image_type "file_storage_object" \
+                             -title $title \
+                             -description $description \
+                             -package_id $package_id \
+                             $parent_id \
+                             $tmp_filename \
+                             $tmp_size \
+                             $mime_type \
+                             $name]
+
+        content::item::set_live_revision -revision_id $revision_id
+    } else {
+        #
+        # The new revision will come from text content.
+        #
+
+        set revision_id [content::revision::new \
+                             -item_id $item_id \
+                             -title $title \
+                             -description $description \
+                             -content $content_body \
+                             -mime_type $mime_type \
+                             -creation_user $creation_user \
+                             -creation_ip $creation_ip \
+                             -package_id $package_id \
+                             -is_live "t" \
+                             -storage_type $storage_type]
+    }
 
     # apisano - This is what we had before (postgres code):
     # begin
