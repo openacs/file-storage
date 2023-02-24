@@ -1,6 +1,6 @@
 namespace eval fs::rss {}
 
-ad_proc -public fs::rss::create_rss_gen_subscr_impl {} {
+ad_proc -private fs::rss::create_rss_gen_subscr_impl {} {
     Register the service contract implementation and return the impl_id
 
     @return impl_id of the created implementation
@@ -16,7 +16,7 @@ ad_proc -public fs::rss::create_rss_gen_subscr_impl {} {
     }]
 }
 
-ad_proc -public fs::rss::drop_rss_gen_subscr_impl {} {
+ad_proc -private fs::rss::drop_rss_gen_subscr_impl {} {
     Unegister the service contract implementation and return the impl_id
 
     @return impl_id of the created implementation
