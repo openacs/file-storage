@@ -1543,11 +1543,13 @@ ad_proc -public fs::get_file_package_id {
 
 namespace eval fs::notification {}
 
-ad_proc -public fs::notification::get_url {
+ad_proc -private fs::notification::get_url {
     object_id:required
 } {
-    returns a full url to the object_id.
-    handles folders
+    This proc implements the GetURL operation of the NotificationType
+    Service Contract and should not be invoked directly.
+
+    @return a full URL to the object_id. Handles folders.
 
     @param object_id
 
