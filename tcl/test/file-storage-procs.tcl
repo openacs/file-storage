@@ -50,6 +50,174 @@ aa_register_case \
             aa_equals "Original and exported files are identical" \
                 [ns_md file $tmp_filename] [ns_md file $exported]
         }
+
+    }
+
+aa_register_case \
+    -cats {api smoke} \
+    -procs {
+        fs::new_root_folder
+        fs::new_folder
+        fs::add_file
+        fs::add_version
+        fs::delete_version
+        fs::delete_file
+        fs::file_copy
+        fs::get_object_info
+        fs::object_p
+        fs_file_p
+        fs_folder_p
+        fs_version_p
+        fs::set_folder_description
+        fs::get_object_name
+        fs::get_object_prettyname
+    } \
+    fs_add_delete_copy {
+
+        Test api to add/delete files, plus various other utilities.
+
+    } {
+        aa_run_with_teardown -rollback -test_code {
+            aa_log "Create a root folder"
+            set package_id [site_node::instantiate_and_mount \
+                                -package_key file-storage \
+                                -node_name __[clock seconds]_file_storage]
+
+            set root_folder_id [fs::get_root_folder -package_id $package_id]
+
+            aa_log "Create a folder"
+
+            set folder_id_1 [fs::new_folder \
+                                 -name __test_fs_folder_1 \
+                                 -pretty_name __test_fs_folder_1_pretty \
+                                 -parent_id $root_folder_id]
+
+            aa_log "Create a new file"
+
+            set content "This is a test file"
+            set wfd [ad_opentmpfile tmp_filename]
+            puts $wfd $content
+            close $wfd
+
+            set revision_id [fs::add_file \
+                                 -name __test_fs_file \
+                                 -parent_id $folder_id_1 \
+                                 -package_id $package_id \
+                                 -tmp_filename $tmp_filename]
+            set item_id [db_string get_item {
+                select item_id from cr_items where live_revision = :revision_id
+            }]
+
+            aa_log "Create a new revision from file"
+
+            set content "This is a test file 2"
+            set wfd [ad_opentmpfile tmp_filename_2]
+            puts $wfd $content
+            close $wfd
+
+            set revision_id [fs::add_version \
+                                 -item_id $item_id \
+                                 -tmp_filename $tmp_filename_2]
+
+            aa_log "Create a new revision from text"
+
+            set revision_id [fs::add_version \
+                                 -item_id $item_id \
+                                 -content_body "My Content Body"]
+
+            aa_equals "There are now 3 revisions" \
+                [db_string count {select count(*) from cr_revisions where item_id = :item_id}] \
+                3
+
+            aa_log "Create another folder"
+
+            set folder_id_2 [fs::new_folder \
+                                 -name __test_fs_folder_2 \
+                                 -pretty_name __test_fs_folder_2 \
+                                 -parent_id $root_folder_id]
+
+            aa_log "Copy the file in the new folder"
+            set copy_item_id [fs::file_copy -file_id $item_id \
+                                  -target_folder_id $folder_id_2]
+
+            aa_true "File was copied" \
+                [db_0or1row check {
+                    select 1 from fs_objects
+                    where name = '__test_fs_file'
+                    and parent_id = :folder_id_2
+                }]
+
+            aa_equals "Only live revision was copied" \
+                [db_string count {select count(*) from cr_revisions where item_id = :copy_item_id}] \
+                1
+
+            set file_info [fs::get_object_info -file_id $copy_item_id]
+            set rfd [open [dict get $file_info cr_file_path] r]
+            set txt [read $rfd]
+            close $rfd
+            aa_equals "Content is expected" \
+                $txt \
+                "My Content Body"
+
+            aa_true "File '$item_id' is an fs object" [fs::object_p -object_id $item_id]
+            aa_true "File '$item_id' is an fs file" [fs_file_p $item_id]
+            aa_true "File '$folder_id_1' is an fs folder" [fs_folder_p $folder_id_1]
+            aa_true "Folder '$folder_id_1' is an fs object" [fs::object_p -object_id $folder_id_1]
+            aa_false "Folder '$folder_id_1' is not an fs file" [fs_file_p $folder_id_1]
+            aa_false "File '$item_id' is not an fs folder" [fs_folder_p $item_id]
+            aa_false "File '$item_id' is not an fs version" [fs_version_p $item_id]
+            aa_false "Folder '$folder_id_1' is not an fs version" [fs_version_p $folder_id_1]
+
+            aa_log "We now delete the first file revision by revision"
+            set n_revisions 3
+            db_foreach get_revisions {
+                select revision_id
+                from cr_revisions
+                where item_id = :item_id
+            } {
+                aa_true "File version '$revision_id' is an fs version" \
+                    [fs_version_p $revision_id]
+                fs::delete_version \
+                    -item_id $item_id \
+                    -version_id $revision_id
+                incr n_revisions -1
+                aa_equals "Revisions are now $n_revisions" \
+                    [db_string q {
+                        select count(*) from cr_revisions
+                        where item_id = :item_id
+                    }] \
+                    $n_revisions
+                aa_false "File version '$revision_id' is not an fs version anymore" \
+                    [fs_version_p $revision_id]
+            }
+
+            aa_false "File '$item_id' is not an fs object anympore" \
+                [fs::object_p -object_id $item_id]
+            aa_false "File '$item_id' is not an fs file anymore" \
+                [fs_file_p $item_id]
+
+            aa_log "Change description for folder '$folder_id_1'"
+            fs::set_folder_description \
+                -folder_id $folder_id_1 \
+                -description "A test description"
+            aa_equals "Description was changed" \
+                [db_string q {
+                    select description from cr_folders
+                    where folder_id = :folder_id_1
+                }] \
+                "A test description"
+
+            aa_equals "Pretty name is expected for folder '$folder_id_1'" \
+                [fs::get_object_prettyname -object_id $folder_id_1] \
+                __test_fs_folder_1_pretty
+
+            aa_equals "Safe filesystem name for Folder '$folder_id_1' is expected" \
+                [fs::get_file_system_safe_object_name -object_id $folder_id_1] \
+                [ad_sanitize_filename \
+                     -collapse_spaces \
+                     -tolower [fs::get_object_name -object_id $folder_id_1]]
+
+        }
     }
 
 aa_register_case \
