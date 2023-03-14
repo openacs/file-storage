@@ -34,6 +34,7 @@ ad_try {
     set in_path [ad_mktmpdir]
 
     foreach fs_object_id $object_id {
+        permission::require_permission -object_id $fs_object_id -privilege read
         fs::publish_object_to_file_system \
             -object_id $fs_object_id \
             -path $in_path \
