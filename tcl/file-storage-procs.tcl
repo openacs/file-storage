@@ -1468,11 +1468,18 @@ ad_proc -public fs::do_notifications {
     }
 }
 
-ad_proc -public fs::item_editable_info {
+ad_proc -deprecated fs::item_editable_info {
     -item_id:required
 } {
     Returns an array containing elements editable_p, mime_type, file_extension
     if an fs item is editable through the browser, editable_p is set to 1
+
+    DEPRECATED: it is unclear what editable is supposed to mean. As of
+    2023-03-16 file-storage does not offer inline editing and no
+    package, including file-storage itself, appears to be using this
+    api.
+
+    @see nothing
 
     @author Deds Castillo (deds@i-manila.com.ph)
     @creation-date 2004-07-03
@@ -1501,10 +1508,17 @@ ad_proc -public fs::item_editable_info {
     return [array get mime_info]
 }
 
-ad_proc -public fs::item_editable_p {
+ad_proc -deprecated fs::item_editable_p {
     -item_id:required
 } {
     returns 1 if item is editable via browser
+
+    DEPRECATED: it is unclear what editable is supposed to mean. As of
+    2023-03-16 file-storage does not offer inline editing and no
+    package, including file-storage itself, appears to be using this
+    api.
+
+    @see nothing
 
     @author Deds Castillo (deds@i-manila.com.ph)
     @creation-date 2004-07-03
