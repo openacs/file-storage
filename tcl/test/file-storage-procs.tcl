@@ -56,6 +56,38 @@ aa_register_case \
 aa_register_case \
     -cats {api smoke} \
     -procs {
+        fs::get_archive_command
+    } \
+    fs_archive_api {
+
+        Test api concerning archiving
+
+    } {
+        set wfd [ad_opentmpfile in_file .in]
+        set out_file [file rootname $in_file].out
+
+        try {
+            puts $wfd abcd
+            close $wfd
+            set in_file_hash [ns_md file $in_file]
+
+            exec -ignorestderr {*}[fs::get_archive_command \
+                                       -in_file $in_file \
+                                       -out_file $out_file]
+
+            aa_equals "Input file was untouched" \
+                [ns_md file $in_file] $in_file_hash
+
+            aa_true "Archive '$out_file' was generated" \
+                [file exists $out_file]
+        } finally {
+            file delete -- $in_file $out_file
+        }
+    }
+
+aa_register_case \
+    -cats {api smoke} \
+    -procs {
         fs::new_root_folder
         fs::new_folder
         fs::add_file
