@@ -447,11 +447,11 @@ ad_proc -deprecated fs::get_folder_contents {
     last_modified, new_p, content_size, file_upload_name
     write_p, delete_p, admin_p,
 
-    DEPRECATED: this proc has been evidently subject of
-    controversy. To this day (2023-03-17) no package seems to be using
-    it. One can either query the database directly or use other
-    existing apis to retrieve the folder children and then fetch the
-    needed metadata as needed via other means.
+    DEPRECATED: this proc has been evidently the subject of
+    controversy over the years. To this day (2023-03-17) no package
+    seems to be using it. One can either query the database directly
+    or use other existing apis to retrieve the folder children and
+    then fetch the needed metadata via other means.
 
     @see fs::get_folder_objects
 
