@@ -594,13 +594,21 @@ ad_proc -public fs::publish_folder_to_file_system {
     # set dir [ad_file join $path "download"]
     file mkdir $dir
 
-    foreach object [get_folder_contents -folder_id $folder_id -user_id $user_id] {
+    db_foreach get_folder_contents {
+        select object_id,
+               name
+          from fs_objects
+         where parent_id = :folder_id
+           and acs_permission.permission_p(object_id, :user_id, 'read') = 't'
+        order by sort_key,
+                 name
+    } {
         set file_name [ad_sanitize_filename \
                            -collapse_spaces \
                            -tolower \
-                           [ns_set get $object name]]
+                           $name]
         publish_object_to_file_system \
-            -object_id [ns_set get $object object_id] \
+            -object_id $object_id \
             -path $dir \
             -file_name $file_name \
             -user_id $user_id
