@@ -418,10 +418,10 @@ ad_proc -public fs::get_folder_objects {
 
 } {
     return [db_list select_folder_contents {
-        select cr_items.item_id as object_id, cr_items.name
-        from   cr_items
-        where  cr_items.parent_id = :folder_id
-        and    acs_permission.permission_p(cr_items.item_id, :user_id, 'read') = 't'
+        select item_id
+          from cr_items
+         where parent_id = :folder_id
+           and acs_permission.permission_p(item_id, :user_id, 'read') = 't'
     }]
 }
 
