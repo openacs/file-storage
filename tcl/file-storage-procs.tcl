@@ -723,9 +723,13 @@ ad_proc -public fs::get_archive_command {
     return $cmd
 }
 
-ad_proc -public fs::get_archive_extension {} {
+ad_proc -deprecated fs::get_archive_extension {} {
     return the archive extension that should be added to the output file of
     an archive command
+
+    DEPRECATED: this is a trivial wrapper over the parameter api
+
+    @see parameter::get
 } {
     return [parameter::get -parameter ArchiveExtension -default "txt"]
 }
