@@ -425,7 +425,7 @@ ad_proc -public fs::get_folder_objects {
     }]
 }
 
-ad_proc -public fs::get_folder_contents {
+ad_proc -private fs::get_folder_contents {
     {-folder_id ""}
     {-user_id ""}
     {-n_past_days "99999"}
