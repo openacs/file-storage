@@ -425,7 +425,7 @@ ad_proc -public fs::get_folder_objects {
     }]
 }
 
-ad_proc -private fs::get_folder_contents {
+ad_proc -deprecated fs::get_folder_contents {
     {-folder_id ""}
     {-user_id ""}
     {-n_past_days "99999"}
@@ -446,6 +446,14 @@ ad_proc -private fs::get_folder_contents {
     object_id, name, live_revision, type,
     last_modified, new_p, content_size, file_upload_name
     write_p, delete_p, admin_p,
+
+    DEPRECATED: this proc has been evidently subject of
+    controversy. To this day (2023-03-17) no package seems to be using
+    it. One can either query the database directly or use other
+    existing apis to retrieve the folder children and then fetch the
+    needed metadata as needed via other means.
+
+    @see fs::get_folder_objects
 
     @param folder_id The folder for which to retrieve contents
     @param user_id The viewer of the contents (to make sure they have
