@@ -63,13 +63,25 @@ aa_register_case \
         Test api concerning archiving
 
     } {
-        set wfd [ad_opentmpfile in_file .in]
-        set out_file [file rootname $in_file].out
+        set orig_package_key [ad_conn package_key]
+        set orig_package_id [ad_conn package_id]
 
         try {
+            set wfd [ad_opentmpfile in_file .in]
+            set out_file [file rootname $in_file].out
+
             puts $wfd abcd
             close $wfd
             set in_file_hash [ns_md file $in_file]
+
+            #
+            # We simulate a file-storage connection context
+            #
+            ad_conn -set package_key "file-storage"
+            ad_conn -set package_id [db_string get_fs_is {
+                select max(package_id) from apm_packages
+                where package_key = 'file-storage'
+            }]
 
             exec -ignorestderr {*}[fs::get_archive_command \
                                        -in_file $in_file \
@@ -81,6 +93,8 @@ aa_register_case \
             aa_true "Archive '$out_file' was generated" \
                 [file exists $out_file]
         } finally {
+            ad_conn -set package_key $orig_package_key
+            ad_conn -set package_id $orig_package_id
             file delete -- $in_file $out_file
         }
     }

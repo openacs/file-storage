@@ -703,6 +703,10 @@ ad_proc -public fs::get_archive_command {
     return the archive command after replacing {in_file} and {out_file} with
     their respective values.
 } {
+    if {[ad_conn package_key] ne "file-storage"} {
+        error "fs::get_archive_command must be called inside the file-storage"
+    }
+
     set cmd [parameter::get -parameter ArchiveCommand -default "tar cf - {in_file} | gzip > {out_file}"]
 
     regsub -all -- {(\W)} $in_file {\\\1} in_file
