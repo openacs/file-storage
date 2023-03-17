@@ -534,7 +534,7 @@ ad_proc -public fs::publish_object_to_file_system {
     publish a file storage object to the filesystem
 } {
     if {$path eq ""} {
-        set path [ad_tmpnam]
+        set path [ad_mktmpdir]
     }
 
     db_1row select_object_info {}
