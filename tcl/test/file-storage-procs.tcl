@@ -9,33 +9,93 @@ ad_library {
 aa_register_case \
     -cats {api smoke} \
     -procs {
+        permission::set_not_inherit
+        site_node::instantiate_and_mount
+        content::folder::register_content_type
+        content::symlink::new
         fs::add_file
-        fs::publish_versioned_object_to_file_system
+        fs::new_folder
+        fs::get_folder_objects
         fs::get_file_package_id
+        fs::publish_versioned_object_to_file_system
+        fs::publish_url_to_file_system
+        fs::publish_object_to_file_system
+        fs::publish_folder_to_file_system
     } \
     fs_publish_file {
 
         Test that exporting a file to the filesystem works.
 
     } {
+        set user_id [dict get [acs::test::user::create] user_id]
 
         aa_run_with_teardown -rollback -test_code {
-            db_1row get_folder {
-                select folder_id, package_id
-                from fs_root_folders
-                fetch first 1 rows only
-            }
+            aa_log "Create a root folder"
+            set package_id [site_node::instantiate_and_mount \
+                                -package_key file-storage \
+                                -node_name __[clock seconds]_file_storage]
+            permission::set_not_inherit -object_id $package_id
 
-            set content "This is a test file"
+            set root_folder_id [fs::get_root_folder -package_id $package_id]
+
+            aa_log "Create a folder"
+
+            set folder_id [fs::new_folder \
+                               -name __test_fs_folder_1 \
+                               -pretty_name __test_fs_folder_1_pretty \
+                               -parent_id $root_folder_id]
+
+            set revisions [list]
+
+            set content "This is a test file 1"
             set wfd [ad_opentmpfile tmp_filename]
             puts $wfd $content
             close $wfd
 
-            set revision_id [fs::add_file \
-                                 -name __test_fs_publish_file \
-                                 -parent_id $folder_id \
-                                 -package_id $package_id \
-                                 -tmp_filename $tmp_filename]
+            lappend revisions [fs::add_file \
+                                   -name __test_fs_publish_file_1 \
+                                   -parent_id $folder_id \
+                                   -package_id $package_id \
+                                   -tmp_filename $tmp_filename]
+
+            set content "This is a test file 2"
+            set wfd [ad_opentmpfile tmp_filename]
+            puts $wfd $content
+            close $wfd
+
+            lappend revisions [fs::add_file \
+                                   -name __test_fs_publish_file_2 \
+                                   -parent_id $folder_id \
+                                   -package_id $package_id \
+                                   -tmp_filename $tmp_filename]
+
+
+            set content "This is a test file 3"
+            set wfd [ad_opentmpfile tmp_filename]
+            puts $wfd $content
+            close $wfd
+
+            lappend revisions [fs::add_file \
+                                   -name __test_fs_publish_file_3 \
+                                   -parent_id $folder_id \
+                                   -package_id $package_id \
+                                   -tmp_filename $tmp_filename]
+
+            aa_equals "fs::get_folder_objects returns nothing for unprivileged user" \
+                [fs::get_folder_objects -folder_id $folder_id -user_id $user_id] \
+                ""
+
+            set security_root [acs_magic_object security_context_root]
+            set swa_id [db_string get_swa {
+                select max(user_id) from users u
+                where acs_permission.permission_p(:security_root, u.user_id, 'admin')
+            }]
+            aa_equals "fs::get_folder_objects returns expected for SWA" \
+                [lsort [fs::get_folder_objects -folder_id $folder_id -user_id $swa_id]] \
+                [lsort [db_list query "select item_id from cr_items where live_revision in ([join $revisions ,])"]]
+
+            set revision_id [lindex $revisions end]
+
             set item_id [db_string get_item_id {
                 select item_id from cr_revisions
                 where revision_id = :revision_id
@@ -44,11 +104,65 @@ aa_register_case \
             aa_equals "Package id from the API and from the database are consistent" \
                 [fs::get_file_package_id -file_id $revision_id] $package_id
 
+            set file_hash [ns_md file $tmp_filename]
+
             set exported [fs::publish_versioned_object_to_file_system \
                               -object_id $item_id]
+            aa_equals "fs::publish_versioned_object_to_file_system: original and exported files are identical" \
+                [ns_md file $exported] $file_hash
 
-            aa_equals "Original and exported files are identical" \
-                [ns_md file $tmp_filename] [ns_md file $exported]
+            set exported [fs::publish_object_to_file_system \
+                              -object_id $item_id]
+            aa_equals "fs::publish_object_to_file_system: original and exported files are identical" \
+                [ns_md file $exported] $file_hash
+
+            aa_log "Add a link to the folder"
+            set url https://test.website.url
+            set link_id [content::extlink::new \
+                             -url $url \
+                             -parent_id $folder_id]
+            set exported [fs::publish_url_to_file_system -object_id $link_id]
+            set rfd [open $exported r]; set exported [read $rfd]; close $rfd
+            aa_true "Link was exported" {
+                [string first $url $exported] >= 0
+            }
+
+            aa_log "Add a symlink to the folder"
+            content::folder::register_content_type \
+                -folder_id $folder_id \
+                -content_type content_symlink
+            content::symlink::new \
+                -target_id $item_id \
+                -parent_id $folder_id
+
+            fs::new_folder \
+                -name __test_fs_subfolder \
+                -pretty_name __test_fs_subfolder_pretty \
+                -parent_id $folder_id
+
+            set exported_folder [fs::publish_folder_to_file_system \
+                                     -folder_id $folder_id \
+                                     -user_id $swa_id]
+
+            set folders 0
+            set file_hashes 0
+            set tot_files 0
+            foreach c [glob -directory $exported_folder *] {
+                set folder_p [file isdirectory $c]
+                incr folders $folder_p
+                incr file_hashes [expr {!$folder_p && $file_hash eq [ns_md file $c]}]
+                incr tot_files
+            }
+
+            aa_equals "Tot folder content is 6" \
+                $tot_files 6
+            aa_equals "We have the same file twice (symlink)" \
+                $file_hashes 2
+            aa_equals "We have 1 folder" \
+                $folders 1
+
+        } -teardown_code {
+            acs::test::user::delete -user_id $user_id
         }
 
     }
