@@ -13,7 +13,7 @@ ad_page_contract {
 
 if {[info exists object_id] && $object_id ne ""} {
     set download_name [fs::get_file_system_safe_object_name -object_id $object_id]
-    set ext [fs::get_archive_extension]
+    set ext [parameter::get -parameter ArchiveExtension -default "txt"]
     if {$ext ne ""} {
         append download_name ".${ext}"
     }
