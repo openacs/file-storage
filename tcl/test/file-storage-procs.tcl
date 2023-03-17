@@ -16,6 +16,7 @@ aa_register_case \
         fs::add_file
         fs::new_folder
         fs::get_folder_objects
+        fs::webdav_url
         fs::get_file_package_id
         fs::publish_versioned_object_to_file_system
         fs::publish_url_to_file_system
@@ -100,6 +101,25 @@ aa_register_case \
                 select item_id from cr_revisions
                 where revision_id = :revision_id
             }]
+
+            set webdav_url [fs::webdav_url \
+                                -item_id $item_id \
+                                -package_id $package_id \
+                                -root_folder_id $root_folder_id]
+            if {[fs::webdav_p] && [oacs_dav::folder_enabled -folder_id $root_folder_id]} {
+                set url_stub [content::item::get_virtual_path -root_folder_id $root_folder_id -item_id $item_id]
+                set package_url [apm_package_url_from_id $package_id]
+                set webdav_prefix [oacs_dav::uri_prefix]
+                if { [security::RestrictLoginToSSLP] } {
+                    set expected_url [security::get_secure_location]${webdav_prefix}${package_url}${url_stub}
+                } else {
+                    set expected_url [ad_url]${webdav_prefix}${package_url}${url_stub}
+                }
+            } else {
+                set expected_url ""
+            }
+            aa_equals "WebDAV URL is expected" \
+                $webdav_url $expected_url
 
             aa_equals "Package id from the API and from the database are consistent" \
                 [fs::get_file_package_id -file_id $revision_id] $package_id
