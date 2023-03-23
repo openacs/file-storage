@@ -7,8 +7,10 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     folder_id:naturalnum,notnull
-    {type "fs_url"}
-    {title ""}
+    {type:token "fs_url"}
+    {title:printable ""}
+    {description:printable}
+    {url:printable}
     {lock_title_p:boolean 0}
 } -validate {
     valid_folder -requires {folder_id:integer} {
