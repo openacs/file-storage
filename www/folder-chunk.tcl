@@ -7,7 +7,7 @@ ad_include_contract {
     {folder_id:integer ""}
     {allow_bulk_actions:boolean true}
     {category_id:integer ""}
-    {n_past_days:integer 99999}
+    {n_past_days:naturalnum ""}
     {fs_url:localurl "[ad_conn package_url]"}
     {return_url ""}
     {format "table"}
@@ -25,6 +25,10 @@ ad_include_contract {
     contents:multirow
     content_size_total:onevalue
     page_num
+}
+
+if {$n_past_days eq ""} {
+    set n_past_days 99999
 }
 
 set this_page [ad_return_url]
