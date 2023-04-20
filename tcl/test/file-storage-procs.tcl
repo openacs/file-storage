@@ -6,6 +6,30 @@ ad_library {
     @cvs-id $Id$
 }
 
+aa_register_case -cats {
+    smoke production_safe
+} -procs {
+    util::which
+} file_storage_exec_dependencies {
+    Test external command dependencies for this package.
+} {
+    set commands [list]
+    foreach unzip [db_list instances {
+        select distinct trim(attr_value)
+          from apm_parameter_values v,
+               apm_parameters p
+         where v.parameter_id = p.parameter_id
+           and p.package_key = 'file-storage'
+           and p.scope = 'instance'
+           and p.parameter_name = 'UnzipBinary'
+    }] {
+        lappend commands [::util::which $unzip]
+    }
+    foreach cmd $commands {
+        aa_true "'$cmd' is executable" [file executable $cmd]
+    }
+}
+
 aa_register_case \
     -cats {api smoke} \
     -procs {
