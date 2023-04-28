@@ -198,7 +198,7 @@ if { $return_url eq "" } {
     set return_url [export_vars -base "index" {folder_id}]
 }
 
-set vars_to_export [list return_url]
+set vars_to_export [list return_url:sign(max_age=300)]
 
 
 set bulk_actions {}
@@ -233,7 +233,7 @@ if {$allow_bulk_actions} {
             [_ file-storage.Delete] ${fs_url}delete [_ file-storage.Delete_Checked_Items]
     }
 
-    set zip_url [export_vars -base ${fs_url}download-zip {{return_url $this_page}}]
+    set zip_url ${fs_url}download-zip
     lappend bulk_actions \
         [_ file-storage.Download_ZIP] $zip_url [_ file-storage.Download_ZIP_Checked_Items]
 
@@ -347,7 +347,7 @@ db_multirow -extend {
             set alt_icon #file-storage.folder#
             set file_url [export_vars -base "${fs_url}index" {{folder_id $object_id}}]
             set download_link [_ file-storage.Download]
-            set download_url [export_vars -base "${fs_url}download-zip" -url {object_id {return_url $this_page}}]
+            set download_url [export_vars -base "${fs_url}download-zip" -url {object_id {return_url:sign(max_age=300) $this_page}}]
         }
         url {
             set properties_link [_ file-storage.properties]
@@ -449,7 +449,7 @@ if { $expose_rss_p } {
 }
 
 if {$content_size_total > 0} {
-    set compressed_url [export_vars -base ${fs_url}download-zip -url {{object_id $folder_id} {return_url $this_page}}]
+    set compressed_url [export_vars -base ${fs_url}download-zip -url {{object_id $folder_id} {return_url:sign(max_age=300) $this_page}}]
 }
 
 # Local variables:

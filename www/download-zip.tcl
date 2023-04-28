@@ -3,7 +3,7 @@ ad_page_contract {
 } {
     object_id:naturalnum,notnull,multiple
     {confirm_p:optional,boolean 0}
-    {return_url:localurl ""}
+    {return_url:localurl,verify ""}
 } -errors {object_id:,notnull,integer,multiple {Please select at least one item to download.}
 }
 
