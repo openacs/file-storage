@@ -160,6 +160,18 @@ set elements {
             </else>
         }
     }
+    short_name {
+        label #file-storage.Name#
+        hide_p 1
+        display_template {
+            <a href="@contents.download_url@" title="#file-storage.Download#">
+               <if @contents.title@ nil>@contents.name;noi18n@</if>
+               <else>@contents.title@</else>
+            </a>
+        }
+        orderby_desc {fs_objects.name desc}
+        orderby_asc {fs_objects.name asc}
+    }
     content_size_pretty {
         label #file-storage.Size#
         display_template {@contents.content_size_pretty;noquote@}
