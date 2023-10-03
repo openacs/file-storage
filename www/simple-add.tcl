@@ -9,8 +9,8 @@ ad_page_contract {
     folder_id:naturalnum,notnull
     {type:token "fs_url"}
     {title:printable ""}
-    {description:printable}
-    {url:printable}
+    {description:printable ""}
+    {url:printable ""}
     {lock_title_p:boolean 0}
 } -validate {
     valid_folder -requires {folder_id:integer} {
