@@ -6,7 +6,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     version_id:naturalnum,notnull
-    {confirmed_p:boolean "f"}
+    {confirmed_p:boolean,notnull "f"}
 } -validate {
     valid_version -requires {version_id} {
         if {![fs_version_p $version_id]} {

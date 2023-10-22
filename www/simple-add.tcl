@@ -11,7 +11,7 @@ ad_page_contract {
     {title:printable ""}
     {description:printable ""}
     {url:printable ""}
-    {lock_title_p:boolean 0}
+    {lock_title_p:boolean,notnull 0}
 } -validate {
     valid_folder -requires {folder_id:integer} {
         if {![fs_folder_p $folder_id]} {

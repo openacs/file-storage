@@ -5,7 +5,7 @@ ad_include_contract {
 } {
     orderby:token,optional
     {folder_id:integer ""}
-    {allow_bulk_actions:boolean true}
+    {allow_bulk_actions:boolean,notnull true}
     {category_id:integer ""}
     {n_past_days:naturalnum ""}
     {fs_url:localurl "[ad_conn package_url]"}
