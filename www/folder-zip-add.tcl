@@ -14,7 +14,7 @@ ad_page_contract {
     {return_url:localurl ""}
     upload_file.tmpfile:tmpfile,optional
     {title ""}
-    {lock_title_p:boolean 0}
+    {lock_title_p:boolean,notnull 0}
 
 } -properties {
 
