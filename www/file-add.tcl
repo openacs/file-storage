@@ -50,7 +50,7 @@ ad_page_contract {
 
 set user_id [ad_conn user_id]
 set package_id [ad_conn package_id]
-set unpack_binary [util::which [string trim [parameter::get -parameter UnzipBinary]]]
+set unpack_binary [util::which unzip]
 set unpack_available_p [expr {$unpack_binary ne ""}]
 
 # check for write permission on the folder or item

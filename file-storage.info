@@ -51,7 +51,6 @@
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="MoveByCopyDeleteP"  default="0" description="Move files by copying and then deleting the original? Default is false, use normal move"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="ShowAdministerPermissionsLinkP"  default="1" description="Whether or not to show a link to administer permissions on the file storage object."/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="StoreFilesInDatabaseP"  default="0" description="Flag to determine the storage type. A flag of 1 (true) will store the files in the database. If 0 (false) files are stored in the filesystem. ***This parameter should only be changed at package instance creation.***"/>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="UnzipBinary"  default="unzip" description="The path and name of the unzip binary to unpack zip files containing multiple files."/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="UseWebDavP"  default="0" description="Flag to determine if WebDav is active.  A flag of 1 (true) means WebDav is active and we will show WebDav links."/>
         </parameters>
 
