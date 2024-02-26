@@ -712,7 +712,7 @@ ad_proc -public fs::publish_versioned_object_to_file_system {
     return $full_filename
 }
 
-ad_proc -public fs::get_archive_command {
+ad_proc -deprecated fs::get_archive_command {
     {-in_file ""}
     {-out_file ""}
 } {
