@@ -175,6 +175,20 @@ ad_proc -private fs::install::upgrade {
                     }
                 }
 	    }
+            5.10.1b2 5.10.1b3 {
+                #
+                # This upgrade is optional, as we do not want to
+                # delete user data just before a release. Uncomment
+                # these lines or otherwise run this snippet to get rid
+                # of 2 legacy parameters.
+                #
+                # apm_parameter_unregister \
+                #     -package_key file-storage \
+                #     -parameter ArchiveCommand
+                # apm_parameter_unregister \
+                #     -package_key file-storage \
+                #     -parameter ArchiveExtension
+            }
 	}
 }
 
