@@ -1233,7 +1233,12 @@ ad_proc fs::delete_file {
     {-parent_id ""}
     -no_callback:boolean
 } {
-    Deletes a file and all its revisions
+    Deletes a file and all its revisions.
+
+    Note that we do not perform filesystem operations here. A trigger
+    on cr_revisions informs the content repository about the deletion
+    and periodic cleanup of files to be deleted is performed in a
+    scheduled procedure.
 } {
 
     set version_name [get_object_name -object_id $item_id]
@@ -1273,7 +1278,12 @@ ad_proc fs::delete_folder {
     -no_callback:boolean
     -no_notifications:boolean
 } {
-    Deletes a folder and all contents
+    Deletes a folder and all contents.
+
+    Note that we do not perform filesystem operations here. A trigger
+    on cr_revisions informs the content repository about the deletion
+    and periodic cleanup of files to be deleted is performed in a
+    scheduled procedure.
 } {
     if {!$no_callback_p} {
         callback fs::folder_delete \
@@ -1304,6 +1314,11 @@ ad_proc fs::delete_version {
 } {
     Deletes a revision. If it was the last revision, it deletes
     the file as well.
+
+    Note that we do not perform filesystem operations here. A trigger
+    on cr_revisions informs the content repository about the deletion
+    and periodic cleanup of files to be deleted is performed in a
+    scheduled procedure.
 } {
     set parent_id [db_exec_plsql delete_version {}]
 
