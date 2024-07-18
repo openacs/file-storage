@@ -230,6 +230,8 @@ aa_register_case \
         fs::get_object_name
         fs::get_object_prettyname
         fs::get_file_system_safe_object_name
+
+        cr_import_content
     } \
     fs_add_delete_copy {
 
@@ -743,6 +745,7 @@ aa_register_case \
         acs::test::get_url_from_location
         ad_sanitize_filename
         content::item::get_id_by_name
+        cr_import_content
         fs::add_file
         fs::add_version
         fs::delete_file
@@ -771,7 +774,7 @@ aa_register_case \
         set user_info [::acs::test::user::create -admin]
         aa_log "user_info = $user_info"
         set request_info [::acs::test::login $user_info]
-
+        ns_log notice "user logged in"
         aa_run_with_teardown -test_code {
 
             set d [file_storage::test::call_fs_page -last_request $request_info]
