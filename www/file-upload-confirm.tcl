@@ -4,8 +4,8 @@ ad_page_contract {
     @author Timo Hentschel (timo@timohentschel.de)
     @creation-date 2006-05-15
 } {
-    folder_id:naturalnum,notnull
-    cancel_url
+    folder_id:object_id,notnull
+    cancel_url:localurl
     return_url:localurl
 }
 
