@@ -7,10 +7,10 @@ ad_page_contract {
     @author Dave Bauer dave@thedesignexperience.org
 
 } -query {
-    object_id:notnull,integer,multiple
-    folder_id:naturalnum,optional
+    object_id:notnull,object_id,multiple
+    folder_id:object_id,optional
     {return_url:localurl ""}
-    {root_folder_id:integer ""}
+    {root_folder_id:object_id ""}
     {redirect_to_folder:boolean,notnull 0}
     {show_items:boolean,notnull 0}
 } -errors {object_id:,notnull,integer,multiple {Please select at least one item to copy.}
