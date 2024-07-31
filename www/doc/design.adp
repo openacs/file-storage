@@ -52,7 +52,7 @@ password, upload Perl scripts or ADP pages, then grab those URLs
 from a Web browser. The cracker is now executing arbitrary code on
 your server with all the privileges that you&#39;ve given your Web
 server.</p>
-<p>The File Storage application is not a web-based file system, and
+<p>The File Storage application is not a web-based filesystem, and
 can not be fairly compared against such systems. The role of File
 Storage is to provide a simple web location where users can share a
 versioned document. It does not allow much functionality with
@@ -138,7 +138,7 @@ its objects.</p>
 <p>The main objects of File Storage are "folders" and
 "files". A "folder" is analogous to a
 subdirectory in the Unix/Windows-world filesystem. Folder objects
-are stored as Content Repostory folders, thus folders are stored
+are stored as Content Repository folders, thus folders are stored
 "as is" in the Content Repository.</p>
 <p>"Files", however, can cause some confusion when stored
 in the Content Repository. A "file" in File Storage
@@ -207,7 +207,7 @@ corresponding to item_id will be used.
 <h3><a href="/api-doc/proc-view?proc=fs%5ffile%5fdownloader">fs_file_downloader</a></h3><pre>
 fs_file_downloader <em>conn</em><em>key</em>
 </pre><blockquote>Sends the requested file to the user. Note that the
-path has the original file name, so the browser will have a
+path has the original filename, so the browser will have a
 sensible name if you save the file. Version downloads are supported
 by looking for the form variable version_id. We don&#39;t actually
 check that the version_id matches the path, we just serve it up.
@@ -325,7 +325,7 @@ end nodes of the file tree up to the root folder. Later
 improvements in Content Repository will allow archiving of the
 contents instead of actually deleting them from the database.</p>
 <h3>VIII. User Interface</h3>
-<p>The user interface attempts to replicate the file system
+<p>The user interface attempts to replicate the filesystem
 metaphors familiar to most computer users, with folders containing
 files. Adding files and folders are hyperlinked options, and a web
 form is used to handle the search function. Files and folders are
