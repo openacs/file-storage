@@ -151,15 +151,36 @@ namespace eval file_storage::test {
     } {
 
         #
-        # Delete the first displayed file (current rather crude, failure must
-        # me detectable from return code).
+        # Delete the first displayed file (current rather crude,
+        # failure must be detectable from return code). Using a class
+        # for the anchor in the bulk actions would be helpful
         #
-        set href [acs::test::find_link -last_request $last_request -label {New}]
-        aa_log "Download link $href"
+        acs::test::dom_html root [dict get $last_request body] {
+            #
+            # We are looking for links of the following form
+            #
+            #    <a href="/file-storage/file-add?file_id=36962" title="Upload a new version">Neu</a>
+            #
+            # to obtain the instance and the object_id
+
+            foreach a [$root selectNodes {//a[contains(@href,'file-add')]}] {
+                set href1 [$a getAttribute href]
+                #
+                # make sure the match was not from a return_url
+                #
+                if {[regexp {^[^?]+[?]} $href1 match]} {
+                    if {[string match *file-add* $match]} {
+                        set href $href1
+                        break
+                    }
+                }
+            }
+        }
+        aa_log "Download link '$href'"
 
         regsub -all /file-add $href /delete href
         regsub -all file_id= $href object_id= href
-        aa_log "Delete link $href"
+        aa_log "Delete link '$href'"
         set d [acs::test::http -last_request $last_request? $href]
         acs::test::reply_has_status_code $d 200
         #
