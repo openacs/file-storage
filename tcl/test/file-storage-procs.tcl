@@ -879,15 +879,21 @@ aa_register_case \
         #
         # Try to create the file via the UI
         #
-        set d [::acs::test::form_reply \
-                   -last_request $d \
-                   -form $form \
-                   -update [list \
-                                upload_file [list $file_name $notmpfile "text/plain"] \
-                                title $file_name \
-                                description $file_name \
-                               ]]
-
+        aa_silence_log_entries -severities error {
+            #
+            # The uploaded file is rejected, due to the invalid tmp
+            # file.
+            #
+            set d [::acs::test::form_reply \
+                       -last_request $d \
+                       -form $form \
+                       -update [list \
+                                    upload_file [list $file_name $notmpfile "text/plain"] \
+                                    title $file_name \
+                                    description $file_name \
+                                   ]]
+        }
+        ns_log notice $d
         #
         # When upload succeeds, a redirect is returned. Here we want
         # to make sure our upload was rejected, but without a server
