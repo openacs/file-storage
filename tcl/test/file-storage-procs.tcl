@@ -836,7 +836,7 @@ aa_register_case \
         should not be in control of the user.
 
         Here we create a file on the server, then try to copy this
-        file into the file-storage via a user requrest. This wold be
+        file into the file-storage via a user request. This wold be
         nasty because:
         1. It means we could access any file the server can read
            e.g. source code, /etc/passwd...
