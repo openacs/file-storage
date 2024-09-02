@@ -2,6 +2,10 @@
 <property name="context">{/doc/file-storage/ {File Storage}} {File-Storage Application Requirements}</property>
 <property name="doc(title)">File-Storage Application Requirements</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>File-Storage Application Requirements</h2>
 
 by <a href="mailto:kevin\@arsdigita.com">Kevin Scaldeferri</a>
