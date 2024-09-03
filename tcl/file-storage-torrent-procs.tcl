@@ -5,10 +5,15 @@ ad_library {
 
 namespace eval fs::torrent {}
 
-ad_proc -public fs::torrent::get_hashsum {
+ad_proc -deprecated fs::torrent::get_hashsum {
     {-filename:required}
 } {
     Get hashsum for the file using SHA1 hashsum technique.
+
+    DEPRECATED: NaviServer can now perform such a digest in a oneliner
+    that won't require slurping the file first.
+
+    @see ns_md
 
     @author Al-Faisal El-Dajani (faisal.dajani@gmail.com)
     @creation-date 2005-10-25

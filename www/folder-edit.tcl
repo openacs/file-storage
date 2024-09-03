@@ -28,6 +28,7 @@ set submit_label [_ file-storage.Save]
 ad_form -export folder_id -form {
     {folder_name:text(text)
         {label "\#file-storage.Folder_Name\#"}
+	{maxlength 1000}
     }
     {description:text(textarea),optional
         {label \#file-storage.Description\#}
@@ -46,24 +47,37 @@ if { [parameter::get -parameter CategoriesP -package_id $package_id -default 0] 
 
 
 ad_form -extend -form {
-    {submit:text(submit) {label $submit_label}}    
+    {submit:text(submit) {label $submit_label}}
 } -on_request {
     content::item::get -item_id $folder_id -array folder
     set folder_name $folder(label)
     set description $folder(description)
 } -on_submit {
 
+    set name [ad_sanitize_filename -collapse_spaces $folder_name]
+
+    # 'folder_name' itself cannot be null, but the sanitized 'name'
+    # might be, if 'folder_name' is made only of invalid
+    # characters. We complain in such case, as we need some kind of
+    # valid name to be there.
+    if {[string length $name] == 0} {
+        template::form::set_error folder-edit folder_name \
+            [_ acs-tcl.lt_name_contains_invalid [list name [_ file-storage.Title]]]
+        break
+    }
+
     db_transaction {
         content::folder::update -folder_id $folder_id \
             -attributes [list \
+                             [list name $name] \
                              [list label $folder_name] \
                              [list description $description]]
-        
+
         if { [parameter::get -parameter CategoriesP -package_id $package_id -default 0] } {
             category::map_object -remove_old -object_id $folder_id [category::ad_form::get_categories \
                                                                         -container_object_id $package_id \
                                                                         -element_name category_id]
-        }        
+        }
 
         callback fs::folder_edit -package_id [ad_conn package_id] -folder_id $folder_id
     }

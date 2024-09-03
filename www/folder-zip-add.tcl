@@ -14,7 +14,7 @@ ad_page_contract {
     {return_url:localurl ""}
     upload_file.tmpfile:tmpfile,optional
     {title ""}
-    {lock_title_p:boolean 0}
+    {lock_title_p:boolean,notnull 0}
 
 } -properties {
 
@@ -40,14 +40,35 @@ ad_page_contract {
         }
     }
 
+    upload_file_tmpfile -requires {upload_file} {
+        #
+        # Check if the upload file looks like a zip file
+        #
+        set n_bytes [ad_file size ${upload_file.tmpfile}]
+        if {$n_bytes < 5} {
+            #
+            # A zip file has at least 4 bytes.
+            #
+            set ok 0
+        } else {
+            #
+            # Check the signature of the zip file.
+            #
+            set ok [util::file_content_check -type zip -file ${upload_file.tmpfile}]
+        }
+        if { !$ok} {
+            ad_complain "The uploaded file does not look like a zip file."
+        }
+    }
+
     max_size -requires {upload_file} {
         #
         # Check if the file is larger than fs::max_upload_size.
         #
-        set n_bytes [file size ${upload_file.tmpfile}]
+        set n_bytes [ad_file size ${upload_file.tmpfile}]
         set max_bytes [fs::max_upload_size]
         if { $n_bytes > $max_bytes } {
-            ad_complain "Your file is larger than the maximum file size allowed on this system ([util_commify_number $max_bytes] bytes)"
+            ad_complain "Your file is larger than the maximum file size allowed on this system ([lc_content_size_pretty -size $max_bytes])"
         }
     }
 }
@@ -108,6 +129,15 @@ if {[ad_form_new_p -key file_id]} {
 }
 
 # Rest of the form.
+
+# Folder names cannot contain slashes
+ad_form -extend -name file_add -form {} -validate {
+    {title
+        {[string first "/" $title] == -1}
+        "#acs-templating.Invalid_filename#"
+    }
+}
+
 ad_form -extend -name file_add -form {} -new_data {
     #
     # new_data block, which unzips the file and uploads its contents to the file
@@ -132,29 +162,28 @@ ad_form -extend -name file_add -form {} -new_data {
     # Uncompress the file.
     #
     set unzip_binary [string trim [parameter::get -parameter UnzipBinary]]
+    if {$unzip_binary ne ""} {
+        ns_log warning "package parameter UnzipBinary of file-storage is ignored, using systemwide util::unzip"
+    }
+
+    set unzip_binary [util::which unzip]
     if { $unzip_binary ne "" } {
         #
         # Create temp directory to unzip.
         #
-        set unzip_path [ad_tmpnam]
-        file mkdir $unzip_path
+        set unzip_path [ad_mktmpdir]
 
         #
         # Unzip.
         #
-        # More flexible parameter design could be:
-        # zip {unzip -jd {out_path} {in_file}} tar {tar xf {in_file} {out_path}} tgz {tar xzf {in_file} {out_path}}
-        #
-        # save paths! get rid of -j switch --DAVEB 20050628
-        #
-        catch { exec $unzip_binary -d $unzip_path ${upload_file.tmpfile} } errmsg
+        util::unzip -source ${upload_file.tmpfile} -destination $unzip_path
 
         #
         # Get two lists of the files to upload, with and without their full path.
         #
         set upload_files [list]
         set upload_tmpfiles [list]
-        foreach file [ad_find_all_files "$unzip_path"] {
+        foreach file [ad_find_all_files $unzip_path] {
             lappend upload_files [regsub "^$unzip_path\/" $file {}]
             lappend upload_tmpfiles $file
         }
@@ -185,7 +214,7 @@ ad_form -extend -name file_add -form {} -new_data {
         #
         set this_file_id $file_id
         set p_f_id $folder_id
-        set file_paths [file split [file dirname $upload_file]]
+        set file_paths [file split [ad_file dirname $upload_file]]
         if {"." ne $file_paths && [llength $file_paths] > 0} {
             #
             # Make sure every folder exists, or create it otherwise.
@@ -203,7 +232,7 @@ ad_form -extend -name file_add -form {} -new_data {
                     set p_f_id $paths($path)
                 }
             }
-            set upload_file [file tail $upload_file]
+            set upload_file [ad_file tail $upload_file]
         }
         set this_title $upload_file
         set this_folder_id $p_f_id
@@ -245,7 +274,7 @@ ad_form -extend -name file_add -form {} -new_data {
         }
 
         #
-        # Cleanup of the tmp file.
+        # Cleanup of the temporary file.
         #
         file delete -- $tmpfile
     }

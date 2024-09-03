@@ -6,7 +6,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     version_id:naturalnum,notnull
-    {confirmed_p:boolean "f"}
+    {confirmed_p:boolean,notnull "f"}
 } -validate {
     valid_version -requires {version_id} {
         if {![fs_version_p $version_id]} {
@@ -40,13 +40,13 @@ set delete_message [_ file-storage.lt_Are_you_sure_that_you]
 set file_url [export_vars -base file {{file_id $item_id}}]
 
 ad_form -export version_id -cancel_url $file_url -form {
-    {delete_message:text(inform) {label $delete_message}}
+    {delete_message:text(inform) {label ""} {value $delete_message}}
 } -on_submit {
 
     set parent_id [fs::delete_version \
                        -item_id $item_id \
                        -version_id $version_id]
-    # parent_id > 0 means this was last revision left, therefore file
+    # parent_id > 0 means this was last revision left, therefore, file
     # was deleted as well. Return to the parent instead than to the
     # non-existing file.
     set return_url [expr {$parent_id == 0 ?

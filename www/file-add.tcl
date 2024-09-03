@@ -12,7 +12,7 @@ ad_page_contract {
     upload_file.tmpfile:tmpfile,optional
     content_body:optional
     {title ""}
-    {lock_title_p:boolean 0}
+    {lock_title_p:boolean,notnull 0}
     {name ""}
 
 } -properties {
@@ -35,7 +35,11 @@ ad_page_contract {
         }
     }
     max_size -requires {upload_file} {
-        set n_bytes [file size ${upload_file.tmpfile}]
+        if {![info exists upload_file.tmpfile]} {
+            ad_complain {Invalid file}
+            return
+        }
+        set n_bytes [ad_file size ${upload_file.tmpfile}]
         set max_bytes [fs::max_upload_size]
         if { $n_bytes > $max_bytes } {
             set number_of_bytes [lc_numeric $max_bytes] ; # needed by message key
@@ -46,7 +50,7 @@ ad_page_contract {
 
 set user_id [ad_conn user_id]
 set package_id [ad_conn package_id]
-set unpack_binary [util::which [string trim [parameter::get -parameter UnzipBinary]]]
+set unpack_binary [util::which unzip]
 set unpack_available_p [expr {$unpack_binary ne ""}]
 
 # check for write permission on the folder or item
@@ -128,6 +132,7 @@ if {$lock_title_p} {
     ad_form -extend -form {
         {title:text(hidden)
             {value $title}
+            {maxlength 1000}
         }
     }
 } else {
@@ -135,6 +140,7 @@ if {$lock_title_p} {
         {title:text,optional
             {label "#file-storage.Title#"}
             {html {size 30}}
+            {maxlength 1000}
         }
     }
 }
@@ -173,14 +179,27 @@ if { [parameter::get -parameter CategoriesP -package_id $package_id -default 0] 
 ad_form -extend -form {} -select_query_name get_file -new_data {
 
     if { [string is true -strict $unpack_p]
+         && $unpack_binary ne ""
          && [file extension [template::util::file::get_property filename $upload_file]] eq ".zip"
     } {
 
-        set path [ad_tmpnam]
-        file mkdir $path
+        set ok [util::file_content_check -type zip -file ${upload_file.tmpfile}]
+        if {!$ok} {
+            ad_complain "The uploaded file does not look like a zip file."
+            ad_script_abort
+        }
 
+        set path [ad_mktmpdir]
 
-        catch { exec $unpack_binary -jd $path ${upload_file.tmpfile} } errmsg
+        if {[catch { exec $unpack_binary -jd $path ${upload_file.tmpfile} } errMsg]} {
+            #
+            # Completely silently catching unzip errors (like it was
+            # before Feb 18, 2022) is NOT a good idea. Maybe, some zip
+            # variants produce output on stderr, so we have to check,
+            # before we are considering to abort here.
+            #
+            ns_log warning "unpacking the uploaded zip file lead to error: $errorMsg"
+        }
 
         # More flexible parameter design could be:
         # zip {unzip -jd {out_path} {in_file}} tar {tar xf {in_file} {out_path}} tgz {tar xzf {in_file} {out_path}}
@@ -189,7 +208,7 @@ ad_form -extend -form {} -select_query_name get_file -new_data {
         set upload_tmpfiles [list]
 
         foreach file [glob -nocomplain "$path/*"] {
-            lappend upload_files [file tail $file]
+            lappend upload_files [ad_file tail $file]
             lappend upload_tmpfiles $file
         }
 
@@ -204,10 +223,9 @@ ad_form -extend -form {} -select_query_name get_file -new_data {
             ad_return_complaint 1 "You have to upload a file or create a new one"
             ad_script_abort
         }
-        # create a tmp file to import from user entered HTML
+        # create a temporary file to import from user entered HTML
         set mime_type text/html
-        set tmp_filename [ad_tmpnam]
-        set fd [open $tmp_filename w]
+        set fd [ad_opentmpfile tmp_filename]
         puts $fd $content_body
         close $fd
         set upload_files [list $title]
@@ -233,6 +251,21 @@ ad_form -extend -form {} -select_query_name get_file -new_data {
             set upload_file $name
         }
 
+        # The upload filename is the one we are going to use as
+        # download filename. Must be safe.
+        set upload_file [ad_sanitize_filename \
+                             -collapse_spaces \
+                             -tolower \
+                             $upload_file]
+        # If the sanitized upload_file name turns out empty, the file
+        # name was only made of invalid characters and chances are
+        # something funny is happening. We complain.
+        if {[string length $upload_file] == 0} {
+            template::form::set_error file-add upload_file \
+                [_ acs-tcl.lt_name_contains_invalid [list name [_ file-storage.Name]]]
+            break
+        }
+
         set existing_item_id [fs::get_item_id -name $upload_file -folder_id $folder_id]
 
         if {$existing_item_id ne ""} {
@@ -246,8 +279,8 @@ ad_form -extend -form {} -select_query_name get_file -new_data {
                     -privilege write
             } else {
                 # create a new filename by appending the item_id to its rootname
-                set extension [file extension $upload_file]
-                set rootname [file rootname $upload_file]
+                set extension [ad_file extension $upload_file]
+                set rootname [ad_file rootname $upload_file]
                 set upload_file ${rootname}-${this_file_id}${extension}
             }
         }

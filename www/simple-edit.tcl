@@ -15,28 +15,53 @@ permission::require_permission -object_id $object_id -privilege write
 
 ad_form -name simple-edit -form {
     object_id:key
-    {name:text {label "#file-storage.Title_#"} {html {size 40} } }
-    {url:text {label "#file-storage.URL#"} {html {size 50} } }
-    {description:text(textarea),optional {label "#file-storage.Description#" } {html { rows 5 cols 50 } } }
+    {name:text
+        {label "#file-storage.Title_#"}
+        {html {size 40} }
+        {maxlength 1000}
+    }
+    {url:text(url)
+        {label "#file-storage.URL#"}
+        {html {size 50} }
+        {maxlength 1000}
+    }
+    {description:text(textarea),optional
+        {label "#file-storage.Description#" }
+        {html { rows 5 cols 50 } }
+    }
     {folder_id:text(hidden)}
 }
 
 set package_id [ad_conn package_id]
-if { [parameter::get -parameter CategoriesP -package_id $package_id -default 0] } {
+if { [parameter::get \
+        -parameter CategoriesP \
+        -package_id $package_id -default 0]
+} {
     category::ad_form::add_widgets \
-	 -container_object_id $package_id \
-	 -categorized_object_id $object_id \
-	 -form_name simple-edit
+        -container_object_id $package_id \
+        -categorized_object_id $object_id \
+        -form_name simple-edit
 }
 
 ad_form -extend -edit_request {
     db_1row extlink_data ""
 } -edit_data {
-    content::extlink::edit -extlink_id $object_id -url $url -label $name -description $description
-    if { [parameter::get -parameter CategoriesP -package_id $package_id -default 0] } {
-	category::map_object -remove_old -object_id $object_id [category::ad_form::get_categories \
-								       -container_object_id $package_id \
-								       -element_name category_id]
+    content::extlink::edit \
+        -extlink_id $object_id \
+        -url $url \
+        -label $name \
+        -description $description
+    if { [parameter::get \
+            -parameter CategoriesP \
+            -package_id $package_id \
+            -default 0]
+} {
+    category::map_object \
+        -remove_old \
+        -object_id $object_id \
+        [category::ad_form::get_categories \
+            -container_object_id $package_id \
+            -element_name category_id]
     }
     ad_returnredirect [export_vars -base . folder_id]
     ad_script_abort

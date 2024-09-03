@@ -5,19 +5,19 @@ ad_page_contract {
     Allows move of single or multiple items
 
     @author Dave Bauer dave@thedesignexperience.org
-    
+
 } -query {
     object_id:notnull,integer,multiple
     folder_id:naturalnum,optional
     {return_url:localurl ""}
     {root_folder_id:integer ""}
-    {redirect_to_folder:boolean 0}
-    {show_items:boolean 0}
+    {redirect_to_folder:boolean,notnull 0}
+    {show_items:boolean,notnull 0}
 } -errors {object_id:,notnull,integer,multiple {Please select at least one item to move.}
 }
 
-set peer_addr [ad_conn peeraddr]  
-set package_id [ad_conn package_id]  
+set peer_addr [ad_conn peeraddr]
+set package_id [ad_conn package_id]
 set copy_and_delete_p [parameter::get -parameter MoveByCopyDeleteP -package_id $package_id -default 0]
 
 set objects_to_move $object_id
@@ -30,7 +30,13 @@ set not_allowed_count 0
 set not_allowed_parents [list]
 set not_allowed_children [list]
 
-db_multirow -extend {move_message} move_objects get_move_objects "" {
+db_multirow -extend {move_message} move_objects get_move_objects [subst {
+      select fs.object_id, fs.name, fs.type, fs.parent_id,
+      acs_permission.permission_p(fs.object_id, :user_id, 'delete') as move_p
+      from fs_objects fs
+      where fs.object_id in ([ns_dbquotelist $object_id])
+	order by move_p
+}] {
     if {$move_p} {
 	set move_message ""
 	incr allowed_count
@@ -60,7 +66,7 @@ if {[info exists folder_id]} {
         -privilege "write"
 
 
-    # check for WRTIE permission on each object to be moved
+    # check for WRITE permission on each object to be moved
     # DaveB: I think it should be DELETE instead of WRITE
     # but the existing file-move page checks for WRITE
     set error_items {}
@@ -72,21 +78,21 @@ if {[info exists folder_id]} {
             lappend error_items $name
         } else {
             db_transaction {
-                if {$copy_and_delete_p} {  
+                if {$copy_and_delete_p} {
                     # copy and delete file to move it
                     set file_id [content::item::copy -item_id $object_id \
                                      -target_folder_id $folder_id \
                                      -creation_user    $user_id \
                                      -creation_ip      $peer_addr]
-                    if {$type ne "folder" } {  
+                    if {$type ne "folder" } {
                         callback fs::file_revision_new \
                             -package_id $package_id \
                             -file_id    $file_id \
                             -parent_id  $folder_id
                         fs::delete_file \
                             -item_id   $object_id \
-                            -parent_id $parent_id  
-                    } else {  
+                            -parent_id $parent_id
+                    } else {
                         fs::delete_folder \
                             -folder_id $object_id \
                             -parent_id $parent_id
@@ -99,7 +105,7 @@ if {[info exists folder_id]} {
                 }
             } on_error {
                 lappend error_items $name
-            } 
+            }
         }
     }
 
@@ -120,7 +126,7 @@ if {[info exists folder_id]} {
 	    name {label \#file-storage.Files_to_be_moved\#}
 	    move_message {}
 	}
-    
+
     template::list::create \
         -name folder_tree \
         -pass_properties { item_id redirect_to_folder return_url } \
@@ -145,8 +151,26 @@ if {[info exists folder_id]} {
     }
     set object_id $objects_to_move
     set cancel_url "[ad_conn url]?[ad_conn query]"
-    db_multirow -extend {move_url level} folder_tree get_folder_tree "" {
-	# teadams 2003-08-22 - change level to level num to avoid 
+    db_multirow -extend {move_url} folder_tree get_folder_tree {
+        with recursive folder_tree (folder_id, parent_id, label, level_num, tree_sortkey) as (
+            select cf.folder_id, cif.parent_id, cf.label, 0 as level_num, cast(cif.parent_id as text) as tree_sortkey
+            from cr_folders cf, cr_items cif
+            where cf.folder_id = :root_folder_id
+              and cf.folder_id = cif.item_id
+            and acs_permission.permission_p(cf.folder_id, :user_id, 'write')
+
+            union all
+
+            select cf.folder_id, cif.parent_id, cf.label, level_num + 1 as level_num, t.tree_sortkey || '|' || cif.parent_id as tree_sortkey
+            from cr_folders cf, cr_items cif, folder_tree t
+            where cif.parent_id = t.folder_id
+              and cf.folder_id = cif.item_id
+              and acs_permission.permission_p(cf.folder_id, :user_id, 'write')
+       ) select folder_id, parent_id, label, level_num
+           from folder_tree
+          order by tree_sortkey asc, label asc
+    } {
+	# teadams 2003-08-22 - change level to level num to avoid
 	# Oracle issue with key words.
         if {$folder_id in [concat $not_allowed_parents $not_allowed_children]
 	    || $parent_id in $not_allowed_children

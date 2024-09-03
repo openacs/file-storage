@@ -1,5 +1,3 @@
-# file-storage/www/folder-chunk.tcl
-
 ad_include_contract {
     @author yon (yon@openforce.net)
     @creation-date Feb 22, 2002
@@ -7,9 +5,9 @@ ad_include_contract {
 } {
     orderby:token,optional
     {folder_id:integer ""}
-    {allow_bulk_actions:boolean true}
+    {allow_bulk_actions:boolean,notnull true}
     {category_id:integer ""}
-    {n_past_days:integer 99999}
+    {n_past_days:naturalnum ""}
     {fs_url:localurl "[ad_conn package_url]"}
     {return_url ""}
     {format "table"}
@@ -28,6 +26,12 @@ ad_include_contract {
     content_size_total:onevalue
     page_num
 }
+
+if {$n_past_days eq ""} {
+    set n_past_days 99999
+}
+
+set this_page [ad_return_url]
 
 set viewing_user_id [ad_conn user_id]
 
@@ -88,6 +92,12 @@ if {$write_p} {
 }
 
 set expose_rss_p [parameter::get -parameter ExposeRssP -package_id $package_id -default 0]
+
+# Disable RSS exposure if the RSS generation is disabled
+if {![parameter::get_global_value -package_key rss-support -parameter RssGenActiveP -default 1]} {
+    set expose_rss_p 0
+}
+
 set like_filesystem_p [parameter::get -parameter BehaveLikeFilesystemP -package_id $package_id -default 1]
 
 set target_window_name [parameter::get -parameter DownloadTargetWindowName -package_id $package_id -default ""]
@@ -133,22 +143,34 @@ if { $categories_p } {
 set elements {
     type {
         label #file-storage.Type#
-        display_template {<img src="@contents.icon@"  style="border: 0;" alt="@contents.alt_icon@" width="16" height="16">@contents.pretty_type@}
+        display_template {<adp:icon name="@contents.icon@" title="@contents.alt_icon@">&nbsp;@contents.pretty_type@}
     }
     name {
         label #file-storage.Name#
         display_template {
             <a @target_attr@ href="@contents.file_url@" title="#file-storage.view_contents#">
             <if @contents.title@ nil>
-               @contents.name@</a>
+            @contents.name;noi18n@</a>
             </if>
             <else>
                @contents.title@</a><br>
                <if @contents.name@ ne @contents.title@>
-                  @contents.name@
+                 @contents.name;noi18n@
                </if>
             </else>
         }
+    }
+    short_name {
+        label #file-storage.Name#
+        hide_p 1
+        display_template {
+            <a href="@contents.download_url@" title="#file-storage.Download#">
+               <if @contents.title@ nil>@contents.name;noi18n@</if>
+               <else>@contents.title@</else>
+            </a>
+        }
+        orderby_desc {fs_objects.name desc}
+        orderby_asc {fs_objects.name asc}
     }
     content_size_pretty {
         label #file-storage.Size#
@@ -179,7 +201,8 @@ if { $categories_p } {
         categories [list label [_ file-storage.Categories] display_col "categories;noquote"]
 }
 
-if {[apm_package_installed_p views]} {
+set views_installed_p [expr {[namespace which ::views::get] ne ""}]
+if { $views_installed_p } {
     lappend elements views [list label "Views"]
 }
 
@@ -187,16 +210,17 @@ if { $return_url eq "" } {
     set return_url [export_vars -base "index" {folder_id}]
 }
 
-set vars_to_export [list return_url]
+set vars_to_export [list return_url:sign(max_age=300)]
 
 
 set bulk_actions {}
 if {$allow_bulk_actions} {
     set user_id [ad_conn user_id]
     set bulk_delete_p [db_string some_deletables {
-        select exists (select 1 from fs_objects
-                       where parent_id = :folder_id
-                       and acs_permission__permission_p(object_id, :viewing_user_id, 'delete'))
+        select case when exists (select 1 from fs_objects
+                                 where parent_id = :folder_id
+                                 and acs_permission.permission_p(object_id, :viewing_user_id, 'delete')) then 1 else 0 end
+        from dual
     }]
     set bulk_copy_p [permission::permission_p -object_id $folder_id -privilege write]
 
@@ -221,8 +245,9 @@ if {$allow_bulk_actions} {
             [_ file-storage.Delete] ${fs_url}delete [_ file-storage.Delete_Checked_Items]
     }
 
+    set zip_url ${fs_url}download-zip
     lappend bulk_actions \
-        [_ file-storage.Download_ZIP] ${fs_url}download-zip [_ file-storage.Download_ZIP_Checked_Items]
+        [_ file-storage.Download_ZIP] $zip_url [_ file-storage.Download_ZIP_Checked_Items]
 
     callback fs::folder_chunk::add_bulk_actions \
         -bulk_variable "bulk_actions" \
@@ -287,9 +312,6 @@ template::list::create \
 
 set orderby [template::list::orderby_clause -name contents_${folder_id} -orderby]
 
-set categories_limitation [expr {$categories_p && $category_id ne "" ?
-                                 [db_map categories_limitation] : ""}]
-
 db_multirow -extend {
     label
     alt_icon
@@ -312,14 +334,7 @@ db_multirow -extend {
         set content_size_pretty "[lc_numeric $content_size]&nbsp;[_ file-storage.items]"
         set pretty_type "#file-storage.Folder#"
     } else {
-        if { $content_size eq "" } {
-            set content_size 0
-        }
-        if {$content_size < 1024} {
-            set content_size_pretty "[lc_numeric $content_size]&nbsp;[_ file-storage.bytes]"
-        } else {
-            set content_size_pretty "[lc_numeric [expr {$content_size / 1024 }]]&nbsp;[_ file-storage.kb]"
-        }
+        set content_size_pretty [lc_content_size_pretty -size $content_size]
     }
 
     if { $content_size ne "" } {
@@ -327,32 +342,31 @@ db_multirow -extend {
     }
 
     set views ""
-    if {[apm_package_installed_p views]} {
+    if { $views_installed_p } {
         array set views_arr [views::get -object_id $object_id]
         if {$views_arr(views_count) ne ""} {
             set views " $views_arr(views_count) / $views_arr(unique_views)"
         }
     }
 
-    set name [lang::util::localize $name]
     switch -- $type {
         folder {
             set properties_link ""
             set properties_url ""
             set new_version_link {}
             set new_version_url {}
-            set icon "/resources/file-storage/folder.gif"
+            set icon [::template::icon::name folder]
             set alt_icon #file-storage.folder#
             set file_url [export_vars -base "${fs_url}index" {{folder_id $object_id}}]
             set download_link [_ file-storage.Download]
-            set download_url "[export_vars -base "${fs_url}download-zip" -url {object_id}]"
+            set download_url [export_vars -base "${fs_url}download-zip" -url {object_id {return_url:sign(max_age=300) $this_page}}]
         }
         url {
             set properties_link [_ file-storage.properties]
             set properties_url [export_vars -base "${fs_url}simple" {object_id}]
             set new_version_link [_ acs-kernel.common_New]
             set new_version_url [export_vars -base "${fs_url}file-add" {{file_id $object_id}}]
-            set icon "/resources/acs-subsite/url-button.gif"
+            set icon [::template::icon::name link]
             # DRB: This alt text somewhat sucks, but the message key already exists in
             # the language catalog files we care most about and we want to avoid a new
             # round of translation work for this minor release if possible ...
@@ -386,16 +400,12 @@ db_multirow -extend {
                 append content_size_pretty "&nbsp;[_ file-storage.items]"
                 set pretty_type "#file-storage.Folder#"
             } else {
-                if {$content_size < 1024} {
-                    set content_size_pretty "[lc_numeric $content_size]&nbsp;[_ file-storage.bytes]"
-                } else {
-                    set content_size_pretty "[lc_numeric [expr {$content_size / 1024 }]]&nbsp;[_ file-storage.kb]"
-                }
+                set content_size_pretty [lc_content_size_pretty -size $content_size]
             }
             set properties_url [export_vars -base ${fs_url}file {{file_id $object_id}}]
             set new_version_link [_ acs-kernel.common_New]
             set new_version_url [export_vars -base ${fs_url}file-add {{file_id $object_id}}]
-            set icon "/resources/file-storage/file.gif"
+            set icon [::template::icon::name file]
             set alt_icon #file-storage.file#
             set download_link [_ file-storage.Download]
             if {$like_filesystem_p} {
@@ -414,11 +424,11 @@ db_multirow -extend {
                 set new_version_link [_ acs-kernel.common_New]
                 set new_version_url [export_vars -base ${fs_url}file-add {{file_id $object_id}}]
             }
-            set icon "/resources/file-storage/file.gif"
-            set alt_icon "#file-storage.file#"
+            set icon [::template::icon::name file]
+            set alt_icon #file-storage.file#
             set download_link [_ file-storage.Download]
             if {$like_filesystem_p} {
-                set download_url /file/$object_id/[ad_urlencode_path $title][file extension $name]
+                set download_url /file/$object_id/[ad_urlencode_path $title][ad_file extension $name]
                 set file_url [export_vars -base ${fs_url}download/[ad_urlencode_path $title] {{file_id $object_id}}]
             } else {
                 set download_url /file/$object_id/[ad_urlencode_path $name]
@@ -451,7 +461,7 @@ if { $expose_rss_p } {
 }
 
 if {$content_size_total > 0} {
-    set compressed_url [export_vars -base ${fs_url}download-zip -url {{object_id $folder_id}}]
+    set compressed_url [export_vars -base ${fs_url}download-zip -url {{object_id $folder_id} {return_url:sign(max_age=300) $this_page}}]
 }
 
 # Local variables:

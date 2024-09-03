@@ -185,8 +185,8 @@ as
         and r.revision_id = i.live_revision
         and i.item_id = file_storage.copy_file.file_id;
 
-	v_filename := nvl(copy.name, v_filename);
-	v_title    := nvl(copy.title, v_title);
+	v_filename := nvl(copy_file.name, v_filename);
+	v_title    := nvl(copy_file.title, v_title);
 
         -- We should probably use the copy functions of CR
         -- when we optimize this function

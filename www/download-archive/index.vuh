@@ -1,76 +1,36 @@
-# -*- Tcl -*-
-# file-storage/www/download-archive/index.vuh
-
 ad_page_contract {
+
+    Download a file-storage object as an archive.
+
+    Note: before 26-02-2024 this page offered, via package parameters,
+    to customize the type and extension of the archive. It would also
+    allow to rename the dowloaded archive arbitrarily by manipulating
+    the request URL,
+    e.g. "/file-storage/download-archive/{object_id}/{download_name}".
+
+    We decided to disable both parameter customization and filename
+    manipulation. Instead, this page will now simply redirect to
+    www/download-zip, which apart from the two aforementioned
+    features, will behave the same. The download name will now always
+    be the "real" (and sanititzed) name of the object, while the
+    archive type and extension will always be zip. Calls to this URL
+    that were not relying on the two features (e.g. expecting a
+    specific file type) should not be affected.
 
     @author <a href="mailto:yon@openforce.net">yon@openforce.net</a>
     @creation-date 2002-05-21
     @version $Id$
 
-} -query {
-    {object_id:naturalnum,optional}
-}
-
-if {[info exists object_id] && $object_id ne ""} {
-    set download_name [fs::get_file_system_safe_object_name -object_id $object_id]
-    set ext [fs::get_archive_extension]
-    if {$ext ne ""} {
-        append download_name ".${ext}"
-    }
-
-    ad_returnredirect "${object_id}/${download_name}"
-    ad_script_abort
-}
-
-# convenient way to get the values out of a list
-lassign [split [ad_conn path_info] /] object_id download_name
-
-# The assignment above might not set the object_id, so set it to a
-# value in that case such it will fail in the object_p test below.
-if {![info exists object_id]} {
-    set object_id ""
-}
-
-if {![fs::object_p -object_id $object_id]} {
-    ad_return_complaint 1 "Object \#$object_id is not a file storage object."
-    ad_script_abort
-}
-
-set user_id [ad_conn user_id]
-if {$user_id == 0} {
-    set user_id ""
-}
-
-# publish the object to the file system
-set in_path [ad_tmpnam]
-file mkdir $in_path
-
-set file [fs::publish_object_to_file_system -object_id $object_id -path $in_path -user_id $user_id]
-set file_name [file tail $file]
-
-# create a temp dir to put the archive in
-set out_path [ad_tmpnam]
-file mkdir $out_path
-
-set out_file [file join ${out_path} ${download_name}]
-
-# get the archive command
-set cmd [fs::get_archive_command -in_file $file_name -out_file $out_file]
-
-# create the archive
-with_catch errmsg {
-    exec bash -c "cd $in_path; $cmd; cd -"
 } {
-    # some day we'll do something useful here
-    error $errmsg
+    {object_id:object_id ""}
 }
 
-# return the archive to the connection.
-ns_returnfile 200 application/octet-stream $out_file
+if {$object_id eq ""} {
+    set object_id [ad_urlencode [lindex [split [ad_conn path_info] /] 0]]
+}
 
-# clean everything up
-file delete -force $in_path
-file delete -force $out_path
+ad_returnredirect ../download-zip?object_id=$object_id
+ad_script_abort
 
 # Local variables:
 #    mode: tcl

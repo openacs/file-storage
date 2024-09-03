@@ -9,9 +9,9 @@ ad_page_contract {
     {show_all_versions_p:boolean,notnull "f"}
 } -validate {
     valid_file -requires {file_id} {
-	if {![fs_file_p $file_id]} {
-	    ad_complain "[_ file-storage.lt_The_specified_file_is]"
-	}
+        if {![fs_file_p $file_id]} {
+            ad_complain "[_ file-storage.lt_The_specified_file_is]"
+        }
     }
 } -properties {
     title:onevalue
@@ -41,8 +41,8 @@ db_1row file_info {
                parent_id,
                coalesce(url,file_upload_name) as name,
                live_revision
-	from   fs_objects f
-	where  f.object_id = :file_id
+        from   fs_objects f
+        where  f.object_id = :file_id
 }
 
 set write_p  [permission::permission_p -party_id $user_id -object_id $file_id -privilege "write"]
@@ -89,7 +89,7 @@ if {$write_p} {
 # add button only when available folders for copy exist. We settle for
 # a lazy check on write permissions for folder because a rigorous
 # check of available destinations would not be performant.
-if {$folder_write_p} {    
+if {$folder_write_p} {
     lappend actions \
         [_ file-storage.Copy_File] \
         [export_vars -base copy {{object_id $file_id} return_url}] \
@@ -120,44 +120,67 @@ template::list::create \
     -multirow version \
     -actions $actions \
     -elements {
-	title {
-	    label \#file-storage.Title\#
-	    link_url_col version_url
-	    link_html {title "\#file-storage.show_version_title\#"}
-	}
-	author { label \#file-storage.Author\#
-            display_template {@version.author_link;noquote@}
+        title {
+            label \#file-storage.Title\#
+            link_url_col version_url
+            link_html {title "\#file-storage.show_version_title\#"}
         }
-	content_size {
-	    label \#file-storage.Size\#
-	    display_col content_size_pretty
-	}
-	type { label \#file-storage.Type\#
-	       display_col pretty_type }
-	last_modified_ansi {
-	    label \#file-storage.Last_Modified\#
-	    display_col last_modified_pretty
-	}
-	description { label \#file-storage.Version_Notes\#}
-	version_delete {
-	    label "" 
-	    link_url_col version_delete_url
-	    link_html {title "\#file-storage.Delete_Version\#"}
-	}
+        author { label \#file-storage.Author\#
+                 display_template {@version.author_link;noquote@}
+        }
+        content_size {
+            label \#file-storage.Size\#
+            display_col content_size_pretty
+        }
+        type { label \#file-storage.Type\#
+               display_col pretty_type }
+        last_modified_ansi {
+            label \#file-storage.Last_Modified\#
+            display_col last_modified_pretty
+        }
+        description { label \#file-storage.Version_Notes\#}
+        version_delete {
+            label ""
+            link_url_col version_delete_url
+            link_html {title "\#file-storage.Delete_Version\#"}
+        }
     }
 
-db_multirow -unclobber -extend { author_link last_modified_pretty content_size_pretty version_url version_delete version_delete_url} version version_info {} {
+db_multirow -unclobber -extend {
+    author
+    author_link
+    last_modified_pretty
+    content_size_pretty
+    version_url
+    version_delete
+    version_delete_url
+} version version_info [subst {
+    select  r.title,
+            r.revision_id as version_id,
+            o.creation_user as author_id,
+            r.mime_type as type,
+            m.label as pretty_type,
+            to_char(o.last_modified,'YYYY-MM-DD HH24:MI:SS') as last_modified_ansi,
+            r.description,
+            acs_permission.permission_p(r.revision_id,:user_id,'admin') as admin_p,
+            acs_permission.permission_p(r.revision_id,:user_id,'delete') as delete_p,
+            coalesce(r.content_length,0) as content_size
+    from   acs_objects o, cr_items i,cr_revisions r
+            left join cr_mime_types m on r.mime_type=m.mime_type
+    where o.object_id = r.revision_id
+      and r.item_id = i.item_id
+      and r.item_id = :file_id
+          and acs_permission.permission_p(r.revision_id, :user_id, 'read')
+    $show_versions order by last_modified desc
+}] {
+    set author [person::name -person_id $author_id]
     # FIXME urlencode each part of the path
     # set file_url [ad_urlencode $file_url]
     set last_modified_ansi [lc_time_system_to_conn $last_modified_ansi]
     set last_modified_pretty [lc_time_fmt $last_modified_ansi "%x %X"]
-    if {$content_size < 1024} {
-	set content_size_pretty "[lc_numeric $content_size] [_ file-storage.bytes]"
-    } else {
-	set content_size_pretty "[lc_numeric [expr {$content_size / 1024 }]] [_ file-storage.kb]"
-    }
+    set content_size_pretty [lc_content_size_pretty -size $content_size]
     if {$title eq ""} {
-	set title "[_ file-storage.untitled]"
+        set title "[_ file-storage.untitled]"
     }
     if {$version_id ne $live_revision } {
         set version_url [export_vars -base "download/$title" {version_id}]
@@ -171,7 +194,7 @@ db_multirow -unclobber -extend { author_link last_modified_pretty content_size_p
     set author_link [acs_community_member_link -user_id $author_id -label $author]
 }
 
-if { [apm_package_installed_p "general-comments"] && [parameter::get -parameter "GeneralCommentsP" -package_id [ad_conn package_id]] } {
+if { [namespace which ::general_comments_create_link] ne "" && [parameter::get -parameter "GeneralCommentsP" -package_id [ad_conn package_id]] } {
     set gc_link [general_comments_create_link $file_id $return_url]
     set gc_comments [general_comments_get_comments $file_id $return_url]
 } else {

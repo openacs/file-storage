@@ -1,28 +1,95 @@
 ad_library {
-    
+
     Procedures for DAV service contract implementations
-    
+
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2003-11-09
     @cvs-id $Id$
-    
+
+}
+
+namespace eval fs::dav {}
+
+ad_proc -private fs::dav::require {} {
+    oacs-dav used to be a requirement for file-storage. We now made
+    this optional, with the caveat that some operations need to happen
+    only depending if the package is there or not.
+} {
+    if { ![apm_package_installed_p oacs-dav] } {
+        #
+        # Delete the Service Contract implementation if they existed.
+        #
+        fs::install::unregister_implementation
+
+        if { [db_table_exists dav_site_node_folder_map] } {
+            #
+            # oacs-dav registers folders for access after mount. We remove
+            # this registration.
+            #
+            db_dml unregister_folders {
+                delete from dav_site_node_folder_map
+                where folder_id in (select folder_id from fs_root_folders)
+            }
+        }
+
+        #
+        # We do not need to define the DAV callbacks, exit now.
+        #
+        return
+
+    } elseif { ![db_0or1row implementation_exists {
+        select 1 from acs_sc_impls
+         where impl_owner_name = 'file-storage'
+           and impl_contract_name = 'dav'
+         fetch first 1 rows only
+    }] } {
+        #
+        # Check at load time whether the Service Contract implementations
+        # exist and register them on the fly in case.
+        #
+        fs::install::register_implementation
+
+        #
+        # Map the root folder of all mounted file-storage instances. Do
+        # not do anything if the DAV folders table has already tuples.
+        #
+        db_dml register_folders {
+            insert into dav_site_node_folder_map
+            select n.node_id, f.folder_id, true as enabled_p
+            from fs_root_folders f,
+                 site_nodes n
+            where n.object_id = f.package_id
+              and not exists (select 1 from dav_site_node_folder_map)
+        }
+    }
+}
+
+if { ![apm_package_installed_p oacs-dav] } {
+    ns_log notice "oacs-dav not installed, fs::impl::fs_object callbacks won't be loaded"
+    return
 }
 
 namespace eval fs::impl::fs_object {}
 
-ad_proc fs::impl::fs_object::get {} {
+ad_proc -private fs::impl::fs_object::get {} {
     GET method
 } {
-    return [oacs_dav::impl::content_revision::get]
+    acs_sc::invoke \
+        -contract dav \
+        -operation get \
+        -impl content_revision
 }
 
-ad_proc fs::impl::fs_object::head {} {
+ad_proc -private fs::impl::fs_object::head {} {
     HEAD method
 } {
-    return [oacs_dav::impl::content_revision::head]
+    acs_sc::invoke \
+        -contract dav \
+        -operation head \
+        -impl content_revision
 }
 
-ad_proc fs::impl::fs_object::put {} {
+ad_proc -private fs::impl::fs_object::put {} {
     PUT method
 } {
     set user_id [oacs_dav::conn user_id]
@@ -33,9 +100,9 @@ ad_proc fs::impl::fs_object::put {} {
     if {"unlocked" ne [tdav::check_lock $uri] } {
 	return [list 423]
     }
-    
+
     set tmp_filename [oacs_dav::conn tmpfile]
-    set tmp_size [file size $tmp_filename]
+    set tmp_size [ad_file size $tmp_filename]
 
     set name [oacs_dav::conn item_name]
     set parent_id [oacs_dav::item_parent_folder_id $uri]
@@ -46,18 +113,18 @@ ad_proc fs::impl::fs_object::put {} {
 	set response [list 409]
 	return $response
     }
-    
+
     if {$item_id eq ""} {
         fs::add_file \
-        -package_id $package_id \
-        -name $name \
-        -title $name \
-	-item_id $item_id \
-	-parent_id $parent_id \
-	-tmp_filename $tmp_filename \
-	-creation_user $user_id \
-	-creation_ip [ad_conn peeraddr] \
-    
+            -package_id $package_id \
+            -name $name \
+            -title $name \
+            -item_id $item_id \
+            -parent_id $parent_id \
+            -tmp_filename $tmp_filename \
+            -creation_user $user_id \
+            -creation_ip [ad_conn peeraddr] \
+
 	if {[file exists [tdav::get_lock_file $uri]]} {
 	    # if there is a null lock use 204
 	    set response [list 204]
@@ -72,7 +139,7 @@ ad_proc fs::impl::fs_object::put {} {
 	    -item_id $item_id \
 	    -creation_user $user_id \
 	    -package_id $package_id
-	
+
 	set response [list 204]
     }
     file delete -- $tmp_filename
@@ -80,19 +147,25 @@ ad_proc fs::impl::fs_object::put {} {
 
 }
 
-ad_proc fs::impl::fs_object::propfind {} {
+ad_proc -private fs::impl::fs_object::propfind {} {
     PROPFIND method
 } {
-    return [oacs_dav::impl::content_revision::propfind]
+    acs_sc::invoke \
+        -contract dav \
+        -operation propfind \
+        -impl content_revision
 }
 
-ad_proc fs::impl::fs_object::delete {} {
+ad_proc -private fs::impl::fs_object::delete {} {
     DELETE method
 } {
-    return [oacs_dav::impl::content_revision::delete]
+    acs_sc::invoke \
+        -contract dav \
+        -operation delete \
+        -impl content_revision
 }
 
-ad_proc fs::impl::fs_object::mkcol {} {
+ad_proc -private fs::impl::fs_object::mkcol {} {
     MKCOL method
 } {
     set uri [oacs_dav::conn uri]
@@ -115,47 +188,62 @@ ad_proc fs::impl::fs_object::mkcol {} {
 	    -parent_id $parent_id \
 	    -creation_user $user_id \
 	    -creation_ip $peer_addr \
-    } ]} {
+        } ]} {
 	return [list 500]
     }
 
     return [list 201]
 }
 
-ad_proc fs::impl::fs_object::proppatch {} {
+ad_proc -private fs::impl::fs_object::proppatch {} {
     PROPPATCH method
 } {
-    return [oacs_dav::impl::content_revision::proppatch]
+    acs_sc::invoke \
+        -contract dav \
+        -operation proppatch \
+        -impl content_revision
 }
 
-ad_proc fs::impl::fs_object::copy {} {
+ad_proc -private fs::impl::fs_object::copy {} {
     COPY method
 } {
-    return [oacs_dav::impl::content_revision::copy]
+    acs_sc::invoke \
+        -contract dav \
+        -operation copy \
+        -impl content_revision
 }
 
-ad_proc fs::impl::fs_object::move {} {
+ad_proc -private fs::impl::fs_object::move {} {
     MOVE method
 } {
-    return [oacs_dav::impl::content_revision::move]
+    acs_sc::invoke \
+        -contract dav \
+        -operation move \
+        -impl content_revision
 }
 
 
-ad_proc fs::impl::fs_object::lock {} {
+ad_proc -private fs::impl::fs_object::lock {} {
     LOCK method
 } {
-    return [oacs_dav::impl::content_revision::lock]
+    acs_sc::invoke \
+        -contract dav \
+        -operation lock \
+        -impl content_revision
 }
 
-ad_proc fs::impl::fs_object::unlock {} {
+ad_proc -private fs::impl::fs_object::unlock {} {
     UNLOCK method
 } {
-    return [oacs_dav::impl::content_revision::unlock]
+    acs_sc::invoke \
+        -contract dav \
+        -operation unlock \
+        -impl content_revision
 }
 
 namespace eval fs::impl::dav_put_type {}
 
-ad_proc fs::impl::dav_put_type::get_type {} {
+ad_proc -private fs::impl::dav_put_type::get_type {} {
 
 } {
     return "file_storage_object"
@@ -163,7 +251,7 @@ ad_proc fs::impl::dav_put_type::get_type {} {
 
 namespace eval fs::impl::dav_mkcol_type {}
 
-ad_proc fs::impl::dav_mkcol_type::get_type {} {
+ad_proc -private fs::impl::dav_mkcol_type::get_type {} {
 
 } {
     return "file_storage_object"

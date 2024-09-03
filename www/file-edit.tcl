@@ -34,6 +34,7 @@ set title_help [_ file-storage.lt_Please_enter_the_new_]
 ad_form -export file_id -form {
     {title:text(text) 
         {label "[_ file-storage.Title]"}
+        {maxlength 1000}
         {value $title}
         {help_text $title_help} 
     }
