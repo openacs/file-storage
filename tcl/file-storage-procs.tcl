@@ -77,37 +77,42 @@ ad_proc fs_version_p {
 # Permission procs
 #
 
-ad_proc children_have_permission_p {
+ad_proc -private fs_children_have_permission_p {
     {-user_id ""}
     item_id
     privilege
 } {
     This procedure, given a content item and a privilege, checks to see if
     there are any children of the item on which the user does not have that
-    privilege.  It returns 0 if there is any child item on which the user
-    does not have the privilege.  It returns 1 if the user has the
-    privilege on every child item.
+    privilege.
+
+    @return 0 if there is any child item on which the user does not
+    have the privilege.  It returns 1 if the user has the privilege on
+    every child item.
 } {
     if {$user_id eq ""} {
         set user_id [ad_conn user_id]
     }
 
-    # This only gets child folders and items
-
-    set num_wo_perm [db_string child_perms {}]
-
-    # now check revisions
-
-    db_foreach child_items {} {
-        incr num_wo_perm [db_string revision_perms {}]
-    }
-
-    if { $num_wo_perm > 0 } {
-        return 0
-    } else {
-        return 1
-    }
-
+    # Check that no item or revision over the whole cr_item
+    # descendants hierarchy does not have the required permissison.
+    set all_children_have_privilege_p [db_string all_children_have_privilege {
+        with recursive children(item_id) as (
+            select cast(:item_id as integer) as item_id
+            union all
+            select i.item_id
+            from cr_items i,
+                 children c
+            where i.parent_id = c.item_id
+        )
+        select not exists (select 1 from children
+                            where acs_permission.permission_p(item_id, :user_id, :privilege) = 'f')
+           and not exists (select 1 from cr_revisions
+                            where item_id in (select item_id from children)
+                              and acs_permission.permission_p(revision_id, :user_id, :privilege) = 'f')
+          from dual
+    }]
+    return [expr {$all_children_have_privilege_p ? 1 : 0}]
 }
 
 
@@ -165,19 +170,23 @@ ad_proc -private fs::after_mount {
 } {
     set folder_id [fs::get_root_folder -package_id $package_id]
 
-    oacs_dav::register_folder -enabled_p "t" $folder_id $node_id
+    if {[apm_package_installed_p oacs-dav]} {
+        oacs_dav::register_folder -enabled_p "t" $folder_id $node_id
+    }
 }
 
 ad_proc -private fs::before_unmount {
     -package_id:required
     -node_id:required
 } {
-    Create root folder for package instance
-    via Tcl callback.
+    Unregister the root WebDAV folder mapping before
+    unmounting a file storage package instance.
 } {
     set folder_id [fs::get_root_folder -package_id $package_id]
 
-    oacs_dav::unregister_folder $folder_id $node_id
+    if {[apm_package_installed_p oacs-dav]} {
+        oacs_dav::unregister_folder $folder_id $node_id
+    }
 }
 
 ad_proc -public fs::new_root_folder {
@@ -252,9 +261,10 @@ ad_proc -public fs::new_folder {
     @param pretty_name What we show to users of the system
     @param parent_id Where we create this folder
     @param creation_user Who created this folder
-    @param creation_ip What is the ip address of the creation_user
+    @param creation_ip What is the IP address of the creation_user
     @param description of the folder. Not used in the current FS UI but might be used elsewhere.
-    @param package_id Package_id of the package for which to create the new folder. Preferably a file storage package_id
+    @param package_id Package_id of the package for which to create the new folder.
+           Preferably a file storage package_id
     @param no_callback defines if the callback should be called. Defaults to yes
     @return folder_id of the newly created folder
 } {
@@ -304,9 +314,9 @@ ad_proc -public fs::rename_folder {
 } {
     db_exec_plsql rename_folder {}
     if {!$no_callback_p} {
-        if {![catch {ad_conn package_id} package_id]} {
-            callback fs::folder_edit -package_id $package_id -folder_id $folder_id
-        }
+        callback fs::folder_edit \
+            -package_id [ad_conn package_id] \
+            -folder_id $folder_id
     }
 }
 
@@ -350,7 +360,7 @@ ad_proc -public fs::get_file_system_safe_object_name {
     {-object_id:required}
 } {
     get the name of a file storage object and make it safe for writing to
-    the file system
+    the filesystem
 } {
     return [ad_sanitize_filename \
                 -collapse_spaces \
@@ -361,12 +371,12 @@ ad_proc -public fs::get_file_system_safe_object_name {
 ad_proc -deprecated -public fs::remove_special_file_system_characters {
     {-string:required}
 } {
-    Remove unsafe file system characters. Useful if you want to use $string
+    Remove unsafe filesystem characters. Useful if you want to use $string
     as the name of an object to write to disk.
 
     @see ad_sanitize_filename
 } {
-    regsub -all {[<>:\"|/@\#%&+\\]} $string {_} string
+    regsub -all -- {[<>:\"|/@\#%&+\\]} $string {_} string
     return [string trim $string]
 }
 
@@ -407,17 +417,22 @@ ad_proc -public fs::get_folder_objects {
                                                permission)
 
 } {
-    return [db_list select_folder_contents {}]
+    return [db_list select_folder_contents {
+        select item_id
+          from cr_items
+         where parent_id = :folder_id
+           and acs_permission.permission_p(item_id, :user_id, 'read') = 't'
+    }]
 }
 
-ad_proc -public fs::get_folder_contents {
+ad_proc -deprecated fs::get_folder_contents {
     {-folder_id ""}
     {-user_id ""}
     {-n_past_days "99999"}
 } {
     WARNING: This proc is not scalable because it does too many permission checks.
 
-    DRB: Not so true now that permissions are fast.  However it is now only used
+    DRB: Not so true now that permissions are fast.  However, it is now only used
     to clone files in dotLRN and for the somewhat brain-damaged syllabus package.
     At minimum the permission checks returned by the code can be removed.  Most of
     the other fields as well.   Oh well ...
@@ -432,6 +447,14 @@ ad_proc -public fs::get_folder_contents {
     last_modified, new_p, content_size, file_upload_name
     write_p, delete_p, admin_p,
 
+    DEPRECATED: this proc has been evidently the subject of
+    controversy over the years. To this day (2023-03-17) no package
+    seems to be using it. One can either query the database directly
+    or use other existing apis to retrieve the folder children and
+    then fetch the needed metadata via other means.
+
+    @see fs::get_folder_objects
+
     @param folder_id The folder for which to retrieve contents
     @param user_id The viewer of the contents (to make sure they have
                                                permission)
@@ -445,12 +468,33 @@ ad_proc -public fs::get_folder_contents {
         set user_id [acs_magic_object the_public]
     }
 
-    set list_of_ns_sets [db_list_of_ns_sets select_folder_contents {}]
+    set list_of_ns_sets [db_list_of_ns_sets select_folder_contents [subst {
+           select fs_objects.object_id,
+           fs_objects.name,
+           fs_objects.title,
+           fs_objects.live_revision,
+           fs_objects.type,
+           to_char(fs_objects.last_modified, 'YYYY-MM-DD HH24:MI:SS') as last_modified_ansi,
+           fs_objects.content_size,
+           fs_objects.url,
+           fs_objects.key,
+           fs_objects.sort_key,
+           fs_objects.file_upload_name,
+           fs_objects.title,
+           fs_objects.last_modified >= (current_timestamp - cast('$n_past_days days' as interval)) as new_p,
+           acs_permission.permission_p(fs_objects.object_id, :user_id, 'admin') as admin_p,
+           acs_permission.permission_p(fs_objects.object_id, :user_id, 'delete') as delete_p,
+           acs_permission.permission_p(fs_objects.object_id, :user_id, 'write') as write_p
+           from fs_objects
+           where fs_objects.parent_id = :folder_id
+           and acs_permission.permission_p(fs_objects.object_id, :user_id, 'read') = 't'
+           order by fs_objects.sort_key, fs_objects.name
+    }]]
 
     foreach set $list_of_ns_sets {
         # in plain Tcl:
         # set last_modified_ansi [lc_time_system_to_conn $last_modified_ansi]
-        ns_set put $set last_modified_ansi [lc_time_system_to_conn [ns_set get $set last_modifed_ansi]]
+        ns_set put $set last_modified_ansi [lc_time_system_to_conn [ns_set get $set last_modified_ansi]]
 
         # in plain Tcl:
         # set last_modified [lc_time_fmt $last_modified_ansi "%x %X"]
@@ -482,7 +526,8 @@ ad_proc -public fs::get_folder_contents_count {
     }
 
     if {$user_id ne ""} {
-        ns_log warning "fs::get_folder_contents_count: specified -user_id doesn't have any effect on proc result"
+        ns_log warning "fs::get_folder_contents_count:" \
+            "specified -user_id doesn't have any effect on proc result"
     }
 
     return [db_string select_folder_contents_count {}]
@@ -494,27 +539,40 @@ ad_proc -public fs::publish_object_to_file_system {
     {-file_name ""}
     {-user_id ""}
 } {
-    publish a file storage object to the file system
+    publish a file storage object to the filesystem
 } {
     if {$path eq ""} {
-        set path [ad_tmpnam]
+        set path [ad_mktmpdir]
     }
 
     db_1row select_object_info {}
 
     switch -- $type {
         folder {
-            set result [publish_folder_to_file_system -folder_id $object_id -path $path -folder_name $name -user_id $user_id]
+            set result [publish_folder_to_file_system \
+                            -folder_id $object_id \
+                            -path $path \
+                            -folder_name $name \
+                            -user_id $user_id]
         }
         url {
-            set result [publish_url_to_file_system -object_id $object_id -path $path -file_name $file_name]
+            set result [publish_url_to_file_system \
+                            -object_id $object_id \
+                            -path $path \
+                            -file_name $file_name]
         }
         symlink {
             set linked_object_id [content::symlink::resolve -item_id $object_id]
-            set result [publish_versioned_object_to_file_system -object_id $linked_object_id -path $path -file_name $file_name]
+            set result [publish_versioned_object_to_file_system \
+                            -object_id $linked_object_id \
+                            -path $path \
+                            -file_name $file_name]
         }
         default {
-            set result [publish_versioned_object_to_file_system -object_id $object_id -path $path -file_name $file_name]
+            set result [publish_versioned_object_to_file_system \
+                            -object_id $object_id \
+                            -path $path \
+                            -file_name $file_name]
         }
     }
     return $result
@@ -526,7 +584,7 @@ ad_proc -public fs::publish_folder_to_file_system {
     {-folder_name ""}
     {-user_id ""}
 } {
-    publish the contents of a file storage folder to the file system
+    publish the contents of a file storage folder to the filesystem
 } {
     if {$path eq ""} {
         set path [ad_tmpnam]
@@ -540,17 +598,25 @@ ad_proc -public fs::publish_folder_to_file_system {
                          -tolower \
                          $folder_name]
 
-    set dir "[file join ${path} "${folder_name}"]"
-    # set dir "[file join ${path} "download"]"
+    set dir [ad_file join $path $folder_name]
+    # set dir [ad_file join $path "download"]
     file mkdir $dir
 
-    foreach object [get_folder_contents -folder_id $folder_id -user_id $user_id] {
+    db_foreach get_folder_contents {
+        select object_id,
+               name
+          from fs_objects
+         where parent_id = :folder_id
+           and acs_permission.permission_p(object_id, :user_id, 'read') = 't'
+        order by sort_key,
+                 name
+    } {
         set file_name [ad_sanitize_filename \
                            -collapse_spaces \
                            -tolower \
-                           [ns_set get $object name]]
+                           $name]
         publish_object_to_file_system \
-            -object_id [ns_set get $object object_id] \
+            -object_id $object_id \
             -path $dir \
             -file_name $file_name \
             -user_id $user_id
@@ -564,12 +630,11 @@ ad_proc -public fs::publish_url_to_file_system {
     {-path ""}
     {-file_name ""}
 } {
-    publish a URL object to the file system as a Windows shortcut
+    publish a URL object to the filesystem as a Windows shortcut
     (which at least KDE also knows how to handle)
 } {
     if {$path eq ""} {
-        set path [ad_tmpnam]
-        file mkdir $path
+        set path [ad_mktmpdir]
     }
 
     db_1row select_object_metadata {}
@@ -583,12 +648,12 @@ ad_proc -public fs::publish_url_to_file_system {
                        -tolower \
                        $file_name]
 
-    set fp [open [file join $path $file_name] w]
+    set fp [open [ad_file join $path $file_name] w]
     puts $fp {[InternetShortcut]}
     puts $fp URL=$url
     close $fp
 
-    return [file join $path $file_name]
+    return [ad_file join $path $file_name]
 }
 
 ad_proc -public fs::publish_versioned_object_to_file_system {
@@ -596,11 +661,10 @@ ad_proc -public fs::publish_versioned_object_to_file_system {
     {-path ""}
     {-file_name ""}
 } {
-    publish an object to the file system
+    publish an object to the filesystem
 } {
     if {$path eq ""} {
-        set path [ad_tmpnam]
-        file mkdir $path
+        set path [ad_mktmpdir]
     }
 
     db_1row select_object_metadata {}
@@ -639,77 +703,49 @@ ad_proc -public fs::publish_versioned_object_to_file_system {
                        -tolower \
                        $file_name]
 
-    switch -- $storage_type {
-        lob {
+    set full_filename [ad_file join $path $file_name]
+    ::content::revision::export_to_filesystem \
+        -storage_type $storage_type \
+        -revision_id $live_revision \
+        -filename $full_filename
 
-            # FIXME: db_blob_get_file is failing when i use bind variables
-
-            # DRB: you're out of luck - the driver doesn't support them and while it should
-            # be fixed it will be a long time before we'll want to require an updated
-            # driver.  I'm substituting the Tcl variable value directly in the query due to
-            # this.  It's safe because we've pulled the value ourselves from the database,
-            # don't need to worry about SQL smuggling etc.
-
-            db_blob_get_file select_object_content {} -file [file join ${path} ${file_name}]
-        }
-        text {
-            set content [db_string select_object_content {}]
-
-            set fp [open [file join ${path} ${file_name}] w]
-            puts $fp $content
-            close $fp
-        }
-        file {
-            set cr_path [cr_fs_path $storage_area_key]
-            set cr_file_name [db_string select_file_name {}]
-
-            #
-            # When there are multiple "unnamed files" in a directory,
-            # the constructed full_name might exist already. This
-            # would lead to an error in the "file copy"
-            # operation. Therefore, generate a new name with an
-            # alternate suffix in these cases.
-            #
-            set full_name [file join $path $file_name]
-            set base_name $full_name
-            set count 0
-            while {[file exists $full_name]} {
-               set full_name $base_name-[incr $count]
-            }
-
-            file copy -- "${cr_path}${cr_file_name}" $full_name
-        }
-    }
-
-    return [file join ${path} ${file_name}]
+    return $full_filename
 }
 
-ad_proc -public fs::get_archive_command {
+ad_proc -deprecated fs::get_archive_command {
     {-in_file ""}
     {-out_file ""}
 } {
     return the archive command after replacing {in_file} and {out_file} with
     their respective values.
 } {
+    if {[ad_conn package_key] ne "file-storage"} {
+        error "fs::get_archive_command must be called inside the file-storage"
+    }
+
     set cmd [parameter::get -parameter ArchiveCommand -default "tar cf - {in_file} | gzip > {out_file}"]
 
-    regsub -all {(\W)} $in_file {\\\1} in_file
-    regsub -all {\\/} $in_file {/} in_file
-    regsub -all {\\\.} $in_file {.} in_file
+    regsub -all -- {(\W)} $in_file {\\\1} in_file
+    regsub -all -- {\\/} $in_file {/} in_file
+    regsub -all -- {\\\.} $in_file {.} in_file
 
-    regsub -all {(\W)} $out_file {\\\1} out_file
-    regsub -all {\\/} $out_file {/} out_file
-    regsub -all {\\\.} $out_file {.} out_file
+    regsub -all -- {(\W)} $out_file {\\\1} out_file
+    regsub -all -- {\\/} $out_file {/} out_file
+    regsub -all -- {\\\.} $out_file {.} out_file
 
-    regsub -all {{in_file}} $cmd $in_file cmd
-    regsub -all {{out_file}} $cmd $out_file cmd
+    regsub -all -- {{in_file}} $cmd $in_file cmd
+    regsub -all -- {{out_file}} $cmd $out_file cmd
 
     return $cmd
 }
 
-ad_proc -public fs::get_archive_extension {} {
+ad_proc -deprecated fs::get_archive_extension {} {
     return the archive extension that should be added to the output file of
     an archive command
+
+    DEPRECATED: this is a trivial wrapper over the parameter api
+
+    @see parameter::get
 } {
     return [parameter::get -parameter ArchiveExtension -default "txt"]
 }
@@ -797,7 +833,7 @@ ad_proc -public fs::add_file {
                 permission::grant -party_id $creation_user -object_id $item_id -privilege admin
             }
 
-            # Deal with notifications. Usually send out the notification
+            # Deal with notifications. Usually, send out the notification
             # But suppress it if the parameter is given
             if {$no_notification_p} {
                 set do_notify_here_p "f"
@@ -841,18 +877,24 @@ ad_proc -public fs::add_file {
         }
 
         if {[string is true $do_notify_here_p]} {
-            fs::do_notifications -folder_id $parent_id -filename $title -item_id $revision_id -action "new_file" -package_id $package_id
+            fs::do_notifications \
+                -folder_id $parent_id \
+                -filename $title \
+                -item_id $revision_id \
+                -action "new_file" \
+                -package_id $package_id
+
             if {!$no_callback_p} {
-                if {![catch {ad_conn package_id} package_id]} {
-                    callback fs::file_new -package_id $package_id -file_id $item_id
-                }
+                callback fs::file_new \
+                    -package_id [ad_conn package_id] \
+                    -file_id $item_id
             }
         }
     }
     return $revision_id
 }
 
-ad_proc -public fs::add_created_file {
+ad_proc -deprecated fs::add_created_file {
     {-name ""}
     -parent_id:required
     -package_id:required
@@ -866,6 +908,10 @@ ad_proc -public fs::add_created_file {
 } {
     Create a new file storage item or add a new revision if
     an item with the same name and parent folder already exists
+
+    DEPRECATED: this proc was superseded by fs::add_file
+
+    @see fs::add_file
 
     @return revision_id
 } {
@@ -915,19 +961,24 @@ ad_proc -public fs::add_created_file {
 
 
         if {[string is true $do_notify_here_p]} {
-            fs::do_notifications -folder_id $parent_id -filename $title -item_id $revision_id -action "new_file" -package_id $package_id
+            fs::do_notifications \
+                -folder_id $parent_id \
+                -filename $title \
+                -item_id $revision_id \
+                -action "new_file" \
+                -package_id $package_id
         }
 
         if {!$no_callback_p} {
-            if {![catch {ad_conn package_id} package_id]} {
-                callback fs::file_new -package_id $package_id -file_id $item_id
-            }
+            callback fs::file_new \
+                -package_id [ad_conn package_id] \
+                -file_id $item_id
         }
     }
     return $revision_id
 }
 
-ad_proc fs::add_created_version {
+ad_proc -deprecated fs::add_created_version {
     -name:required
     -content_body:required
     -mime_type:required
@@ -942,13 +993,20 @@ ad_proc fs::add_created_version {
     {-storage_type ""}
 } {
     Create a new version of a file storage item using the content passed in content_body
+
+    DEPRECATED: this proc has been superseded by fs::add_version
+
+    @see fs::add_version
+
     @return revision_id
 } {
     if {$package_id eq ""} {
         set package_id [ad_conn package_id]
     }
     if {$storage_type eq ""} {
-        set storage_type [db_string get_storage_type {}]
+        set storage_type [db_string get_storage_type {
+            select storage_type from cr_items where item_id = :item_id
+        }]
     }
     if {$creation_user eq ""} {
         set creation_user [ad_conn user_id]
@@ -956,67 +1014,34 @@ ad_proc fs::add_created_version {
     if {$creation_ip eq ""} {
         set creation_ip [ns_conn peeraddr]
     }
-    set parent_id [fs::get_parent -item_id $item_id]
-    if {$storage_type eq ""} {
-        set storage_type [db_string get_storage_type {
-            select storage_type from cr_items where item_id=:item_id
-        }]
-    }
-    switch -- $storage_type {
-        file {
-            set revision_id [db_exec_plsql new_file_revision {}]
 
-            set cr_file [cr_create_content_file_from_string $item_id $revision_id $content_body]
-
-            # get the size
-            set file_size [cr_file_size $cr_file]
-
-            # update the file path in the CR and the size on cr_revisions
-            db_dml update_revision {}
-        }
-        lob {
-            # if someone stored file storage content in the database
-            # we need to use lob. The only way to get a lob into the
-            # database is to pass it as a file
-            set revision_id [cr_import_content \
+    set revision_id [content::revision::new \
                          -item_id $item_id \
-                         -storage_type  \
-                         -creation_user $creation_user \
-                         -creation_ip $creation_ip \
-                         -other_type "file_storage_object" \
-                         -image_type "file_storage_object" \
                          -title $title \
                          -description $description \
+                         -content $content_body \
+                         -mime_type $mime_type \
+                         -creation_user $creation_user \
+                         -creation_ip $creation_ip \
                          -package_id $package_id \
-                         $parent_id \
-                         $tmp_filename \
-                         $tmp_size \
-                         $mime_type \
-                         $name]
-                db_dml set_lob_content "" -blobs [list $content_body]
-                db_dml set_lob_size ""
-        }
-        text {
-            set revision_id [content::revision::new \
-                                 -item_id $item_id \
-                                 -title $title \
-                                 -description $description \
-                                 -content $content_body \
-                                 -mime_type $mime_type \
-                                 -creation_user $creation_user \
-                                 -creation_ip $creation_ip \
-                                 -package_id $package_id]
-        }
-    }
+                         -is_live "t" \
+                         -storage_type $storage_type]
 
-    db_dml set_live_revision ""
-    db_exec_plsql update_last_modified ""
+    set parent_id [fs::get_parent -item_id $item_id]
 
     if {[string is false $suppress_notify_p]} {
-        fs::do_notifications -folder_id $parent_id -filename $title -item_id $revision_id -action "new_version" -package_id $package_id
+        fs::do_notifications \
+            -folder_id $parent_id \
+            -filename $title \
+            -item_id $revision_id \
+            -action "new_version" \
+            -package_id $package_id
     }
 
-    #It's safe to rebuild RSS repeatedly, assuming it's not too expensive.
+    #
+    # It is safe to rebuild RSS repeatedly, assuming it's not too
+    # expensive.
+    #
     set folder_info [fs::get_folder_package_and_root $parent_id]
     set db_package_id [lindex $folder_info 0]
     if { [parameter::get -package_id $db_package_id -parameter ExposeRssP -default 0] } {
@@ -1028,59 +1053,161 @@ ad_proc fs::add_created_version {
 
 
 ad_proc fs::add_version {
-    -name:required
-    -tmp_filename:required
-    -package_id:required
-    {-item_id ""}
+    -item_id:required
+    {-name ""}
+    {-package_id ""}
+    {-mime_type ""}
+    -tmp_filename
+    -content_body
     {-creation_user ""}
     {-creation_ip ""}
     {-title ""}
     {-description ""}
     {-suppress_notify_p "f"}
     {-storage_type ""}
-    {-mime_type ""}
     -no_callback:boolean
 } {
-    Create a new version of a file storage item
+    Create a new version of a file storage item.
+
+    @param tmp_filename absolute path to a file on the
+                        filesystem. when specified, the new revision
+                        data will come from this file.
+    @param content_body Text content for the new revision. When
+                        'tmp_filename' is missing, the new revision
+                        data will come from here.
+
     @return revision_id
 } {
-    # always use the storage type of the existing item
-    if {$storage_type eq ""} {
-        set storage_type [db_string get_storage_type {}]
+    if {![info exists content_body] && ![info exists tmp_filename]} {
+        error "No data supplied for the new version."
     }
 
-    # This check also happens in content repository, but as something
-    # similar was already here and mimetype coming from this was used
-    # afterwards, we kept this behavior.
-    set mime_type [cr_check_mime_type \
-                       -filename  $name \
-                       -mime_type $mime_type \
-                       -file      $tmp_filename]
+    #
+    # Obtain optional information for the new version from the
+    # existing item.
+    #
+    db_1row get_item_info {
+        select coalesce(:storage_type, i.storage_type) as storage_type,
+               coalesce(:name, i.name) as name,
+               coalesce(:package_id, o.package_id) as package_id,
+               coalesce(:title, r.title) as title,
+               coalesce(:description, r.description) as description,
+               coalesce(:mime_type, r.mime_type) as mime_type,
+               i.parent_id
+        from cr_items i
+             -- we may not have a live revision here yet
+             left join cr_revisions r
+               on r.revision_id = i.live_revision,
+             acs_objects o
+        where i.item_id = :item_id
+          and o.object_id = i.item_id
+    }
 
-    set tmp_size [file size $tmp_filename]
-    set parent_id [fs::get_parent -item_id $item_id]
-    set revision_id [cr_import_content \
-                         -item_id $item_id \
-                         -storage_type $storage_type \
-                         -creation_user $creation_user \
-                         -creation_ip $creation_ip \
-                         -other_type "file_storage_object" \
-                         -image_type "file_storage_object" \
-                         -title $title \
-                         -description $description \
-                         -package_id $package_id \
-                         $parent_id \
-                         $tmp_filename \
-                         $tmp_size \
-                         $mime_type \
-                         $name]
+    #
+    # Obtain other possibly missing information from the connection
+    # context.
+    #
+    if {$package_id eq ""} {
+        set package_id [ad_conn package_id]
+    }
+    if {$creation_user eq ""} {
+        set creation_user [ad_conn user_id]
+    }
+    if {$creation_ip eq ""} {
+        set creation_ip [ns_conn peeraddr]
+    }
 
-    content::item::set_live_revision -revision_id $revision_id
+    if {[info exists tmp_filename]} {
+        #
+        # The new revision will come from a file.
+        #
 
-    db_exec_plsql update_last_modified ""
+        # This check also happens in content repository, but as something
+        # similar was already here and mimetype coming from this was used
+        # afterwards, we kept this behavior.
+        set mime_type [cr_check_mime_type \
+                           -filename  $name \
+                           -mime_type $mime_type \
+                           -file      $tmp_filename]
+
+        set tmp_size [ad_file size $tmp_filename]
+        set revision_id [cr_import_content \
+                             -item_id $item_id \
+                             -storage_type $storage_type \
+                             -creation_user $creation_user \
+                             -creation_ip $creation_ip \
+                             -other_type "file_storage_object" \
+                             -image_type "file_storage_object" \
+                             -title $title \
+                             -description $description \
+                             -package_id $package_id \
+                             $parent_id \
+                             $tmp_filename \
+                             $tmp_size \
+                             $mime_type \
+                             $name]
+
+        content::item::set_live_revision -revision_id $revision_id
+    } else {
+        #
+        # The new revision will come from text content.
+        #
+
+        set revision_id [content::revision::new \
+                             -item_id $item_id \
+                             -title $title \
+                             -description $description \
+                             -content $content_body \
+                             -mime_type $mime_type \
+                             -creation_user $creation_user \
+                             -creation_ip $creation_ip \
+                             -package_id $package_id \
+                             -is_live "t" \
+                             -storage_type $storage_type]
+    }
+
+    # apisano - This is what we had before (postgres code):
+    # begin
+    # perform acs_object__update_last_modified
+    # (:parent_id,:creation_user,:creation_ip);
+    # perform
+    # acs_object__update_last_modified(:item_id,:creation_user,:creation_ip);
+    # return null;
+    # end;
+    # Could be refactored with the recursive query below, which will
+    # not go over the context hierarchy, but over the "filesystem"
+    # hierarchy, which makes more sense, and update modification
+    # metadata for the whole tree.
+    # However, I wonder if there is really need for all of this... If
+    # there is, one should probably have this logic at the content
+    # repository level, rather than here.
+    db_dml update_last_modified {
+        with recursive fs_hierarchy as (
+            select object_id, parent_id
+              from fs_objects
+             where object_id = :item_id
+
+            union
+
+            select p.object_id, p.parent_id
+              from fs_objects p,
+                   fs_hierarchy c
+             where p.object_id = c.parent_id
+        )
+        update acs_objects set
+          modifying_user = :creation_user,
+          modifying_ip   = :creation_ip,
+          last_modified  = current_timestamp
+        where object_id in (select object_id from fs_hierarchy)
+    }
 
     if {[string is false $suppress_notify_p]} {
-        fs::do_notifications -folder_id $parent_id -filename $title -item_id $revision_id -action "new_version" -package_id $package_id
+        fs::do_notifications \
+            -folder_id $parent_id \
+            -filename $title \
+            -item_id $revision_id \
+            -action "new_version" \
+            -package_id $package_id
     }
 
     #It's safe to rebuild RSS repeatedly, assuming it's not too expensive.
@@ -1091,9 +1218,10 @@ ad_proc fs::add_version {
     }
 
     if {!$no_callback_p} {
-        if {![catch {ad_conn package_id} package_id]} {
-            callback fs::file_revision_new -package_id $package_id -file_id $item_id -parent_id $parent_id
-        }
+        callback fs::file_revision_new \
+            -package_id [ad_conn package_id] \
+            -file_id $item_id \
+            -parent_id $parent_id
     }
 
     return $revision_id
@@ -1105,7 +1233,12 @@ ad_proc fs::delete_file {
     {-parent_id ""}
     -no_callback:boolean
 } {
-    Deletes a file and all its revisions
+    Deletes a file and all its revisions.
+
+    Note that we do not perform filesystem operations here. A trigger
+    on cr_revisions informs the content repository about the deletion
+    and periodic cleanup of files to be deleted is performed in a
+    scheduled procedure.
 } {
 
     set version_name [get_object_name -object_id $item_id]
@@ -1124,9 +1257,9 @@ ad_proc fs::delete_file {
     }
 
     if {!$no_callback_p} {
-        if {![catch {ad_conn package_id} package_id]} {
-            callback fs::file_delete -package_id $package_id -file_id $item_id
-        }
+        callback fs::file_delete \
+            -package_id [ad_conn package_id] \
+            -file_id $item_id
     }
 
     fs::do_notifications \
@@ -1145,12 +1278,17 @@ ad_proc fs::delete_folder {
     -no_callback:boolean
     -no_notifications:boolean
 } {
-    Deletes a folder and all contents
+    Deletes a folder and all contents.
+
+    Note that we do not perform filesystem operations here. A trigger
+    on cr_revisions informs the content repository about the deletion
+    and periodic cleanup of files to be deleted is performed in a
+    scheduled procedure.
 } {
     if {!$no_callback_p} {
-        if {![catch {ad_conn package_id} package_id]} {
-            callback fs::folder_delete -package_id $package_id -folder_id $folder_id
-        }
+        callback fs::folder_delete \
+            -package_id [ad_conn package_id] \
+            -folder_id $folder_id
     }
 
     if {$parent_id eq ""} {
@@ -1176,6 +1314,11 @@ ad_proc fs::delete_version {
 } {
     Deletes a revision. If it was the last revision, it deletes
     the file as well.
+
+    Note that we do not perform filesystem operations here. A trigger
+    on cr_revisions informs the content repository about the deletion
+    and periodic cleanup of files to be deleted is performed in a
+    scheduled procedure.
 } {
     set parent_id [db_exec_plsql delete_version {}]
 
@@ -1183,6 +1326,17 @@ ad_proc fs::delete_version {
         delete_file -item_id $item_id -parent_id $parent_id
     }
     return $parent_id
+}
+
+ad_proc -private fs::webdav_p {} {
+    Returns if webDAV is enabled.
+
+    @return boolean
+} {
+    return [expr {
+                  [parameter::get -parameter "UseWebDavP" -default 0] &&
+                  [apm_package_installed_p oacs-dav]
+              }]
 }
 
 ad_proc fs::webdav_url {
@@ -1199,8 +1353,8 @@ ad_proc fs::webdav_url {
             item is not WebDAV enabled
 } {
 
-    if {  [parameter::get -parameter "UseWebDavP"] == 0 } {
-        return "ho"
+    if {![fs::webdav_p]} {
+        return ""
     }
     if {$package_id eq ""} {
         set package_id [ad_conn package_id]
@@ -1244,8 +1398,8 @@ ad_proc -public fs::do_notifications {
 
     Note that not all possible operations are implemented, e.g. move, copy etc. See documentation.
 
-    @param action The kind of operation. One of: new_file, new_version, new_url, delete_file, delete_url
-                  delete_folder
+    @param action The kind of operation. One of: new_file, new_version,
+                  new_url, delete_file, delete_url, delete_folder
 } {
     set package_and_root [fs::get_folder_package_and_root $folder_id]
     set root_folder [lindex $package_and_root 1]
@@ -1353,11 +1507,18 @@ ad_proc -public fs::do_notifications {
     }
 }
 
-ad_proc -public fs::item_editable_info {
+ad_proc -deprecated fs::item_editable_info {
     -item_id:required
 } {
     Returns an array containing elements editable_p, mime_type, file_extension
     if an fs item is editable through the browser, editable_p is set to 1
+
+    DEPRECATED: it is unclear what editable is supposed to mean. As of
+    2023-03-16 file-storage does not offer inline editing and no
+    package, including file-storage itself, appears to be using this
+    api.
+
+    @see nothing
 
     @author Deds Castillo (deds@i-manila.com.ph)
     @creation-date 2004-07-03
@@ -1386,10 +1547,17 @@ ad_proc -public fs::item_editable_info {
     return [array get mime_info]
 }
 
-ad_proc -public fs::item_editable_p {
+ad_proc -deprecated fs::item_editable_p {
     -item_id:required
 } {
     returns 1 if item is editable via browser
+
+    DEPRECATED: it is unclear what editable is supposed to mean. As of
+    2023-03-16 file-storage does not offer inline editing and no
+    package, including file-storage itself, appears to be using this
+    api.
+
+    @see nothing
 
     @author Deds Castillo (deds@i-manila.com.ph)
     @creation-date 2004-07-03
@@ -1421,7 +1589,7 @@ ad_proc -public fs::get_object_info {
 
     @error
 } {
-    if {(![info exists revision_id] || $revision_id eq "")} {
+    if {![info exists revision_id] || $revision_id eq ""} {
         set revision_id [content::item::get_live_revision -item_id $file_id]
     }
 
@@ -1480,16 +1648,34 @@ ad_proc -public fs::get_file_package_id {
     @return package_id
 
 } {
-    return [db_string select_package_id {}]
+    return [db_string select_package_id {
+        with recursive hierarchy as
+        (
+         select package_id, context_id
+         from acs_objects
+         where object_id = :file_id
+
+         union
+
+         select o.package_id, o.context_id
+         from acs_objects o, hierarchy h
+         where object_id = h.context_id
+           and h.package_id is null
+         )
+        select package_id from hierarchy
+        where package_id is not null
+    } -default ""]
 }
 
 namespace eval fs::notification {}
 
-ad_proc -public fs::notification::get_url {
+ad_proc -private fs::notification::get_url {
     object_id:required
 } {
-    returns a full url to the object_id.
-    handles folders
+    This proc implements the GetURL operation of the NotificationType
+    Service Contract and should not be invoked directly.
+
+    @return a full URL to the object_id. Handles folders.
 
     @param object_id
 
@@ -1512,21 +1698,27 @@ ad_proc -public fs::file_copy {
 
     @param file_id Item_id of the file to be copied
     @param target_folder_id Folder ID of the folder to which the file is copied to
-    @param postfix Postfix will be added with "_" to the new filename (not title). Very useful if you want to avoid unique name constraints on cr_items.
+    @param postfix Postfix will be added with "_" to the new filename (not title).
+           Very useful if you want to avoid unique name constraints on cr_items.
     @param symlink Defines if, instead of a full item, we should just add a symlink.
 } {
     db_1row file_data {}
 
     if {$postfix ne ""} {
-        set name [lang::util::localize "[file rootname $name]_$postfix[file extension $name]"]
+        set name [lang::util::localize "[ad_file rootname $name]_$postfix[ad_file extension $name]"]
     }
 
     if {$symlink_p} {
-        return [content::symlink::new -name $name -label $title -target_id $file_id -parent_id $target_folder_id]
+        return [content::symlink::new \
+                    -name $name \
+                    -label $title \
+                    -target_id $file_id \
+                    -parent_id $target_folder_id]
     } else {
         set user_id [ad_conn user_id]
         set creation_ip [ad_conn peeraddr]
-        set file_path "[cr_fs_path][cr_create_content_file_path $file_id $file_rev_id]"
+        #set file_path "[cr_fs_path][cr_create_content_file_path $file_id $file_rev_id]"
+        set file_path [content::revision::get_cr_file_path -revision_id $file_rev_id]
 
         # We need to check if the file already exists with the same name in the target folder
         # If yes, just add a new revision.
@@ -1549,7 +1741,7 @@ ad_proc -public fs::file_copy {
                                  -creation_user $user_id \
                                  -creation_ip $creation_ip]
 
-        set new_path [cr_create_content_file_path $new_file_id $new_file_rev_id]
+        #set new_path [cr_create_content_file_path $new_file_id $new_file_rev_id]
         cr_create_content_file $new_file_id $new_file_rev_id $file_path
 
         if {$postfix ne ""} {
@@ -1573,21 +1765,27 @@ ad_proc -public fs::file_copy {
 
     @param file_id Item_id of the file to be copied
     @param target_folder_id Folder ID of the folder to which the file is copied to
-    @param postfix Postfix will be added with "_" to the new filename (not title). Very useful if you want to avoid unique name constraints on cr_items.
+    @param postfix Postfix will be added with "_" to the new filename (not title).
+           Very useful if you want to avoid unique name constraints on cr_items.
     @param symlink Defines if, instead of a full item, we should just add a symlink.
 } {
     db_1row file_data {}
 
     if {$postfix ne ""} {
-        set name [lang::util::localize "[file rootname $name]_$postfix[file extension $name]"]
+        set name [lang::util::localize "[ad_file rootname $name]_$postfix[ad_file extension $name]"]
     }
 
     if {$symlink_p} {
-        return [content::symlink::new -name $name -label $title -target_id $file_id -parent_id $target_folder_id]
+        return [content::symlink::new \
+                    -name $name \
+                    -label $title \
+                    -target_id $file_id \
+                    -parent_id $target_folder_id]
     } else {
         set user_id [ad_conn user_id]
         set creation_ip [ad_conn peeraddr]
-        set file_path "[cr_fs_path][cr_create_content_file_path $file_id $file_rev_id]"
+        #set file_path "[cr_fs_path][cr_create_content_file_path $file_id $file_rev_id]"
+        set file_path [content::revision::get_cr_file_path -revision_id $file_rev_id]
 
         # We need to check if the file already exists with the same name in the target folder
         # If yes, just add a new revision.
@@ -1610,7 +1808,7 @@ ad_proc -public fs::file_copy {
                                  -creation_user $user_id \
                                  -creation_ip $creation_ip]
 
-        set new_path [cr_create_content_file_path $new_file_id $new_file_rev_id]
+        #set new_path [cr_create_content_file_path $new_file_id $new_file_rev_id]
         cr_create_content_file $new_file_id $new_file_rev_id $file_path
 
         if {$postfix ne ""} {
@@ -1633,8 +1831,10 @@ ad_proc -private fs::category_links {
 } {
     @param object_id the file storage object_id whose category list we creating
     @param folder_id the folder the category link should shearch on
-    @param selected_category_id the category that has been selected and for which a link to return to the folder without that category limitation should exist
-    @param fs_url is the file storage url for which these links will be created - defaults to the current package_url
+    @param selected_category_id the category that has been selected and for
+           which a link to return to the folder without that category limitation should exist
+    @param fs_url is the file storage url for which these links will be created -
+           defaults to the current package_url
     @param joinwith allows you to join the link list with something other than the default ", "
 
     @return a list of category_links to filter the supplied folder for a given category
@@ -1645,22 +1845,40 @@ ad_proc -private fs::category_links {
     set selected_found_p 0
     set categories [list]
     foreach category_id [category::get_mapped_categories $object_id] {
+        set name [category::get_name $category_id]
         if { $category_id eq $selected_category_id } {
             set selected_found_p 1
-            lappend categories "[category::get_name $category_id] <a href=\"[export_vars -base $fs_url -url {folder_id}]\">(x)</a>"
+            set href [export_vars -base $fs_url -url {folder_id}]
+            lappend categories "[ns_quotehtml $name] <a href=\"[ns_quotehtml $href]\">(x)</a>"
         } else {
-            lappend categories "<a href=\"[export_vars -base $fs_url -url {folder_id category_id}]\">[category::get_name $category_id]</a>"
+            set href [export_vars -base $fs_url -url {folder_id category_id}]
+            lappend categories "<a href=\"[ns_quotehtml $href]\">[ns_quotehtml $name]</a>"
         }
     }
     if { [string is false $selected_found_p] && $selected_category_id ne "" } {
         # we need to show the link to remove this category file at the
         # top of the folder
-        lappend categories "[category::get_name $selected_category_id] <a href=\"[export_vars -base $fs_url -url {folder_id}]\">(x)</a>"
+        set href [export_vars -base $fs_url -url {folder_id}]
+        set name [category::get_name $selected_category_id]
+        lappend categories "[ns_quotehtml $name] <a href=\"[ns_quotehtml $href]\">(x)</a>"
     }
     return [join $categories $joinwith]
 }
 
-ad_proc -private fs::max_upload_size {
+ad_proc -private fs::unit_conv {value} {
+
+    Convert units to value. This should done more generic, ... we have
+    in NaviServer c-level support for this which should be used if
+    available in the future.
+
+} {
+    if {[regexp {^([0-9.]+)\s*(MB|KB)} $value . number unit]} {
+        set value [expr {int($number * ($unit eq "KB" ? 1024 : 1024*1024))}]
+    }
+    return $value
+}
+
+ad_proc -public fs::max_upload_size {
     {-package_id ""}
 } {
     @param package_id id of the file-storage package instance. Will
@@ -1672,7 +1890,9 @@ ad_proc -private fs::max_upload_size {
 
     @return numeric value in bytes
 } {
-    set max_bytes_param [parameter::get -package_id $package_id -parameter "MaximumFileSize"]
+    set max_bytes_param [fs::unit_conv [parameter::get \
+                                            -package_id $package_id \
+                                            -parameter "MaximumFileSize"]]
     if {![string is double -strict $max_bytes_param]} {
         set max_bytes_param Inf
     }
@@ -1681,8 +1901,7 @@ ad_proc -private fs::max_upload_size {
                       [ns_conn driver] :
                       [lindex [ns_driver names] 0]}]
     set section [ns_driversection -driver $driver]
-    set max_bytes_conf [ns_config $section maxinput]
-
+    set max_bytes_conf [fs::unit_conv  [ns_config $section maxinput]]
     return [expr {min($max_bytes_param,$max_bytes_conf)}]
 }
 

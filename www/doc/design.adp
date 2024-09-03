@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/file-storage {File Storage}} {File Storage Design Document}</property>
+<property name="context">{/doc/file-storage/ {File Storage}} {File Storage Design Document}</property>
 <property name="doc(title)">File Storage Design Document</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>File Storage Design Document</h2>
 
 by <a href="mailto:kevin\@arsdigita.com">Kevin Scaldeferri</a>
@@ -61,7 +65,7 @@ of a given type, or searching through specified file types).</p>
 <h3>V. Design Tradeoffs</h3>
 <h4>Folder Permissions</h4>
 <p>Previous versions of File Storage have not included folder
-permissions. (However they did have a concept of private group
+permissions. (However, they did have a concept of private group
 trees.) The reasons for this were to simplify the code and the user
 experience. However, this system actually caused some confusion
 (<em>e.g.</em>, explicitly granting permission to an outsider on a
@@ -138,7 +142,7 @@ its objects.</p>
 <p>The main objects of File Storage are "folders" and
 "files". A "folder" is analogous to a
 subdirectory in the Unix/Windows-world filesystem. Folder objects
-are stored as Content Repostory folders, thus folders are stored
+are stored as Content Repository folders, thus folders are stored
 "as is" in the Content Repository.</p>
 <p>"Files", however, can cause some confusion when stored
 in the Content Repository. A "file" in File Storage
@@ -159,7 +163,7 @@ of the file, is stored in the "title" attribute of
 cr_revisions. Note that "title" is also used as the
 (unique within a folder) identifier of the file stored in cr_items.
 Thus, wrappers to the Content Repository API makes sure that the
-naming convention is corect: cr_items.name attribute stores the
+naming convention is correct: cr_items.name attribute stores the
 title of a file and all its versions, while the cr_revisions.title
 attribute stores the filename of the version uploaded into the
 Content Repository.</p>
@@ -173,8 +177,7 @@ file_storage PL/SQL package</a>
 </p>
 <h4>Tcl API</h4>
 <table width="100%"><tr><td bgcolor="#E4E4E4">
-<h3><a href="/api-doc/proc-view?proc=children%5fhave%5fpermission%5fp">children_have_permission_p</a></h3><pre>
-children_have_permission_p [ -user_id <em>user_id</em> ] <em>item_id</em><em>privilege</em>
+<h3><a href="/api-doc/proc-view?proc=children%5fhave%5fpermission%5fp">children_have_permission_p</a></h3><pre>children_have_permission_p [ -user_id <em>user_id</em> ] <em>item_id</em><em>privilege</em>
 </pre><blockquote>This procedure, given a content item and a privilege,
 checks to see if there are any children of the item on which the
 user does not have that privilege.
@@ -188,8 +191,7 @@ user does not have that privilege.
 </blockquote>
 </td></tr></table>
 <table width="100%"><tr><td bgcolor="#E4E4E4">
-<h3><a href="/api-doc/proc-view?proc=fs%5fcontext%5fbar%5flist">fs_context_bar_list</a></h3><pre>
-fs_context_bar_list [ -final <em>final</em> ] <em>item_id</em>
+<h3><a href="/api-doc/proc-view?proc=fs%5fcontext%5fbar%5flist">fs_context_bar_list</a></h3><pre>fs_context_bar_list [ -final <em>final</em> ] <em>item_id</em>
 </pre><blockquote>Constructs the list to be fed to ad_context_bar
 appropriate for item_id. If -final is specified, that string will
 be the last item in the context bar. Otherwise, the name
@@ -316,7 +318,7 @@ by APM. This trigger walks through all the contents of the instance
 of File Storage, and starts deleting from the "leaves" or
 end nodes of the file tree up to the root folder. Later
 improvements in Content Repository will allow archiving of the
-contents instaed of actually deleting them from the database.</p>
+contents instead of actually deleting them from the database.</p>
 <h3>VIII. User Interface</h3>
 <p>The user interface attempts to replicate the file system
 metaphors familiar to most computer users, with folders containing

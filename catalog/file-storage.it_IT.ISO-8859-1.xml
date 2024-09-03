@@ -40,6 +40,8 @@
   <msg key="Download">Scarica</msg>
   <msg key="Download_ZIP">Scarica come file ZIP</msg>
   <msg key="Download_ZIP_Checked_Items">Scarica gli elementi selezionati come file ZIP</msg>
+  <msg key="download_zip_creating_archive_msg">Stiamo generando l&#39;archivio, ti preghiamo di attendere...</msg>
+  <msg key="download_zip_file_is_ready_msg">Il tuo file ZIP è pronto.</msg>
   <msg key="Edit">Modifica</msg>
   <msg key="edit">modifica</msg>
   <msg key="Edit_File">Edita File</msg>

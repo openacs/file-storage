@@ -1,8 +1,8 @@
 namespace eval fs::rss {}
 
-ad_proc -public fs::rss::create_rss_gen_subscr_impl {} {
+ad_proc -private fs::rss::create_rss_gen_subscr_impl {} {
     Register the service contract implementation and return the impl_id
-    
+
     @return impl_id of the created implementation
 } {
     return [acs_sc::impl::new_from_spec -spec {
@@ -16,9 +16,9 @@ ad_proc -public fs::rss::create_rss_gen_subscr_impl {} {
     }]
 }
 
-ad_proc -public fs::rss::drop_rss_gen_subscr_impl {} {
+ad_proc -private fs::rss::drop_rss_gen_subscr_impl {} {
     Unegister the service contract implementation and return the impl_id
-    
+
     @return impl_id of the created implementation
 } {
     acs_sc::impl::delete -contract_name RssGenerationSubscriber -impl_name fs_rss
@@ -28,11 +28,11 @@ ad_proc -private fs::rss::datasource {
     summary_context_id
 } {
     This procedure implements the "datasource" operation of the
-    RssGenerationSubscriber service contract.  
+    RssGenerationSubscriber service contract.
 
     Important: in this implementation, the summary_context_id is equal
     to the subscription_id, which we use to key into the fs_rss_subscrs table
-    to find the folder_id.  
+    to find the folder_id.
 
     @author Andrew Grumet (aegrumet@alum.mit.edu)
 } {
@@ -100,7 +100,25 @@ ad_proc -private fs::rss::datasource {
         set revisions_clause "r.item_id = o.object_id"
     }
 
-    db_foreach select_files {} {
+    db_foreach select_files [subst -nocommands {
+        select * from (
+          select o.object_id as item_id,
+                 o.title,
+                 o.name,
+                 o.file_upload_name,
+                 o.type,
+                 o.content_size,
+                 to_char(r.publish_date,'YYYY-MM-DD HH24:MI:SS') as publish_date_ansi,
+                 r.description,
+                 r.revision_id
+          from fs_objects o,
+               cr_revisions r
+          where $parent_clause
+            and type != 'folder'
+            and $revisions_clause
+          order by last_modified desc
+        ) as v fetch first :max_items rows only
+    }] {
         set link "${ad_url}${base_url}file?file_id=$item_id&version_id=$revision_id"
         set content "content"
         set description $description
@@ -108,11 +126,11 @@ ad_proc -private fs::rss::datasource {
         if {$include_revisions_p == "t"} {
             append description "<br><br><b>Note:</b> This may be a new revision of an existing file."
         }
-        
+
         # Always convert timestamp to GMT
         set publish_date_ansi [lc_time_tz_convert -from [lang::system::timezone] -to "Etc/GMT" -time_value $publish_date_ansi]
         set publish_timestamp "[clock format [clock scan $publish_date_ansi] -format "%a, %d %b %Y %H:%M:%S"] GMT"
-        
+
         set iteminfo [list \
                           link $link \
                           title $title \
@@ -147,7 +165,7 @@ ad_proc -private fs::rss::datasource {
     set column_array(channel_rating)                 ""
     set column_array(channel_skipDays)               ""
     set column_array(channel_skipHours)              ""
-    
+
     return [array get column_array]
 }
 
@@ -162,7 +180,13 @@ ad_proc -private fs::rss::lastUpdated {
 
     #result differs on whether we're including revisions
 
-    db_1row select_last_updated {}
+    db_1row select_last_updated {
+	select (max(last_modified)-to_date('1970-01-01','YYYY-MM-DD'))*60*60*24 as last_update
+        from fs_rss_subscrs s, fs_objects f
+        where s.subscr_id = :summary_context_id
+          and f.parent_id = s.folder_id
+          and f.type != 'folder'
+    }
 
     return $last_update
 }
@@ -178,7 +202,7 @@ ad_proc -private fs::rss::build_feeds {
     #Don't use nested db_ calls because then fs::rss::datasource will
     #not see the results of in-progress transactions.
     set subscr_id_list [db_list select_subscrs {}]
-    
+
     foreach subscr_id $subscr_id_list {
         rss_gen_report $subscr_id
     }

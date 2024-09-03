@@ -6,26 +6,28 @@
     <pretty-plural>File Storage Areas</pretty-plural>
     <initial-install-p>f</initial-install-p>
     <singleton-p>f</singleton-p>
-    
-    <version name="5.10.0d2" url="http://openacs.org/repository/download/apm/file-storage-5.10.0d2.apm">
+
+    <version name="5.10.1" url="http://openacs.org/repository/download/apm/file-storage-5.10.1.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Collaborative document storage</summary>
-        <release-date>2017-08-06</release-date>
+        <release-date>2024-09-02</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/plain">Provides a versioned document store with storage in the filesystem or database (depending on configuration).  Documents and folders can be permissioned and folders downloaded.</description>
         <license>GPL version 2</license>
         <maturity>2</maturity>
         <package_instance_name>#file-storage.file-storage#</package_instance_name>
 
-        <provides url="file-storage" version="5.10.0d2"/>
-	<requires url="acs-kernel" version="5.9.1"/>
-	<requires url="acs-tcl" version="5.9.1"/>
-        <requires url="acs-content-repository" version="5.9.1"/>
-        
+        <provides url="file-storage" version="5.10.1"/>
+        <requires url="acs-kernel" version="5.10.1"/>
+        <requires url="acs-tcl" version="5.10.1"/>
+        <requires url="acs-content-repository" version="5.10.1"/>
+        <requires url="acs-automated-testing" version="5.10.1"/>
+        <requires url="acs-templating" version="5.10.1"/>
+        <requires url="acs-lang" version="5.10.1"/>
+
         <requires url="categories" version="1.1.3"/>
-        <requires url="notifications" version="5.9.1"/>
-        <requires url="oacs-dav" version="1.1b1"/>
-        <requires url="rss-support" version="0.3"/>
+        <requires url="notifications" version="5.10.1"/>
+        <requires url="rss-support" version="0.5"/>
 
         <callbacks>
             <callback type="after-install"  proc="fs::install::package_install"/>
@@ -38,19 +40,16 @@
         </callbacks>
         <parameters>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="AllowTextEdit"  default="0" description="Allow users to edit the content of text based files in their browser."/>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ArchiveCommand"  default="/usr/bin/zip -r {out_file} {in_file}" description="Program (and program options) to use for archiving file storage objects. Use the special tags {in_file} and {out_file} (including the curly braces) to denote the locations of the input and output files on the command line."/>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ArchiveExtension"  default="zip" description="The extension that the programmer should add to the output file. This depends on the value of ArchiveCommand"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="BehaveLikeFilesystemP"  default="0" description="Switch to use file-title for download instead of original filename"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="CategoriesP"  default="0" description="Allow categories to be attached to a file."/>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="DownloadTargetWindowName"  description="Many modern Web browsers will attempt to open documents directly in the browser if they can.  To disable this &quot;plugin mode&quot; behavior and cause downloads to open in a new window, set this value to &quot;_blank&quot; or any non-empty string.  Setting this value to the empty string (default) will leave it to the browser program to decide."/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="DownloadTargetWindowName"  description="Many modern Web browsers will attempt to open documents directly in the browser if they can.  To disable this &quot;plugin mode&quot; behavior and cause downloads to open in a new window, set this value to &quot;_blank&quot; or any nonempty string.  Setting this value to the empty string (default) will leave it to the browser program to decide."/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="ExposeRssP"  default="0" description="Should we offer navigation to set up RSS feeds for folders?"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="GeneralCommentsP"  default="0" description="Allow comments to be attached to a file."/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="MaximumFileSize"  default="" description="The maximum size, in bytes, of files that users are allowed to upload.  Should not be set larger than the systemwide AOLServer parameter maxinput."/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="MoveByCopyDeleteP"  default="0" description="Move files by copying and then deleting the original? Default is false, use normal move"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="ShowAdministerPermissionsLinkP"  default="1" description="Whether or not to show a link to administer permissions on the file storage object."/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="StoreFilesInDatabaseP"  default="0" description="Flag to determine the storage type. A flag of 1 (true) will store the files in the database. If 0 (false) files are stored in the filesystem. ***This parameter should only be changed at package instance creation.***"/>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="UnzipBinary"  default="unzip" description="The path and name of the unzip binary to unpack zip files containing multiple files."/>
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="UseWebDavP"  default="0" description="Flag to determine if WebDav is active.  A flag of 1 (true) means WebDav is active and we will show WebDav links"/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="UseWebDavP"  default="0" description="Flag to determine if WebDav is active.  A flag of 1 (true) means WebDav is active and we will show WebDav links."/>
         </parameters>
 
     </version>

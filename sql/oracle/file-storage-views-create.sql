@@ -83,11 +83,8 @@ as
       end as name,
       cr_items.name as file_upload_name,
       cr_revisions.title,
-        case
-        when cr_items.content_type = 'content_folder'
-        then acs_objects.last_modified
-        else cr_revisions.publish_date
-        end as last_modified,
+      cr_revisions.mime_type,
+      acs_objects.last_modified,
       cr_extlinks.url,
       cr_items.parent_id,
       cr_items.name as key,

@@ -41,6 +41,8 @@
   <msg key="Download">Herunterladen</msg>
   <msg key="Download_ZIP">Als ZIP-Datei herunterladen</msg>
   <msg key="Download_ZIP_Checked_Items">Markierte Elemente als ZIP-Datei herunterladen</msg>
+  <msg key="download_zip_creating_archive_msg">Archiv wird erstellt, bitte warten...</msg>
+  <msg key="download_zip_file_is_ready_msg">Ihre ZIP-Datei würde erfolgreich herstellt.</msg>
   <msg key="Edit">Bearbeiten</msg>
   <msg key="edit">Umbenennen</msg>
   <msg key="Edit_File">Datei bearbeiten</msg>

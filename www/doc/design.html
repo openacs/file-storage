@@ -86,7 +86,7 @@ type, or searching through specified file types).
 <h4>Folder Permissions</h4>
 
 <p>Previous versions of File Storage have not included folder
-permissions.  (However they did have a concept of private group
+permissions.  (However, they did have a concept of private group
 trees.)  The reasons for this were to simplify the code and the user
 experience.  However, this system actually caused some confusion
 (<em>e.g.</em>, explicitly granting permission to an outsider on a file in a
@@ -192,7 +192,7 @@ due to the different way File Storage labels its objects.
 
 The main objects of File Storage are "folders" and "files". A "folder"
 is analogous to a subdirectory in the Unix/Windows-world filesystem.
-Folder objects are stored as Content Repostory folders, thus folders
+Folder objects are stored as Content Repository folders, thus folders
 are stored "as is" in the Content Repository.
 
 <p>
@@ -216,7 +216,7 @@ uploaded from the client's computer, as a version of the file, is
 stored in the "title" attribute of cr_revisions.  Note that "title" is
 also used as the (unique within a folder) identifier of the file
 stored in cr_items.  Thus, wrappers to the Content Repository API
-makes sure that the naming convention is corect: cr_items.name
+makes sure that the naming convention is correct: cr_items.name
 attribute stores the title of a file and all its versions, while the
 cr_revisions.title attribute stores the filename of the version
 uploaded into the Content Repository.
@@ -432,7 +432,7 @@ identifier before the root folder identifier is deleted by APM. This
 trigger walks through all the contents of the instance of File
 Storage, and starts deleting from the "leaves" or end nodes of the
 file tree up to the root folder.  Later improvements in Content
-Repository will allow archiving of the contents instaed of actually
+Repository will allow archiving of the contents instead of actually
 deleting them from the database.
 
 <h3>VIII.  User Interface</h3>

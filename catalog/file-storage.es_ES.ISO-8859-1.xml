@@ -37,6 +37,8 @@
   <msg key="Delete_this_folder">Borrar esta carpeta</msg>
   <msg key="Delete_Version">Borrar versión</msg>
   <msg key="Description">Descripción:</msg>
+  <msg key="download_zip_creating_archive_msg">Creando archivo, espere por favor...</msg>
+  <msg key="download_zip_file_is_ready_msg">El archivo ZIP está listo.</msg>
   <msg key="Download">Descargar</msg>
   <msg key="Download_ZIP">Descargar en un ZIP</msg>
   <msg key="Download_ZIP_Checked_Items">Descargar elementos seleccionados en un ZIP</msg>
@@ -179,9 +181,9 @@
   <msg key="Upload_a_folder">Subir una carpeta</msg>
   <msg key="Upload_a_new_version">Subir una nueva versión</msg>
   <msg key="Upload_folder_help">Subir una carpeta desde el sistema de ficheros</msg>
-  <msg key="Upload_Limit">Tamaño Límite(bytes)</msg>
-  <msg key="Upload_limit_error">El tamaño límite no debe ser mayor que</msg>
-  <msg key="Upload_limit_error_2">bytes. Aumente el tamaño límite en su archivo Tcl de configuración de AOLserver</msg>
+  <msg key="Upload_Limit">Tamaño máximo (bytes)</msg>
+  <msg key="Upload_limit_error">El tamaño máximo no debe ser mayor que</msg>
+  <msg key="Upload_limit_error_2">bytes. Aumente el tamaño máximo en su archivo Tcl de configuración de AOLserver</msg>
   <msg key="Upload_New_File">Subir un archivo nuevo</msg>
   <msg key="Upload_New_Version">Subir una nueva versión</msg>
   <msg key="Upload_Revision">Subir nueva versión</msg>
