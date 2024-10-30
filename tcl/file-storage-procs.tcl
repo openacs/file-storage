@@ -587,7 +587,7 @@ ad_proc -public fs::publish_folder_to_file_system {
     publish the contents of a file storage folder to the filesystem
 } {
     if {$path eq ""} {
-        set path [ad_tmpnam]
+        set path [ad_mktmpdir]
     }
 
     if {$folder_name eq ""} {
