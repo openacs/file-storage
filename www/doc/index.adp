@@ -13,4 +13,5 @@ div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
 <h2>Release Notes</h2>
 <p>Please file bugs in the <a href="http://openacs.org/bugtracker/openacs/">Bug Tracker</a>.</p>
 <hr>
-<a href="mailto:kevin\@arsdigita.com"><address>kevin\@arsdigita.com</address></a>
+<a href="mailto:kevin\@arsdigita.com"></a>
+<address>kevin\@arsdigita.com</address>
