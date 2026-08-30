@@ -1670,7 +1670,7 @@ ad_proc -public fs::get_file_package_id {
 namespace eval fs::notification {}
 
 ad_proc -private fs::notification::get_url {
-    object_id:required
+    object_id
 } {
     This proc implements the GetURL operation of the NotificationType
     Service Contract and should not be invoked directly.
